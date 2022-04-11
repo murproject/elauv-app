@@ -11,10 +11,10 @@ import './BlocklyStyle'
 
 export default {
   start: function () {
-    console.log("startin")
+    console.log("starting")
     Blocks.init();
     Blockly.setLocale(Ru)
-    var blocklyArea = document.getElementById('blocklyArea');
+    var blocklyArea = document.getElementById('blocklyPanel');
     var blocklyDiv = document.getElementById('blocklyDiv');
     console.log(Blockly);
     console.log(blocklyDiv);

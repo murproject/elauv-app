@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <noscript>
-      <strong>Enable JavaScript to use <%= htmlWebpackPlugin.options.title %></strong>
-    </noscript>
 
-    <!-- <main id="app"></main> -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <div id="app">
-      <div id="head" style="height: 15vh;">
-        <button type="submit">run</button>
-        <button type="submit">save</button>
-        <button type="submit">load</button>
-        <div id="compa"></div>
-      </div>
-      <div id="blocklyArea" style="height: 90vh;">
-        <div id="blocklyDiv" style="height: 100%;"></div>
-      </div>
+<body>
+  <noscript>
+    <strong>Enable JavaScript to use <%= htmlWebpackPlugin.options.title %></strong>
+  </noscript>
+
+  <!-- <main id="app"></main> -->
+  <div id="app">
+
+    <div id="head" style="height: 4em;">
+      <span class="buttons-group" id="buttons-main">
+        <button onclick="app.panelSelect('telemetry');" type="submit">telemetry</button>
+        <button onclick="app.panelSelect('blockly');" type="submit">blockly</button>
+      </span>
+
+      <span class="buttons-group" id="buttons-blockly" style="float: right;" >
+        <button onclick="app.blocklyAction('run');" type="submit">run</button>
+        <button onclick="app.blocklyAction('save');" type="submit">save</button>
+        <button onclick="app.blocklyAction('load');" type="submit">load</button>
+      </span>
     </div>
 
-    <!-- built files will be auto injected -->
-  </body>
+    <main style="height: calc(100vh - 4em);">
+
+      <div class="panel" id="telemetryPanel">
+        <div id="telemetryText">telemetry</div>
+      </div>
+
+      <div id="blocklyPanel" class="panel fluid">
+        <div id="blocklyDiv" style="height: 100%;"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- built files will be auto injected -->
+</body>
+
 </html>

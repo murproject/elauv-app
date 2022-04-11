@@ -9,3 +9,21 @@ body {
     padding: 0.5em;
     margin: 0.5em;
 }
+
+.panel {
+    height: 100%;
+    display: none;
+    padding: 0.5em;
+}
+
+.panel.fluid {
+    padding: 0 !important;
+}
+
+.panel.active {
+    display: block;
+}
+
+.buttons-group button {
+    height: 3em;
+}
