@@ -23,13 +23,17 @@
     <div id="head" style="height: 4em;">
       <span class="buttons-group" id="buttons-main">
         <button onclick="app.panelSelect('telemetry');" type="submit">telemetry</button>
+        <button onclick="app.panelSelect('joystick');" type="submit">joystick</button>
         <button onclick="app.panelSelect('blockly');" type="submit">blockly</button>
       </span>
 
       <span class="buttons-group" id="buttons-blockly" style="float: right;" >
-        <button onclick="app.blocklyAction('run');" type="submit">run</button>
-        <button onclick="app.blocklyAction('save');" type="submit">save</button>
+        <button onclick="app.blocklyAction('run_lua');" type="submit">run_lua</button>
+        <button onclick="app.blocklyAction('run_js');" type="submit">run_js</button>
+        <button onclick="app.blocklyAction('stop');" type="submit">stop</button>
+        <button onclick="app.blocklyAction('example');" type="submit">example</button>
         <button onclick="app.blocklyAction('load');" type="submit">load</button>
+        <button onclick="app.blocklyAction('save');" type="submit">save</button>
       </span>
     </div>
 
@@ -37,6 +41,12 @@
 
       <div class="panel" id="telemetryPanel">
         <div id="telemetryText">telemetry</div>
+      </div>
+
+      <div class="panel" id="joystickPanel">
+        <div>joystick</div>
+        <div class="nipple-wrapper" id="nipple0"></div>
+        <div class="nipple-wrapper" id="nipple1"></div>
       </div>
 
       <div id="blocklyPanel" class="panel fluid">

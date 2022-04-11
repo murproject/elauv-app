@@ -13,11 +13,12 @@ body {
 .panel {
     height: 100%;
     display: none;
-    padding: 0.5em;
+    margin: 0.5em;
+    padding: 0;
 }
 
 .panel.fluid {
-    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .panel.active {
@@ -26,4 +27,16 @@ body {
 
 .buttons-group button {
     height: 3em;
+}
+
+#telemetryText {
+    font-family: monospace;
+    white-space: pre;
+}
+
+.nipple-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 150px;
+    height: 150px;
 }
