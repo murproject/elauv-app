@@ -18,9 +18,9 @@
   </noscript>
 
   <!-- <main id="app"></main> -->
-  <div id="app">
+  <main id="app">
 
-    <div id="head" style="height: 4em;">
+    <header id="head" style="height: 4em;">
       <span class="buttons-group" id="buttons-main">
         <button onclick="app.panelSelect('telemetry');" type="submit">telemetry</button>
         <button onclick="app.panelSelect('joystick');" type="submit">joystick</button>
@@ -35,9 +35,9 @@
         <button onclick="app.blocklyAction('load');" type="submit">load</button>
         <button onclick="app.blocklyAction('save');" type="submit">save</button>
       </span>
-    </div>
+    </header>
 
-    <main style="height: calc(100vh - 4em);">
+    <section class="panel-wrapper">
 
       <div class="panel" id="telemetryPanel">
         <div id="telemetryText">telemetry</div>
@@ -53,8 +53,8 @@
         <div id="blocklyDiv" style="height: 100%;"></div>
       </div>
 
-    </main>
-  </div>
+    </section>
+  </main>
 
   <!-- built files will be auto injected -->
 </body>
