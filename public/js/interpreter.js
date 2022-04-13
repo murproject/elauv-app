@@ -2,7 +2,8 @@ var state = null
 var script = null
 var scripts = []
 var telemetry = {}
-var highlightedBlocksArray = {}
+var highlightedBlocks = {}
+var highlightedBlocksActual = {}
 
 var contextUpdater = setInterval(sendContext, 75)
 var highlightUpdater = setInterval(sendHighlight, 125)
@@ -35,16 +36,22 @@ function sendContext () {
 function sendHighlight () {
   const changedBlocks = {}
   const time = +new Date()
+  let newState = null
 
-  for (const key in highlightedBlocksArray) {
-    const block = highlightedBlocksArray[key]
+  for (const key in highlightedBlocks) {
+    const block = highlightedBlocks[key]
     const timeout = typeof (block) === 'number' ? (time - block) > 125 : !block
 
     if (timeout) {
-      highlightedBlocksArray[key] = false
-      changedBlocks[key] = false
+      highlightedBlocks[key] = false
+      newState = false
     } else {
-      changedBlocks[key] = true
+      newState = true
+    }
+
+    if (highlightedBlocksActual[key] != newState) {
+      changedBlocks[key] = newState
+      highlightedBlocksActual[key] = newState
     }
   }
 
@@ -52,18 +59,17 @@ function sendHighlight () {
 }
 
 const mur = {
-  highlightedBlocks: {},
   lastActiveBlock: {},
 
   h: async function (scriptId, blockId) {
     if (this.lastActiveBlock[scriptId] && this.lastActiveBlock[scriptId] !== blockId) {
-      highlightedBlocksArray[this.lastActiveBlock[scriptId]] = +new Date()
+      highlightedBlocks[this.lastActiveBlock[scriptId]] = +new Date()
     }
 
     this.lastActiveBlock[scriptId] = blockId
-    highlightedBlocksArray[blockId] = true
+    highlightedBlocks[blockId] = true
 
-    await mur.delay(10)
+    await mur.delay(4)
   },
 
   set_axis: async function (index, speed) {
