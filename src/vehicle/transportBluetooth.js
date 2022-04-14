@@ -82,7 +82,7 @@ export default {
     }
 
     // this.devices.all = newAllDevices
-    Vue.set(this.devices, 'all', newAllDevices)
+    this.devices.all = newAllDevices
 
     // console.log(this.devices.all)
   },
