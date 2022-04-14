@@ -42,7 +42,7 @@ export default {
           startScale: 1.0,
           maxScale: 2.0,
           minScale: 0.3,
-          scaleSpeed: 1.5,
+          scaleSpeed: 1.15,
           pinch: true
         },
         // css: false,
@@ -147,7 +147,7 @@ export default {
       this.scriptWorker.terminate()
     }
 
-    this.scriptWorker = new Worker('/js/interpreter.js')
+    this.scriptWorker = new Worker('/js/interpreter.js', { type: 'module' })
 
     this.scriptWorker.onmessage = this.workerMsgHandler
 
@@ -185,6 +185,18 @@ export default {
     this.scriptStatus = 'running'
   },
 
+  updateTelemetry: function(telemetry) {
+    if (this.scriptStatus === 'running') {
+      this.scriptWorker.postMessage({
+        type: 'telemetry',
+        // telemetry: {
+        //   imuYaw: t.imuYaw
+        // }
+        telemetry: JSON.parse(JSON.stringify(telemetry)) // TODO: should do it in better way
+      })
+    }
+  },
+
   workerMsgHandler: function (e) {
     // console.log(this);
     // TODO: should move this from component!
@@ -207,6 +219,7 @@ export default {
       const blocks = data.blockId
 
       for (const key in blocks) {
+        // console.log("highlighting block with id: " + key + " = " + blocks[key])
         workspace.highlightBlock(key, blocks[key])
       }
 
