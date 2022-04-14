@@ -1,12 +1,12 @@
 import BlocklyWrapper from './blockly-wrapper/BlocklyWrapper.js'
 import apiGameMur from './vehicle/apiGameMur.js'
+import joystick from './joystick.js';
 
 const q = selector => document.querySelector(selector);
 
 var app = {
   currentPanel: null,
 
-  blockly: BlocklyWrapper,
 
   panels: {
     telemetry: q('#telemetryPanel'),
@@ -15,6 +15,9 @@ var app = {
 
     telemetryText: q('#telemetryText'),
   },
+  // TODO: combine with panels? as object like {el: …, obj: …}
+  blockly: BlocklyWrapper,
+  joystick: joystick,
 
   panelSelect: function (target) {
     if (this.currentPanel) {
@@ -42,11 +45,15 @@ var app = {
     this.mur.telemetryUpdated = (t, f) => {
       const prettyTelemetry = JSON.stringify(f, null, '\t');
       this.panels.telemetryText.innerText = prettyTelemetry;
+
+      this.blockly.updateTelemetry(t);
     };
 
     this.timerKeepAlive = setInterval(() => {
       this.mur.controlInfo();
     }, 1500);
+
+    this.joystick.init();
   },
 }
 
