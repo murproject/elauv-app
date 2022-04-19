@@ -83,6 +83,38 @@ export default {
     }
   },
 
+  splitBufferToPackets: function(buffer) {
+    // TODO: split buffer to packets, respecting 2-bytes size header
+    let chunk = buffer;
+    let packets = [];
+
+    for (let i = 0; i < 20; i++) { // no more than 20 packets per buffer
+      const packetSize = (chunk[1] << 8) + chunk[0];
+      // console.log('packet size: ' + packet_size);
+      const currentPacket = chunk.slice(2, 2 + packetSize);
+      // console.log(packet);
+
+      if (packetSize > 0 && packetSize === currentPacket.length) {
+        packets.push(currentPacket);
+        chunk = chunk.slice(2 + packetSize);
+      } else {
+        break;
+      }
+
+      if (packetSize !== currentPacket.length) {
+        console.log(`packet_size: ${packetSize}; currentPacket.length: ${currentPacket.length}`);
+      }
+    }
+
+    if (packets.length !== 1) {
+      console.log('unusal packets count: ' + packets.length);
+      console.log(buffer);
+      console.log(packets);
+    }
+
+    return packets;
+  },
+
   parsePacket: function (raw) {
     var data = decode(raw)
 
@@ -198,7 +230,17 @@ export default {
       payload
     ]
 
-    return encode(packet)
+    // TODO: fill first bytes with packet size
+
+    const encoded = encode(packet)
+    const len = encoded.length
+    const buffer = new Uint8Array(2 + len)
+    buffer.set([len & 0xFF, len >> 8], 0)
+    buffer.set(encoded,2)
+    // console.log("sending packet:")
+    // console.log(buffer)
+
+    return buffer
   },
 
   packControlContext: function (data) {

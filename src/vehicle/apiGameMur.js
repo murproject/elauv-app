@@ -49,39 +49,15 @@ export default {
       // EventBus.$emit('notify', { text: 'Установлено подключение' })
     }
 
+    const mur = this
+
     this.conn.onMessage = (event) => {
-      const mur = this
-
-      event.data.arrayBuffer().then(function (buf) {
+      event.data.arrayBuffer().then((buf) => {
         const raw = new Uint8Array(buf)
-        const message = Protocol.parsePacket(raw)
-        const date = new Date()
-        mur.lastUpdatedDate = date
+        const packets = Protocol.splitBufferToPackets(raw)
 
-        switch (message.type) {
-          case 'telemetry':
-            if (message.timestamp < mur.telemetry.timestamp) {
-              console.warn('inconsistent timestamps: old is ' + mur.telemetry.timestamp + ', and new is ' + message.timestamp)
-            }
-            mur.telemetry = message
-            mur.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3)
-            // EventBus.$emit('telemetry-received')
-            mur.updateTelemetry()
-            // console.log(mur.formattedTelemetry)
-            mur.telemetryUpdated(mur.telemetry, mur.formattedTelemetry)
-            break
-
-          case 'diagnostic-info':
-            // EventBus.$emit('log-received', message)
-            break
-
-          case 'script-output':
-            // EventBus.$emit('output-received', message)
-            break
-
-          case 'script-highlight':
-            // EventBus.$emit('script-highlight', message)
-            break
+        for (const key in packets) {
+          mur.handlePacket(packets[key]);
         }
       })
     }
@@ -95,6 +71,47 @@ export default {
         // EventBus.$emit('status-updated')
       }
     }, 1500)
+  },
+
+  // handleIncomingBuffer: function(buf) {
+  //   const raw = new Uint8Array(buf)
+  //   const packets = Protocol.splitBufferToPackets(raw)
+
+  //   for (const key in packets) {
+  //     mur.handlePacket(packets[key]);
+  //   }
+  // },
+
+  handlePacket: function (raw) {
+    const message = Protocol.parsePacket(raw)
+    const date = new Date()
+    this.lastUpdatedDate = date
+
+    switch (message.type) {
+      case 'telemetry':
+        if (message.timestamp < this.telemetry.timestamp) {
+          console.warn('inconsistent timestamps: old is ' + this.telemetry.timestamp + ', and new is ' + message.timestamp)
+        }
+        this.telemetry = message
+        this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3)
+        // EventBus.$emit('telemetry-received')
+        this.updateTelemetry()
+        // console.log(mur.formattedTelemetry)
+        this.telemetryUpdated(this.telemetry, this.formattedTelemetry)
+        break
+
+      case 'diagnostic-info':
+        // EventBus.$emit('log-received', message)
+        break
+
+      case 'script-output':
+        // EventBus.$emit('output-received', message)
+        break
+
+      case 'script-highlight':
+        // EventBus.$emit('script-highlight', message)
+        break
+    }
   },
 
   connect: function (address) {
