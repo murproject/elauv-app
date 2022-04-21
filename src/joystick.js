@@ -1,6 +1,20 @@
 import nipplejs from 'nipplejs'
 
 export default {
+    axisFormulaDefault: `max_power = 50
+
+a = + x + y
+b = + x - y
+c = + z
+d = - z
+
+
+/*
+x = yaw
+y = forward
+z = depth
+*/`,
+
     axes: {
         yaw: 0,
         forward: 0,
@@ -8,7 +22,7 @@ export default {
         vertical: 0,
     },
 
-    thresh: 10,
+    thresh: 0.1,
 
     nipple0: nipplejs.create({
         zone: document.getElementById('nipple0'),
@@ -26,24 +40,24 @@ export default {
     }),
 
     init: function() {
-        this.nipple0.on("move", function(evt, data) {
-            this.yaw = Math.abs(data.vector.x) >= this.thresh ? Math.round(data.vector.x * 100) : 0;
-            this.forward = Math.abs(data.vector.y) >= this.thresh ? Math.round(data.vector.y * 100) : 0;
+        this.nipple0.on("move", (evt, data) => {
+            this.axes.yaw = Math.abs(data.vector.x) >= this.thresh ? Math.round(data.vector.x * 100) : 0;
+            this.axes.forward = Math.abs(data.vector.y) >= this.thresh ? Math.round(data.vector.y * 100) : 0;
         })
 
-        this.nipple1.on("move", function(evt, data) {
-            this.side = Math.abs(data.vector.x) >= this.thresh ? Math.round(data.vector.x * 100) : 0;
-            this.vertical = Math.abs(data.vector.y) >= this.thresh ? Math.round(data.vector.y * 100) :0;
+        this.nipple1.on("move", (evt, data) => {
+            this.axes.side = Math.abs(data.vector.x) >= this.thresh ? Math.round(data.vector.x * 100) : 0;
+            this.axes.vertical = Math.abs(data.vector.y) >= this.thresh ? Math.round(data.vector.y * 100) :0;
         })
 
-        this.nipple0.on("end", function(evt) {
-            this.yaw = 0;
-            this.forward = 0;
+        this.nipple0.on("end", (evt) => {
+            this.axes.yaw = 0;
+            this.axes.forward = 0;
         })
 
-        this.nipple1.on("end", function(evt) {
-            this.side = 0;
-            this.vertical = 0;
+        this.nipple1.on("end", (evt) => {
+            this.axes.side = 0;
+            this.axes.vertical = 0;
         })
     }
 }
