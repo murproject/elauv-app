@@ -5,8 +5,8 @@ var telemetry = {}
 var highlightedBlocks = {}
 var highlightedBlocksActual = {}
 
-var contextUpdater = setInterval(sendContext, 75)
-var highlightUpdater = setInterval(sendHighlight, 125)
+var contextUpdater = setInterval(sendContext, 50)
+var highlightUpdater = setInterval(sendHighlight, 80)
 
 setState('not-running')
 
@@ -69,7 +69,7 @@ const mur = {
     this.lastActiveBlock[scriptId] = blockId
     highlightedBlocks[blockId] = true
 
-    await mur.delay(4)
+    await mur.delay(5)
   },
 
   set_axis: async function (index, speed) {
@@ -89,6 +89,8 @@ const mur = {
   },
 
   delay: function (sleepMs) {
+    // TODO: should not create dozens of timers by calling setTimeout() lots times per second,
+    // TODO: create one tiemr with setInterval to control ticks
     return new Promise(resolve => setTimeout(resolve, sleepMs))
   },
 
