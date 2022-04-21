@@ -23,6 +23,9 @@ export default {
   start: function () {
     console.log("starting")
     Blocks.init();
+
+    Ru["CLEAN_UP"] = "Упорядочить блоки";
+
     Blockly.setLocale(Ru)
     var blocklyArea = document.getElementById('blocklyPanel');
     var blocklyDiv = document.getElementById('blocklyDiv');
@@ -64,6 +67,58 @@ export default {
     );
     workspace = this.workspace; // TODO: тупизм...
     Blockly.svgResize(this.workspace);
+
+    const filterGlow = `
+    <filter id="filterGlow">
+      <feDropShadow
+        id="filterGlowShadow"
+        stdDeviation="1.5"
+        dx="0"
+        dy="0"
+        flood-color="#FFC"
+        flood-opacity="0.85"
+      ></feDropShadow>
+
+      <feComposite
+        in2="specOut"
+        operator="arithmetic"
+        k1="0"
+        k2="1"
+        k3="1"
+      ></feComposite>
+    </filter>
+
+    <filter id="filterShadow">
+      <feDropShadow
+        stdDeviation="1.0"
+        dx="0"
+        dy="0"
+        flood-color="black"
+        flood-opacity="0.5"
+      ></feDropShadow>
+    </filter>
+    `
+
+    // <feMorphology operator="dilate" radius="1"/>
+
+    // const animateGlow = `
+    // <animate
+    //   xlink:href="#filterGlowShadow"
+    //   calcMode="discrete"
+    //   id="anim-dialiate"
+    //   attributeName="stdDeviation"
+    //   from="1.0"
+    //   to="5.0"
+    //   dur="1s"
+    //   repeatCount="indefinite"
+    //   begin="0s"
+    //   fill="freeze"
+    // ></animate>
+    // `
+
+    let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
+    defs.innerHTML += filterGlow
+    // defs.innerHTML += animateGlow
   },
 
   generate_code: function (workspace) {
@@ -90,6 +145,9 @@ export default {
     mur.controlContext(paramsContext)
 
     this.workspace.highlightBlock(null)
+
+    document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', '')});
+    // document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', 'url(#filterShadow')});
   },
 
   save: function() {
@@ -138,6 +196,7 @@ export default {
   },
 
   run_js: function() {
+
     this.code = this.generate_code(this.workspace)
     console.log(this.code)
 
@@ -220,7 +279,8 @@ export default {
 
       for (const key in blocks) {
         // console.log("highlighting block with id: " + key + " = " + blocks[key])
-        workspace.highlightBlock(key, blocks[key])
+        // workspace.highlightBlock(key, blocks[key])
+        document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
       }
 
       return
