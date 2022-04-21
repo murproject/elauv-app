@@ -5,8 +5,8 @@ var telemetry = {}
 var highlightedBlocks = {}
 var highlightedBlocksActual = {}
 
-var contextUpdater = setInterval(sendContext, 50)
-var highlightUpdater = setInterval(sendHighlight, 80)
+var contextUpdater = setInterval(sendContext,100)
+var highlightUpdater = setInterval(sendHighlight, 100)
 
 setState('not-running')
 
@@ -40,7 +40,7 @@ function sendHighlight () {
 
   for (const key in highlightedBlocks) {
     const block = highlightedBlocks[key]
-    const timeout = typeof (block) === 'number' ? (time - block) > 125 : !block
+    const timeout = typeof (block) === 'number' ? (time - block) > 100 : !block
 
     if (timeout) {
       highlightedBlocks[key] = false
@@ -69,7 +69,7 @@ const mur = {
     this.lastActiveBlock[scriptId] = blockId
     highlightedBlocks[blockId] = true
 
-    await mur.delay(5)
+    // await mur.delay(5)
   },
 
   set_axis: async function (index, speed) {
