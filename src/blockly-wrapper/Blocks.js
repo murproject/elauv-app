@@ -353,6 +353,26 @@ mur.h(_scriptId, null)
       }
     }
 
+    register_proto('mur_sensor_color_wait', (gen) => {
+      return (block) => {
+        let mode = block.getFieldValue('MODE')
+
+        // TODO: stupid! try to do it with async way
+        // TODO: should only call function in interpreter
+
+        // TODO: should implement a proper way to wait for event!
+
+        if (gen === Blockly.JavaScript) {
+          return makeFunc(gen, `while (!mur.get_color_status('${mode}')) {await mur.delay(50);}`)
+        }
+
+        if (gen === BlocklyLua) {
+          return makeFunc(gen, `while (!mur.get_color_status('${mode}')) do mur.delay(50) end`)
+        }
+      }
+    })
+
+
     Blockly.Blocks.mur_get_color = {
       init: function () {
         this.appendDummyInput()
@@ -538,12 +558,15 @@ mur.h(_scriptId, null)
       return (block) => {
         // TODO: stupid! try to do it with async way
         // TODO: should only call function in interpreter
+
+        // TODO: should implement a proper way to wait for event!
+
         if (gen === Blockly.JavaScript) {
-          return makeFunc(gen, 'while (!mur.get_imu_tap()) {await mur.delay(100);}')
+          return makeFunc(gen, 'while (!mur.get_imu_tap()) {await mur.delay(50);}')
         }
 
         if (gen === BlocklyLua) {
-          return makeFunc(gen, 'while (!mur.get_imu_tap()) do mur.delay(100) end')
+          return makeFunc(gen, 'while (!mur.get_imu_tap()) do mur.delay(50) end')
         }
       }
     })
@@ -557,7 +580,7 @@ mur.h(_scriptId, null)
 
         this.appendValueInput('Delay')
           .setCheck('Number')
-          .appendField(icon('timer-outline', 'время'))
+          .appendField(icon('timer-sand', 'время'))
 
         this.appendStatementInput('STACK').appendField()
         this.setPreviousStatement(true, 'action')
