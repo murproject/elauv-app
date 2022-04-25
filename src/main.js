@@ -138,6 +138,14 @@ var app = {
   },
 }
 
+
+if (typeof cordova !== 'undefined') {
+  document.addEventListener('deviceready', () => {
+    window.IsekaiFakeSplash.hide()
+  }, false)
+}
+
+
 window.onload = function () {
   document.app = app;
   app.init();
