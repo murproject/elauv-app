@@ -23,7 +23,9 @@
       "cordova-plugin-bluetooth-classic-serial-port": {},
       "cordova-plugin-qr-barcode-scanner": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      }
+      },
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-isekai-fake-splash": {}
     }
   }
 }

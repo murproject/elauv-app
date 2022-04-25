@@ -44,8 +44,9 @@
     "@msgpack/msgpack": "^2.7.2",
     "blockly": "^8.0.0",
     "cordova-plugin-bluetooth-classic-serial-port": "^0.9.10",
-    "cordova-plugin-fullscreen-cutout": "^1.4.0",
+    "cordova-plugin-isekai-fake-splash": "^1.0.1",
     "cordova-plugin-qr-barcode-scanner": "^8.0.3",
+    "cordova-plugin-statusbar": "^3.0.0",
     "hyperapp": "^2.0.22",
     "nipplejs": "^0.9.1"
   }

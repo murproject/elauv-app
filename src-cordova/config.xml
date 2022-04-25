@@ -10,4 +10,25 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+
+    <access origin="*" />
+    <allow-navigation href="*"/>
+
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="Fullscreen" value="true" />
+
+    <icon src="../src/assets/icon.png" platform="android" width="512" height="512" density="mdpi" />
+
+    <splash src="../src/assets/splash.png" density="land-hdpi" />
+    <splash src="../src/assets/splash.png" density="land-ldpi" />
+    <splash src="../src/assets/splash.png" density="land-mdpi" />
+    <splash src="../src/assets/splash.png" density="land-xhdpi" />
+    <splash src="../src/assets/splash.png" density="land-xxhdpi" />
+    <splash src="../src/assets/splash.png" density="land-xxxhdpi" />
+    <splash src="../src/assets/splash.png" density="port-hdpi" />
+    <splash src="../src/assets/splash.png" density="port-ldpi" />
+    <splash src="../src/assets/splash.png" density="port-mdpi" />
+    <splash src="../src/assets/splash.png" density="port-xhdpi" />
+    <splash src="../src/assets/splash.png" density="port-xxhdpi" />
+    <splash src="../src/assets/splash.png" density="port-xxxhdpi" />
 </widget>
