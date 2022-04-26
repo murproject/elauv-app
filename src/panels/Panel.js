@@ -42,7 +42,11 @@ export default class Panel {
     } else {
       this.container.classList.remove('active');
     }
+
+    this.onActiveChanged();
   }
+
+  onActiveChanged() {}
 
   setInterval(func, timeout) {
     return window.setInterval(() => { this[func.name]() }, timeout);
