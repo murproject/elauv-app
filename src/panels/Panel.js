@@ -1,8 +1,11 @@
 export default class Panel {
 
-  constructor(id) {
+  constructor(name) {
+    this.begin();
     this.inject();
     this.init();
+
+    console.log(this);
   }
 
   init() {
@@ -12,8 +15,13 @@ export default class Panel {
   inject() {
     this.container = document.createElement("div");
     this.container.classList.add("panel");
-    this.container.innerHTML = this.html();
-    document.querySelector(".panel-wrapper").appendChild(this.container);
+    this.container.innerHTML = this.html;
+    document.querySelector("#panel-wrapper").appendChild(this.container);
+
+    this.panelButton = document.createElement("button");
+    this.panelButton.onclick = () => document.app.panelSelect(this.name);
+    this.panelButton.innerText = this.name;
+    document.querySelector("#buttons-main").appendChild(this.panelButton);
 
     this.setActive(false);
   }
