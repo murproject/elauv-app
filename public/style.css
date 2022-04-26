@@ -2,6 +2,10 @@
     user-select: none;
 }
 
+textarea {
+    user-select: auto;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -30,7 +34,7 @@ body {
     height: 3em;
 }
 
-.panel-wrapper {
+#panel-wrapper {
     flex-grow: 1;
 
     position: relative;

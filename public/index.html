@@ -22,9 +22,10 @@
 
     <header id="head">
       <span class="buttons-group" id="buttons-main">
-        <button onclick="app.panelSelect('telemetry');" type="submit">telemetry</button>
-        <button onclick="app.panelSelect('joystick');" type="submit">joystick</button>
-        <button onclick="app.panelSelect('blockly');" type="submit">blockly</button>
+        <!-- <button onclick="app.panelSelect('devices');" type="submit">devices</button> -->
+        <!-- <button onclick="app.panelSelect('telemetry');" type="submit">telemetry</button> -->
+        <!-- <button onclick="app.panelSelect('joystick');" type="submit">joystick</button> -->
+        <!-- <button onclick="app.panelSelect('blockly');" type="submit">blockly</button> -->
       </span>
 
       <span class="buttons-group" id="buttons-blockly" style="float: right;" >
@@ -37,20 +38,10 @@
       </span>
     </header>
 
-    <section class="panel-wrapper">
+    <section id="panel-wrapper">
 
       <div class="panel" id="telemetryPanel">
         <div id="telemetryText">telemetry</div>
-      </div>
-
-      <div class="panel" id="joystickPanel">
-        <div>joystick</div>
-        <div class="nipple-wrapper" id="nipple0"></div>
-        <div class="nipple-wrapper" id="nipple1"></div>
-        <br>
-
-        <textarea id="axesFormula" spellcheck="false" rows="15" cols="40" name="text"></textarea>
-        <div id="formulaStatus"></div>
       </div>
 
       <div id="blocklyPanel" class="panel fluid">
