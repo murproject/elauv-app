@@ -1,6 +1,6 @@
-import BlocklyWrapper from './blockly-wrapper/BlocklyWrapper.js'
 import apiGameMur from './vehicle/apiGameMur.js'
 
+import DevicesPanel from './panels/Devices.js';
 import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
@@ -18,15 +18,11 @@ var app = {
   currentPanelName: "",
 
   panels: {
+    devices: new DevicesPanel(),
     telemetry: new TelemetryPanel(),
     joystick: new JoystickPanel(),
     blockly: new BlocklyPanel(),
   },
-
-  blockly: BlocklyWrapper,
-
-  formulaInput: q("#axesFormula"),
-  formulaStatusText: q("#formulaStatus"),
 
   panelSelect: function (target) {
     if (this.currentPanel) {
@@ -45,20 +41,12 @@ var app = {
   mur: apiGameMur,
 
   init: function () {
-    // for (const key in this.panels) {
-    //   this.panels[key].init();
-    // }
-
-    // this.panels.joystick.init();
-
     this.panelSelect(this.panels.telemetry);
 
-    console.log(this.panels.joystick);
+    this.mur.create();
 
     // this.blockly.start();
     // this.blockly.mur = this.mur;
-
-    this.mur.create();
 
     this.mur.telemetryUpdated = (t, f) => {
       const prettyTelemetry = JSON.stringify(f, null, '\t');
@@ -66,9 +54,9 @@ var app = {
     //   this.blockly.updateTelemetry(t);
     };
 
-    // this.timerKeepAlive = setInterval(() => {
-    //   this.mur.controlInfo();
-    // }, 1500);
+    this.timerKeepAlive = setInterval(() => {
+      this.mur.controlInfo();
+    }, 1500);
   },
 }
 

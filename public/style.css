@@ -14,13 +14,13 @@ body {
 .panel-button {
     border: 1px solid #777;
     background-color: #ddd;
-    min-width: 7em;
+    /* min-width: 7em; */
     text-align: center;
     /* height: 100%; */
 }
 
 .panel-button.active {
-    font-weight: bold;
+    /* font-weight: bold; */
     background-color: #AAA;
 }
 
