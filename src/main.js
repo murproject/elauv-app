@@ -9,11 +9,11 @@ import protocol from './vehicle/protocolGameMur.js'
 
 const q = selector => document.querySelector(selector);
 
-var app = {
+const app = {
   html: /*html*/`
     <header id="head">
       <div class="buttons-group" id="buttons-main">
-      <div class="panel-logo">ElAUV</div>
+        <!-- <div class="panel-logo">ElAUV</div> -->
       </div>
     </header>
     <section id="panel-wrapper"></section>
@@ -70,11 +70,14 @@ var app = {
 if (typeof cordova !== 'undefined') {
   document.addEventListener('deviceready', () => {
     window.IsekaiFakeSplash.hide()
+    main();
   }, false)
+} else {
+  window.onload = () => main();
 }
 
 
-window.onload = function () {
+function main() {
   document.app = app;
   app.init();
-};
+}
