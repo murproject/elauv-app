@@ -44,6 +44,32 @@ export default class Blockly extends Panel {
 
   init() {
     this.container.classList.add("fluid");
+
+    this.toolButtons = document.createElement("div");
+    this.toolButtons.classList.add("buttons-group");
+    this.toolButtons.id = "buttons-blockly";
+    document.querySelector("#head").appendChild(this.toolButtons);
+
+    const actions = [
+      { name: 'run_lua', func: this.run_lua },
+      { name: 'run_js', func: this.run_js },
+      { name: 'stop', func: this.stop },
+      { name: 'example', func: this.example },
+      { name: 'load', func: this.load },
+      { name: 'save', func: this.save },
+    ]
+
+    actions.forEach(action => {
+      const actionButton = document.createElement("div");
+      actionButton.classList.add("panel-button");
+      actionButton.onclick = () => action.func();
+      actionButton.innerText = action.name;
+      this.toolButtons.appendChild(actionButton);
+    });
+  }
+
+  load() {
+    console.log("load");
   }
 
 }

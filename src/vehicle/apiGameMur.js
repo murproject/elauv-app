@@ -181,7 +181,7 @@ export default {
       let result = ''
       for (const key in value) {
         if (typeof value[key] !== 'function') {
-          result += key + ': ' + value[key] + '\n'
+          result += key + ': ' + value[key] + '; '
         }
         // if (value[key] === true) {
         // result.push(key)

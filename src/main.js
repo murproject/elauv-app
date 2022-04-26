@@ -9,20 +9,21 @@ import protocol from './vehicle/protocolGameMur.js'
 
 const q = selector => document.querySelector(selector);
 
-function clamp (value, min, max) {
-  return Math.round(Math.min(Math.max(min, value), max))
-}
-
 var app = {
-  currentPanel: null,
-  currentPanelName: "",
+  html: /*html*/`
+    <header id="head">
+      <div class="buttons-group" id="buttons-main">
+      <div class="panel-logo">ElAUV</div>
+      </div>
+    </header>
+    <section id="panel-wrapper"></section>
+  `,
 
-  panels: {
-    devices: new DevicesPanel(),
-    telemetry: new TelemetryPanel(),
-    joystick: new JoystickPanel(),
-    blockly: new BlocklyPanel(),
-  },
+  container: document.querySelector("#app"),
+
+  panels: {},
+
+  currentPanel: null,
 
   panelSelect: function (target) {
     if (this.currentPanel) {
@@ -33,14 +34,19 @@ var app = {
     this.currentPanel.setActive(true);
   },
 
-  blocklyAction: function (action) {
-    console.log('blockly action: ' + action);
-    this.blockly[action](); // TODO: if typeof === function
-  },
-
   mur: apiGameMur,
 
   init: function () {
+    this.container.innerHTML = this.html;
+    console.log(this.container);
+
+    this.panels = {
+      devices: new DevicesPanel(),
+      telemetry: new TelemetryPanel(),
+      joystick: new JoystickPanel(),
+      blockly: new BlocklyPanel(),
+    };
+
     this.panelSelect(this.panels.telemetry);
 
     this.mur.create();
