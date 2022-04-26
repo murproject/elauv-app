@@ -1,7 +1,7 @@
 import nipplejs from 'nipplejs'
 
 export default {
-    axisFormulaDefault: `max_power = 50
+    axisFormulaDefault: `max_power = 30
 
 a = + x + y
 b = + x - y
