@@ -57,7 +57,7 @@ const app = {
     this.mur.telemetryUpdated = (t, f) => {
       const prettyTelemetry = JSON.stringify(f, null, '\t');
       this.panels.telemetry.update(prettyTelemetry);
-    //   this.blockly.updateTelemetry(t);
+      this.panels.blockly.updateTelemetry(t);
     };
 
     this.timerKeepAlive = setInterval(() => {

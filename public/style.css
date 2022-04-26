@@ -133,6 +133,7 @@ body {
 /* ---- Blockly ---- */
 
 #blocklyDiv {
+    height: 100%;
     /* box-shadow: 0 0 18px rgba(0, 0, 0, 0.25); */
 }
 

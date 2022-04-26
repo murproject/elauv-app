@@ -2,6 +2,7 @@ export default class Panel {
 
   constructor() {
     this.name = this.constructor.name;
+    this.html = ``;
 
     this.begin();
     this.inject();
