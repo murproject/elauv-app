@@ -150,3 +150,10 @@ path.blocklyPath {
     background: #aaa;
     border-radius: 2px;
 }
+
+.blocklyDraggable > path {
+    stroke-width: 2px;
+    /* stroke-linejoin: round; */
+    /* stroke: white !important; */
+    stroke-opacity: 1.0;
+}
