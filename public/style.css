@@ -11,6 +11,19 @@ body {
     padding: 0;
 }
 
+.panel-button {
+    border: 1px solid #777;
+    background-color: #ddd;
+    min-width: 7em;
+    text-align: center;
+    /* height: 100%; */
+}
+
+.panel-button.active {
+    font-weight: bold;
+    background-color: #AAA;
+}
+
 #head button,
 #head div {
     float: left;
