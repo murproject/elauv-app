@@ -244,6 +244,10 @@ mur.h(_scriptId, null)
 
     /* mur.actuator(index, power) */
 
+    // TODO: solenoid now can be only turned on/off without power level
+    // TODO: make forced zero-power on solenoid after timeout?
+
+
     Blockly.Blocks.mur_actuator = {
       init: function () {
         this.appendValueInput('Index')
@@ -276,7 +280,9 @@ mur.h(_scriptId, null)
         const index = calcVal(gen, block, 'Index')
         const power = calcVal(gen, block, 'Power')
         const sleepMs = calcVal(gen, block, 'Delay')
-        return makeFunc(gen, `mur.actuator(${index}, ${power})`) + makeDelay(gen, sleepMs)
+        return makeFunc(gen, `mur.actuator(${index}, ${power})`) +
+               makeDelay(gen, sleepMs) +
+               makeFunc(gen, `mur.actuator(${index}, 0)`)
       }
     })
 
