@@ -1,11 +1,11 @@
 export default class Panel {
 
-  constructor(name) {
+  constructor() {
+    this.name = this.constructor.name;
+
     this.begin();
     this.inject();
     this.init();
-
-    console.log(this);
   }
 
   init() {
@@ -20,7 +20,7 @@ export default class Panel {
 
     this.panelButton = document.createElement("div");
     this.panelButton.classList.add("panel-button");
-    this.panelButton.onclick = () => document.app.panelSelect(this.name);
+    this.panelButton.onclick = () => document.app.panelSelect(this);
     this.panelButton.innerText = this.name;
     document.querySelector("#buttons-main").appendChild(this.panelButton);
 

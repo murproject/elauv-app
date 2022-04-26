@@ -1,6 +1,10 @@
 import BlocklyWrapper from './blockly-wrapper/BlocklyWrapper.js'
 import apiGameMur from './vehicle/apiGameMur.js'
-import joystickPanel from './panels/Joystick.js';
+
+import TelemetryPanel from './panels/Telemetry.js';
+import JoystickPanel from './panels/Joystick.js';
+import BlocklyPanel from './panels/Blockly.js';
+
 import protocol from './vehicle/protocolGameMur.js'
 
 const q = selector => document.querySelector(selector);
@@ -14,11 +18,9 @@ var app = {
   currentPanelName: "",
 
   panels: {
-    // telemetry: q('#telemetryPanel'),
-    // blockly: q('#blocklyPanel'),
-    joystick: new joystickPanel(),
-
-    // telemetryText: q('#telemetryText'),
+    telemetry: new TelemetryPanel(),
+    joystick: new JoystickPanel(),
+    blockly: new BlocklyPanel(),
   },
 
   blockly: BlocklyWrapper,
@@ -27,13 +29,11 @@ var app = {
   formulaStatusText: q("#formulaStatus"),
 
   panelSelect: function (target) {
-    this.currentPanelName = target;
-
     if (this.currentPanel) {
       this.currentPanel.setActive(false);
     }
 
-    this.currentPanel = this.panels[target];
+    this.currentPanel = target;
     this.currentPanel.setActive(true);
   },
 
@@ -51,7 +51,7 @@ var app = {
 
     // this.panels.joystick.init();
 
-    // this.panelSelect('joystick');
+    this.panelSelect(this.panels.telemetry);
 
     console.log(this.panels.joystick);
 
@@ -60,12 +60,11 @@ var app = {
 
     this.mur.create();
 
-    // this.mur.telemetryUpdated = (t, f) => {
-    //   const prettyTelemetry = JSON.stringify(f, null, '\t');
-    //   this.panels.telemetryText.innerText = prettyTelemetry;
-
+    this.mur.telemetryUpdated = (t, f) => {
+      const prettyTelemetry = JSON.stringify(f, null, '\t');
+      this.panels.telemetry.update(prettyTelemetry);
     //   this.blockly.updateTelemetry(t);
-    // };
+    };
 
     // this.timerKeepAlive = setInterval(() => {
     //   this.mur.controlInfo();

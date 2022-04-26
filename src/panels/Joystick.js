@@ -23,7 +23,7 @@ d = - z
 export default class Joystick extends Panel {
 
   begin() {
-    this.name = "joystick";
+    this.name = "Joystick";
 
     this.html = /*html*/`
       <div class="nipple-wrapper" id="nipple0"></div>
@@ -97,7 +97,7 @@ export default class Joystick extends Panel {
 
 
   computePowers() {
-    var max_power = 50;
+    var max_power = 0;
 
     var yaw = this.axes.yaw;
     var forward = this.axes.forward;
