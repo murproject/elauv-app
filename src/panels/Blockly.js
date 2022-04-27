@@ -246,13 +246,13 @@ export default class BlocklyPanel extends Panel {
     // Load each block into the workspace individually and generate code.
     var allCode = []
     var headless = new Blockly.Workspace()
-    for (var i = 0; i < topBlocks.length; i++) {
-      var block = topBlocks[i]
+
+    topBlocks.forEach(block => {
       blocks.push(block)
       Blockly.serialization.workspaces.load(json, headless)
       allCode.push(this.generate_code(headless))
       blocks.length = 0
-    }
+    });
 
     console.log(allCode)
 

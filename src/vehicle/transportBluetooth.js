@@ -60,8 +60,8 @@ export default {
     }
 
     let replaced = false
-    for (const i in this.devices.all) {
-      const comparedDevice = this.devices.all[i]
+
+    this.devices.all.forEach(comparedDevice => {
       if (currentDevice.address === comparedDevice.address) {
         if (currentDevice.isPaired || currentDevice.isActive) {
           newAllDevices.push(currentDevice)
@@ -72,7 +72,7 @@ export default {
       } else {
         newAllDevices.push(comparedDevice)
       }
-    }
+    });
 
     if (!replaced) {
       newAllDevices.push(currentDevice)
@@ -114,13 +114,12 @@ export default {
     this.devices.paired = []
     bluetoothClassicSerial.list(
       (results) => {
-        for (const i in results) {
-          const device = results[i]
+        results.forEach(device => {
           if (this.isDeviceCompatible(device)) {
             this.devices.paired.push(device)
           }
           this.deviceDiscovered(device, true)
-        }
+        });
         // EventBus.$emit('bt-discovered-paired', { devices: results })
       },
       (error) => {

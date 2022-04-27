@@ -56,9 +56,7 @@ export default {
         const raw = new Uint8Array(buf)
         const packets = Protocol.splitBufferToPackets(raw)
 
-        for (const key in packets) {
-          mur.handlePacket(packets[key]);
-        }
+        packets.forEach(packet => mur.handlePacket(packet));
       })
     }
 
