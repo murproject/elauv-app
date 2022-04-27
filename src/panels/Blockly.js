@@ -121,12 +121,14 @@ export default class BlocklyPanel extends Panel {
       { name: 'example',  func: this.example },
       { name: 'load',     func: this.load },
       { name: 'save',     func: this.save },
-    ]
+    ];
 
     actions.forEach(action => {
       const actionButton = document.createElement("div");
       actionButton.classList.add("panel-button");
-      actionButton.onclick = () => this[action.func.name]();
+      actionButton.onclick = () => {
+        window.setTimeout(() => this[action.func.name](), 50);
+      };
       actionButton.innerText = action.name;
       this.toolButtons.appendChild(actionButton);
     });
@@ -146,13 +148,6 @@ export default class BlocklyPanel extends Panel {
     this.container.appendChild(this.blocklyDiv);
 
     this.reinject(false);
-
-    // this.workspace = Blockly.inject(this.blocklyDiv, blocklyConfig);
-    // workspace = this.workspace; // TODO: тупзим
-    // Blockly.svgResize(this.workspace);
-
-    // let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
-    // defs.innerHTML += filterGlow
   }
 
   generate_code(workspace) {
