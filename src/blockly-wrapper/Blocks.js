@@ -195,7 +195,8 @@ end
         return `
 (async () => {
 ${branch}
-mur.h(_scriptId, null)
+await mur.h(_scriptId, null);
+await mur.thread_end(_scriptId);
 })();
 `
         // let sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
