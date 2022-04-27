@@ -61,7 +61,7 @@ const app = {
     };
 
     this.timerKeepAlive = setInterval(() => {
-      mur.controlInfo();
+      mur.controlInfo(); // TODO: use separate keepalive packet?
     }, 1500);
   },
 

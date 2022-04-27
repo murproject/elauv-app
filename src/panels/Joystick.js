@@ -11,9 +11,9 @@ function clamp (value, min, max) {
 const axesFormulaDefault = `max_power = 30
 
 a = + x + y
-b = + x - y
+b = + z
 c = + z
-d = - z
+d = - x + y
 
 // x = yaw
 // y = forward
