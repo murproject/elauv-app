@@ -23,11 +23,11 @@ const blocklyConfig = {
   zoom: {
     controls: true,
     wheel: true,
+    pinch: true,
     startScale: 1.0,
     maxScale: 2.0,
     minScale: 0.3,
     scaleSpeed: 1.15,
-    pinch: true
   },
   // css: false,
   move: {
@@ -178,6 +178,8 @@ export default class BlocklyPanel extends Panel {
 
     this.workspace.highlightBlock(null)
 
+    this.reinject(false);
+
     document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', '')});
     // document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', 'url(#filterShadow')});
   }
@@ -229,11 +231,10 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_js() {
-
     this.code = this.generate_code(this.workspace)
     console.log(this.code)
 
-    // this.reinject(true)
+    this.reinject(true)
 
     if (this.scriptWorker != null) {
       this.scriptWorker.terminate()
@@ -271,7 +272,6 @@ export default class BlocklyPanel extends Panel {
     this.scriptWorker.postMessage({
       type: 'run',
       scripts: allCode
-      // script: this.code
     })
 
     this.scriptStatus = 'running'
@@ -281,39 +281,51 @@ export default class BlocklyPanel extends Panel {
     if (this.scriptStatus === 'running') {
       this.scriptWorker.postMessage({
         type: 'telemetry',
-        // telemetry: {
-        //   imuYaw: t.imuYaw
-        // }
         telemetry: JSON.parse(JSON.stringify(telemetry)) // TODO: should do it in better way
       })
     }
   }
 
+  reinject (readonly = false) {
+    this.workspaceBlocks = Blockly.serialization.workspaces.save(this.workspace)
+    this.workspace.dispose()
+
+    // this.$refs.blocklyInstance.inject(readonly)
+    blocklyConfig.readOnly = readonly;
+    blocklyConfig.zoom.controls = !readonly;
+    blocklyConfig.zoom.wheel = !readonly;
+    blocklyConfig.zoom.pinch = !readonly;
+
+    blocklyConfig.move.drag = !readonly;
+    blocklyConfig.move.wheel = !readonly;
+    // blocklyConfig.scrollbars = !readonly;
+
+    this.workspace = Blockly.inject(this.blocklyDiv, blocklyConfig);
+    workspace = this.workspace
+
+    Blockly.serialization.workspaces.load(this.workspaceBlocks, this.workspace)
+    this.workspace.zoomToFit()
+
+    if (readonly) {
+      document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.add("hidden"));
+    } else {
+      document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.remove("hidden"));
+    }
+  }
+
   workerMsgHandler(e) {
-    // console.log(this);
-    // TODO: should move this from component!
-
-    // console.log('Received: ' + e.data)
-
-    // const data = e.data
     const data = Object.assign({}, e.data)
-    // console.log(data)
 
     if (!('type' in data)) {
       return
     }
 
-    const curTimestamp = +new Date()
-
     if (data.type === 'mur.h') {
-      // TODO //
-
       const blocks = data.blockId
 
       for (const key in blocks) {
-        // console.log("highlighting block with id: " + key + " = " + blocks[key])
-        // workspace.highlightBlock(key, blocks[key])
-        document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
+        workspace.highlightBlock(key, blocks[key])
+        // document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
       }
 
       return
