@@ -36,30 +36,30 @@ const MurToolbox = {
       colour: 20,
       contents: [
 
-        {
-          kind: 'block',
-          type: 'mur_set_axis',
-          inputs: {
-            Power: placeholderNum(50)
-          }
-        },
+        // {
+        //   kind: 'block',
+        //   type: 'mur_set_axis',
+        //   inputs: {
+        //     Power: placeholderNum(50)
+        //   }
+        // },
 
-        {
-          kind: 'block',
-          type: 'mur_set_axis_wait',
-          inputs: {
-            Power: placeholderNum(50),
-            Delay: placeholderNum(0.5)
-          }
-        },
+        // {
+        //   kind: 'block',
+        //   type: 'mur_set_axis_wait',
+        //   inputs: {
+        //     Power: placeholderNum(50),
+        //     Delay: placeholderNum(0.5)
+        //   }
+        // },
 
-        {
-          kind: 'block',
-          type: 'mur_set_yaw',
-          inputs: {
-            Angle: placeholderNum(0)
-          }
-        },
+        // {
+        //   kind: 'block',
+        //   type: 'mur_set_yaw',
+        //   inputs: {
+        //     Angle: placeholderNum(0)
+        //   }
+        // },
 
         {
           kind: 'block',
