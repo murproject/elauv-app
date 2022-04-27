@@ -1,15 +1,13 @@
-import apiGameMur from './vehicle/apiGameMur.js'
+import mur from './vehicle/apiGameMur.js'
 
 import DevicesPanel from './panels/Devices.js';
 import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 
-import protocol from './vehicle/protocolGameMur.js'
-
-const q = selector => document.querySelector(selector);
 
 const app = {
+
   html: /*html*/`
     <header id="head">
       <div class="buttons-group" id="buttons-main">
@@ -20,10 +18,9 @@ const app = {
   `,
 
   container: document.querySelector("#app"),
-
   panels: {},
-
   currentPanel: null,
+
 
   panelSelect: function (target) {
     if (this.currentPanel) {
@@ -34,11 +31,11 @@ const app = {
     this.currentPanel.setActive(true);
   },
 
-  mur: apiGameMur,
 
-  init: function () {
-    this.container.innerHTML = this.html;
-    console.log(this.container);
+  createPanels: function () {
+    if (this.panels.length > 0) {
+      return;
+    }
 
     this.panels = {
       devices: new DevicesPanel(),
@@ -47,23 +44,27 @@ const app = {
       blockly: new BlocklyPanel(),
     };
 
-    this.panelSelect(this.panels.telemetry);
+    this.panelSelect(this.panels.blockly);
+  },
 
-    this.mur.create();
 
-    // this.blockly.start();
-    // this.blockly.mur = this.mur;
+  init: function () {
+    this.container.innerHTML = this.html;
+    this.createPanels();
 
-    this.mur.telemetryUpdated = (t, f) => {
+    mur.create();
+
+    mur.telemetryUpdated = (t, f) => {
       const prettyTelemetry = JSON.stringify(f, null, '\t');
       this.panels.telemetry.update(prettyTelemetry);
       this.panels.blockly.updateTelemetry(t);
     };
 
     this.timerKeepAlive = setInterval(() => {
-      this.mur.controlInfo();
+      mur.controlInfo();
     }, 1500);
   },
+
 }
 
 
@@ -79,5 +80,5 @@ if (typeof cordova !== 'undefined') {
 
 function main() {
   document.app = app;
-  app.init();
+  document.app.init();
 }
