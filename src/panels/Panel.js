@@ -9,9 +9,7 @@ export default class Panel {
     this.init();
   }
 
-  init() {
-    console.error("Empty panel init!");
-  }
+  begin() {}
 
   inject() {
     this.container = document.createElement("div");
@@ -27,6 +25,8 @@ export default class Panel {
 
     this.setActive(false);
   }
+
+  init() {}
 
   q(selector) {
     return this.container.querySelector(selector);

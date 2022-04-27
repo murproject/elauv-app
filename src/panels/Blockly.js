@@ -86,13 +86,6 @@ const filterGlow = `
 
 export default class BlocklyPanel extends Panel {
 
-  begin() {
-    this.html = /*html*/`
-
-    `
-  }
-
-
   onActiveChanged() {
     if (this.toolButtons) {
       if (this.active) {
