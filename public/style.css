@@ -32,6 +32,15 @@ body {
     font-family: "Roboto";
 }
 
+.push-button {
+    display: inline;
+    padding: 0.5em;
+    margin: 0.5em;
+    z-index: unset;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+
 .panel-button:active {
 /*     box-shadow: 0 0 20px rgba(0,0,0,0.5); */
     background-color: #888 !important;
@@ -152,11 +161,11 @@ body {
     pointer-events: none;
 }
 
-.blocklyWsDragSurface {
-    /* will-change: transform !important; */
-}
+/* .blocklyWsDragSurface {
+    will-change: transform !important;
+} */
 
-path.blocklyPath {
+/* path.blocklyPath { */
     /* translate: 20px 20px 29px; */
     /* transform: translateZ(0); */
     /* will-change: transform !important; */
@@ -169,7 +178,7 @@ path.blocklyPath {
     perspective: 1000  !important;
     transform: translate3d(0,0,0) !important;
     transform: translateZ(0) !important; */
-}
+/* } */
 
 
 
@@ -188,9 +197,9 @@ path.blocklyPath {
     margin-bottom: 0em;
 }
 
-#blocklyDiv text {
+/* #blocklyDiv text { */
     /* font-family: "Noto Sans" !important; */
-}
+/* } */
 
 #blocklyDiv.pretty .custom_renderer-renderer .blocklyEditableText > text,
 #blocklyDiv.pretty .custom_renderer-renderer .blocklyNonEditableText > text {
