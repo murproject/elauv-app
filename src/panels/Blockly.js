@@ -145,12 +145,14 @@ export default class BlocklyPanel extends Panel {
     this.blocklyDiv.classList.add("pretty");
     this.container.appendChild(this.blocklyDiv);
 
-    this.workspace = Blockly.inject(this.blocklyDiv, blocklyConfig);
-    workspace = this.workspace; // TODO: тупзим
-    Blockly.svgResize(this.workspace);
+    this.reinject(false);
 
-    let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
-    defs.innerHTML += filterGlow
+    // this.workspace = Blockly.inject(this.blocklyDiv, blocklyConfig);
+    // workspace = this.workspace; // TODO: тупзим
+    // Blockly.svgResize(this.workspace);
+
+    // let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
+    // defs.innerHTML += filterGlow
   }
 
   generate_code(workspace) {
@@ -195,6 +197,8 @@ export default class BlocklyPanel extends Panel {
     if (savedBlocks) {
       Blockly.serialization.workspaces.load(JSON.parse(savedBlocks), this.workspace)
     }
+
+    this.workspace.zoomToFit()
   }
 
   example() {
@@ -287,8 +291,10 @@ export default class BlocklyPanel extends Panel {
   }
 
   reinject (readonly = false) {
-    this.workspaceBlocks = Blockly.serialization.workspaces.save(this.workspace)
-    this.workspace.dispose()
+    if (this.workspace) {
+      this.workspaceBlocks = Blockly.serialization.workspaces.save(this.workspace)
+      this.workspace.dispose()
+    }
 
     // this.$refs.blocklyInstance.inject(readonly)
     blocklyConfig.readOnly = readonly;
@@ -302,8 +308,12 @@ export default class BlocklyPanel extends Panel {
 
     this.workspace = Blockly.inject(this.blocklyDiv, blocklyConfig);
     workspace = this.workspace
+    Blockly.svgResize(this.workspace);
 
-    Blockly.serialization.workspaces.load(this.workspaceBlocks, this.workspace)
+    if (this.workspaceBlocks) {
+      Blockly.serialization.workspaces.load(this.workspaceBlocks, this.workspace)
+    }
+
     this.workspace.zoomToFit()
 
     if (readonly) {
@@ -311,6 +321,9 @@ export default class BlocklyPanel extends Panel {
     } else {
       document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.remove("hidden"));
     }
+
+    let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
+    defs.innerHTML += filterGlow
   }
 
   workerMsgHandler(e) {
@@ -324,8 +337,8 @@ export default class BlocklyPanel extends Panel {
       const blocks = data.blockId
 
       for (const key in blocks) {
-        workspace.highlightBlock(key, blocks[key])
-        // document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
+        // workspace.highlightBlock(key, blocks[key])
+        document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
       }
 
       return

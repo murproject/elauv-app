@@ -201,9 +201,8 @@ path.blocklyPath {
 }
 
 .blocklyMenuItemContent img {
-    outline: solid 2px #bbb;
-    background: #aaa;
-    border-radius: 2px;
+    outline: solid 2px #333333;
+    background: #656565;
 }
 
 .blocklyDraggable > path {
@@ -211,4 +210,15 @@ path.blocklyPath {
     /* stroke-linejoin: round; */
     /* stroke: white !important; */
     stroke-opacity: 1.0;
+}
+
+.blocklyMenuItem {
+    min-width: auto !important;
+}
+
+.blocklyMenuItemContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
