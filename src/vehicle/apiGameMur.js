@@ -51,6 +51,8 @@ export default {
 
     const mur = this
 
+    // this.connect();
+
     this.conn.onMessage = (event) => {
       event.data.arrayBuffer().then((buf) => {
         const raw = new Uint8Array(buf)
@@ -62,13 +64,15 @@ export default {
 
     this.reconnectTimer = setInterval(() => {
       const date = new Date()
-      if (this.status !== 'open' || (((date - this.lastUpdatedDate) > 3000) && this.status !== 'connecting')) {
+      if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 3000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
         console.warn('Connection lost')
+        console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
+        // console.warn(`status: ${this.status}, timestamp delta: ${date - this.lastUpdatedDate}`);
         this.connect()
       } else if (this.status === 'open') {
         // EventBus.$emit('status-updated')
       }
-    }, 1500)
+    }, 2500)
   },
 
   // handleIncomingBuffer: function(buf) {

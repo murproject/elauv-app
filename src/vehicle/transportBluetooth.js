@@ -19,9 +19,9 @@ export default {
   },
 
   // macAddress: null,
-  macAddress: 'D8:A0:1D:5C:FF:26', // TODO: don't hardcode
+  // macAddress: 'D8:A0:1D:5C:FF:26', // TODO: don't hardcode
   // macAddress: '50:02:91:AC:B3:BA',
-  // macAddress: 'AC:0B:FB:74:1E:1E',
+  macAddress: 'AC:0B:FB:74:1E:1E',
   /* TODO:
    * 1) show list of paired / discovered devices
    * 2) open system bluetooth settings for manual pairing
@@ -234,6 +234,8 @@ export default {
           },
           (error) => {
             // EventBus.$emit('notify', { text: 'ОШИБКА! ' + error })
+            console.log("connect error:");
+            console.error(error);
             this.state = 'closed'
             bluetoothClassicSerial.unsubscribeRawData(this.macAddress)
           }
@@ -268,7 +270,11 @@ export default {
       // console.log(data)
       bluetoothClassicSerial.write(this.macAddress, data,
         (a) => { },
-        // (b) => { EventBus.$emit('notify', { text: 'WRITE ERROR! ' + b }) }
+        (b) => {
+          // EventBus.$emit('notify', { text: 'WRITE ERROR! ' + b })
+          console.error("send error:");
+          console.error(b);
+        }
       )
     }
   },
