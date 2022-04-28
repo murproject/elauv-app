@@ -8,12 +8,12 @@ function clamp (value, min, max) {
   return Math.round(Math.min(Math.max(min, value), max))
 }
 
-const axesFormulaDefault = `max_power = 30
+const axesFormulaDefault = `max_power = 75
 
-a = + x + y
+a = - x + y
 b = + z
 c = + z
-d = - x + y
+d = + x + y
 
 // x = yaw
 // y = forward
