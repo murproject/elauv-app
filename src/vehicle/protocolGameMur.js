@@ -183,9 +183,10 @@ export default {
       imuPitch: data[8] * 0.01,
       imuRoll: data[9] * 0.01,
       battVolts: data[10] * 0.01,
-      battRsoc: data[11] * 0.01,
-      battTemp: data[12] * 0.01,
-      memFree: data[13]
+      battAmps: data[11] * 0.01,
+      battRsoc: data[12] * 0.01,
+      battTemp: data[13] * 0.01,
+      memFree: data[14]
     }
 
     // debug(telemetry)
