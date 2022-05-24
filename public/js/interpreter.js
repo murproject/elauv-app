@@ -1,3 +1,5 @@
+"use strict";
+
 var state = null
 var script = null
 var scripts = []
@@ -34,7 +36,6 @@ function sendContext () {
   self.postMessage({ type: 'context', context: context })
 }
 
-
 function sendHighlight () {
   const changedBlocks = {}
   const time = +new Date()
@@ -57,7 +58,7 @@ function sendHighlight () {
     }
   }
 
-  self.postMessage({ type: 'mur.h', blockId: changedBlocks })
+  // self.postMessage({ type: 'mur.h', blockId: changedBlocks })
 }
 
 
@@ -92,6 +93,9 @@ const mur = {
   delay: function (sleepMs) {
     // TODO: should not create dozens of timers by calling setTimeout() lots times per second,
     // TODO: create one timer with setInterval to control ticks? (but will block other async threads)
+    if (sleepMs <= 0) {
+      return;
+    }
     return new Promise(resolve => setTimeout(resolve, sleepMs))
   },
 

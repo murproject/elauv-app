@@ -21,7 +21,8 @@ export default {
   // macAddress: null,
   // macAddress: 'D8:A0:1D:5C:FF:26', // TODO: don't hardcode
   // macAddress: '50:02:91:AC:B3:BA',
-  macAddress: 'AC:0B:FB:74:1E:1E',
+  // macAddress: 'AC:0B:FB:74:1E:1E',
+  macAddress: 'AC:0B:FB:74:1E:2A',
   /* TODO:
    * 1) show list of paired / discovered devices
    * 2) open system bluetooth settings for manual pairing
@@ -34,8 +35,8 @@ export default {
   },
 
   start: function () {
-    bluetoothClassicSerial.setDeviceDiscoveredListener((device) => {
-      if (!this.devices.unpaired.includes(device) && this.isDeviceCompatible(device)) {
+    bluetoothClassicSerial.setDeviceDiscoveredListener(device => {
+      if (!this.devices.unpaired.includes(device) ) { // && this.isDeviceCompatible(device)
         this.devices.unpaired.push(device)
       }
       this.deviceDiscovered(device, false)
@@ -85,7 +86,9 @@ export default {
     // this.devices.all = newAllDevices
     this.devices.all = newAllDevices
 
-    // console.log(this.devices.all)
+    this.onDeviceDiscovered(this.devices.all);
+
+    console.log(this.devices.all)
   },
 
   scanUnpaired: function () {
@@ -96,6 +99,7 @@ export default {
     this.devices.unpaired = []
     bluetoothClassicSerial.discoverUnpaired(
       (results) => {
+        console.log(results);
         // for (const i in results) {
         //   if (this.isDeviceCompatible(results[i])) {
         //     this.devices.paired.push(results[i])
@@ -105,6 +109,7 @@ export default {
         this.state = 'closed'
       },
       (error) => {
+        console.error(error)
         // EventBus.$emit('notify', { text: 'discoverUnpaired failed: ' + error })
       }
     )
@@ -278,6 +283,8 @@ export default {
       )
     }
   },
+
+  onDeviceDiscovered: null,
 
   onScan: null,
   onOpen: null,

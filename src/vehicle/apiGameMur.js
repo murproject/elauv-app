@@ -10,6 +10,7 @@ if (typeof cordova !== 'undefined') {
 
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
+
 export default {
   name: 'mur',
   mur: this,
@@ -28,6 +29,8 @@ export default {
   reconnecting: false,
   reconnectTimer: null,
   context: {},
+
+  oldImuTapState: false,
 
   telemetryUpdated: (t, f) => {},
 
@@ -57,7 +60,6 @@ export default {
       event.data.arrayBuffer().then((buf) => {
         const raw = new Uint8Array(buf)
         const packets = Protocol.splitBufferToPackets(raw)
-
         packets.forEach(packet => mur.handlePacket(packet));
       })
     }
@@ -75,14 +77,6 @@ export default {
     }, 2500)
   },
 
-  // handleIncomingBuffer: function(buf) {
-  //   const raw = new Uint8Array(buf)
-  //   const packets = Protocol.splitBufferToPackets(raw)
-
-  //   for (const key in packets) {
-  //     mur.handlePacket(packets[key]);
-  //   }
-  // },
 
   handlePacket: function (raw) {
     const message = Protocol.parsePacket(raw)
@@ -91,11 +85,17 @@ export default {
 
     switch (message.type) {
       case 'telemetry':
+        this.oldImuTapState = !this.oldImuTapState;
+        // console.log(this.oldImuTapState);
+
         if (message.timestamp < this.telemetry.timestamp) {
           console.warn('inconsistent timestamps: old is ' + this.telemetry.timestamp + ', and new is ' + message.timestamp)
         }
         this.telemetry = message
         this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3)
+
+        // this.telemetry.feedback.imuTap = this.oldImuTapState; // TODO: delete!
+
         // EventBus.$emit('telemetry-received')
         this.updateTelemetry()
         // console.log(mur.formattedTelemetry)

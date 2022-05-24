@@ -149,11 +149,11 @@ public class BluetoothClassicSerial extends CordovaPlugin {
                 ic = getInterfaceContext(macAddress);
 
                 /* Now using ThreadPool to avoid following error:
-                
+
                    THREAD WARNING: exec() call to BluetoothClassicSerial.write
                    blocked the main thread for 30ms.
                    Plugin should use CordovaInterface.getThreadPool(). */
-                
+
                 if (ic != null) {
                     cordova.getThreadPool().execute(new Runnable() {
                         @Override

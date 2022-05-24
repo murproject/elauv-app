@@ -165,7 +165,7 @@ export default class BlocklyPanel extends Panel {
 
     this.workspace.highlightBlock(null)
 
-    this.reinject(false);
+    // this.reinject(false);
 
     document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', '')});
 
@@ -225,7 +225,7 @@ export default class BlocklyPanel extends Panel {
     this.code = this.generate_code(this.workspace)
     console.log(this.code)
 
-    this.reinject(true)
+    // this.reinject(true)
 
     if (this.scriptWorker != null) {
       this.scriptWorker.terminate()
@@ -276,6 +276,13 @@ export default class BlocklyPanel extends Panel {
     }
   }
 
+  // TODO: don't use reinjecting because of bad performance.
+  /* TODO: block editing with alternative methods:
+      - disable event handlers?
+      - transparent overlay with 100% w/h on top of blockly panel
+      - hide toolbox with css
+  */
+
   reinject (readonly = false) {
     if (this.workspace) {
       this.workspaceBlocks = Blockly.serialization.workspaces.save(this.workspace)
@@ -322,9 +329,9 @@ export default class BlocklyPanel extends Panel {
       const blocks = data.blockId
 
       for (const key in blocks) {
-        // workspace.highlightBlock(key, blocks[key])
         if (key !== 'null') {
-          document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
+          this.workspace.highlightBlock(key, blocks[key])
+        //   document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
         }
       }
 
