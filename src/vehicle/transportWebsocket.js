@@ -31,6 +31,7 @@ export default {
           break
         }
       }
+      this.state = state;
       return state
     } else {
       return 'null'
