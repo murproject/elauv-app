@@ -573,7 +573,7 @@ await mur.thread_end(_scriptId);
         }
 
         if (gen === BlocklyLua) {
-          return makeFunc(gen, 'while (!mur.get_imu_tap()) do mur.delay(50) end')
+          return makeFunc(gen, 'while (not mur.get_imu_tap()) do mur.delay(50) end')
         }
       }
     })
