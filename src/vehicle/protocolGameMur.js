@@ -311,6 +311,53 @@ export default {
 
     var packet = this.makePacket(0, 'P', payload)
     return packet
+  },
+
+  packControlKeepAlive: function (data) {
+    var payload = []
+
+    var packet = this.makePacket(0, 'K', payload)
+    return packet
+  },
+
+  packControlResetFuelGauge: function (data) {
+    var payload = []
+
+    var packet = this.makePacket(0, 'F', payload)
+    return packet
+  },
+
+  packControlSetBatterySettings: function (data) {
+    var payload = [
+      data.designCapacity,
+      data.ccGain,
+      data.terminateVoltage,
+      data.taperCurrent,
+    ]
+
+    var packet = this.makePacket(0, 'B', payload)
+    return packet
+  },
+
+  packControlSetMotorsSettings: function (data) {
+    var payload = [
+      data.motorsPorts,
+      data.motorsMultipliers,
+    ]
+
+    var packet = this.makePacket(0, 'M', payload)
+    return packet
+  },
+
+  packControlSetMotorsSettings: function (data) {
+    var payload = [
+      data.recalibrate == true ? 1 : 0,
+      data.tapTimeout,
+      data.tapTreshold,
+    ]
+
+    var packet = this.makePacket(0, 'G', payload)
+    return packet
   }
 
 }
