@@ -9,7 +9,7 @@ var highlightedBlocks = {}
 var highlightedBlocksActual = {}
 
 var contextUpdater = setInterval(sendContext,100)
-var highlightUpdater = setInterval(sendHighlight, 100)
+var highlightUpdater = setInterval(sendHighlight, 50)
 
 setState('not-running')
 
@@ -41,24 +41,28 @@ function sendHighlight () {
   const time = +new Date()
   let newState = null
 
+  // for (const key in highlightedBlocks) {
+  //   const block = highlightedBlocks[key]
+  //   const timeout = typeof (block) === 'number' ? (time - block) > 100 : !block
+
+  //   if (timeout) {
+  //     highlightedBlocks[key] = false
+  //     newState = false
+  //   } else {
+  //     newState = true
+  //   }
+
+  //   if (highlightedBlocksActual[key] != newState && key) {
+  //     changedBlocks[key] = newState
+  //     highlightedBlocksActual[key] = newState
+  //   }
+  // }
+
   for (const key in highlightedBlocks) {
-    const block = highlightedBlocks[key]
-    const timeout = typeof (block) === 'number' ? (time - block) > 100 : !block
-
-    if (timeout) {
-      highlightedBlocks[key] = false
-      newState = false
-    } else {
-      newState = true
-    }
-
-    if (highlightedBlocksActual[key] != newState && key) {
-      changedBlocks[key] = newState
-      highlightedBlocksActual[key] = newState
-    }
+    changedBlocks[key] = highlightedBlocks[key];
   }
 
-  // self.postMessage({ type: 'mur.h', blockId: changedBlocks })
+  self.postMessage({ type: 'mur.h', blockId: changedBlocks })
 }
 
 
@@ -68,15 +72,19 @@ const mur = {
   lastActiveBlock: {},
 
   h: async function (scriptId, blockId) {
-    if (this.lastActiveBlock[scriptId] && this.lastActiveBlock[scriptId] !== blockId) {
-      highlightedBlocks[this.lastActiveBlock[scriptId]] = +new Date()
-    }
+    // if (this.lastActiveBlock[scriptId] && this.lastActiveBlock[scriptId] !== blockId) {
+    //   highlightedBlocks[this.lastActiveBlock[scriptId]] = +new Date()
+    // }
 
-    this.lastActiveBlock[scriptId] = blockId
-    highlightedBlocks[blockId] = true
+    // this.lastActiveBlock[scriptId] = blockId
+    // highlightedBlocks[blockId] = true
 
-    // await mur.delay(5)
+    highlightedBlocks[scriptId] = blockId
+
+    await mur.delay(3)
   },
+
+  // TODO: clamp here or in context handler?
 
   set_axis: async function (index, speed) {
     context.motor_axes[index] = Math.round(speed)
