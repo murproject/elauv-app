@@ -106,7 +106,7 @@ public class BluetoothClassicSerial extends CordovaPlugin {
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
 
-        LOG.d(TAG, "action = " + action);
+        // LOG.d(TAG, "action = " + action);
 
         if (bluetoothAdapter == null) {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -148,12 +148,12 @@ public class BluetoothClassicSerial extends CordovaPlugin {
 
                 ic = getInterfaceContext(macAddress);
 
-                /* Now using ThreadPool to avoid following error:   
-                
+                /* Now using ThreadPool to avoid following error:
+
                    THREAD WARNING: exec() call to BluetoothClassicSerial.write
                    blocked the main thread for 30ms.
                    Plugin should use CordovaInterface.getThreadPool(). */
-                
+
                 if (ic != null) {
                     cordova.getThreadPool().execute(new Runnable() {
                         @Override

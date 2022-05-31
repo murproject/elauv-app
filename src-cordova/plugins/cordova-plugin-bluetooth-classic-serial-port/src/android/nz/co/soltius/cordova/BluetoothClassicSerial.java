@@ -106,7 +106,7 @@ public class BluetoothClassicSerial extends CordovaPlugin {
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
 
-        LOG.d(TAG, "action = " + action);
+        // LOG.d(TAG, "action = " + action);
 
         if (bluetoothAdapter == null) {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
