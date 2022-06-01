@@ -18,11 +18,11 @@ export default {
     all: []
   },
 
-  // macAddress: null,
+  macAddress: null,
   // macAddress: 'D8:A0:1D:5C:FF:26', // TODO: don't hardcode
   // macAddress: '50:02:91:AC:B3:BA',
   // macAddress: 'AC:0B:FB:74:1E:1E',
-  macAddress: 'AC:0B:FB:74:1E:2A',
+  // macAddress: 'AC:0B:FB:74:1E:2A',
   /* TODO:
    * 1) show list of paired / discovered devices
    * 2) open system bluetooth settings for manual pairing
@@ -39,7 +39,7 @@ export default {
       if (!this.devices.unpaired.includes(device) ) { // && this.isDeviceCompatible(device)
         this.devices.unpaired.push(device)
       }
-      this.deviceDiscovered(device, false)
+      this.deviceDiscovered(device, false, true)
     })
   },
 
@@ -48,27 +48,52 @@ export default {
     // return true // TODO //
   },
 
-  deviceDiscovered: function (device, isPaired) {
+  deviceDiscovered: function (device, isPaired, isOnline) {
     const deviceActive = this.macAddress === device.address
     const newAllDevices = []
+    const compatible = this.isDeviceCompatible(device)
 
     const currentDevice = {
-      type: this.isDeviceCompatible(device) ? 'elauv' : 'unknown', // TODO:   type deduction
+      type: compatible ? 'elauv' : 'unknown', // TODO:   type deduction
       address: device.address,
       name: device.name ? device.name : '',
+      isCompatible: compatible,
       isPaired: isPaired,
-      isActive: deviceActive // TODO: active means selected, but not connected and working device
+      isOnline: isOnline,
+      isActive: deviceActive, // TODO: 'active' means selected, but not connected and working device
+      tag: `${deviceActive ? 0 : 1}-${compatible ? 0 : 1}-${isPaired ? 0 : 1}-${isOnline ? 0 : 1}-${device.address}`,
     }
 
     let replaced = false
 
+    console.log('all paired: ')
+    console.log(this.devices.paired)
+
+    this.devices.paired.forEach(comparedDevice => {
+      if (currentDevice.address === comparedDevice.address) {
+
+        currentDevice.isPaired = true
+        console.log('previously paired: ' + currentDevice)
+
+        // if (currentDevice.isPaired || currentDevice.isActive) {
+        //   newAllDevices.push(currentDevice)
+        // } else {
+        //   newAllDevices.push(comparedDevice)
+        // }
+        // newAllDevices.push(comparedDevice)
+        // replaced = true
+      } else {
+        // newAllDevices.push(comparedDevice)
+      }
+    });
+
     this.devices.all.forEach(comparedDevice => {
       if (currentDevice.address === comparedDevice.address) {
-        if (currentDevice.isPaired || currentDevice.isActive) {
-          newAllDevices.push(currentDevice)
-        } else {
-          newAllDevices.push(comparedDevice)
+        if (comparedDevice.isOnline) {
+          currentDevice.isOnline = true;
         }
+        // if (currentDevice.isPaired || currentDevice.isActive) {
+        newAllDevices.push(currentDevice)
         replaced = true
       } else {
         newAllDevices.push(comparedDevice)
@@ -83,8 +108,10 @@ export default {
       this.devices.active = currentDevice
     }
 
+    this.devices.all = newAllDevices.sort((a, b) => a.tag.localeCompare(b.tag));
+
     // this.devices.all = newAllDevices
-    this.devices.all = newAllDevices
+    // this.devices.all = newAllDevices
 
     this.onDeviceDiscovered(this.devices.all);
 
@@ -123,7 +150,7 @@ export default {
           if (this.isDeviceCompatible(device)) {
             this.devices.paired.push(device)
           }
-          this.deviceDiscovered(device, true)
+          this.deviceDiscovered(device, true, false)
         });
         // EventBus.$emit('bt-discovered-paired', { devices: results })
       },
@@ -134,10 +161,12 @@ export default {
   },
 
   scanAll: function () {
+    this.disconnect();
+
     bluetoothClassicSerial.enable(() => {
-      this.state = 'closed'
+      this.state = 'scanning'
     }, () => {
-      this.state = 'closed'
+      this.state = 'scanning'
     })
 
     this.devices.all = []

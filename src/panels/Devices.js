@@ -1,5 +1,6 @@
 import Panel from './Panel'
 import mur from '../vehicle/apiGameMur.js'
+import { text } from 'hyperapp';
 
 export default class Devices extends Panel {
 
@@ -19,8 +20,8 @@ export default class Devices extends Panel {
         </div>
         <br>
 
-        <div>
-          Available devices: <span id="connDevicesList"></span>
+        <div id="connDevicesWrapper">
+          <div id="connDevicesList"></div>
         </div>
 
       </div>
@@ -62,8 +63,67 @@ export default class Devices extends Panel {
   }
 
 
+  addDeviceTag(item, tag, active = true) {
+    let tagEl = document.createElement("span");
+
+    if (tag === 'online') {
+      tagEl.classList.add('device-tag-online');
+    } else {
+      tagEl.classList.add('device-tag');
+      tagEl.innerText = tag;
+    }
+
+    if (!active) tagEl.classList.add('opacity-0');
+
+    item.appendChild(tagEl);
+  }
+
+
   onUpdateDevicesList(devices) {
-    this.devicesListEl.innerText = JSON.stringify(devices);
+    // this.devicesListEl.innerText = JSON.stringify(devices, null, '\t');
+
+    this.devicesListEl.innerHtml = "";
+    this.devicesListEl.innerText = "";
+    this.devicesListEl.textContent = "";
+
+    devices.forEach(device => {
+      let el = document.createElement("div");
+      el.classList.add("device-item");
+
+      this.addDeviceTag(el, "online", (device.isCompatible & device.isOnline));
+
+      if (device.isCompatible) {
+        let nameEl = document.createElement("span");
+        nameEl.innerText = `${device.name.substring(0, device.name.search('-'))}`;
+        nameEl.classList.add("text");
+        el.appendChild(nameEl);
+
+        let nameIdEl = document.createElement("span");
+        nameIdEl.innerText = `${device.name.replace('ElementaryAUV-', '')}`;
+        nameIdEl.classList.add("text");
+        nameIdEl.classList.add("bold");
+        el.appendChild(nameIdEl);
+
+      } else {
+        let nameEl = document.createElement("span");
+        nameEl.innerText = `${device.name}`;
+        nameEl.classList.add("text");
+        el.appendChild(nameEl);
+      }
+
+      let addrEl = document.createElement("span");
+      addrEl.innerText = `[${device.address}]`;
+      addrEl.classList.add("text");
+      if (device.isCompatible) addrEl.classList.add("opacity-25");
+      el.appendChild(addrEl);
+
+      this.addDeviceTag(el, "💾", device.isPaired);
+      this.addDeviceTag(el, "✅", device.isActive);
+      // if (device.isCompatible) this.addDeviceTag(el, "ElAUV");
+      if (!device.isCompatible) el.classList.add("opacity-25");
+
+      this.devicesListEl.appendChild(el);
+    });
   }
 
 
