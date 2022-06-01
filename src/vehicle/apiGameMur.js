@@ -66,6 +66,10 @@ export default {
 
     this.reconnectTimer = setInterval(() => {
       const date = new Date()
+      if (this.conn.state == 'scanning') {
+        return;
+      }
+
       if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 3000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
         console.warn('Connection lost')
         console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
@@ -85,7 +89,7 @@ export default {
 
     switch (message.type) {
       case 'telemetry':
-        this.oldImuTapState = !this.oldImuTapState;
+        this.oldImuTapState = !this.oldImuTapState; // TODO: delete!
         // console.log(this.oldImuTapState);
 
         if (message.timestamp < this.telemetry.timestamp) {
@@ -103,6 +107,8 @@ export default {
         break
 
       case 'diagnostic-info':
+        this.timePong = new Date();
+        this.timePingDelta = this.timePong - this.timePing;
         // EventBus.$emit('log-received', message)
         break
 
@@ -147,6 +153,7 @@ export default {
 
   updateStatus: function () {
     this.status = this.conn.checkStatus()
+    this.conn.onDeviceDiscovered(this.conn.devices.all)
     // EventBus.$emit('status-updated', { status: this.status })
     // console.log(this.status)
   },
@@ -223,6 +230,7 @@ export default {
   controlInfo: function () {
     if (this.status === 'open') {
       this.conn.sendMessage(Protocol.packControlInfo({ }))
+      this.timePing = new Date();
     }
   },
 
