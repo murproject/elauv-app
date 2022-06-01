@@ -2,6 +2,10 @@
     user-select: none;
 }
 
+html {
+    overflow: hidden;
+}
+
 textarea {
     user-select: auto;
 }
@@ -40,6 +44,10 @@ body {
     border: 1px solid rgba(0,0,0,0.1);
 }
 
+.push-button.disabled {
+    opacity: 30% !important;
+    pointer-events: none !important;
+}
 
 .panel-button:active {
 /*     box-shadow: 0 0 20px rgba(0,0,0,0.5); */
@@ -233,4 +241,8 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+}
+
+.blocklyScrollbarHandle {
+    opacity: 50%;
 }
