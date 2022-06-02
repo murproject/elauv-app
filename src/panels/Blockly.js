@@ -275,7 +275,34 @@ export default class BlocklyPanel extends Panel {
       blocks.length = 0
     });
 
-    console.log(allCode)
+    console.log(allCode);
+
+    this.executionCursors = {};
+
+    for (const key in allCode) {
+      if (!(key in this.executionCursors)) {
+        /* TODO --- */
+        const cursorHtml = `
+        <g id="execution-cursor-${key}" style="display: block;" >
+          <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
+        </g>`;
+
+        let cursor = document.createElement("g");
+        cursor.id = `execution-cursor-${key}`;
+        cursor.setAttribute("style", "display: block;");
+        cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
+
+        document.querySelector(".blocklyBlockCanvas").innerHTML += cursorHtml;
+
+        for (let i = 0; i <= key; i++) { // need to query elements again after altering .blocklyBlockCanvas!
+          this.executionCursors[i] = document.querySelector(`#execution-cursor-${i}`);
+          // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
+          // TODO: fill executionCursors in reinject function instead of this highlight handler?
+        }
+
+        console.log(this.executionCursors);
+      }
+    }
 
     this.scriptWorker.postMessage({ // TODO: copypasta
       type: 'telemetry',
@@ -357,28 +384,28 @@ export default class BlocklyPanel extends Panel {
 
       for (const key in blocks) {
         if (key !== 'null') {
-          if (!(key in this.executionCursors)) {
-              /* TODO --- */
-              const cursorHtml = `
-              <g id="execution-cursor-${key}" style="display: block;" >
-                <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
-              </g>`;
+          // if (!(key in this.executionCursors)) {
+          //     /* TODO --- */
+          //     const cursorHtml = `
+          //     <g id="execution-cursor-${key}" style="display: block;" >
+          //       <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
+          //     </g>`;
 
-              let cursor = document.createElement("g");
-              cursor.id = `execution-cursor-${key}`;
-              cursor.setAttribute("style", "display: block;");
-              cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
+          //     let cursor = document.createElement("g");
+          //     cursor.id = `execution-cursor-${key}`;
+          //     cursor.setAttribute("style", "display: block;");
+          //     cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
 
-              document.querySelector(".blocklyBlockCanvas").innerHTML += cursorHtml;
+          //     document.querySelector(".blocklyBlockCanvas").innerHTML += cursorHtml;
 
-              for (let i = 0; i <= key; i++) { // need to query elements again after altering .blocklyBlockCanvas!
-                this.executionCursors[i] = document.querySelector(`#execution-cursor-${i}`);
-                // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
-                // TODO: fill executionCursors in reinject function instead of this highlight handler?
-              }
+          //     for (let i = 0; i <= key; i++) { // need to query elements again after altering .blocklyBlockCanvas!
+          //       this.executionCursors[i] = document.querySelector(`#execution-cursor-${i}`);
+          //       // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
+          //       // TODO: fill executionCursors in reinject function instead of this highlight handler?
+          //     }
 
-              console.log(this.executionCursors);
-          }
+          //     console.log(this.executionCursors);
+          // }
 
           if (this.highlightMode == 'blockly') {
             this.workspace.highlightBlock(key, blocks[key])
