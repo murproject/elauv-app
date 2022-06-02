@@ -7,13 +7,26 @@ export default class Telemetry extends Panel {
   begin() {
     this.html = /*html*/`
       <div id="telemetryText">Waiting for connection…</div>
+
+      <br>
+      <div class="push-button" id="resetStats">Reset stats</div>
     `
   }
 
 
   init() {
+    this.setIcon('battery-high');
     this.textElement = this.q("#telemetryText");
 
+    this.stats = {};
+    this.resetStats();
+
+    this.resetStatsButton = this.q("#resetStats");
+    this.resetStatsButton.onclick = () => this.resetStats();
+  }
+
+
+  resetStats() {
     this.stats = {
       maxVolts: -Infinity,
       minVolts:  Infinity,
@@ -27,8 +40,6 @@ export default class Telemetry extends Panel {
       lastTimestamp: null,
       ping: null,
     };
-
-    this.setIcon('battery-high');
   }
 
 
