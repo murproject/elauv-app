@@ -8,8 +8,8 @@ var telemetry = {}
 var highlightedBlocks = {}
 var highlightedBlocksActual = {}
 
-var contextUpdater = setInterval(sendContext,100)
-var highlightUpdater = setInterval(sendHighlight, 50)
+var contextUpdater = null
+var highlightUpdater = null
 
 setState('not-running')
 
@@ -169,6 +169,9 @@ self.onmessage = function (e) {
 
   if (e.data.type === 'run') {
     scripts = e.data.scripts
+
+    contextUpdater = setInterval(sendContext,100)
+    highlightUpdater = setInterval(sendHighlight, 50)
 
     if (state === 'running') {
       return;
