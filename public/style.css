@@ -20,6 +20,10 @@ body {
     --color-light: hsl(0, 0%, 80%);
 
     --color-cyan: hsl(170, 25%, 50%);
+    --color-blue: hsl(200, 100%, 15%);
+
+    --radius: 5px;
+    --radius-round: 999px;
 }
 
 .hidden {
@@ -47,7 +51,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
     font-family: "Roboto";
 
     display: inline-block;
@@ -79,7 +83,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+
+.logo {
+    height: 20px;
+    object-fit: cover;
+    vertical-align: middle;
+    margin: auto;
+    padding: 0em 1em;
+    padding-left: 1.5em;
+}
 
 .panel-button.active {
     /* font-weight: bold; */
@@ -156,6 +170,8 @@ body {
     width: 1.5em;
     height: 1.5em;
     background-color: var(--color-dark);
+    /* background-color: var(--color-blue); */
+    -webkit-mask-size: cover !important;
 }
 
 .icon.small {
@@ -174,7 +190,7 @@ body {
 }
 
 .icon.cyan {
-    background-color: var(--color-cyan);
+    background-color: var(--color-cyan) !important;
 }
 
 .float-rigth {
