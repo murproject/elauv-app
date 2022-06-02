@@ -2,10 +2,6 @@
     user-select: none;
 }
 
-html {
-    overflow: hidden;
-}
-
 textarea {
     user-select: auto;
 }
@@ -37,11 +33,20 @@ body {
 }
 
 .push-button {
-    display: inline;
+    background-color: #ddd;
+    transition: 0.1s;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    font-family: "Roboto";
+
+    display: inline-block;
     padding: 0.5em;
     margin: 0.5em;
     z-index: unset;
     border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
 }
 
 .push-button.disabled {
@@ -49,9 +54,11 @@ body {
     pointer-events: none !important;
 }
 
-.panel-button:active {
+.panel-button:active,
+.push-button:active {
 /*     box-shadow: 0 0 20px rgba(0,0,0,0.5); */
-    background-color: #888 !important;
+    background-color: #AAA !important;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
 }
 
 .panel-logo {
@@ -86,7 +93,6 @@ body {
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 4px;
     box-shadow: 0 0 7px rgba(0,0,0,0.1);
-    transition: 0.2s;
 }
 
 .device-item.active {
@@ -331,8 +337,4 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-}
-
-.blocklyScrollbarHandle {
-    opacity: 50%;
 }

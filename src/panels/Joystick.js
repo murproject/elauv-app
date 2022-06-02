@@ -35,7 +35,7 @@ export default class Joystick extends Panel {
       <div id="formulaStatus"></div>
       <br>
 
-      <div class="panel-button push-button" id="buttonSolenoidOn">Solenoid on</div>
+      <div class="push-button" id="buttonSolenoidOn">Solenoid on</div>
     `
   }
 

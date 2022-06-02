@@ -9,14 +9,13 @@ export default class Devices extends Panel {
       <div>
         Status - <span id="connStatus"></span>
       </div>
-      <br>
 
       <div id="connBluetoothPanel">
 
         <div>
-          <div class="panel-button push-button" id="connScanDevices">Scan Devices</div>
-          <div class="panel-button push-button" id="connScanCode">Scan Code</div>
-          <div class="panel-button push-button" id="connDisconnect">Disconnect</div>
+          <div class="push-button" id="connScanDevices">Scan Devices</div>
+          <div class="push-button" id="connScanCode">Scan Code</div>
+          <div class="push-button" id="connDisconnect">Disconnect</div>
         </div>
         <br>
 
