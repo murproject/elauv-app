@@ -86,7 +86,7 @@ body {
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 4px;
     box-shadow: 0 0 7px rgba(0,0,0,0.1);
-    transition: 0.05s;
+    transition: 0.2s;
 }
 
 .device-item.active {
@@ -130,6 +130,10 @@ body {
     background-color: rgba(50,255,50,0.25);
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 99px;
+}
+
+.float-rigth {
+    float: right;
 }
 
 .bold {
