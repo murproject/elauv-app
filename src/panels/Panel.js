@@ -1,3 +1,5 @@
+import icon from '/src/utils/icon'
+
 export default class Panel {
 
   constructor() {
@@ -54,6 +56,10 @@ export default class Panel {
 
   setInterval(func, timeout) {
     return window.setInterval(() => { this[func.name]() }, timeout);
+  }
+
+  setIcon(name, color) {
+    this.panelButton.innerHTML = icon(name, 'big', color); // TODO //
   }
 
 }
