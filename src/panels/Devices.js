@@ -70,6 +70,7 @@ export default class Devices extends Panel {
       tagEl.classList.add('device-tag-online');
     } else {
       tagEl.classList.add('device-tag');
+      tagEl.classList.add('float-rigth');
       tagEl.innerText = tag;
     }
 
@@ -80,8 +81,6 @@ export default class Devices extends Panel {
 
 
   onUpdateDevicesList(devices) {
-    // this.devicesListEl.innerText = JSON.stringify(devices, null, '\t');
-
     this.devicesListEl.innerHtml = "";
     this.devicesListEl.innerText = "";
     this.devicesListEl.textContent = "";
@@ -90,7 +89,7 @@ export default class Devices extends Panel {
       let deviceEl = document.createElement("div");
       deviceEl.classList.add("device-item");
 
-      this.addDeviceTag(deviceEl, "online", (device.isCompatible & device.isOnline));
+      this.addDeviceTag(deviceEl, "online", (device.isCompatible & device.isOnline) || (device.isActive && mur.conn.state == "open"));
 
       if (device.isCompatible) {
         let nameEl = document.createElement("span");
@@ -119,9 +118,9 @@ export default class Devices extends Panel {
 
       this.addDeviceTag(deviceEl, "💾", device.isPaired);
       this.addDeviceTag(deviceEl, "✅", device.isActive);
+
       if (!device.isCompatible) deviceEl.classList.add("inactive");
       if (device.isActive && mur.conn.state == "open") deviceEl.classList.add("active");
-      // if (device.isActive && mur.conn.state != "open") deviceEl.classList.add("active");
 
       deviceEl.onclick = () => mur.connect(device.address);
 

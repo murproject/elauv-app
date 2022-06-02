@@ -61,7 +61,7 @@ export default {
       isPaired: isPaired,
       isOnline: isOnline,
       isActive: deviceActive, // TODO: 'active' means selected, but not connected and working device
-      tag: `${deviceActive ? 0 : 1}-${compatible ? 0 : 1}-${isPaired ? 0 : 1}-${isOnline ? 0 : 1}-${device.address}`,
+      tag: `${deviceActive ? 0 : 1}-${compatible ? 0 : 1}-${isOnline ? 0 : 1}-${isPaired ? 0 : 1}-${device.address}`,
     }
 
     let replaced = false
@@ -201,6 +201,7 @@ export default {
       const data = {
         incomingCrc: msgSplitted[1],
         calculatedCrc: msgSplitted[1], // TODO!! calcCrc32(msgSplitted[0])
+
         headerMagic: dataSplitted[0],
         vehicleType: dataSplitted[1],
         vehicleVersion: dataSplitted[2],
