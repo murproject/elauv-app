@@ -57,8 +57,7 @@ export default class Devices extends Panel {
 
 
   disconnect() {
-    mur.conn.disconnect();
-    mur.conn.macAddress = null;
+    mur.disconnect();
   }
 
 
@@ -102,7 +101,7 @@ export default class Devices extends Panel {
         nameIdEl.classList.add("bold");
         deviceEl.appendChild(nameIdEl);
 
-      } else {
+      } else if (device.name.length > 0) {
         let nameEl = document.createElement("span");
         nameEl.innerText = `${device.name}`;
         nameEl.classList.add("text");

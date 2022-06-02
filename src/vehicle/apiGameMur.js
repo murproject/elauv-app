@@ -15,6 +15,7 @@ export default {
   name: 'mur',
   mur: this,
   ip: '127.0.0.1',
+  deviceAddress: localStorage.lastDeviceAddress ? localStorage.lastDeviceAddress : null,
   port: '8802',
   page: 'api',
   url: null,
@@ -127,6 +128,13 @@ export default {
       return
     }
 
+    if (!address) {
+      address = localStorage.lastDeviceAddress
+    } else {
+      this.deviceAddress = address
+      localStorage.lastDeviceAddress = address
+    }
+
     // console.warn('WebSocket: connecting…')
     this.reconnecting = true
 
@@ -149,6 +157,11 @@ export default {
     }, 250)
 
     // this.reconnecting = false
+  },
+
+  disconnect: function() {
+    this.deviceAddress = null
+    localStorage.lastDeviceAddress = null
   },
 
   updateStatus: function () {
