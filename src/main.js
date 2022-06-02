@@ -44,7 +44,7 @@ const app = {
       blockly: new BlocklyPanel(),
     };
 
-    this.panelSelect(this.panels.telemetry);
+    this.panelSelect(this.panels.devices);
   },
 
 

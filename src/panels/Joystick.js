@@ -41,6 +41,8 @@ export default class Joystick extends Panel {
 
 
   init() {
+    this.setIcon('gamepad');
+
     this.axes = {
       yaw: 0,
       forward: 0,

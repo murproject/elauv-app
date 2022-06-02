@@ -1,5 +1,6 @@
 import Panel from './Panel'
-import mur from '../vehicle/apiGameMur.js'
+import mur from '/src/vehicle/apiGameMur.js'
+import icon from '/src/utils/icon'
 
 export default class Telemetry extends Panel {
 
@@ -26,6 +27,8 @@ export default class Telemetry extends Panel {
       lastTimestamp: null,
       ping: null,
     };
+
+    this.setIcon('battery-high');
   }
 
 
