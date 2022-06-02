@@ -9,6 +9,7 @@ function clamp (value, min, max) {
 }
 
 const axesFormulaDefault = `max_power = 75
+solenoid_time = 30000
 
 a = - x + y
 b = + z
@@ -32,6 +33,9 @@ export default class Joystick extends Panel {
 
       <textarea id="axesFormula" spellcheck="false" rows="15" cols="40" name="text"></textarea>
       <div id="formulaStatus"></div>
+      <br>
+
+      <div class="panel-button push-button" id="buttonSolenoidOn">Solenoid on</div>
     `
   }
 
@@ -50,6 +54,16 @@ export default class Joystick extends Panel {
 
     this.initNipples();
     this.updateTimer = this.setInterval(this.update, 100);
+    this.solenoidTriggered = false;
+    this.solenoidTime = 1000;
+
+    this.solenoidButton = this.q("#buttonSolenoidOn");
+    this.solenoidButton.onclick = () => {
+      this.solenoidButton.classList.add('disabled');
+      this.solenoidTriggered = true;
+      setTimeout(() => this.solenoidTriggered = false, this.solenoidTime);
+      setTimeout(() => this.solenoidButton.classList.remove('disabled'), this.solenoidTime + 10000);
+    };
   }
 
 
@@ -103,6 +117,8 @@ export default class Joystick extends Panel {
     var forward = this.axes.forward;
     var depth = this.axes.vertical;
 
+    var solenoid_time = 0;
+
     /* short aliases for axes */
     var x = yaw;
     var y = forward;
@@ -134,6 +150,8 @@ export default class Joystick extends Panel {
     this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
     this.formulaStatusText.innerText += `\npowers: ${a}, ${b}, ${c}, ${d}`;
 
+    this.solenoidTime = solenoid_time;
+
     return {
       axes: {x: x, y: y, z: z},
       motors: [a, b, c, d],
@@ -148,6 +166,8 @@ export default class Joystick extends Panel {
       var regs = protocol.regulators;
       regs.yaw = false; // TODO
       regs.depth = false; // TODO
+
+      let solenoidPower = this.solenoidTriggered ? 100 : 0;
 
       const data = {
         direct_power: [
@@ -165,7 +185,7 @@ export default class Joystick extends Panel {
         ],
         axes_regulators: regs.pack(), // TODO
         target_yaw: null,
-        actuator_power: [0, 0]
+        actuator_power: [solenoidPower, solenoidPower]
       };
 
       mur.controlContext(data);
