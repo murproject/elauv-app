@@ -12,7 +12,13 @@ const MurToolbox = {
       contents: [
         // { kind: 'block', type: 'text' },
         // { kind: 'block', type: 'text_print' },
-        { kind: 'block', type: 'mur_delay' },
+        {
+          kind: 'block',
+          type: 'mur_delay',
+          inputs: {
+            sleepSeconds: placeholderNum(1)
+          }
+        },
         { kind: 'block', type: 'mur_thread' },
         { kind: 'block', type: 'mur_sensor_color_wait' },
         { kind: 'block', type: 'mur_get_color' },
@@ -66,8 +72,8 @@ const MurToolbox = {
           type: 'mur_set_power',
           inputs: {
             Index: placeholderNum(0),
-            Power: placeholderNum(50),
-            Delay: placeholderNum(0.5)
+            Power: placeholderNum(20),
+            Delay: placeholderNum(0)
           }
         },
 
