@@ -1,24 +1,18 @@
-# gamemur-webapp-lite
+# GameMUR / ElementaryAUV JS app.
 
-## Project setup
-```
-npm install
-```
+- Cordova for Android support.
+- No (more) frontend frameworks (serious performance issues on low cost / old devices).
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Build `src-cordova/www` for Android (with watching changes)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+    $ npx cross-env CORDOVA_PLATFORM=android vue-cli-service --watch --mode development cordova-build-only-www-android
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Build / Run Android APK
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+    $ cd src-cordova
+
+    $ cordova build android
+
+or
+
+    $ cordova run android
