@@ -12,6 +12,7 @@ import Blocks from '../blockly-wrapper/Blocks'
 import '../blockly-wrapper/BlocklyStyle'
 
 import mur from '../vehicle/apiGameMur'
+import icon from '/src/utils/icon'
 
 const blocklyConfig = {
   grid: {
@@ -110,13 +111,13 @@ export default class BlocklyPanel extends Panel {
     this.onActiveChanged();
 
     const actions = [
-      { name: 'run_lua',  func: this.run_lua },
-      { name: 'run_js',   func: this.run_js },
-      { name: 'stop',     func: this.stop },
-      { name: 'example',  func: this.example },
-      { name: 'load',     func: this.load },
-      { name: 'save',     func: this.save },
-      { name: '*H',       func: this.triggerHighlightMode }, // TODO: delete debug feature
+      // { name: 'run_lua',  icon: '',     func: this.run_lua },
+      { func: this.run_js,    name: 'run_js',   icon: 'play-circle-outline',},
+      { func: this.stop,      name: 'stop',     icon: 'stop-circle-outline',},
+      { func: this.example,   name: 'example',  icon: 'star',},
+      { func: this.load,      name: 'load',     icon: 'file-upload',},
+      { func: this.save,      name: 'save',     icon: 'content-save',},
+      // { name: '*H',       icon: '', func: this.triggerHighlightMode }, // TODO: delete debug feature
     ];
 
     actions.forEach(action => {
@@ -126,7 +127,13 @@ export default class BlocklyPanel extends Panel {
       actionButton.onclick = () => {
         window.setTimeout(() => this[action.func.name](), 50);
       };
-      actionButton.innerText = action.name;
+
+      if (action.icon) {
+        actionButton.innerHTML = icon(action.icon, 'big')
+      } else {
+        actionButton.innerText = action.name;
+      }
+
       this.toolButtons.appendChild(actionButton);
     });
 
@@ -163,7 +170,7 @@ export default class BlocklyPanel extends Panel {
                          this.highlightMode == 'blockly'  ? 'query'   :
                          this.highlightMode == 'query'    ? 'none'    : 'none';
 
-    document.querySelector("#blockly-action-triggerHighlightMode").innerText = "*H=" + this.highlightMode;
+    // document.querySelector("#blockly-action-triggerHighlightMode").innerText = "*H=" + this.highlightMode; // TODO: delete debug feature
   }
 
   generate_code(workspace) {
