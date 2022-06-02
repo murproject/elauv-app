@@ -443,6 +443,17 @@ await mur.thread_end(_scriptId);
       }
     }
 
+    register_proto('mur_stop_motors', (gen) => {
+      return (block) => {
+        return makeFunc(gen, `
+          mur.set_power(0, 0)
+          mur.set_power(1, 0)
+          mur.set_power(2, 0)
+          mur.set_power(3, 0)
+        `)
+      }
+    })
+
     /* set yaw */
 
     Blockly.Blocks.mur_set_yaw = {
