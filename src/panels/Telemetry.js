@@ -15,7 +15,9 @@ export default class Telemetry extends Panel {
 
 
   init() {
-    this.setIcon('battery-unknown');
+    this.battIconName = 'battery-unknown';
+    this.oldBattIconName = this.battIconName;
+    this.setIcon(this.battIconName);
     this.textElement = this.q("#telemetryText");
 
     this.stats = {};
@@ -85,7 +87,12 @@ export default class Telemetry extends Panel {
 
     const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : ''
 
-    this.setIcon(`battery-${batteryCharge}${batteryText}`, batteryColor);
+    this.battIconName = `battery-${batteryCharge}${batteryText}`
+
+    if (this.oldBattIconName != this.battIconName) {
+      this.setIcon(this.battIconName, batteryColor);
+      this.oldBattIconName = this.battIconName;
+    }
   }
 
 }
