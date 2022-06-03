@@ -11,7 +11,7 @@ var highlightedBlocksActual = {}
 var contextUpdater = null
 var highlightUpdater = null
 
-setState('not-running')
+// setState('stopped')
 
 // TODO: regulators!!!
 

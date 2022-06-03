@@ -118,8 +118,9 @@ export default class BlocklyPanel extends Panel {
 
     const actions = [
       // { name: 'run_lua',  icon: '',     func: this.run_lua },
-      { func: this.run_js,    name: 'run_js',   icon: 'play-circle-outline',},
-      { func: this.stop,      name: 'stop',     icon: 'stop-circle-outline',},
+      // { func: this.run_js,    name: 'run_js',   icon: 'play-circle-outline',},
+      // { func: this.stop,      name: 'stop',     icon: 'stop-circle-outline',},
+      { func: this.run,       name: 'run',      icon: 'play-circle-outline',},
       { func: this.example,   name: 'example',  icon: 'star',},
       { func: this.load,      name: 'load',     icon: 'file-upload',},
       { func: this.save,      name: 'save',     icon: 'content-save',},
@@ -169,6 +170,8 @@ export default class BlocklyPanel extends Panel {
     // this.currrsor = document.createElement("div");
     // this.currrsor.classList.add("blockly-execution-cursor");
     // this.blocklyDiv.appendChild(this.currrsor);
+
+    this.scriptStatus = 'stopped';
   }
 
   triggerHighlightMode() { // TODO: delete debug feature
@@ -177,6 +180,7 @@ export default class BlocklyPanel extends Panel {
                          this.highlightMode == 'query'    ? 'none'    : 'none';
 
     // document.querySelector("#blockly-action-triggerHighlightMode").innerText = "*H=" + this.highlightMode; // TODO: delete debug feature
+    this.btnRun = document.querySelector("#blockly-action-run");
   }
 
   generate_code(workspace) {
@@ -186,9 +190,22 @@ export default class BlocklyPanel extends Panel {
     return code
   }
 
+  run() {
+    console.log("status = " + this.scriptStatus);
+    if (this.scriptStatus == 'running') {
+      this.stop();
+    } else {
+      this.run_js();
+    }
+  }
+
   stop() {
+    this.btnRun.innerHTML = icon('play-circle-outline', 'big');
     this.scriptStatus = 'stopped'
-    this.scriptWorker.terminate()
+
+    if (this.scriptWorker) {
+      this.scriptWorker.terminate()
+    }
 
     mur.controlScriptStop()
     const paramsContext = {
@@ -260,6 +277,10 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_js() {
+    this.btnRun.innerHTML = icon('stop-circle-outline', 'big');
+
+    this.scriptStatus = 'running'
+
     this.code = this.generate_code(this.workspace)
     console.log(this.code)
 
@@ -275,6 +296,11 @@ export default class BlocklyPanel extends Panel {
     var json = Blockly.serialization.workspaces.save(this.workspace)
 
     // Store top blocks separately, and remove them from the JSON.
+    if (!json.blocks) {
+      // TODO: emit stop?
+      return
+    }
+
     var blocks = json.blocks.blocks
     var topBlocks = blocks.slice() // Create shallow copy.
     blocks.length = 0
@@ -328,8 +354,6 @@ export default class BlocklyPanel extends Panel {
       type: 'run',
       scripts: allCode
     })
-
-    this.scriptStatus = 'running'
   }
 
   updateTelemetry(telemetry) {
