@@ -13,12 +13,15 @@ var highlightUpdater = null
 
 setState('not-running')
 
+// TODO: regulators!!!
+
 var context = {
   motor_axes: [0, 0, 0, 0],
   regulators: 0,
   motor_powers: [0, 0, 0, 0],
   directMode: 0,
-  actuators: [0, 0]
+  actuators: [0, 0],
+  leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 }
 
 // var contextOld = Object.assign({}, context)
@@ -92,6 +95,13 @@ const mur = {
 
   set_power: async function (index, power) {
     context.motor_powers[index] = Math.round(power)
+  },
+
+  set_led: async function (index, colour) {
+    const rawColour = Number("0x" + colour.substring(1))
+    context.leds[index * 3 + 0] = (rawColour >> (16)) & 0xFF
+    context.leds[index * 3 + 1] = (rawColour >> ( 8)) & 0xFF
+    context.leds[index * 3 + 2] = (rawColour >> ( 0)) & 0xFF
   },
 
   actuator: async function (index, power) {

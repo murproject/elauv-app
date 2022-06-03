@@ -40,6 +40,8 @@ export default class Telemetry extends Panel {
       lastTimestamp: null,
       ping: null,
     };
+
+    this.update('');
   }
 
 

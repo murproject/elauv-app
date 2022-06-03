@@ -167,7 +167,10 @@ export default class Joystick extends Panel {
 
       var regs = protocol.regulators;
       regs.yaw = false; // TODO
+      regs.pitch = false;
+      regs.roll = false;
       regs.depth = false; // TODO
+      regs.isJoystick = true;
 
       let solenoidPower = this.solenoidTriggered ? 100 : 0;
 
@@ -182,12 +185,13 @@ export default class Joystick extends Panel {
         axes_speed: [
           powers.axes.x,
           powers.axes.y,
-          0,
+          0, // TODO: rearrange
           powers.axes.z
         ],
         axes_regulators: regs.pack(), // TODO
         target_yaw: null,
-        actuator_power: [solenoidPower, solenoidPower]
+        actuator_power: [solenoidPower, solenoidPower],
+        leds: [0,0,0,0,0,0,0,0,0,0,0,0],
       };
 
       mur.controlContext(data);

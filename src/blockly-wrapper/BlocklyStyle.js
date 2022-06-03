@@ -45,6 +45,9 @@ var CustomConstantsProvider = function () {
   this.TRIG_PREV_NEXT = this.makeTriangularPreviousConn()
   this.TRIG_INPUT_OUTPUT = this.makeTriangularInputConn()
   this.RECT_INPUT_OUTPUT = this.makeRectInputConn()
+
+  this.FIELD_COLOUR_DEFAULT_WIDTH = 22
+  this.FIELD_COLOUR_DEFAULT_HEIGHT = 22
 }
 
 Blockly.utils.object.inherits(CustomConstantsProvider,

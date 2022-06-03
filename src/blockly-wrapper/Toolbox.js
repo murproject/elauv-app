@@ -19,6 +19,7 @@ const MurToolbox = {
             sleepSeconds: placeholderNum(1)
           }
         },
+        { kind: 'block', type: 'mur_set_led' },
         { kind: 'block', type: 'mur_thread' },
         { kind: 'block', type: 'mur_sensor_color_wait' },
         { kind: 'block', type: 'mur_get_color' },
@@ -140,6 +141,18 @@ const MurToolbox = {
         { kind: 'block', type: 'controls_for' },
         { kind: 'block', type: 'controls_forEach' },
         { kind: 'block', type: 'controls_flow_statements' }
+      ]
+    },
+
+    {
+      kind: 'category',
+      name: 'Цвета',
+      categorystyle: 'colour_category',
+      contents: [
+        { kind: 'block', type: 'colour_picker' },
+        { kind: 'block', type: 'colour_random' },
+        { kind: 'block', type: 'colour_rgb' },
+        { kind: 'block', type: 'colour_blend' },
       ]
     },
 

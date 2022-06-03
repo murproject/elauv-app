@@ -13,6 +13,12 @@ import '../blockly-wrapper/BlocklyStyle'
 
 import mur from '../vehicle/apiGameMur'
 import icon from '/src/utils/icon'
+import protocolGameMur from '../vehicle/protocolGameMur';
+
+/* TODO: plugins
+   TODO: "if"-block mutator crash. possible solution: https://github.com/google/blockly-samples/tree/master/plugins/block-plus-minus
+   TODO: slider: https://github.com/google/blockly-samples/tree/master/plugins/field-slider
+ */
 
 const blocklyConfig = {
   grid: {
@@ -456,7 +462,8 @@ export default class BlocklyPanel extends Panel {
         axes_speed: ctx.motor_axes,
         axes_regulators: ctx.regulators,
         target_yaw: null, // TODO
-        actuator_power: ctx.actuators
+        actuator_power: ctx.actuators,
+        leds: ctx.leds,
       }
 
       // TODO: fill context correctly in inpertreter and don't fill it here

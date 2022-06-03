@@ -649,6 +649,62 @@ await mur.thread_end(_scriptId);
       }
     })
 
+    /* set led color */
+
+    Blockly.Blocks.mur_set_led = {
+      init: function () {
+        this.appendValueInput('Index')
+          .setCheck('Number')
+          .appendField(icon('white-balance-iridescent', 'светодиод'))
+
+        this.appendValueInput('Colour')
+          .setCheck('Colour')
+          .appendField(icon('palette', 'цвет'))
+
+        this.setPreviousStatement(true, 'action')
+        this.setNextStatement(true, 'action')
+        this.setInputsInline(true)
+        this.setColour(color_spec)
+        this.setTooltip('Задать цвет на светодиод')
+      }
+    }
+
+    register_proto('mur_set_led', (gen) => {
+      return (block) => {
+        const index = calcVal(gen, block, 'Index')
+        const colour = calcVal(gen, block, 'Colour')
+        return makeFunc(gen, `mur.set_led(${index}, ${colour})`)
+      }
+    })
+
+    Blockly.FieldColour.COLOURS = [
+      '#000000',
+      '#ffffff',
+      '#ff00ff',
+      '#ff0000',
+      '#ff6600',
+      '#ffff00',
+      '#00ff00',
+      '#00ffff',
+      '#0000ff',
+    ];
+
+    Blockly.FieldColour.TITLES = [
+        'Чёрный',
+        'Белый',
+        'Пурпурный',
+        'Красный',
+        'Оранжевый',
+        'Жёлтый',
+        'Зелёный',
+        'Голубой',
+        'Синий',
+    ];
+
+    Blockly.FieldColour.COLUMNS = 3;
+
+
+
     //
   }
 }

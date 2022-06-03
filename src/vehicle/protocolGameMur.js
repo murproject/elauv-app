@@ -21,10 +21,11 @@ function packFloat (value, precision = 0.01) {
 }
 
 var regulatorsMask = {
-  yaw: 1 << 0,
-  pitch: 1 << 1,
-  roll: 1 << 2,
-  depth: 1 << 3
+  yaw:        1 << 0,
+  pitch:      1 << 1,
+  roll:       1 << 2,
+  depth:      1 << 3,
+  isJoystick: 1 << 4,
 }
 
 var feedbackMask = {
@@ -45,12 +46,14 @@ export default {
     pitch: false,
     roll: false,
     depth: false,
+    isJoystick: false,
 
     unpack: function (data) {
-      this.depth = checkBit(data, regulatorsMask.depth)
       this.yaw = checkBit(data, regulatorsMask.yaw)
       this.pitch = checkBit(data, regulatorsMask.pitch)
       this.roll = checkBit(data, regulatorsMask.roll)
+      this.depth = checkBit(data, regulatorsMask.depth)
+      this.isJoystick = checkBit(data, regulatorsMask.isJoystick)
       return this
     },
 
@@ -60,6 +63,7 @@ export default {
       data = setBit(data, regulatorsMask.yaw, this.yaw)
       data = setBit(data, regulatorsMask.pitch, this.pitch)
       data = setBit(data, regulatorsMask.roll, this.roll)
+      data = setBit(data, regulatorsMask.isJoystick, this.isJoystick)
       return data
     }
   },
@@ -251,11 +255,13 @@ export default {
       data.axes_speed,
       data.axes_regulators,
       data.target_yaw !== null ? packFloat(data.target_yaw) : packFloat(-9900),
-      data.actuator_power
+      data.actuator_power,
+      data.leds,
     ]
 
     // debug("control payload:")
     // debug(payload)
+    console.log(payload);
 
     var packet = this.makePacket(0, 'C', payload)
     return packet

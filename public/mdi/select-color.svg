@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+   version="1.1"
+   id="mdi-select-color"
    width="24"
    height="24"
-   version="1.1"
-   id="svg8"
-   sodipodi:docname="depth-down.svg"
+   viewBox="0 0 24 24"
+   sodipodi:docname="select-color.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs12" />
+     id="defs7" />
   <sodipodi:namedview
-     id="namedview10"
+     id="namedview5"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
@@ -29,17 +30,9 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg8" />
+     inkscape:current-layer="mdi-select-color" />
   <path
-     d="m7 23 4-4H8v-5H6v5H3M17 23l4-4h-3v-5h-2v5h-3"
+     d="M3.88,3C3.38,3.06 3,3.5 3,4V4L3,5H4L5,5V4L5,3H4L3.88,3M7,3V5H9V3H7M11,3V5H13V3H11M15,3V5H17V3H15M19,3V4L19,5H20L21,5V4L21,3.88C20.94,3.38 20.5,3 20,3H19M3,7V9H5V7H3M19,7V9H21V7H19M3,11V13H5V11H3M19.31,12C19.18,12 19.05,12.05 18.95,12.14L17.39,13.71L16.43,12.75L15.72,13.46L16.43,14.17L11.97,18.63V21H14.35L18.8,16.54L19.5,17.25L20.22,16.54L19.26,15.58L20.82,14.03C21,13.83 21,13.5 20.82,13.31L19.65,12.14C19.56,12.05 19.44,12 19.31,12M3,15V17H5V15H3M17,15L17.97,15.97L13.93,20L12.97,19.04L17,15M3,19V20L3,20.12C3.06,20.62 3.5,21 4,21V21H5V20L5,19H4L3,19M7,19V21H9V19H7Z"
      id="path2"
      style="fill:#ffffff" />
-  <g
-     id="g6"
-     style="fill:#ffffff">
-    <path
-       d="m 20,8 h 2 v 2 H 20 C 18.62,10 17.26,9.65 16,9 13.5,10.3 10.5,10.3 8,9 6.74,9.65 5.37,10 4,10 H 2 V 8 h 2 c 1.39,0 2.78,-0.47 4,-1.33 2.44,1.71 5.56,1.71 8,0 C 17.22,7.53 18.61,8 20,8 m 0,-6 h 2 V 4 H 20 C 18.62,4 17.26,3.65 16,3 13.5,4.3 10.5,4.3 8,3 6.74,3.65 5.37,4 4,4 H 2 V 2 h 2 c 1.39,0 2.78,-0.47 4,-1.33 2.44,1.71 5.56,1.71 8,0 C 17.22,1.53 18.61,2 20,2"
-       id="path4"
-       style="fill:#ffffff" />
-  </g>
 </svg>

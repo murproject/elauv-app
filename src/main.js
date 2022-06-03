@@ -5,13 +5,13 @@ import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 
-
 const app = {
 
   html: /*html*/`
     <header id="head">
       <div class="buttons-group" id="buttons-main">
         <!-- <div class="panel-logo">ElAUV</div> -->
+        <img class="logo" src="/media/logo.png" />
       </div>
     </header>
     <section id="panel-wrapper"></section>
@@ -70,11 +70,29 @@ const app = {
 
 if (typeof cordova !== 'undefined') {
   document.addEventListener('deviceready', () => {
+    window.cutout.has().then(hasCutout => {
+      if (hasCutout) {
+        // TODO: make it better?
+        document.addEventListener("resume", triggerStatusbar, false);
+        triggerStatusbar();
+      }
+    });
+
     window.IsekaiFakeSplash.hide()
     main();
   }, false)
 } else {
   window.onload = () => main();
+}
+
+
+function triggerStatusbar() {
+  setTimeout(() => {
+    window.StatusBar.overlaysWebView(false);
+    window.StatusBar.show();
+    window.StatusBar.backgroundColorByHexString("FFF");
+    window.StatusBar.styleDefault();
+  }, 250);
 }
 
 
