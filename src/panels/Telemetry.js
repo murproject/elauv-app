@@ -15,7 +15,7 @@ export default class Telemetry extends Panel {
 
 
   init() {
-    this.setIcon('battery-high');
+    this.setIcon('battery-unknown');
     this.textElement = this.q("#telemetryText");
 
     this.stats = {};
@@ -46,7 +46,7 @@ export default class Telemetry extends Panel {
 
 
   update(telemetryText) {
-    if (this.active) {
+    if (this.active && telemetryText) {
       this.stats.maxVolts = Math.max(this.stats.maxVolts, mur.telemetry.battVolts).toFixed(2);
       this.stats.minVolts = Math.min(this.stats.minVolts, mur.telemetry.battVolts).toFixed(2);
 
@@ -70,6 +70,22 @@ export default class Telemetry extends Panel {
 
       this.textElement.innerText = telemetryText;
     }
+
+    const rsoc = mur.telemetry.battRsoc;
+
+    const batteryText = mur.conn.state != 'open' ? 'unknown' :
+                        rsoc < 10 ? 'outline' :
+                        rsoc < 40 ? 'low'     :
+                        rsoc < 70 ? 'medium'  : 'high';
+
+    const batteryColor = mur.conn.state != 'open' ? 'dark' :
+                         rsoc < 10 ? 'red'    :
+                         rsoc < 40 ? 'orange' :
+                         rsoc < 70 ? 'yellow' : 'green'
+
+    const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : ''
+
+    this.setIcon(`battery-${batteryCharge}${batteryText}`, batteryColor);
   }
 
 }

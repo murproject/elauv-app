@@ -63,6 +63,10 @@ const app = {
     this.timerKeepAlive = setInterval(() => {
       mur.controlInfo(); // TODO: use separate keepalive packet?
     }, 1500);
+
+    mur.onStatusUpdated = (status) => {
+      this.panels.telemetry.update()
+    }
   },
 
 }

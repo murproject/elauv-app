@@ -34,6 +34,7 @@ export default {
   oldImuTapState: false,
 
   telemetryUpdated: (t, f) => {},
+  onStatusUpdated: (status) => {},
 
   create: function () {
     console.info('Connecting to', this.url)
@@ -167,6 +168,7 @@ export default {
   updateStatus: function () {
     this.status = this.conn.checkStatus()
     this.conn.onDeviceDiscovered(this.conn.devices.all)
+    this.onStatusUpdated(this.status)
     // EventBus.$emit('status-updated', { status: this.status })
     // console.log(this.status)
   },
