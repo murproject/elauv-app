@@ -426,3 +426,14 @@ body {
     border-radius: 5px;
     margin: 0.2em;
 }
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform:rotate(360deg);
+    }
+}
+
+.anim-spin {
+    animation: spin 4s linear infinite;
+}

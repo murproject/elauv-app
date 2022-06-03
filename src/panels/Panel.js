@@ -58,8 +58,8 @@ export default class Panel {
     return window.setInterval(() => { this[func.name]() }, timeout);
   }
 
-  setIcon(name, color) {
-    this.panelButton.innerHTML = icon(name, 'big', color); // TODO //
+  setIcon(name, color, modifier='') {
+    this.panelButton.innerHTML = icon(name, 'big ' + modifier, color); // TODO //
   }
 
 }

@@ -200,6 +200,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   stop() {
+    this.setIcon('puzzle');
     this.btnRun.innerHTML = icon('play', 'big');
     this.scriptStatus = 'stopped'
 
@@ -277,6 +278,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_js() {
+    this.setIcon('cog', 'anim-spin');
     this.btnRun.innerHTML = icon('stop', 'big');
 
     this.scriptStatus = 'running'
