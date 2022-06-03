@@ -20,15 +20,15 @@ body {
     --color-light:  hsl(0, 0%, 80%);
 
     /* --color-cyan:   hsl(170, 25%, 50%); */
-    --color-mur:   hsl(200, 100%, 15%);
+    --color-mur:    hsl(200, 100%, 15%);
 
-    --color-red:    hsl(  0, 90%, 30%);
-    --color-orange: hsl( 30, 90%, 30%);
-    --color-yellow: hsl( 50, 90%, 30%);
-    --color-green:  hsl( 90, 90%, 30%);
-    --color-cyan:   hsl( 170, 90%, 30%);
-    --color-blue:   hsl(200, 90%, 30%);
-    --color-purple: hsl(290, 90%, 30%);
+    --color-red:    hsl(  0, 70%, 25%);
+    --color-orange: hsl( 30, 70%, 25%);
+    --color-yellow: hsl( 50, 70%, 25%);
+    --color-green:  hsl( 90, 70%, 25%);
+    --color-cyan:   hsl(170, 70%, 25%);
+    --color-blue:   hsl(200, 70%, 25%);
+    --color-purple: hsl(290, 70%, 25%);
 
     --radius: 5px;
     --radius-round: 999px;
