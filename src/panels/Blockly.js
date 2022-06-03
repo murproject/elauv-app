@@ -120,7 +120,7 @@ export default class BlocklyPanel extends Panel {
       // { name: 'run_lua',  icon: '',     func: this.run_lua },
       // { func: this.run_js,    name: 'run_js',   icon: 'play-circle-outline',},
       // { func: this.stop,      name: 'stop',     icon: 'stop-circle-outline',},
-      { func: this.run,       name: 'run',      icon: 'play-circle-outline',},
+      { func: this.run,       name: 'run',      icon: 'play',},
       { func: this.example,   name: 'example',  icon: 'star',},
       { func: this.load,      name: 'load',     icon: 'file-upload',},
       { func: this.save,      name: 'save',     icon: 'content-save',},
@@ -200,7 +200,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   stop() {
-    this.btnRun.innerHTML = icon('play-circle-outline', 'big');
+    this.btnRun.innerHTML = icon('play', 'big');
     this.scriptStatus = 'stopped'
 
     if (this.scriptWorker) {
@@ -277,7 +277,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_js() {
-    this.btnRun.innerHTML = icon('stop-circle-outline', 'big');
+    this.btnRun.innerHTML = icon('stop', 'big');
 
     this.scriptStatus = 'running'
 
