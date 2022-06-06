@@ -13,7 +13,8 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "cordova-android": "~10.1.1"
+    "cordova-android": "~10.1.1",
+    "cordova-plugin-cutout": "^1.0.11"
   },
   "cordova": {
     "platforms": [
@@ -25,7 +26,8 @@
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-isekai-fake-splash": {}
+      "cordova-plugin-isekai-fake-splash": {},
+      "cordova-plugin-cutout": {}
     }
   }
 }
