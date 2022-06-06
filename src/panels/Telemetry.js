@@ -73,14 +73,14 @@ export default class Telemetry extends Panel {
       this.textElement.innerText = telemetryText;
     }
 
-    const rsoc = mur.telemetry.battRsoc;
+    const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : false;
 
-    const batteryText = mur.conn.state != 'open' ? 'unknown' :
+    const batteryText = mur.conn.state != 'open' || !rsoc ? 'unknown' :
                         rsoc < 10 ? 'outline' :
                         rsoc < 40 ? 'low'     :
                         rsoc < 70 ? 'medium'  : 'high';
 
-    const batteryColor = mur.conn.state != 'open' ? 'dark' :
+    const batteryColor = mur.conn.state != 'open' || !rsoc ? 'dark' :
                          rsoc < 10 ? 'red'    :
                          rsoc < 40 ? 'orange' :
                          rsoc < 70 ? 'yellow' : 'green'
