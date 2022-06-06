@@ -51,6 +51,10 @@ body {
     padding: 0 1em;
     margin: 0 0.25em;
     font-family: "Roboto";
+
+    margin-top: 0.1em;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .push-button {
@@ -271,7 +275,8 @@ body {
     align-items: end;
     justify-content: space-between;
 
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 #panel-wrapper {
@@ -396,11 +401,6 @@ body {
     fill-opacity: 0.2;
 }
 
-.blocklyMenuItemContent img {
-    outline: solid 2px #333333;
-    background: #656565;
-}
-
 .blocklyPath {
     stroke-width: 2px;
     /* stroke-linejoin: round; */
@@ -427,6 +427,10 @@ body {
     margin: 0.2em;
 }
 
+.blocklyMainWorkspaceScrollbar {
+    opacity: 50%;
+}
+
 @keyframes spin {
     100% {
         -webkit-transform: rotate(360deg);
@@ -436,4 +440,56 @@ body {
 
 .anim-spin {
     animation: spin 4s linear infinite;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    border: none !important;
+    border-radius: 4px;
+    color: white;
+    padding-left: 0 !important;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    padding: 1em !important;
+}
+
+.blocklyMenuItemContent img {
+    outline: solid 2px rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.fieldGridDropDownContainer .blocklyMenuItem.blocklyMenuItemSelected {
+    /*     outline: solid 2px rgba(0,0,0,0.5); */
+    /*     background: rgba(0,0,0,0.35); */
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    padding: 0.5em !important;
+}
+
+.fieldSliderContainer {
+    width: 250px !important;
+}
+
+.fieldSliderContainer::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0;
+    top: 0em;
+    left: 50%;
+    height: 0.3em;
+    margin: auto;
+    border-radius: 99px;
+    border-left: 1px solid rgba(255,255,255,0.5);
 }
