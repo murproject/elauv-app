@@ -34,7 +34,7 @@ var CustomConstantsProvider = function () {
   this.EXTERNAL_VALUE_INPUT_PADDING = 0
 
   this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT * 1.5
-  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = this.TAB_HEIGHT
+  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = this.DUMMY_INPUT_MIN_HEIGHT
   this.EMPTY_INLINE_INPUT_HEIGHT = this.TAB_HEIGHT * 1.75
 
   this.TAB_OFFSET_FROM_TOP = 5
@@ -48,6 +48,16 @@ var CustomConstantsProvider = function () {
 
   this.FIELD_COLOUR_DEFAULT_WIDTH = 22
   this.FIELD_COLOUR_DEFAULT_HEIGHT = 22
+
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = 16
+  this.FIELD_BORDER_RECT_HEIGHT = 16
+  this.FIELD_DROPDOWN_COLOURED_DIV = true
+
+  // this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+
+  this.generateSecondaryColour_ = function (inputColour) {
+    return Blockly.utils.colour.blend('#fff', inputColour, 0.3) || inputColour;
+  }
 }
 
 Blockly.utils.object.inherits(CustomConstantsProvider,
