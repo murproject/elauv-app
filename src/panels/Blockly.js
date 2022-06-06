@@ -44,8 +44,6 @@ const blocklyConfig = {
   scrollbars: true,
   media: '/blockly-media/', // TODO!!!
   trashcan: true,
-  // renderer: 'thrasos', // thrasos, zelos
-  // renderer: 'zelos',
   renderer: 'custom_renderer',
   horizontalLayout: true,
   collapse: false,
@@ -115,6 +113,8 @@ export default class BlocklyPanel extends Panel {
     document.querySelector("#head").appendChild(this.toolButtons);
 
     this.onActiveChanged();
+
+    console.log(Blockly.FieldNumber)
 
     const actions = [
       // { name: 'run_lua',  icon: '',     func: this.run_lua },
@@ -208,6 +208,8 @@ export default class BlocklyPanel extends Panel {
       this.scriptWorker.terminate()
     }
 
+    // TODO: make function to return empty context! (in mur)
+
     mur.controlScriptStop()
     const paramsContext = {
       direct_power: [0, 0, 0, 0],
@@ -215,7 +217,8 @@ export default class BlocklyPanel extends Panel {
       axes_speed: [0, 0, 0, 0],
       axes_regulators: 0,
       target_yaw: null,
-      actuator_power: [0, 0]
+      actuator_power: [0, 0],
+      leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     }
     mur.context = paramsContext // TODO: move context to global scope?
     mur.controlContext(paramsContext)
