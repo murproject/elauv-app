@@ -4,6 +4,9 @@ import * as Blockly from 'blockly/core'
 import BlocklyLua from 'blockly/lua'
 import 'blockly/javascript';
 
+import {FieldSlider} from '/src/blockly-wrapper/field_slider';
+import {FieldGridDropdown} from '@blockly/field-grid-dropdown';
+
 const color_spec = 70
 const color_mov = 20
 
@@ -206,24 +209,28 @@ await mur.thread_end(_scriptId);
 
     /* mur.set_power(index, power) */
 
+    const motors_dropdown = [
+      item_image('chars/alpha-c', 'MOTOR_C', 'C'),
+      item_image('chars/alpha-d', 'MOTOR_D', 'D'),
+      item_image('chars/alpha-a', 'MOTOR_A', 'A'),
+      item_image('chars/alpha-b', 'MOTOR_B', 'B'),
+    ]
+
     Blockly.Blocks.mur_set_power = {
       init: function () {
-        this.appendValueInput('Index')
-          .setCheck('Number')
+        this.appendDummyInput()
+          // .setCheck('Number')
           // .appendField('задать на мотор №')
           .appendField(icon('fan', 'движитель'))
+
+          // .appendField(new Blockly.FieldDropdown(movements_dropdown, null), 'MODE')
+
+          .appendField(new FieldGridDropdown(motors_dropdown, undefined, {columns: 2, DEFAULT_VALUE: 'MOTOR_A'}), "Index");
 
         this.appendValueInput('Power')
           .setCheck('Number')
           .appendField(icon('speedometer', 'тяга'))
           // .appendField('тяга')
-
-        this.appendValueInput('Delay')
-          .setCheck('Number')
-          .appendField(icon('timer', 'длительность'))
-        // this.appendDummyInput()
-          // .appendField(icon('percent', '%'))
-          // .appendField('%')
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
@@ -233,13 +240,21 @@ await mur.thread_end(_scriptId);
       }
     }
 
+    const MotorsIndex = {
+      'MOTOR_A': 0,
+      'MOTOR_B': 1,
+      'MOTOR_C': 2,
+      'MOTOR_D': 3,
+    }
+
     register_proto('mur_set_power', (gen) => {
       return (block) => {
-        const index = calcVal(gen, block, 'Index')
+        const indexChar = block.getFieldValue('Index')
+        const index = MotorsIndex[indexChar];
         const power = calcVal(gen, block, 'Power')
         // let sleepMs = Math.round(calcVal(gen, block, 'Delay') * 1000)
         const sleepMs = calcVal(gen, block, 'Delay')
-        return makeFunc(gen, `mur.set_power(${index}, ${power})`) + makeDelay(gen, sleepMs)
+        return makeFunc(gen, `mur.set_power(${index}, ${power})`)
       }
     })
 
@@ -703,8 +718,66 @@ await mur.thread_end(_scriptId);
 
     Blockly.FieldColour.COLUMNS = 3;
 
+    /* math_slider_number */
 
+    Blockly.Blocks.mur_number_slider = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new FieldSlider(0, -100, 100, false, 5), "Value")
 
-    //
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(color_mov)
+        this.setTooltip('Число')
+      }
+    }
+
+    register_proto('mur_number_slider', (gen) => {
+      return (block) => {
+        const value = block.getFieldValue('Value')
+        return makeInlineFunc(gen, `(${value})`)
+      }
+    })
+
+    /*
+
+        Blockly.Blocks.mur_get_color = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
+            item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
+          ], null), 'MODE')
+
+        this.setOutput(true, 'Boolean')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(color_spec)
+        this.setTooltip('Проверка цвета')
+      }
+    }
+
+    // register_proto('mur_get_color', (gen) => {
+    //   return (block) => {
+    //     let mode = block.getFieldValue('MODE')
+    //     return [`mur.get_color_status('${mode}')`, Blockly.JavaScript.ORDER_NONE]
+    //     // return makeFunc(gen, 'mur.get_imu_tap()')
+    //   }
+    // })
+
+    register_proto('mur_get_color', (gen) => {
+      return (block) => {
+        let mode = block.getFieldValue('MODE')
+        if (gen === BlocklyLua) {
+          mode = 1 // TODO !!!
+        }
+        // return [`mur.get_color_status('${mode}')`, Blockly.JavaScript.ORDER_NONE]
+        return makeInlineFunc(gen, `mur.get_color_status('${mode}')`)
+      }
+    })
+
+    */
+
   }
 }

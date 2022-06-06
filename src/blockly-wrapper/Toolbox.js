@@ -72,9 +72,12 @@ const MurToolbox = {
           kind: 'block',
           type: 'mur_set_power',
           inputs: {
-            Index: placeholderNum(0),
-            Power: placeholderNum(20),
-            Delay: placeholderNum(0)
+            // Index: placeholderNum(0),
+            // Power: placeholderNum(20),
+            Power: { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } },
+          },
+          fields: {
+            Index: 'MOTOR_A'
           }
         },
 
@@ -116,6 +119,8 @@ const MurToolbox = {
       name: 'Математика',
       categorystyle: 'math_category',
       contents: [
+        // { kind: 'block', type: 'mur_number_slider' },
+
         { kind: 'block', type: 'math_number' },
         { kind: 'block', type: 'math_arithmetic' },
         { kind: 'block', type: 'math_single' },
