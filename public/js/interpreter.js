@@ -56,7 +56,7 @@ const mur = {
   lastActiveBlock: {},
 
   h: async function (scriptId, blockId) {
-    highlightedBlocks[scriptId] = [blockId, 5]
+    highlightedBlocks[scriptId] = [blockId, 0]
 
     await mur.delay(3)
   },

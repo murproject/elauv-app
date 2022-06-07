@@ -440,8 +440,9 @@ export default class BlocklyPanel extends Panel {
           }
           if (this.highlightMode == 'none') {
             const blockElement = this.workspace.getBlockById(blockId);
-            const x = blockElement.getRelativeToSurfaceXY().x - 14;
-            const y = blockElement.getRelativeToSurfaceXY().y + 5;
+            const blockXY = blockElement.getRelativeToSurfaceXY();
+            const x = blockXY.x - 14;
+            const y = blockXY.y + 5;
             this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
           }
           this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
