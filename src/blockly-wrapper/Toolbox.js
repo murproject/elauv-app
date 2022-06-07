@@ -86,11 +86,11 @@ const MurToolbox = {
         {
           kind: 'block',
           type: 'mur_actuator',
-          inputs: {
-            Index: placeholderNum(0),
-            Power: placeholderNum(75),
-            Delay: placeholderNum(0.5)
-          }
+          // inputs: {
+            // Index: placeholderNum(0),
+            // Power: placeholderNum(75),
+            // Delay: placeholderNum(0.5)
+          // }
         },
 
         {

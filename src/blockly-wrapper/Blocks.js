@@ -266,22 +266,12 @@ await mur.thread_end(_scriptId);
 
     Blockly.Blocks.mur_actuator = {
       init: function () {
-        this.appendValueInput('Index')
-          .setCheck('Number')
-          .appendField(icon('magnet', 'соленоид'))
-          // .appendField('задать на соленоид №')
+        this.appendDummyInput()
 
-        this.appendValueInput('Power')
-          .setCheck('Number')
-          .appendField(icon('speedometer', 'мощность'))
-          // .appendField('мощность')
-
-        this.appendValueInput('Delay')
-          .setCheck('Number')
-          .appendField(icon('timer', 'длительность'))
-        // this.appendDummyInput()
-          // .appendField(icon('percent', '%'))
-          // .appendField('%')
+        .appendField(new FieldGridDropdown([
+            item_image('magnet-on',  'SOLENOID_ON',   'включить'),
+            item_image('magnet-off', 'SOLENOID_OFF',  'выключить')
+          ], undefined, {columns: 2, DEFAULT_VALUE: 'SOLENOID_ON'}), "MODE");
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
@@ -293,12 +283,8 @@ await mur.thread_end(_scriptId);
 
     register_proto('mur_actuator', (gen) => {
       return (block) => {
-        const index = calcVal(gen, block, 'Index')
-        const power = calcVal(gen, block, 'Power')
-        const sleepMs = calcVal(gen, block, 'Delay')
-        return makeFunc(gen, `mur.actuator(${index}, ${power})`) +
-               makeDelay(gen, sleepMs) +
-               makeFunc(gen, `mur.actuator(${index}, 0)`)
+        const mode = block.getFieldValue('MODE')
+        return makeFunc(gen, `mur.actuator(0, ${mode == 'SOLENOID_ON' ? 100 : 0})`)
       }
     })
 
@@ -778,6 +764,8 @@ await mur.thread_end(_scriptId);
     })
 
     */
+
+
 
   }
 }
