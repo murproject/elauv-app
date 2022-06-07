@@ -467,7 +467,7 @@ export default class BlocklyPanel extends Panel {
 
               // this.currrsor.setAttribute("transform",  block.getSvgRoot().getAttribute("transform"));
               // this.workspace.highlightBlock(blocks[key], true);
-              this.executionCursors[key].setAttribute("transform", `translate(${block.getRelativeToSurfaceXY().x - 25},${block.getRelativeToSurfaceXY().y + 5})`);
+              this.executionCursors[key].setAttribute("transform", `translate(${block.getRelativeToSurfaceXY().x - 14},${block.getRelativeToSurfaceXY().y + 5})`);
               // console.log(`${key} : ${blocks[key]} - ${block}`);
 
               // console.log(this.executionCursors);
