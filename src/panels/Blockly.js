@@ -140,6 +140,8 @@ export default class BlocklyPanel extends Panel {
       this.toolButtons.appendChild(actionButton);
     });
 
+    this.btnRun = document.querySelector("#blockly-action-run");
+
     /* --- Blockly --- */
 
     this.workspace = null;
