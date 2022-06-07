@@ -117,14 +117,10 @@ export default class BlocklyPanel extends Panel {
     console.log(Blockly.FieldNumber)
 
     const actions = [
-      // { name: 'run_lua',  icon: '',     func: this.run_lua },
-      // { func: this.run_js,    name: 'run_js',   icon: 'play-circle-outline',},
-      // { func: this.stop,      name: 'stop',     icon: 'stop-circle-outline',},
       { func: this.run,       name: 'run',      icon: 'play',},
       { func: this.example,   name: 'example',  icon: 'star',},
       { func: this.load,      name: 'load',     icon: 'file-upload',},
       { func: this.save,      name: 'save',     icon: 'content-save',},
-      // { name: '*H',       icon: '', func: this.triggerHighlightMode }, // TODO: delete debug feature
     ];
 
     actions.forEach(action => {
@@ -143,9 +139,6 @@ export default class BlocklyPanel extends Panel {
 
       this.toolButtons.appendChild(actionButton);
     });
-
-    this.highlightMode = null; // TODO: delete debug feature
-    this.triggerHighlightMode(); // TODO: delete debug feature
 
     /* --- Blockly --- */
 
@@ -172,15 +165,6 @@ export default class BlocklyPanel extends Panel {
     // this.blocklyDiv.appendChild(this.currrsor);
 
     this.scriptStatus = 'stopped';
-  }
-
-  triggerHighlightMode() { // TODO: delete debug feature
-    this.highlightMode = this.highlightMode == 'none'     ? 'blockly' :
-                         this.highlightMode == 'blockly'  ? 'query'   :
-                         this.highlightMode == 'query'    ? 'none'    : 'none';
-
-    // document.querySelector("#blockly-action-triggerHighlightMode").innerText = "*H=" + this.highlightMode; // TODO: delete debug feature
-    this.btnRun = document.querySelector("#blockly-action-run");
   }
 
   generate_code(workspace) {
@@ -432,19 +416,12 @@ export default class BlocklyPanel extends Panel {
           const blockId = block[0];
           const blockTime = block[1];
 
-          if (this.highlightMode == 'blockly') {
-            this.workspace.highlightBlock(key, blockId)
-          }
-          if (this.highlightMode == 'query') {
-            document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
-          }
-          if (this.highlightMode == 'none') {
-            const blockElement = this.workspace.getBlockById(blockId);
-            const blockXY = blockElement.getRelativeToSurfaceXY();
-            const x = blockXY.x - 14;
-            const y = blockXY.y + 5;
-            this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
-          }
+          const blockElement = this.workspace.getBlockById(blockId);
+          const blockXY = blockElement.getRelativeToSurfaceXY();
+          const x = blockXY.x - 14;
+          const y = blockXY.y + 5;
+
+          this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
           this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
         }
 
