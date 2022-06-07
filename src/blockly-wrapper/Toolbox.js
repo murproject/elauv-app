@@ -1,3 +1,5 @@
+import '@blockly/block-plus-minus';
+
 function placeholderNum (defaultNum) {
   return { block: { type: 'math_number', fields: { NUM: defaultNum } } }
 }
@@ -105,6 +107,7 @@ const MurToolbox = {
       categorystyle: 'logic_category',
       contents: [
         { kind: 'block', type: 'controls_if' },
+        { kind: 'block', type: 'controls_if', "extraState": {"hasElse": true} },
         { kind: 'block', type: 'logic_compare' },
         { kind: 'block', type: 'logic_operation' },
         { kind: 'block', type: 'logic_negate' },
