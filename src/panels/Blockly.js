@@ -329,7 +329,7 @@ export default class BlocklyPanel extends Panel {
       if (!(key in this.executionCursors)) {
         /* TODO --- */
         const cursorHtml = `
-        <g id="execution-cursor-${key}" style="display: block;" >
+        <g id="execution-cursor-${key}" style="display: block;" opacity="0%">
           <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
         </g>`;
 
@@ -424,61 +424,30 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'mur.h') {
-      const blocks = data.blockId
+      const blocks = data.blocks
 
       for (const key in blocks) {
         if (key !== 'null') {
-          // if (!(key in this.executionCursors)) {
-          //     /* TODO --- */
-          //     const cursorHtml = `
-          //     <g id="execution-cursor-${key}" style="display: block;" >
-          //       <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
-          //     </g>`;
-
-          //     let cursor = document.createElement("g");
-          //     cursor.id = `execution-cursor-${key}`;
-          //     cursor.setAttribute("style", "display: block;");
-          //     cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
-
-          //     document.querySelector(".blocklyBlockCanvas").innerHTML += cursorHtml;
-
-          //     for (let i = 0; i <= key; i++) { // need to query elements again after altering .blocklyBlockCanvas!
-          //       this.executionCursors[i] = document.querySelector(`#execution-cursor-${i}`);
-          //       // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
-          //       // TODO: fill executionCursors in reinject function instead of this highlight handler?
-          //     }
-
-          //     console.log(this.executionCursors);
-          // }
+          const block = blocks[key];
+          const blockId = block[0];
+          const blockTime = block[1];
 
           if (this.highlightMode == 'blockly') {
-            this.workspace.highlightBlock(key, blocks[key])
+            this.workspace.highlightBlock(key, blockId)
           }
           if (this.highlightMode == 'query') {
             document.querySelector(`[data-id="${key}"`).childNodes[0].setAttribute('filter', blocks[key] ? 'url(#filterGlow)' : '');
           }
           if (this.highlightMode == 'none') {
-            // if (blocks[key]) {
-              // place marker by x,y of highlighted block
-              // console.log(this.workspace.getBlockById(key));
-              // console.log(this.workspace.getBlockById(key).getRelativeToSurfaceXY());
-
-              const block = this.workspace.getBlockById(blocks[key]);
-
-              // this.currrsor.setAttribute("transform",  block.getSvgRoot().getAttribute("transform"));
-              // this.workspace.highlightBlock(blocks[key], true);
-              this.executionCursors[key].setAttribute("transform", `translate(${block.getRelativeToSurfaceXY().x - 14},${block.getRelativeToSurfaceXY().y + 5})`);
-              // console.log(`${key} : ${blocks[key]} - ${block}`);
-
-              // console.log(this.executionCursors);
-
-              // this.currrsor.style.setProperty("top",  this.workspace.scrollY + block.getRelativeToSurfaceXY().y + 20 + "px");
-              // this.currrsor.style.setProperty("left", this.workspace.scrollX + block.getRelativeToSurfaceXY().x + 20 + "px")
-            // }
+            const blockElement = this.workspace.getBlockById(blockId);
+            const x = blockElement.getRelativeToSurfaceXY().x - 14;
+            const y = blockElement.getRelativeToSurfaceXY().y + 5;
+            this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
           }
+          this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
         }
-      }
 
+      }
       return;
     }
 

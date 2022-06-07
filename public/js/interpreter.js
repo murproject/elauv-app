@@ -40,32 +40,13 @@ function sendContext () {
 }
 
 function sendHighlight () {
-  const changedBlocks = {}
-  const time = +new Date()
-  let newState = null
-
-  // for (const key in highlightedBlocks) {
-  //   const block = highlightedBlocks[key]
-  //   const timeout = typeof (block) === 'number' ? (time - block) > 100 : !block
-
-  //   if (timeout) {
-  //     highlightedBlocks[key] = false
-  //     newState = false
-  //   } else {
-  //     newState = true
-  //   }
-
-  //   if (highlightedBlocksActual[key] != newState && key) {
-  //     changedBlocks[key] = newState
-  //     highlightedBlocksActual[key] = newState
-  //   }
-  // }
-
   for (const key in highlightedBlocks) {
-    changedBlocks[key] = highlightedBlocks[key];
+    if (highlightedBlocks[key][1] < 100) {
+      highlightedBlocks[key][1] += 5;
+    }
   }
 
-  self.postMessage({ type: 'mur.h', blockId: changedBlocks })
+  self.postMessage({ type: 'mur.h', blocks: highlightedBlocks })
 }
 
 
@@ -75,14 +56,7 @@ const mur = {
   lastActiveBlock: {},
 
   h: async function (scriptId, blockId) {
-    // if (this.lastActiveBlock[scriptId] && this.lastActiveBlock[scriptId] !== blockId) {
-    //   highlightedBlocks[this.lastActiveBlock[scriptId]] = +new Date()
-    // }
-
-    // this.lastActiveBlock[scriptId] = blockId
-    // highlightedBlocks[blockId] = true
-
-    highlightedBlocks[scriptId] = blockId
+    highlightedBlocks[scriptId] = [blockId, 5]
 
     await mur.delay(3)
   },
@@ -140,12 +114,14 @@ const mur = {
     return telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE')
   },
 
-  thread_end: function (scriptId) {
+  thread_end: async function (scriptId) {
     this.threadsStates[scriptId] = false;
 
     if (!this.threadsStates.includes(true) && !this.mainThreadState) {
       setState('done');
     }
+
+    await new Promise(() => {}); // wait forever
   },
 }
 
@@ -198,6 +174,7 @@ self.onmessage = function (e) {
 
     script = `
 (async () => {
+mur.h(null);
 ${script}
 })();
 `
@@ -220,3 +197,5 @@ ${script}
     telemetry = e.data.telemetry
   }
 }
+
+// TODO: wait forever (stop thread): await new Promise(() => {});
