@@ -1,4 +1,4 @@
-import icon from '/src/utils/icon'
+import Icon from '/src/components/Icon'
 
 export default class Panel {
 
@@ -59,7 +59,7 @@ export default class Panel {
   }
 
   setIcon(name, color, modifier='') {
-    this.panelButton.innerHTML = icon(name, 'big ' + modifier, color); // TODO //
+    this.panelButton.innerHTML = Icon(name, 'big ' + modifier, color); // TODO //
   }
 
 }

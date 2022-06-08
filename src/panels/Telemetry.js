@@ -1,6 +1,6 @@
 import Panel from './Panel'
 import mur from '/src/vehicle/apiGameMur.js'
-import icon from '/src/utils/icon'
+import Icon from '/src/components/Icon'
 
 export default class Telemetry extends Panel {
 

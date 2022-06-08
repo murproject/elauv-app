@@ -1,6 +1,6 @@
 import Panel from './Panel'
 import mur from '/src/vehicle/apiGameMur.js'
-import icon from '/src/utils/icon'
+import Icon from '/src/components/Icon'
 
 export default class Devices extends Panel {
 
@@ -9,13 +9,13 @@ export default class Devices extends Panel {
       <div>
         Status - <span id="connStatus"></span>
         <br>
-        ${icon('battery-high')}
+        ${Icon('battery-high')}
       </div>
 
       <div id="connBluetoothPanel">
 
         <div>
-          <div class="push-button" id="connScanDevices">${icon('bluetooth-connect')} Scan Devices</div>
+          <div class="push-button" id="connScanDevices">${Icon('bluetooth-connect')} Scan Devices</div>
           <div class="push-button" id="connScanCode">Scan Code</div>
           <div class="push-button" id="connDisconnect">Disconnect</div>
         </div>
