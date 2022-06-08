@@ -1,13 +1,13 @@
 import Panel from './Panel'
 import mur from '/src/vehicle/apiGameMur.js'
 import Icon from '/src/components/Icon'
+import Button from '../components/Button'
 
 export default class Telemetry extends Panel {
 
   begin() {
     this.html = /*html*/`
       <div id="telemetryText">Waiting for connection…</div>
-
       <br>
       <div class="push-button" id="resetStats">Reset stats</div>
     `
@@ -25,8 +25,35 @@ export default class Telemetry extends Panel {
 
     this.resetStatsButton = this.q("#resetStats");
     this.resetStatsButton.onclick = () => this.resetStats();
+
+    this.makeFeedbackIcons()
   }
 
+  makeFeedbackIcons() {
+    this.feedbackBox = document.createElement("div");
+    this.feedbackBox.classList.add("buttons-group");
+    this.feedbackBox.id = "telemetry-feedback-box";
+
+    this.feedbackIcons = {};
+
+    const feedbacks = [
+      {name: 'solenoid',  color: 'red',   pulse: true,  icon: '../magnet-off'},
+      {name: 'motors',    color: 'red',   pulse: true,  icon: '../fan-off'},
+      {name: 'tap',       color: 'cyan',  pulse: false, icon: '../cursor-default-click'},
+    ];
+
+    feedbacks.forEach(feedback => {
+      const feedbackIcon = new Button(
+        feedback.name, '', 'panel-feedback', undefined, feedback.icon, false
+      );
+
+      feedbackIcon.setIcon(feedback.icon, feedback.color, `big ${feedback.pulse ? 'pulse' : ''}`);
+      feedbackIcon.inject(this.feedbackBox);
+      this.feedbackIcons[feedback.name] = feedbackIcon;
+    });
+
+    document.querySelector("#head").appendChild(this.feedbackBox);
+  }
 
   resetStats() {
     this.stats = {
@@ -46,8 +73,7 @@ export default class Telemetry extends Panel {
     this.update('');
   }
 
-
-  update(telemetryText) {
+  updateStats(telemetryText) {
     if (this.active && telemetryText) {
       this.stats.maxVolts = Math.max(this.stats.maxVolts, mur.telemetry.battVolts).toFixed(2);
       this.stats.minVolts = Math.min(this.stats.minVolts, mur.telemetry.battVolts).toFixed(2);
@@ -75,7 +101,9 @@ export default class Telemetry extends Panel {
       this.textElement.innerText = telemetryText;
 
     }
+  }
 
+  updateBattery() {
     const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : false;
 
     const batteryText = mur.conn.state != 'open' || !rsoc ? 'unknown' :
@@ -96,6 +124,23 @@ export default class Telemetry extends Panel {
       this.setIcon(this.battIconName, batteryColor);
       this.oldBattIconName = this.battIconName;
     }
+  }
+
+  updateFeedbacks() {
+    if ('feedback' in mur.telemetry) {
+      // this.feedbackMotors.setActive(mur.telemetry.feedback.colorStatus);
+      // this.feedbackSolenoid.setActive(mur.telemetry.feedback.imuTap);
+      if (mur.telemetry.feedback.imuTap) {
+        this.feedbackIcons.tap.setActive(true);
+        setTimeout(() => this.feedbackIcons.tap.setActive(false), 500);
+      }
+    }
+  }
+
+  update(telemetryText) {
+    this.updateStats(telemetryText);
+    this.updateBattery();
+    this.updateFeedbacks();
   }
 
 }

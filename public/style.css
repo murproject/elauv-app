@@ -142,6 +142,26 @@ body {
     background-color: #AAA;
 }
 
+.panel-feedback {
+    height: 100%;
+    transition: 0.05s;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    padding: 0 1em;
+    margin: 0 0.25em;
+    margin-top: 0.1em;
+}
+
+.panel-feedback:not(.active) .icon {
+    animation: none !important;
+}
+
+.panel-feedback:not(.active) {
+    display: none;
+}
+
 .text-center {
     text-align: center;
 }
@@ -290,6 +310,7 @@ article {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 article div {
@@ -323,7 +344,8 @@ article div {
 
     display: flex;
     align-items: end;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: start;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -369,6 +391,12 @@ article div {
 .buttons-group {
     height: 100%;
     display: flex;
+}
+
+#buttons-blockly {
+    width: 100%;
+    justify-content: flex-end;
+    /* flex-direction: row-reverse; */
 }
 
 #telemetryText {
@@ -569,3 +597,16 @@ input[type="number"] {
     border-left: 1px solid rgba(255,255,255,0.5);
 }
 
+@keyframes pulse {
+    50% {
+        opacity: 50%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.pulse {
+    animation: 1s linear 0s infinite alternate pulse;
+}
