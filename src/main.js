@@ -1,5 +1,6 @@
 import mur from './vehicle/apiGameMur.js'
 
+import AboutPanel from './panels/About.js'
 import DevicesPanel from './panels/Devices.js';
 import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
@@ -9,10 +10,7 @@ const app = {
 
   html: /*html*/`
     <header id="head">
-      <div class="buttons-group" id="buttons-main">
-        <!-- <div class="panel-logo">ElAUV</div> -->
-        <img class="logo" src="/media/logo.png" />
-      </div>
+      <div class="buttons-group" id="buttons-main"></div>
     </header>
     <section id="panel-wrapper"></section>
   `,
@@ -38,13 +36,14 @@ const app = {
     }
 
     this.panels = {
+      about: new AboutPanel(),
       devices: new DevicesPanel(),
       telemetry: new TelemetryPanel(),
       joystick: new JoystickPanel(),
       blockly: new BlocklyPanel(),
     };
 
-    this.panelSelect(this.panels.devices);
+    this.panelSelect(this.panels.blockly);
   },
 
 

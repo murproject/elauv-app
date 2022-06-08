@@ -16,6 +16,8 @@ body {
     max-width: 100vw;
     overflow: hidden;
 
+    font-family: "Roboto", "Noto Sans", "Open Sans", "Segoe UI", sans-serif;
+
     --color-dark:   hsl(0, 0%, 20%);
     --color-light:  hsl(0, 0%, 80%);
 
@@ -113,14 +115,28 @@ body {
     align-items: center;
 }
 
+.logo:not(.active) {
+    box-shadow: none !important;
+    background: none !important;
+}
 
 .logo {
+    padding-left: 1.25em;
+    transition: 0.25s;
+}
+
+.logo.active {
+    background-color: #112655 !important;
+}
+
+.logo.active img {
+    filter: contrast(0) brightness(100);
+}
+
+.logo img {
     height: 20px;
     object-fit: cover;
     vertical-align: middle;
-    margin: auto;
-    padding: 0em 1em;
-    padding-left: 1.5em;
 }
 
 .panel-button.active {
@@ -265,6 +281,22 @@ body {
 .opacity-100 {
     opacity: 100% !important;
 }
+
+article {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+article div {
+    width: 100%;
+}
+
+.about-splash {
+    max-width: 30vw;
+}
+
 
 #head div {
     /* float: left; */
