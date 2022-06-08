@@ -4,6 +4,10 @@ function placeholderNum (defaultNum) {
   return { block: { type: 'math_number', fields: { NUM: defaultNum } } }
 }
 
+function shadowSlider() {
+  return { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } };
+}
+
 const MurToolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -45,38 +49,27 @@ const MurToolbox = {
       colour: 20,
       contents: [
 
-        // {
-        //   kind: 'block',
-        //   type: 'mur_set_axis',
-        //   inputs: {
-        //     Power: placeholderNum(50)
-        //   }
-        // },
+        {
+          kind: 'block',
+          type: 'mur_set_axis',
+          inputs: {
+            Power: shadowSlider()
+          }
+        },
 
-        // {
-        //   kind: 'block',
-        //   type: 'mur_set_axis_wait',
-        //   inputs: {
-        //     Power: placeholderNum(50),
-        //     Delay: placeholderNum(0.5)
-        //   }
-        // },
-
-        // {
-        //   kind: 'block',
-        //   type: 'mur_set_yaw',
-        //   inputs: {
-        //     Angle: placeholderNum(0)
-        //   }
-        // },
+        {
+          kind: 'block',
+          type: 'mur_set_yaw',
+          inputs: {
+            Angle: shadowSlider() // TODO: slider -180 ~ +180
+          }
+        },
 
         {
           kind: 'block',
           type: 'mur_set_power',
           inputs: {
-            // Index: placeholderNum(0),
-            // Power: placeholderNum(20),
-            Power: { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } },
+            Power: shadowSlider(),
           },
           fields: {
             Index: 'MOTOR_A'
@@ -85,18 +78,13 @@ const MurToolbox = {
 
         {
           kind: 'block',
-          type: 'mur_actuator',
-          // inputs: {
-            // Index: placeholderNum(0),
-            // Power: placeholderNum(75),
-            // Delay: placeholderNum(0.5)
-          // }
+          type: 'mur_stop_motors'
         },
 
         {
           kind: 'block',
-          type: 'mur_stop_motors'
-        }
+          type: 'mur_actuator',
+        },
 
       ]
     },
@@ -112,7 +100,7 @@ const MurToolbox = {
         { kind: 'block', type: 'logic_operation' },
         { kind: 'block', type: 'logic_negate' },
         { kind: 'block', type: 'logic_boolean' },
-        { kind: 'block', type: 'logic_null' },
+        // { kind: 'block', type: 'logic_null' },
         { kind: 'block', type: 'logic_ternary' }
       ]
     },
@@ -126,16 +114,16 @@ const MurToolbox = {
 
         { kind: 'block', type: 'math_number' },
         { kind: 'block', type: 'math_arithmetic' },
-        { kind: 'block', type: 'math_single' },
-        { kind: 'block', type: 'math_trig' },
-        { kind: 'block', type: 'math_constant' },
+        // { kind: 'block', type: 'math_single' },
+        // { kind: 'block', type: 'math_trig' },
+        // { kind: 'block', type: 'math_constant' },
         { kind: 'block', type: 'math_number_property' },
         { kind: 'block', type: 'math_round' },
-        { kind: 'block', type: 'math_on_list' },
+        // { kind: 'block', type: 'math_on_list' },
         { kind: 'block', type: 'math_modulo' },
         { kind: 'block', type: 'math_constrain' },
         { kind: 'block', type: 'math_random_int' },
-        { kind: 'block', type: 'math_random_float' }
+        // { kind: 'block', type: 'math_random_float' }
       ]
     },
 
@@ -147,7 +135,7 @@ const MurToolbox = {
         { kind: 'block', type: 'controls_repeat_ext' },
         { kind: 'block', type: 'controls_whileUntil' },
         { kind: 'block', type: 'controls_for' },
-        { kind: 'block', type: 'controls_forEach' },
+        // { kind: 'block', type: 'controls_forEach' },
         { kind: 'block', type: 'controls_flow_statements' }
       ]
     },
@@ -160,7 +148,7 @@ const MurToolbox = {
         { kind: 'block', type: 'colour_picker' },
         { kind: 'block', type: 'colour_random' },
         { kind: 'block', type: 'colour_rgb' },
-        { kind: 'block', type: 'colour_blend' },
+        // { kind: 'block', type: 'colour_blend' },
       ]
     },
 
