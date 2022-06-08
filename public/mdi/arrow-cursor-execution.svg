@@ -12,21 +12,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs7">
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1577"
-       x="-0.17413049"
-       y="-0.17413049"
-       width="1.348261"
-       height="1.348261">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.63667374"
-         id="feGaussianBlur1579" />
-    </filter>
-  </defs>
+     id="defs7" />
   <sodipodi:namedview
      id="namedview5"
      pagecolor="#ffffff"
@@ -37,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:snap-global="true"
-     inkscape:zoom="4.3385417"
-     inkscape:cx="15.673469"
-     inkscape:cy="21.435774"
+     inkscape:zoom="8.6770834"
+     inkscape:cx="14.405762"
+     inkscape:cy="19.130852"
      inkscape:window-width="1920"
      inkscape:window-height="1019"
      inkscape:window-x="0"
@@ -60,15 +46,7 @@
      inkscape:snap-intersection-paths="true"
      inkscape:object-paths="true" />
   <circle
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter1577)"
-     id="path1108-3"
-     cx="12"
-     cy="12"
-     r="5.8232679"
-     inkscape:label="path1108"
-     transform="matrix(0.57197606,0,0,0.57197606,5.1362873,5.1362873)" />
-  <circle
-     style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:0.571976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path1108"
      cx="12"
      cy="12"
