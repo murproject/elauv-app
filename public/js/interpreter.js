@@ -56,7 +56,7 @@ const mur = {
   lastActiveBlock: {},
 
   h: async function (scriptId, blockId) {
-    highlightedBlocks[scriptId] = [blockId, 0]
+    highlightedBlocks[scriptId] = [blockId, 5]
 
     await mur.delay(3)
   },
@@ -64,14 +64,17 @@ const mur = {
   // TODO: clamp here or in context handler?
 
   set_axis: async function (index, speed) {
+    // TODO: check index and constrain power
     context.motor_axes[index] = Math.round(speed)
   },
 
   set_power: async function (index, power) {
+    // TODO: check index and constrain power
     context.motor_powers[index] = Math.round(power)
   },
 
   set_led: async function (index, colour) {
+    // TODO: check index
     const rawColour = Number("0x" + colour.substring(1))
     context.leds[index * 3 + 0] = (rawColour >> (16)) & 0xFF
     context.leds[index * 3 + 1] = (rawColour >> ( 8)) & 0xFF

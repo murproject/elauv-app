@@ -217,6 +217,7 @@ body {
     height: 1.5em;
     background-color: var(--color-dark);
     /* background-color: var(--color-blue); */
+    mask-size: cover !important;
     -webkit-mask-size: cover !important;
 }
 
@@ -232,7 +233,7 @@ body {
 
 .icon.big {
     width: 2em;
-    height: 2em;
+    height: 2.25em;
 }
 
 .icon.cyan {
@@ -491,6 +492,10 @@ article div {
     border: 2.5px solid rgba(0,0,0,0.24);
     border-radius: 5px;
     margin: 0.2em;
+}
+
+.blocklyColourSelected {
+    outline-width: 3px;
 }
 
 .blocklyMainWorkspaceScrollbar {
