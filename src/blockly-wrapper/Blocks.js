@@ -691,15 +691,15 @@ await mur.thread_end(_scriptId);
     ];
 
     Blockly.FieldColour.TITLES = [
-        'Чёрный',
-        'Белый',
-        'Пурпурный',
-        'Красный',
-        'Оранжевый',
-        'Жёлтый',
-        'Зелёный',
-        'Голубой',
-        'Синий',
+      'Чёрный',
+      'Белый',
+      'Пурпурный',
+      'Красный',
+      'Оранжевый',
+      'Жёлтый',
+      'Зелёный',
+      'Голубой',
+      'Синий',
     ];
 
     Blockly.FieldColour.COLUMNS = 3;
@@ -720,6 +720,26 @@ await mur.thread_end(_scriptId);
     }
 
     register_proto('mur_number_slider', (gen) => {
+      return (block) => {
+        const value = block.getFieldValue('Value')
+        return makeInlineFunc(gen, `(${value})`)
+      }
+    })
+
+    Blockly.Blocks.mur_number = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new FieldSlider(0, undefined, undefined, true), "Value")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(color_spec)
+        this.setTooltip('Число')
+      }
+    }
+
+    register_proto('mur_number', (gen) => {
       return (block) => {
         const value = block.getFieldValue('Value')
         return makeInlineFunc(gen, `(${value})`)

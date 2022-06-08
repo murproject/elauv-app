@@ -37,6 +37,8 @@ export class FieldSlider extends Blockly.FieldNumber {
       precision = undefined, validator = undefined, config = undefined) {
     super(value, min, max, precision, validator, config);
 
+    this.isSlider = isSlider;
+
     /**
      * Array holding info needed to unbind events.
      * Used for disposing.
@@ -82,6 +84,8 @@ export class FieldSlider extends Blockly.FieldNumber {
         Blockly.utils.userAgent.ANDROID || Blockly.utils.userAgent.IPAD;
     super.showEditor_(e, noFocus);
     // Build the DOM.
+
+    console.log(this.isSlider);
 
     if (!('isSlider' in this && this.isSlider)) {
       const editor = this.dropdownCreate_();

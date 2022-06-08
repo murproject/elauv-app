@@ -111,7 +111,7 @@ const MurToolbox = {
       categorystyle: 'math_category',
       contents: [
         // { kind: 'block', type: 'mur_number_slider' },
-
+        { kind: 'block', type: 'mur_number' },
         { kind: 'block', type: 'math_number' },
         { kind: 'block', type: 'math_arithmetic' },
         // { kind: 'block', type: 'math_single' },
