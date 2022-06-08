@@ -463,7 +463,7 @@ export default class BlocklyPanel extends Panel {
           const x = blockXY.x - 14;
           const y = blockXY.y + 5;
 
-          this.executionCursors[key].setAttribute("transform", `translate(${x},${y}) scale(${blockTime / 400 + 0.75} 1)`);
+          this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
           this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
         }
 
