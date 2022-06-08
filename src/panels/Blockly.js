@@ -116,8 +116,16 @@ export default class BlocklyPanel extends Panel {
 
     console.log(Blockly.FieldNumber)
 
+    this.actionButtons = {};
+
     const actions = [
-      { func: this.run,       name: 'run',      icon: 'play',},
+      { spacer: true },
+
+      { func: this.undo,      name: 'undo',     icon: 'undo',},
+      { func: this.redo,      name: 'redo',     icon: 'redo',},
+      { spacer: true },
+
+      { func: this.run,       name: 'run',      icon: 'play'},
       { func: this.example,   name: 'example',  icon: 'star',},
       { func: this.load,      name: 'load',     icon: 'file-upload',},
       { func: this.save,      name: 'save',     icon: 'content-save',},
@@ -125,22 +133,29 @@ export default class BlocklyPanel extends Panel {
 
     actions.forEach(action => {
       const actionButton = document.createElement("div");
-      actionButton.classList.add("panel-button");
-      actionButton.id = "blockly-action-" + action.func.name;
-      actionButton.onclick = () => {
-        window.setTimeout(() => this[action.func.name](), 50);
-      };
 
-      if (action.icon) {
-        actionButton.innerHTML = icon(action.icon, 'big')
+      if ('spacer' in action && action.spacer === true) {
+        actionButton.classList.add("panel-spacer");
       } else {
-        actionButton.innerText = action.name;
+        actionButton.classList.add("panel-button");
+        actionButton.id = "blockly-action-" + action.func.name;
+        actionButton.onclick = () => {
+          window.setTimeout(() => this[action.func.name](), 50);
+        };
+
+        if ('icon' in action) {
+          actionButton.innerHTML = icon(action.icon, 'big')
+        } else {
+          actionButton.innerText = action.name;
+        }
+
+        this.actionButtons[action.name] = actionButton;
       }
 
       this.toolButtons.appendChild(actionButton);
     });
 
-    this.btnRun = document.querySelector("#blockly-action-run");
+    // this.btnRun = document.querySelector("#blockly-action-run");
 
     /* --- Blockly --- */
 
@@ -158,6 +173,10 @@ export default class BlocklyPanel extends Panel {
 
     this.reinject(false);
 
+    this.stateOfUndo = {undo: undefined, redo: undefined}
+    this.workspace.addChangeListener(() => { this.onWorkspaceChange() });
+    this.onWorkspaceChange();
+
     /* --- Cursor --- */
 
     this.executionCursors = {}; //will be one cursor per script thread
@@ -167,6 +186,39 @@ export default class BlocklyPanel extends Panel {
     // this.blocklyDiv.appendChild(this.currrsor);
 
     this.scriptStatus = 'stopped';
+  }
+
+  onWorkspaceChange() {
+    const newStateUndo = this.workspace.getUndoStack().length > 0;
+    const newStateRedo = this.workspace.getRedoStack().length > 0;
+
+    if (this.stateOfUndo.undo != newStateUndo) {
+      this.stateOfUndo.undo = newStateUndo;
+
+      if (newStateUndo) {
+        this.actionButtons.undo.classList.remove('disabled');
+      } else {
+        this.actionButtons.undo.classList.add('disabled');
+      }
+    }
+
+    if (this.stateOfUndo.redo != newStateRedo) {
+      this.stateOfUndo.redo = newStateRedo;
+
+      if (newStateRedo) {
+        this.actionButtons.redo.classList.remove('disabled');
+      } else {
+        this.actionButtons.redo.classList.add('disabled');
+      }
+    }
+  }
+
+  undo() {
+    this.workspace.undo(false);
+  }
+
+  redo() {
+    this.workspace.undo(true);
   }
 
   generate_code(workspace) {
@@ -187,7 +239,7 @@ export default class BlocklyPanel extends Panel {
 
   stop() {
     this.setIcon('puzzle');
-    this.btnRun.innerHTML = icon('play', 'big');
+    this.actionButtons.run.innerHTML = icon('play', 'big');
     this.scriptStatus = 'stopped'
 
     if (this.scriptWorker) {
@@ -230,7 +282,9 @@ export default class BlocklyPanel extends Panel {
       Blockly.serialization.workspaces.load(JSON.parse(savedBlocks), this.workspace)
     }
 
-    this.workspace.zoomToFit()
+    this.workspace.clearUndo();
+    this.onWorkspaceChange();
+    this.workspace.zoomToFit();
   }
 
   example() {
@@ -268,7 +322,7 @@ export default class BlocklyPanel extends Panel {
 
   run_js() {
     this.setIcon('cog', 'anim-spin');
-    this.btnRun.innerHTML = icon('stop', 'big');
+    this.actionButtons.run.innerHTML = icon('stop', 'big');
 
     this.scriptStatus = 'running'
 
@@ -423,7 +477,7 @@ export default class BlocklyPanel extends Panel {
           const x = blockXY.x - 14;
           const y = blockXY.y + 5;
 
-          this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
+          this.executionCursors[key].setAttribute("transform", `translate(${x},${y}) scale(${blockTime / 400 + 0.75} 1)`);
           this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
         }
 
