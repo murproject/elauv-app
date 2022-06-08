@@ -1,4 +1,5 @@
-import Icon from '/src/components/Icon'
+import Icon from '/src/components/Icon';
+import Button from '../components/Button';
 
 export default class Panel {
 
@@ -19,12 +20,14 @@ export default class Panel {
     this.container.innerHTML = this.html;
     document.querySelector("#panel-wrapper").appendChild(this.container);
 
-    this.panelButton = document.createElement("div");
-    this.panelButton.classList.add("panel-button");
-    this.panelButton.onclick = () => document.app.panelSelect(this);
-    this.panelButton.innerText = this.name;
-    document.querySelector("#buttons-main").appendChild(this.panelButton);
+    this.panelButton = new Button(
+      this.name,
+      '',
+      'panel-button',
+      () => document.app.panelSelect(this)
+    );
 
+    this.panelButton.inject(document.querySelector("#buttons-main"));
     this.setActive(false);
   }
 
@@ -40,13 +43,12 @@ export default class Panel {
 
   setActive(state) {
     this.active = state;
+    this.panelButton.setActive(state);
 
     if (this.active) {
       this.container.classList.add('active');
-      this.panelButton.classList.add('active');
     } else {
       this.container.classList.remove('active');
-      this.panelButton.classList.remove('active');
     }
 
     this.onActiveChanged();
@@ -59,7 +61,7 @@ export default class Panel {
   }
 
   setIcon(name, color, modifier='') {
-    this.panelButton.innerHTML = Icon(name, 'big ' + modifier, color); // TODO //
+    this.panelButton.setIcon(name, 'big ' + modifier, color); // TODO //
   }
 
 }

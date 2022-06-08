@@ -48,6 +48,14 @@ export default class Button {
     }
   }
 
+  setActive(isActive) {
+    if (isActive) {
+      this.el.classList.add('active');
+    } else {
+      this.el.classList.remove('active');
+    }
+  }
+
   setAction(action, timeout) {
     if (timeout > 0) {
       this.el.onclick = () => {
