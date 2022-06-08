@@ -150,6 +150,13 @@ export default class BlocklyPanel extends Panel {
         }
 
         this.actionButtons[action.name] = actionButton;
+        actionButton.setEnabled = function(status) {
+          if (status === true) {
+            this.classList.remove('disabled');
+          } else {
+            this.classList.add('disabled');
+          }
+        }
       }
 
       this.toolButtons.appendChild(actionButton);
@@ -194,22 +201,12 @@ export default class BlocklyPanel extends Panel {
 
     if (this.stateOfUndo.undo != newStateUndo) {
       this.stateOfUndo.undo = newStateUndo;
-
-      if (newStateUndo) {
-        this.actionButtons.undo.classList.remove('disabled');
-      } else {
-        this.actionButtons.undo.classList.add('disabled');
-      }
+      this.actionButtons.undo.setEnabled(newStateUndo)
     }
 
     if (this.stateOfUndo.redo != newStateRedo) {
       this.stateOfUndo.redo = newStateRedo;
-
-      if (newStateRedo) {
-        this.actionButtons.redo.classList.remove('disabled');
-      } else {
-        this.actionButtons.redo.classList.add('disabled');
-      }
+      this.actionButtons.redo.setEnabled(newStateRedo)
     }
   }
 
