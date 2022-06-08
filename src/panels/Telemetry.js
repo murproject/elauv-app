@@ -69,8 +69,11 @@ export default class Telemetry extends Panel {
 
       telemetryText += '\n\n';
       telemetryText += JSON.stringify(this.stats, null, '\t');
+      telemetryText += '\n\ncontext = ';
+      telemetryText += JSON.stringify(mur.context, null, '\t')
 
       this.textElement.innerText = telemetryText;
+
     }
 
     const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : false;

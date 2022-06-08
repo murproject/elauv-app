@@ -56,7 +56,6 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     padding: 0 1em;
     margin: 0 0.25em;
-    font-family: "Roboto";
 
     margin-top: 0.1em;
     border-top-right-radius: 5px;
@@ -68,7 +67,6 @@ body {
     transition: 0.05s;
     text-align: center;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    font-family: "Roboto";
 
     display: flex;
     justify-content: center;
@@ -142,6 +140,10 @@ body {
 .panel-button.active {
     /* font-weight: bold; */
     background-color: #AAA;
+}
+
+.text-center {
+    text-align: center;
 }
 
 #connDevicesWrapper {
@@ -297,7 +299,6 @@ article div {
     max-width: 30vw;
 }
 
-
 #head div {
     /* float: left; */
 /*     padding: 0.5em; */
@@ -372,6 +373,8 @@ article div {
 #telemetryText {
     font-family: monospace;
     white-space: pre;
+    overflow: scroll;
+    max-height: 100%;
 }
 
 .nipple-wrapper {
