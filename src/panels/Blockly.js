@@ -171,10 +171,14 @@ export default class BlocklyPanel extends Panel {
     this.blocklyDiv.classList.add("pretty");
     this.container.appendChild(this.blocklyDiv);
 
+    this.stateOfUndo = {
+      undo: undefined,
+      redo: undefined,
+      savedUndoStack: [],
+      savedRedoStack: [],
+    }
     this.reinject(false);
 
-    this.stateOfUndo = {undo: undefined, redo: undefined}
-    this.workspace.addChangeListener(() => { this.onWorkspaceChange() });
     this.onWorkspaceChange();
 
     /* --- Cursor --- */
@@ -185,15 +189,32 @@ export default class BlocklyPanel extends Panel {
   }
 
   onWorkspaceChange() {
+    this.checkUndoRedo();
+  }
+
+  checkUndoRedo(force = undefined) {
+    if (force === true) {
+      this.stateOfUndo.undo = false;
+      this.stateOfUndo.redo = false;
+      this.actionButtons.undo.setEnabled(false)
+      this.actionButtons.redo.setEnabled(false)
+      return;
+    }
+
+    if (force === false) {
+      this.stateOfUndo.undo = undefined;
+      this.stateOfUndo.redo = undefined;
+    }
+
     const newStateUndo = this.workspace.getUndoStack().length > 0;
     const newStateRedo = this.workspace.getRedoStack().length > 0;
 
-    if (this.stateOfUndo.undo != newStateUndo) {
+    if (this.stateOfUndo.undo !== newStateUndo) {
       this.stateOfUndo.undo = newStateUndo;
       this.actionButtons.undo.setEnabled(newStateUndo)
     }
 
-    if (this.stateOfUndo.redo != newStateRedo) {
+    if (this.stateOfUndo.redo !== newStateRedo) {
       this.stateOfUndo.redo = newStateRedo;
       this.actionButtons.redo.setEnabled(newStateRedo)
     }
@@ -263,6 +284,9 @@ export default class BlocklyPanel extends Panel {
   }
 
   load() {
+    this.stateOfUndo.savedUndoStack = [];
+    this.stateOfUndo.savedRedoStack = [];
+
     const savedBlocks = localStorage.savedBlocks
     if (savedBlocks) {
       Blockly.serialization.workspaces.load(JSON.parse(savedBlocks), this.workspace)
@@ -315,7 +339,8 @@ export default class BlocklyPanel extends Panel {
     this.code = this.generate_code(this.workspace)
     console.log(this.code)
 
-    this.reinject(true)
+    this.reinject(true);
+    // checkUndoRedo(true);
 
     if (this.scriptWorker != null) {
       this.scriptWorker.terminate()
@@ -411,6 +436,11 @@ export default class BlocklyPanel extends Panel {
       this.workspace.dispose()
     }
 
+    if (readonly) {
+      this.stateOfUndo.savedUndoStack = this.workspace.getUndoStack();
+      this.stateOfUndo.savedRedoStack = this.workspace.getRedoStack();
+    }
+
     // this.$refs.blocklyInstance.inject(readonly)
     blocklyConfig.readOnly = readonly;
     blocklyConfig.zoom.controls = !readonly;
@@ -436,8 +466,27 @@ export default class BlocklyPanel extends Panel {
       document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.remove("hidden"));
     }
 
+    if (!readonly) {
+      for (const key in this.stateOfUndo.savedUndoStack) {
+        this.stateOfUndo.savedUndoStack[key].workspaceId = this.workspace.id;
+      }
+
+      for (const key in this.stateOfUndo.savedRedoStack) {
+        this.stateOfUndo.savedRedoStack[key].workspaceId = this.workspace.id;
+      }
+
+      this.workspace.undoStack_ = this.stateOfUndo.savedUndoStack;
+      this.workspace.redoStack_ = this.stateOfUndo.savedRedoStack;
+
+      this.stateOfUndo.savedUndoStack = [];
+      this.stateOfUndo.savedRedoStack = [];
+    }
+
     let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
     defs.innerHTML += filterGlow
+
+    this.workspace.addChangeListener(() => { this.onWorkspaceChange() });
+    // this.checkUndoRedo(false);
 
     // TODO: CURSOR
   }
