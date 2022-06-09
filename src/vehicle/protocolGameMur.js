@@ -16,6 +16,10 @@ function setBit (value, mask, state) {
   return value
 }
 
+function clamp(value, maxPower = 100) {
+  return Math.min(Math.max(value, -maxPower), maxPower)
+}
+
 function packFloat (value, precision = 0.01) {
   return Math.round(value * (1.0 / precision))
 }
@@ -36,10 +40,6 @@ var feedbackMask = {
 export default {
   name: 'Protocol',
   protocol: this,
-
-  clamp: function (value, maxPower = 100) {
-    return Math.min(Math.max(value, -maxPower), maxPower)
-  },
 
   regulators: {
     yaw: false,
@@ -249,6 +249,18 @@ export default {
   },
 
   packControlContext: function (data) {
+    for (const i in data.direct_power) {
+      data.direct_power[i] = clamp(data.direct_power[i]);
+    }
+
+    for (const i in data.axes_speed) {
+      data.axes_speed[i] = clamp(data.axes_speed[i]);
+    }
+
+    for (const i in data.actuator_power) {
+      data.actuator_power[i] = clamp(data.actuator_power[i]);
+    }
+
     var payload = [
       data.direct_power,
       data.direct_mode,
