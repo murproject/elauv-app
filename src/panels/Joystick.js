@@ -5,10 +5,10 @@ import mur from '../vehicle/apiGameMur.js'
 import protocol from '../vehicle/protocolGameMur'
 
 function clamp (value, min, max) {
-  return Math.round(Math.min(Math.max(min, value), max))
+  return Math.min(Math.max(min, Math.round(value)), max)
 }
 
-const axesFormulaDefault = `max_power = 75
+const axesFormulaDefault = `max_power = 100
 solenoid_time = 30000
 
 a = - x + y
@@ -143,6 +143,13 @@ export default class Joystick extends Panel {
       d = 0;
       axisFormulaOk = false;
     }
+
+    a = a / 100 * max_power;
+    b = b / 100 * max_power;
+    c = c / 100 * max_power;
+    d = d / 100 * max_power;
+
+    max_power = Math.min(max_power, 100);
 
     a = clamp(a, -max_power, max_power);
     b = clamp(b, -max_power, max_power);
