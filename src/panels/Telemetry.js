@@ -39,7 +39,7 @@ export default class Telemetry extends Panel {
     const feedbacks = [
       {name: 'solenoid',  color: 'red',   pulse: true,  icon: '../magnet-off'},
       {name: 'motors',    color: 'red',   pulse: true,  icon: '../fan-off'},
-      {name: 'tap',       color: 'cyan',  pulse: false, icon: '../cursor-default-click'},
+      {name: 'tap',       color: 'cyan',  pulse: true,  icon: '../cursor-default-click'},
     ];
 
     feedbacks.forEach(feedback => {
@@ -104,21 +104,21 @@ export default class Telemetry extends Panel {
   }
 
   updateBattery() {
-    const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : false;
+    const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : -1;
 
-    const batteryText = mur.conn.state != 'open' || !rsoc ? 'unknown' :
+    const batteryText = mur.conn.state != 'open' || rsoc < 0 ? 'unknown' :
                         rsoc < 10 ? 'outline' :
                         rsoc < 40 ? 'low'     :
                         rsoc < 70 ? 'medium'  : 'high';
 
-    const batteryColor = mur.conn.state != 'open' || !rsoc ? 'dark' :
+    const batteryColor = mur.conn.state != 'open' || rsoc < 0 ? 'dark' :
                          rsoc < 10 ? 'red'    :
                          rsoc < 40 ? 'orange' :
-                         rsoc < 70 ? 'yellow' : 'green'
+                         rsoc < 70 ? 'yellow' : 'green';
 
-    const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : ''
+    const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : '';
 
-    this.battIconName = `battery-${batteryCharge}${batteryText}`
+    this.battIconName = `battery-${batteryCharge}${batteryText}`;
 
     if (this.oldBattIconName != this.battIconName) {
       this.setIcon(this.battIconName, batteryColor);
@@ -128,8 +128,9 @@ export default class Telemetry extends Panel {
 
   updateFeedbacks() {
     if ('feedback' in mur.telemetry) {
-      // this.feedbackMotors.setActive(mur.telemetry.feedback.colorStatus);
-      // this.feedbackSolenoid.setActive(mur.telemetry.feedback.imuTap);
+      // mur.telemetry.feedback.motors.setActive(mur.telemetry.feedback.motorsDisabled);
+      // mur.telemetry.feedback.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
+
       if (mur.telemetry.feedback.imuTap) {
         this.feedbackIcons.tap.setActive(true);
         setTimeout(() => this.feedbackIcons.tap.setActive(false), 500);
