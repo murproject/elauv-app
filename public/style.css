@@ -128,13 +128,14 @@ body {
 }
 
 .logo.active img {
-    filter: contrast(0) brightness(100);
+    /* filter: contrast(0) brightness(100); */
 }
 
 .logo img {
     height: 20px;
     object-fit: cover;
     vertical-align: middle;
+    filter: drop-shadow(0 0 2px white);
 }
 
 .panel-button.active {
@@ -318,7 +319,7 @@ article div {
 }
 
 .about-splash {
-    max-width: 30vw;
+    max-width: 6cm;
 }
 
 #head div {
@@ -365,6 +366,16 @@ article div {
     box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
 }
 
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+}
+
+.row .push-button {
+    flex-grow: 1;
+}
+
 .panel {
     position: absolute;
 
@@ -402,7 +413,7 @@ article div {
 #telemetryText {
     font-family: monospace;
     white-space: pre;
-    overflow: scroll;
+    overflow: auto;
     max-height: 100%;
 }
 
@@ -609,4 +620,33 @@ input[type="number"] {
 
 .pulse {
     animation: 1s linear 0s infinite alternate pulse;
+}
+
+.loading-wrapper {
+    /* display: none; */
+    width: 100%;
+    transition: 1s;
+    height: 100%;
+    z-index: 99;
+    position: fixed;
+    /* opacity: 50%; */
+    opacity: 0%;
+
+    background: white;
+    /* background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.75)    0px,
+        rgba(255,255,255,0.75)   10px,
+        rgba(255,255,255,0.5)    10px,
+        rgba(255,255,255,0.5)    20px
+    ); */
+
+    pointer-events: none;
+}
+
+.loading-wrapper.active {
+    /* display: block; */
+    pointer-events: all;
+
+    opacity: 30%;
 }

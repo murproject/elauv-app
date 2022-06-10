@@ -140,6 +140,11 @@ export default class BlocklyPanel extends Panel {
     Ru["CLEAN_UP"] = "Упорядочить блоки";
     Blockly.setLocale(Ru)
 
+    this.loadingDiv = document.createElement("div");
+    this.loadingDiv.id = "loading-wrapper";
+    this.loadingDiv.classList.add("loading-wrapper");
+    this.container.appendChild(this.loadingDiv);
+
     this.blocklyDiv = document.createElement("div");
     this.blocklyDiv.id = "blocklyDiv";
     this.blocklyDiv.classList.add("pretty");
@@ -202,6 +207,16 @@ export default class BlocklyPanel extends Panel {
     });
   }
 
+  setLoading(isLoading, timeout) {
+    setTimeout(() => {
+      if (isLoading) {
+        this.loadingDiv.classList.add('active')
+      } else {
+        this.loadingDiv.classList.remove('active');
+      }
+    }, timeout);
+  }
+
   onWorkspaceChange() {
     this.checkUndoRedo();
   }
@@ -252,9 +267,11 @@ export default class BlocklyPanel extends Panel {
   run() {
     console.log("status = " + this.scriptStatus);
     if (this.scriptStatus == 'running') {
-      this.stop();
+      this.setLoading(true, 0);
+      setTimeout(() => this.stop(), 100);
     } else {
-      this.run_js();
+      this.setLoading(true, 0);
+      setTimeout(() => this.run_js(), 100);
     }
   }
 
@@ -288,6 +305,8 @@ export default class BlocklyPanel extends Panel {
 
     document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', '')});
 
+    this.setLoading(false, 100);
+
     // document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', 'url(#filterShadow')});
   }
 
@@ -308,7 +327,7 @@ export default class BlocklyPanel extends Panel {
 
     this.workspace.clearUndo();
     this.onWorkspaceChange();
-    this.workspace.zoomToFit();
+    this.autoZoom();
   }
 
   example() {
@@ -420,10 +439,16 @@ export default class BlocklyPanel extends Panel {
       telemetry: JSON.parse(JSON.stringify(mur.telemetry))
     })
 
-    this.scriptWorker.postMessage({
-      type: 'run',
-      scripts: allCode
-    })
+    this.setLoading(false, 100);
+
+    setTimeout(() => {
+      this.scriptWorker.postMessage({
+        type: 'run',
+        scripts: allCode
+      })
+    }, 500);
+
+    // this.loadingDiv.classList.remove('active');
   }
 
   updateTelemetry(telemetry) {
@@ -432,6 +457,25 @@ export default class BlocklyPanel extends Panel {
         type: 'telemetry',
         telemetry: JSON.parse(JSON.stringify(telemetry)) // TODO: should do it in better way
       })
+    }
+  }
+
+  autoZoom() {
+    this.workspace.zoomToFit();
+    let doZoomOut = true;
+
+    if (this.workspace.getScale() > 1) {
+      this.workspace.setScale(1);
+      this.workspace.scrollCenter();
+      doZoomOut = false;
+    }
+
+    const metrics = this.workspace.getMetrics();
+    const x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
+    const y = (metrics.viewHeight / 2) + metrics.absoluteTop;
+
+    if (doZoomOut) {
+      this.workspace.zoom(x, y, -0.15);
     }
   }
 
@@ -472,7 +516,7 @@ export default class BlocklyPanel extends Panel {
       Blockly.serialization.workspaces.load(this.workspaceBlocks, this.workspace)
     }
 
-    this.workspace.zoomToFit()
+    this.autoZoom()
 
     if (readonly) {
       document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.add("hidden"));
