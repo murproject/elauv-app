@@ -58,7 +58,7 @@ export default {
       address: device.address,
       name: device.name ? device.name : '',
       isCompatible: compatible,
-      isPaired: isPaired,
+      isPaired: isPaired && compatible,
       isOnline: isOnline,
       isActive: deviceActive, // TODO: 'active' means selected, but not connected and working device
       tag: `${compatible ? 0 : 1}-${isPaired ? 0 : 1}-${device.address}`,
