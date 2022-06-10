@@ -61,7 +61,7 @@ export default {
       isPaired: isPaired,
       isOnline: isOnline,
       isActive: deviceActive, // TODO: 'active' means selected, but not connected and working device
-      tag: `${deviceActive ? 0 : 1}-${compatible ? 0 : 1}-${isOnline ? 0 : 1}-${isPaired ? 0 : 1}-${device.address}`,
+      tag: `${compatible ? 0 : 1}-${isPaired ? 0 : 1}-${device.address}`,
     }
 
     let replaced = false

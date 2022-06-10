@@ -169,7 +169,7 @@ body {
 
 #connDevicesWrapper {
     font-family: monospace;
-    font-size: 16px;
+    font-size: 14px;
     max-height: 70vh;
     overflow: auto;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.25);
@@ -183,6 +183,23 @@ body {
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 5px;
     box-shadow: 0 0 7px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+}
+
+.device-title {
+    flex-grow: 1;
+    overflow:hidden;
+}
+
+@media (max-width: 450px) {
+    .device-title div {
+        font-size: 12px !important;
+    }
+}
+
+.device-title div {
+    display: inline-block;
 }
 
 .device-item.active {
@@ -209,7 +226,7 @@ body {
     margin: 0 0.25em;
     padding: 0 0.25em;
     width: 1em;
-    height: 1em;
+    /* height: 1em; */
     /* background-color: rgba(100,255,255,0.1); */
     /* border: 1px solid rgba(0,0,0,0.1); */
     border-radius: 99px;
@@ -220,11 +237,11 @@ body {
     display: inline-block;
     margin: 0 0.5em;
     margin-right: 1em;
-    width: 1em;
+    min-width: 1em;
     height: 1em;
     vertical-align: middle;
     background-color: rgba(50,255,50,0.25);
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1.5px solid rgba(0,0,0,0.1);
     border-radius: 99px;
 }
 
@@ -368,7 +385,7 @@ article div {
 
 .row {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: stretch;
 }
 
