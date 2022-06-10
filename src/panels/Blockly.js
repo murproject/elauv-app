@@ -87,6 +87,16 @@ const filterGlow = `
         flood-opacity="0.5"
       ></feDropShadow>
     </filter>
+
+    <filter id="filterInactive">
+      <feComposite
+        in2="specOut"
+        operator="arithmetic"
+        k1="0"
+        k2="0.5"
+        k3="1"
+      ></feComposite>
+    </filter>
     `
 
 
@@ -117,43 +127,7 @@ export default class BlocklyPanel extends Panel {
 
     console.log(Blockly.FieldNumber)
 
-    this.actionButtons = {};
-
-    const actions = [
-      { spacer: true },
-      { func: this.undo,      name: 'undo',     icon: 'undo',},
-      { func: this.redo,      name: 'redo',     icon: 'redo',},
-      { spacer: true },
-      { func: this.run,       name: 'run',      icon: 'play'},
-      { func: this.example,   name: 'example',  icon: 'star',},
-      { func: this.load,      name: 'load',     icon: 'file-upload',},
-      { func: this.save,      name: 'save',     icon: 'content-save',},
-    ];
-
-    actions.forEach(action => {
-      let actionButton = null;
-
-      if (!('spacer' in action && action.spacer == true)) {
-        actionButton = new Button(
-          action.name,
-          '',
-          'panel-button',
-          () => this[action.func.name](),
-          action.icon,
-          true,
-          25
-        );
-      } else {
-        actionButton = new Button(
-          'spacer',
-          '',
-          'panel-spacer'
-        );
-      }
-
-      actionButton.inject(this.toolButtons);
-      this.actionButtons[action.name] = actionButton;
-    });
+    this.makeActionButtons();
 
     // this.btnRun = document.querySelector("#blockly-action-run");
 
@@ -186,6 +160,46 @@ export default class BlocklyPanel extends Panel {
     this.executionCursors = {}; // one cursor per script thread
 
     this.scriptStatus = 'stopped';
+  }
+
+  makeActionButtons() {
+    this.actionButtons = {};
+
+    const actions = [
+      { spacer: true },
+      { func: this.undo,      name: 'undo',     icon: 'undo',},
+      { func: this.redo,      name: 'redo',     icon: 'redo',},
+      { spacer: true },
+      { func: this.run,       name: 'run',      icon: 'play'},
+      // { func: this.example,   name: 'example',  icon: 'star',},
+      { func: this.load,      name: 'load',     icon: 'file-upload',},
+      { func: this.save,      name: 'save',     icon: 'content-save',},
+    ];
+
+    actions.forEach(action => {
+      let actionButton = null;
+
+      if (!('spacer' in action && action.spacer == true)) {
+        actionButton = new Button(
+          action.name,
+          '',
+          'panel-button',
+          () => this[action.func.name](),
+          action.icon,
+          true,
+          25
+        );
+      } else {
+        actionButton = new Button(
+          'spacer',
+          '',
+          'panel-spacer'
+        );
+      }
+
+      actionButton.inject(this.toolButtons);
+      this.actionButtons[action.name] = actionButton;
+    });
   }
 
   onWorkspaceChange() {
@@ -384,10 +398,10 @@ export default class BlocklyPanel extends Panel {
           <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
         </g>`;
 
-        let cursor = document.createElement("g");
-        cursor.id = `execution-cursor-${key}`;
-        cursor.setAttribute("style", "display: block;");
-        cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
+        // let cursor = document.createElement("g");
+        // cursor.id = `execution-cursor-${key}`;
+        // cursor.setAttribute("style", "display: block;");
+        // cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
 
         document.querySelector(".blocklyBlockCanvas").innerHTML += cursorHtml;
 
@@ -508,12 +522,16 @@ export default class BlocklyPanel extends Panel {
           const blockTime = block[1];
 
           const blockElement = this.workspace.getBlockById(blockId);
-          const blockXY = blockElement.getRelativeToSurfaceXY();
-          const x = blockXY.x - 14;
-          const y = blockXY.y + 5;
+          if (blockElement !== null) {
+            const blockXY = blockElement.getRelativeToSurfaceXY();
+            const x = blockXY.x - 14;
+            const y = blockXY.y - 10;
 
-          this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
-          this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
+            this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
+            this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
+          } else {
+            // this.executionCursors[key].setAttribute("opacity", `20%`);
+          }
         }
 
       }
@@ -545,6 +563,10 @@ export default class BlocklyPanel extends Panel {
         console.log('script done')
         this.workspace.highlightBlock(null)
       }
+    }
+
+    if (data.type === 'thread_end') {
+      this.executionCursors[data.id].children[0].setAttribute('xlink:href', '/mdi/arrow-cursor-execution-off.svg')
     }
 
     // e = null

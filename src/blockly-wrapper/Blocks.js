@@ -175,37 +175,37 @@ end
 
     /* thread */
 
-    Blockly.Blocks.mur_thread = {
-      init: function () {
-        this.appendDummyInput()
-          // .appendField(icon('parallel-thread-rotated', 'поток'))
-          .appendField(icon('parallel-thread-rotated'), 'поток')
-          // .appendField('поток')
-          .appendField(new Blockly.FieldTextInput(), 'threadName')
+//     Blockly.Blocks.mur_thread = {
+//       init: function () {
+//         this.appendDummyInput()
+//           // .appendField(icon('parallel-thread-rotated', 'поток'))
+//           .appendField(icon('parallel-thread-rotated'), 'поток')
+//           // .appendField('поток')
+//           .appendField(new Blockly.FieldTextInput(), 'threadName')
 
-        this.appendStatementInput('STACK').appendField()
-        this.setPreviousStatement(false, '')
-        this.setNextStatement(false, '')
-        this.setInputsInline(true)
-        this.setColour(color_spec)
-        this.setTooltip('Поток')
-      }
-    }
+//         this.appendStatementInput('STACK').appendField()
+//         this.setPreviousStatement(false, '')
+//         this.setNextStatement(false, '')
+//         this.setInputsInline(true)
+//         this.setColour(color_spec)
+//         this.setTooltip('Поток')
+//       }
+//     }
 
-    register_proto('mur_thread', (gen) => {
-      return (block) => {
-        const branch = Blockly.JavaScript.statementToCode(block, 'STACK')
-        return `
-(async () => {
-${branch}
-await mur.h(_scriptId, null);
-await mur.thread_end(_scriptId);
-})();
-`
-        // let sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
-        // return makeDelay(gen, sleepMs)
-      }
-    })
+//     register_proto('mur_thread', (gen) => {
+//       return (block) => {
+//         const branch = Blockly.JavaScript.statementToCode(block, 'STACK')
+//         return `
+// (async () => {
+// ${branch}
+// await mur.h(_scriptId, null);
+// await mur.thread_end(_scriptId);
+// })();
+// `
+//         // let sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
+//         // return makeDelay(gen, sleepMs)
+//       }
+//     })
 
     /* mur.set_power(index, power) */
 

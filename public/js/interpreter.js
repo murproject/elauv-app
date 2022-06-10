@@ -24,6 +24,10 @@ var context = {
   leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 }
 
+function clamp(value, maxPower = 100) {
+  return Math.min(Math.max(value, -maxPower), maxPower)
+}
+
 // var contextOld = Object.assign({}, context)
 var contextTimestamp = new Date()
 
@@ -65,11 +69,13 @@ const mur = {
 
   set_axis: async function (index, speed) {
     // TODO: check index and constrain power
+    speed = clamp(speed);
     context.motor_axes[index] = Math.round(speed)
   },
 
   set_power: async function (index, power) {
     // TODO: check index and constrain power
+    power = clamp(power);
     context.motor_powers[index] = Math.round(power)
   },
 
@@ -82,6 +88,7 @@ const mur = {
   },
 
   actuator: async function (index, power) {
+    power = clamp(power);
     context.actuators[index] = Math.round(power)
   },
 
@@ -118,7 +125,9 @@ const mur = {
   },
 
   thread_end: async function (scriptId) {
-    this.threadsStates[scriptId] = false;
+    // this.threadsStates[scriptId] = false;
+
+    self.postMessage({ type: 'thread_end', id: scriptId })
 
     if (!this.threadsStates.includes(true) && !this.mainThreadState) {
       setState('done');
@@ -144,9 +153,16 @@ function makeScript (index, code) {
   console.log('generated code:')
   console.log(code)
 
-  return `
+//   return `
+// ${strReplaceAll(code, '_scriptId', index)}
+// /* ------------- */
+// `
+
+  return`
+(async () => {
 ${strReplaceAll(code, '_scriptId', index)}
-/* ------------- */
+await mur.thread_end(${index});
+})();
 `
 }
 
