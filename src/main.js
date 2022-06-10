@@ -5,6 +5,7 @@ import DevicesPanel from './panels/Devices.js';
 import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
+import ProjectsPanel from './panels/Projects.js';
 
 const app = {
 
@@ -40,6 +41,7 @@ const app = {
       devices: new DevicesPanel(),
       telemetry: new TelemetryPanel(),
       joystick: new JoystickPanel(),
+      projects: new ProjectsPanel(),
       blockly: new BlocklyPanel(),
     };
 

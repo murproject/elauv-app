@@ -5,11 +5,14 @@ export default class About extends Panel {
   begin() {
     this.html = /*html*/`
       <article class="">
-        <h1>ElemetaryAUV App</h1>
+        <h1>ElementaryAUV App</h1>
 
-        <img src="/media/splash.png" class="about-splash"/>
+        <img src="/media/splash-anim.gif" class="about-splash"/>
 
-        <p>ООО "Центр робототехники", г. Владивосток</p>
+        <p class="text-center">
+          ООО "Центр робототехники"<br>
+          г. Владивосток
+        </p>
       </article>
     `
   }
@@ -17,7 +20,7 @@ export default class About extends Panel {
   init() {
     // this.panelButton.el.classList.remove('panel-button');
     this.panelButton.el.classList.add('logo');
-    this.panelButton.el.innerHTML = `<img class="" src="/media/logo.png" />`;
+    this.panelButton.el.innerHTML = `<img src="/media/icon-small.png" />`;
 
     this.setIcon('bluetooth-connect');
   }

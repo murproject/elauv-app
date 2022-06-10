@@ -58,48 +58,6 @@ const blocklyConfig = {
 
 const example_code = {"blocks":{"languageVersion":0,"blocks":[{"type":"mur_loop_infinite","id":"Qh(t3|)K3S)rL~dLpo-W","x":377,"y":-169,"inputs":{"STACK":{"block":{"type":"mur_loop_timeout","id":"?)~Q6_MpYj}Wh)u@#h^3","inputs":{"Delay":{"block":{"type":"math_number","id":"62vr@Dx4M|$/`}xtV%OC","fields":{"NUM":2}}},"STACK":{"block":{"type":"mur_wait_imu_tap","id":"E^zpriL]IYrRE8*vT82P","fields":{"MODE":"IMU_TAP_ONE"},"next":{"block":{"type":"mur_set_power","id":"gKoaAi]XfQu~?[97KTq*","inputs":{"Index":{"block":{"type":"math_number","id":";YVeJYCFn?z-YEw3U6N:","fields":{"NUM":0}}},"Power":{"block":{"type":"math_number","id":"mv^YL(N|S7!dBHr1nSJn","fields":{"NUM":50}}},"Delay":{"block":{"type":"math_number","id":"B0=,8[F*{8?T{5b9.gm4","fields":{"NUM":0}}}},"next":{"block":{"type":"mur_set_power","id":"B;.:;_x9KvqhotN,M`0{","inputs":{"Index":{"block":{"type":"math_number","id":"QF,c6oPQM/rqio_G:xtr","fields":{"NUM":1}}},"Power":{"block":{"type":"math_number","id":"3JY}]^Z+rJg|!V^;#5BU","fields":{"NUM":0}}},"Delay":{"block":{"type":"math_number","id":"HsQ+-PCQ8;yf^Fc^cV7l","fields":{"NUM":0}}}},"next":{"block":{"type":"mur_delay","id":",4$I5::.uW)}2sP[_eMq","inputs":{"sleepSeconds":{"block":{"type":"math_number","id":"+(1YqBL#_OaZZA9}iuKc","fields":{"NUM":0.1}}}},"next":{"block":{"type":"mur_set_power","id":"tU^P~+N3v?Ce.vLTu@^e","inputs":{"Index":{"block":{"type":"math_number","id":"irE6@Om{5:C0?1}VM~Iv","fields":{"NUM":0}}},"Power":{"block":{"type":"math_number","id":"4[Ra/Y~wXc8K0rGz~kl7","fields":{"NUM":0}}},"Delay":{"block":{"type":"math_number","id":"^:jS$JIGL)wbjSXAw$1k","fields":{"NUM":0}}}},"next":{"block":{"type":"mur_set_power","id":"7hDpZw(iIealwIK8A+=x","inputs":{"Index":{"block":{"type":"math_number","id":"h(*9sL3}=oi3NhiSZfA(","fields":{"NUM":1}}},"Power":{"block":{"type":"math_number","id":"u|P,0*;hM8x1x1DR?/R=","fields":{"NUM":0}}},"Delay":{"block":{"type":"math_number","id":"T5Cnu**_s]8JVx0oxv(m","fields":{"NUM":0}}}}}}}}}}}}}}}}},"next":{"block":{"type":"mur_loop_timeout","id":"fNkz-PA=N)x3ra~zsd)K","inputs":{"Delay":{"block":{"type":"math_number","id":"|g?pd1Bu0x^#H}WnWa;6","fields":{"NUM":2}}},"STACK":{"block":{"type":"mur_wait_imu_tap","id":"xNhBIl}+$U*}w;P3{;M0","fields":{"MODE":"IMU_TAP_ONE"},"next":{"block":{"type":"mur_set_power","id":"`7%5Roa4*QboKlS]WAt1","inputs":{"Index":{"block":{"type":"math_number","id":"T7}gkO^6k7YR#ZIUojde","fields":{"NUM":0}}},"Power":{"block":{"type":"math_number","id":"p;sX+bX2ud@C-@H9PpWh","fields":{"NUM":0}}},"Delay":{"block":{"type":"math_number","id":"1/)xI8c8Wel2zxWE7?ZV","fields":{"NUM":0}}}},"next":{"block":{"type":"mur_set_power","id":"${hj$7jEymJ)u0`}oZ19","inputs":{"Index":{"block":{"type":"math_number","id":"RdpMIPe)6y3E4sG;QK+C","fields":{"NUM":1}}},"Power":{"block":{"type":"math_number","id":"=H)F[m=HVRqNxo2sz8ER","fields":{"NUM":50}}},"Delay":{"block":{"type":"math_number","id":"P*XzT{WxdwR}PN@WI%E|","fields":{"NUM":0}}}},"next":{"block":{"type":"mur_delay","id":"gs7bnz+4L]e)EvS{cg^f","inputs":{"sleepSeconds":{"block":{"type":"math_number","id":"s94C;[1BdYG|Evxcn1%+","fields":{"NUM":0.1}}}},"next":{"block":{"type":"mur_set_power","id":"+vHT[g5Qn|nCmn0bjY+q","inputs":{"Index":{"block":{"type":"math_number","id":"Y+|hbX)Q4/04F.5Kl|j{","fields":{"NUM":0}}},"Power":{"block":{"type":"math_number","id":"E1Z/Kie:dUS0;NsjkewL","fields":{"NUM":0}}},"Delay":{"block":{"type":"math_number","id":"DoEl8|O12X2RFrLU}Gfd","fields":{"NUM":0}}}},"next":{"block":{"type":"mur_set_power","id":"$189.}=`_,f@pB23cFS}","inputs":{"Index":{"block":{"type":"math_number","id":"{*xfGf$`BkU~n=$W$UdM","fields":{"NUM":1}}},"Power":{"block":{"type":"math_number","id":"u`Z](mEI#~.vh+/FwU5[","fields":{"NUM":0}}},"Delay":{"block":{"type":"math_number","id":"CS(8A$U2Da,m5,I6C{dr","fields":{"NUM":0}}}}}}}}}}}}}}}}}}}}}}}]},"variables":[{"name":"ticks","id":"r)`vzf?vojnEoKMg?x*f"},{"name":"counter","id":"97;yimqMJ0z-Lg`:,2Jj"},{"name":"res","id":"Iun5SN}x^sIKG[Gwyd*u"},{"name":"delay","id":"29jU7naadNhY~_e}zI,q"},{"name":"yaw_delta","id":"]QI~H-_-/5O61CUw54kN"},{"name":"speed","id":"8@4vQig94DBNTyq{5EJ,"},{"name":"yaw_target","id":"vwFV3XnP_JtZ=%;2[-Wy"}]}
 
-const filterGlow = `
-    <filter id="filterGlow">
-      <feDropShadow
-        id="filterGlowShadow"
-        stdDeviation="1.5"
-        dx="0"
-        dy="0"
-        flood-color="#FFC"
-        flood-opacity="0.85"
-      ></feDropShadow>
-
-      <feComposite
-        in2="specOut"
-        operator="arithmetic"
-        k1="0"
-        k2="1"
-        k3="1"
-      ></feComposite>
-    </filter>
-
-    <filter id="filterShadow">
-      <feDropShadow
-        stdDeviation="1.0"
-        dx="0"
-        dy="0"
-        flood-color="black"
-        flood-opacity="0.5"
-      ></feDropShadow>
-    </filter>
-
-    <filter id="filterInactive">
-      <feComposite
-        in2="specOut"
-        operator="arithmetic"
-        k1="0"
-        k2="0.5"
-        k3="1"
-      ></feComposite>
-    </filter>
-    `
-
-
 export default class BlocklyPanel extends Panel {
 
   onActiveChanged() {
@@ -124,12 +82,7 @@ export default class BlocklyPanel extends Panel {
     document.querySelector("#head").appendChild(this.toolButtons);
 
     this.onActiveChanged();
-
-    console.log(Blockly.FieldNumber)
-
     this.makeActionButtons();
-
-    // this.btnRun = document.querySelector("#blockly-action-run");
 
     /* --- Blockly --- */
 
@@ -300,14 +253,8 @@ export default class BlocklyPanel extends Panel {
     mur.controlContext(paramsContext)
 
     this.workspace.highlightBlock(null)
-
     this.reinject(false);
-
-    document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', '')});
-
     this.setLoading(false, 100);
-
-    // document.querySelectorAll(`.blocklyDraggable`).forEach(node => {node.childNodes[0].setAttribute('filter', 'url(#filterShadow')});
   }
 
   save() {
@@ -539,9 +486,6 @@ export default class BlocklyPanel extends Panel {
       this.stateOfUndo.savedUndoStack = [];
       this.stateOfUndo.savedRedoStack = [];
     }
-
-    let defs = document.getElementsByClassName("blocklySvg")[0].getElementsByTagName("defs")[1];
-    defs.innerHTML += filterGlow
 
     this.workspace.addChangeListener(() => { this.onWorkspaceChange() });
     // this.checkUndoRedo(false);

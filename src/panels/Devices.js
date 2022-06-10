@@ -7,15 +7,13 @@ export default class Devices extends Panel {
   begin() {
     this.html = /*html*/`
       <div>
-        Status - <span id="connStatus"></span>
-        <br>
-        ${Icon('battery-high')}
+        <span id="connStatus"></span>
       </div>
 
       <div id="connBluetoothPanel">
 
-        <div>
-          <div class="push-button" id="connScanDevices">${Icon('bluetooth-connect')} Scan Devices</div>
+        <div class="row">
+          <div class="push-button" id="connScanDevices">Scan Devices</div>
           <div class="push-button" id="connScanCode">Scan Code</div>
           <div class="push-button" id="connDisconnect">Disconnect</div>
         </div>
@@ -32,7 +30,7 @@ export default class Devices extends Panel {
 
   init() {
     this.statusEl = this.q("#connStatus");
-    this.statusEl.innerText = "waiting… type: " + mur.conn.type;
+    // this.statusEl.innerText = "waiting… type: " + mur.conn.type;
 
     this.devicesListEl = this.q("#connDevicesList");
 
