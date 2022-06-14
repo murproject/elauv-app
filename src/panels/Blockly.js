@@ -549,7 +549,12 @@ export default class BlocklyPanel extends Panel {
       this.scriptStatus = data.state;
       if (data.state === 'done') {
         console.log('script done')
-        this.workspace.highlightBlock(null)
+
+        if (this.scriptWorker) {
+          this.scriptWorker.terminate();
+        }
+
+        // this.workspace.highlightBlock(null) // TODO: ?
       }
     }
 

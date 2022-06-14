@@ -26,7 +26,7 @@ const MurToolbox = {
           }
         },
         { kind: 'block', type: 'mur_set_led' },
-        // { kind: 'block', type: 'mur_thread' },
+        { kind: 'block', type: 'mur_end_thread' },
         { kind: 'block', type: 'mur_sensor_color_wait' },
         { kind: 'block', type: 'mur_get_color' },
         { kind: 'block', type: 'mur_get_imu_tap' },

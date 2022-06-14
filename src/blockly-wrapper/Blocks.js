@@ -674,7 +674,7 @@ end
       return (block) => {
         const index = calcVal(gen, block, 'Index')
         const colour = calcVal(gen, block, 'Colour')
-        return makeFunc(gen, `mur.set_led(${index}, ${colour})`)
+        return makeFunc(gen, `await mur.set_led(${index}, ${colour})`)
       }
     })
 
@@ -784,6 +784,36 @@ end
     })
 
     */
+
+
+    /* end thread */
+
+    // TODO: rename!! to be consistent
+
+    Blockly.Blocks.mur_end_thread = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(icon('flag-checkered', 'завершить'))
+
+          .appendField(new FieldGridDropdown([
+              ['Завершить скрипт',  'MODE_END_SCRIPT'],
+              ['Завершить поток',   'MODE_END_THREAD'],
+            ], undefined, {columns: 1, DEFAULT_VALUE: 'MODE_END_SCRIPT'}), "MODE");
+
+        this.setPreviousStatement(true, 'action')
+        this.setNextStatement(false)
+        this.setInputsInline(true)
+        this.setColour(color_spec)
+        this.setTooltip('Завершить выполнение')
+      }
+    }
+
+    register_proto('mur_end_thread', (gen) => {
+      return (block) => {
+        const mode = block.getFieldValue('MODE')
+        return makeFunc(gen, `await mur.thread_end(_scriptId, ${mode == 'MODE_END_SCRIPT'})`)
+      }
+    })
 
 
 

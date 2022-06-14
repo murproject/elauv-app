@@ -43,10 +43,14 @@ function sendContext () {
   self.postMessage({ type: 'context', context: context })
 }
 
-function sendHighlight () {
+function sendHighlight (bold = false) {
   for (const key in highlightedBlocks) {
     if (highlightedBlocks[key][1] < 100) {
       highlightedBlocks[key][1] += 5;
+    }
+
+    if (bold) {
+      highlightedBlocks[key][1] = 100;
     }
   }
 
@@ -124,16 +128,27 @@ const mur = {
     return telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE')
   },
 
-  thread_end: async function (scriptId) {
-    // this.threadsStates[scriptId] = false;
+  thread_end: async function (scriptId, end_script = false, wait_forever = true) {
 
+    console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
+
+    if (end_script) {
+      for (const i in scripts) {
+        this.thread_end(i, false);
+      }
+    }
+
+    this.threadsStates[scriptId] = false;
     self.postMessage({ type: 'thread_end', id: scriptId })
 
     if (!this.threadsStates.includes(true) && !this.mainThreadState) {
+      sendHighlight(true);
       setState('done');
     }
 
-    await new Promise(() => {}); // wait forever
+    if (wait_forever) {
+      await new Promise(() => {});
+    }
   },
 }
 
@@ -153,17 +168,27 @@ function makeScript (index, code) {
   console.log('generated code:')
   console.log(code)
 
-//   return `
-// ${strReplaceAll(code, '_scriptId', index)}
-// /* ------------- */
-// `
+  let script = '';
 
-  return`
+  if (code.includes('async function'))  {
+    script = `
+// THIS IS FUNCTION //
 (async () => {
-${strReplaceAll(code, '_scriptId', index)}
-await mur.thread_end(${index});
+  ${strReplaceAll(code, '_scriptId', index)}
+  await mur.thread_end(${index});
 })();
 `
+  }
+  else {
+    script = `
+(async () => {
+  ${strReplaceAll(code, '_scriptId', index)}
+  await mur.thread_end(${index});
+})();
+`
+  }
+
+  return script;
 }
 
 
