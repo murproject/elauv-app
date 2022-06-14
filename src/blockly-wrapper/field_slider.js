@@ -85,8 +85,6 @@ export class FieldSlider extends Blockly.FieldNumber {
     super.showEditor_(e, noFocus);
     // Build the DOM.
 
-    console.log(this.isSlider);
-
     if (!('isSlider' in this && this.isSlider)) {
       const editor = this.dropdownCreate_();
 

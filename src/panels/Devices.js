@@ -6,23 +6,18 @@ export default class Devices extends Panel {
 
   begin() {
     this.html = /*html*/`
-      <div>
-        <span id="connStatus"></span>
+      <div class="row">
+        <span id="connStatus">Bluetooth</span>
       </div>
 
-      <div id="connBluetoothPanel">
+      <div class="row">
+        <div class="push-button" id="connScanDevices">Scan Devices</div>
+        <div class="push-button" id="connScanCode">Scan Code</div>
+        <div class="push-button" id="connDisconnect">Disconnect</div>
+      </div>
 
-        <div class="row">
-          <div class="push-button" id="connScanDevices">Scan Devices</div>
-          <div class="push-button" id="connScanCode">Scan Code</div>
-          <div class="push-button" id="connDisconnect">Disconnect</div>
-        </div>
-        <br>
-
-        <div id="connDevicesWrapper">
-          <div id="connDevicesList"></div>
-        </div>
-
+      <div id="connDevicesWrapper" class="row">
+        <div id="connDevicesList" class="width-fill"></div>
       </div>
     `
   }

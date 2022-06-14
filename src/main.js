@@ -19,7 +19,7 @@ const app = {
   container: document.querySelector("#app"),
   panels: {},
   currentPanel: null,
-
+  mur: mur,
 
   panelSelect: function (target) {
     if (this.currentPanel) {
