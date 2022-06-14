@@ -50,6 +50,8 @@ const app = {
 
 
   init: function () {
+    this.preloadIcons();
+
     this.container.innerHTML = this.html;
     this.createPanels();
 
@@ -70,6 +72,26 @@ const app = {
     }
   },
 
+  preloadIcons() {
+    // TODO
+    const preloadList = [
+      'ui/content-save',
+      'ui/checkbox-marked-outline',
+      'ui/stop',
+      'ui/play'
+    ]
+
+    const htmlHead = document.querySelector('head');
+
+    preloadList.forEach(item => {
+      var link = document.createElement('link');
+      link.rel = 'preload';
+      link.type = 'image/svg+xml';
+      link.as = 'image';
+      link.href = '/mdi/' + item + '.svg';
+      document.head.appendChild(link);
+    });
+  }
 }
 
 
@@ -83,8 +105,8 @@ if (typeof cordova !== 'undefined') {
       }
     });
 
-    window.IsekaiFakeSplash.hide()
     main();
+    setTimeout(() => window.IsekaiFakeSplash.hide(), 250);
   }, false)
 } else {
   window.onload = () => main();
