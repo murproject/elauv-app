@@ -91,6 +91,7 @@ export default class BlocklyPanel extends Panel {
 
     Blocks.init();
     Ru["CLEAN_UP"] = "Упорядочить блоки";
+    Ru['PROCEDURE_VARIABLE'] = "аргумент";
     Blockly.setLocale(Ru)
 
     this.loadingDiv = document.createElement("div");
@@ -213,7 +214,7 @@ export default class BlocklyPanel extends Panel {
   generate_code(workspace) {
     Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_scriptId, %1);\n'
     var code = Blockly.JavaScript.workspaceToCode(workspace)
-    code = code.replace(/(?<=^|\n)function \w+\(.*\)/g, 'async $&') // TODO: do this better
+
     return code
   }
 
@@ -518,7 +519,7 @@ export default class BlocklyPanel extends Panel {
             this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
             this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
           } else {
-            // this.executionCursors[key].setAttribute("opacity", `20%`);
+            this.executionCursors[key].setAttribute("opacity", `0%`);
           }
         }
 

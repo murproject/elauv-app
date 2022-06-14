@@ -169,15 +169,22 @@ function makeScript (index, code) {
   console.log(code)
 
   let script = '';
+  let isFunction = false;
+
+  // make user-defined function async
+  code = code.replace(/(?<=^|\n)function \w+\(.*\)/g, 'async $&')
+
+  // clear blocks highlight on any return from function
+  code = code.replace(/( *)return/g, 'await mur.h(_scriptId, null); return')
+
+  // clear blocks highlight on end of function
+  const lastBracket = code.lastIndexOf("}");
+  code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_scriptId, null);\n" + code.slice(lastBracket)
 
   if (code.includes('async function'))  {
-    script = `
-// THIS IS FUNCTION //
-(async () => {
-  ${strReplaceAll(code, '_scriptId', index)}
-  await mur.thread_end(${index});
-})();
-`
+    script = `${strReplaceAll(code, '_scriptId', index)}`
+
+    isFunction = true;
   }
   else {
     script = `
@@ -188,7 +195,7 @@ function makeScript (index, code) {
 `
   }
 
-  return script;
+  return {script: script, isFunction: isFunction};
 }
 
 
@@ -213,7 +220,12 @@ self.onmessage = function (e) {
     script = ''
     for (var i in scripts) {
       mur.threadsStates[i] = true;
-      script += makeScript(i, scripts[i])
+      const currentScript = makeScript(i, scripts[i]);
+      if (currentScript.isFunction) {
+        script = currentScript.script + script; // prepend
+      } else {
+        script += currentScript.script;
+      }
     }
 
     script = `

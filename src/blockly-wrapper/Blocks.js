@@ -817,7 +817,29 @@ end
       }
     })
 
+    /* Procedures: should await for execution! */
 
+    Blockly.JavaScript['procedures_callreturn'] = function(block) {
+      // Call a procedure with a return value.
+      const funcName = Blockly.JavaScript.nameDB_.getName(
+          block.getFieldValue('NAME'), Blockly.Names.NameType.PROCEDURE);
+      const args = [];
+      const variables = block.getVars();
+      for (let i = 0; i < variables.length; i++) {
+        args[i] = Blockly.JavaScript.valueToCode(block, 'ARG' + i, Blockly.JavaScript.ORDER_NONE) ||
+            'null';
+      }
+      const code = 'await ' + funcName + '(' + args.join(', ') + ')';
+      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    };
+
+    Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
+      // Call a procedure with no return value.
+      // Generated code is for a function call as a statement is the same as a
+      // function call as a value, with the addition of line ending.
+      const tuple = Blockly.JavaScript['procedures_callreturn'](block);
+      return tuple[0] + ';\n';
+    };
 
   }
 }
