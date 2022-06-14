@@ -7,6 +7,8 @@ import 'blockly/javascript';
 import {FieldSlider} from '/src/blockly-wrapper/field_slider';
 import {FieldGridDropdown} from '@blockly/field-grid-dropdown';
 
+import './BlocklyPatches'
+
 const color_spec = 70
 const color_mov = 20
 
