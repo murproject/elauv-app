@@ -547,7 +547,8 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'state') {
-      this.scriptStatus = data.state;
+      // this.scriptStatus = data.state;
+      // TODO: inform user on script stop?
       if (data.state === 'done') {
         console.log('script done')
 
