@@ -169,20 +169,22 @@ function makeScript (index, code) {
   let script = '';
   let isFunction = false;
 
-  // make user-defined function async
-  code = code.replace(/(?<=^|\n)function \w+\(.*\)/g, 'async $&')
+  const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
 
-  // clear blocks highlight on any return from function
-  code = code.replace(/( *)return/g, 'await mur.h(_scriptId, null); return')
-
-  // clear blocks highlight on end of function
-  const lastBracket = code.lastIndexOf("}");
-  code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_scriptId, null);\n" + code.slice(lastBracket)
-
-  if (code.includes('async function'))  {
-    script = `${strReplaceAll(code, '_scriptId', index)}`
-
+  if (funcRegex.test(code)) {
     isFunction = true;
+
+    // make user-defined function async
+    code = code.replace(funcRegex, 'async $&')
+
+    // clear blocks highlight on any return from function
+    code = code.replace(/( *)return/g, 'await mur.h(_scriptId, null); return')
+
+    // clear blocks highlight on end of function
+    const lastBracket = code.lastIndexOf("}\n");
+    code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_scriptId, null);\n" + code.slice(lastBracket)
+
+    script = `${strReplaceAll(code, '_scriptId', index)}`
   }
   else {
     script = `
