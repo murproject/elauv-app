@@ -560,15 +560,64 @@ article div {
     stroke-opacity: 1.0;
 }
 
-.blocklyMenuItem {
-    min-width: auto !important;
+.blocklyEditableText text,
+.blocklyNonEditableText text {
+    font-weight: bold !important;
+    font-size: 14px !important;
+    left: 20px !important;
 }
 
-.blocklyMenuItemContent {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+.blocklyMenuItem {
+    min-width: auto !important;
+    border-radius: 5px;
+}
+
+.blocklyMenu:not(.blocklyContextMenu) .blocklyMenuItemContent {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: left;
+}
+
+.blocklyMenuItemContent img {
+    outline: solid 2px rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.blocklyMenuItemSelected {
+    border: 3px solid rgba(0,0,0,0.25);
+}
+
+.blocklyMenuItemSelected .blocklyMenuItemCheckbox {
+    background: url('/mdi/check-bold.svg') !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    width: 16px;
+    height: 16px;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    border: none !important;
+    border-radius: 4px;
+    color: white;
+    padding-left: 0 !important;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    padding: 1em !important;
+}
+
+/* .blocklyMenuItemContent {
+    color: white;
+} */
+
+.fieldGridDropDownContainer .blocklyMenuItem.blocklyMenuItemSelected {
+    /*     outline: solid 2px rgba(0,0,0,0.5); */
+    /*     background: rgba(0,0,0,0.35); */
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    padding: 0.5em !important;
 }
 
 .blocklyColourTable>tr>td {
@@ -606,35 +655,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 input[type="number"] {
     -moz-appearance: textfield;
-}
-
-.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
-    border: none !important;
-    border-radius: 4px;
-    color: white;
-    padding-left: 0 !important;
-}
-
-.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
-    padding: 1em !important;
-}
-
-.blocklyMenuItemContent img {
-    outline: solid 2px rgba(0, 0, 0, 0.3);
-    background: rgba(0, 0, 0, 0.2);
-}
-
-/* .blocklyMenuItemContent {
-    color: white;
-} */
-
-.fieldGridDropDownContainer .blocklyMenuItem.blocklyMenuItemSelected {
-    /*     outline: solid 2px rgba(0,0,0,0.5); */
-    /*     background: rgba(0,0,0,0.35); */
-}
-
-.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
-    padding: 0.5em !important;
 }
 
 .fieldSliderContainer {
