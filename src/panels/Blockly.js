@@ -556,6 +556,7 @@ export default class BlocklyPanel extends Panel {
           this.scriptWorker.terminate();
         }
 
+        setTimeout(() => this.stop(), 2000);
         // this.workspace.highlightBlock(null) // TODO: ?
       }
     }
