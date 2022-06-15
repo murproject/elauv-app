@@ -4,9 +4,7 @@ var state = null
 var script = null
 var scripts = []
 var telemetry = {}
-
 var highlightedBlocks = {}
-var highlightedBlocksActual = {}
 
 var contextUpdater = null
 var highlightUpdater = null
@@ -222,6 +220,7 @@ self.onmessage = function (e) {
       mur.threadsStates[i] = true;
       const currentScript = makeScript(i, scripts[i]);
       if (currentScript.isFunction) {
+        mur.threadsStates[i] = false;
         script = currentScript.script + script; // prepend
       } else {
         script += currentScript.script;
