@@ -159,7 +159,7 @@ function setState (newState) {
 
 
 function strReplaceAll(str, match, replace) {
-  return str.replace(new RegExp(match, 'g'), () => replace)
+  return str.replace(new RegExp(match, 'gm'), () => replace)
 }
 
 
@@ -179,7 +179,7 @@ function makeScript (index, code) {
     code = code.replace(funcRegex, 'async $&')
 
     // clear blocks highlight on any return from function
-    code = code.replace(/( *)return/g, 'await mur.h(_scriptId, null); return')
+    code = code.replace(/^ *return/gm, 'await mur.h(_scriptId, null); return')
 
     // clear blocks highlight on end of function
     const lastBracket = code.lastIndexOf("}\n");
