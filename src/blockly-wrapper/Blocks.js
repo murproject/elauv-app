@@ -526,10 +526,12 @@ end
     register_proto('mur_set_axis', (gen) => {
       return (block) => {
         // TODO
-        const index = calcVal(gen, block, 'Index')
+        const mode = block.getFieldValue('MODE')
+        const index = mode == 'AXIS_MARCH'  ? 0 :
+                      mode == 'AXIS_YAW'    ? 1 :
+                      mode == 'AXIS_DEPTH'  ? 2 : 0;
         const power = calcVal(gen, block, 'Power')
-        const sleepMs = calcVal(gen, block, 'Delay')
-        return makeFunc(gen, `mur.set_axis(${index}, ${power})`) + makeDelay(gen, sleepMs)
+        return makeFunc(gen, `mur.set_axis(${index}, ${power})`)
       }
     })
 
