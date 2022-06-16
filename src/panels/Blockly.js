@@ -90,8 +90,11 @@ export default class BlocklyPanel extends Panel {
     this.scriptWorker = null;
 
     Blocks.init();
+
+    // TODO: move locale overrides?
     Ru["CLEAN_UP"] = "Упорядочить блоки";
-    Ru['PROCEDURE_VARIABLE'] = "аргумент";
+    Ru["PROCEDURE_VARIABLE"] = "аргумент";
+    Ru["MATH_SUBTRACTION_SYMBOL"] = "–";
     Blockly.setLocale(Ru)
 
     this.loadingDiv = document.createElement("div");
@@ -204,6 +207,10 @@ export default class BlocklyPanel extends Panel {
   }
 
   undo() {
+    // TODO: remove debug feature
+    // const undoStack = this.workspace.getUndoStack();
+    // console.log("Undo stack:");
+    // undoStack.forEach(item => console.log(item));
     this.workspace.undo(false);
   }
 

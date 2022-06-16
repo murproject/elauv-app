@@ -56,6 +56,7 @@ var CustomConstantsProvider = function () {
   // this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   this.FIELD_TEXT_FONTWEIGHT = 'bold';
+  this.FIELD_TEXT_FONTFAMILY = 'Roboto';
 
   this.generateSecondaryColour_ = function (inputColour) {
     return Blockly.utils.colour.blend('#fff', inputColour, 0.3) || inputColour;

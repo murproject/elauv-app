@@ -798,8 +798,8 @@ end
           .appendField(icon('flag-checkered', 'завершить'))
 
           .appendField(new FieldGridDropdown([
-              ['Завершить скрипт',  'MODE_END_SCRIPT'],
-              ['Завершить поток',   'MODE_END_THREAD'],
+              ['Завершить программу', 'MODE_END_SCRIPT'],
+              ['Завершить поток',     'MODE_END_THREAD'],
             ], undefined, {columns: 1, DEFAULT_VALUE: 'MODE_END_SCRIPT'}), "MODE");
 
         this.setPreviousStatement(true, 'action')
