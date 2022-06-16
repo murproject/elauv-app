@@ -4,7 +4,7 @@
    height="24"
    version="1.1"
    id="svg8"
-   sodipodi:docname="depth-down.svg"
+   sodipodi:docname="arrow-depth.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -21,9 +21,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="34.708333"
-     inkscape:cx="11.985594"
-     inkscape:cy="11.985594"
+     inkscape:zoom="17.354167"
+     inkscape:cx="24.547419"
+     inkscape:cy="18.266507"
      inkscape:window-width="1920"
      inkscape:window-height="1019"
      inkscape:window-x="0"
@@ -31,13 +31,13 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="svg8" />
   <path
-     d="m7 23 4-4H8v-5H6v5H3M17 23l4-4h-3v-5h-2v5h-3"
      id="path2"
-     style="fill:#ffffff" />
+     style="fill:#ffffff"
+     d="m 7,10.298758 -4,4 h 3 v 5 H 3 l 4,4 4,-4 H 8 v -5 h 3 z m 10,0 -4,4 h 3 v 5 h -3 l 4,4 4,-4 h -3 v -5 h 3 z" />
   <g
      id="g6"
      style="fill:#ffffff;fill-opacity:0.25"
-     transform="matrix(1,0,0,1.2861736,0,-0.19173633)">
+     transform="matrix(1,0,0,0.96463023,0,0.02369776)">
     <path
        d="m 20,8 h 2 v 2 H 20 C 18.62,10 17.26,9.65 16,9 13.5,10.3 10.5,10.3 8,9 6.74,9.65 5.37,10 4,10 H 2 V 8 h 2 c 1.39,0 2.78,-0.47 4,-1.33 2.44,1.71 5.56,1.71 8,0 C 17.22,7.53 18.61,8 20,8 m 0,-6 h 2 V 4 H 20 C 18.62,4 17.26,3.65 16,3 13.5,4.3 10.5,4.3 8,3 6.74,3.65 5.37,4 4,4 H 2 V 2 h 2 c 1.39,0 2.78,-0.47 4,-1.33 2.44,1.71 5.56,1.71 8,0 C 17.22,1.53 18.61,2 20,2"
        id="path4"

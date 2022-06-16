@@ -22,7 +22,7 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:zoom="34.708333"
-     inkscape:cx="12"
+     inkscape:cx="11.985594"
      inkscape:cy="11.985594"
      inkscape:window-width="1920"
      inkscape:window-height="1019"
@@ -36,10 +36,11 @@
      style="fill:#ffffff" />
   <g
      id="g6"
-     style="fill:#ffffff">
+     style="fill:#ffffff;fill-opacity:0.25"
+     transform="matrix(1,0,0,1.2861736,0,-0.19173633)">
     <path
        d="m 20,8 h 2 v 2 H 20 C 18.62,10 17.26,9.65 16,9 13.5,10.3 10.5,10.3 8,9 6.74,9.65 5.37,10 4,10 H 2 V 8 h 2 c 1.39,0 2.78,-0.47 4,-1.33 2.44,1.71 5.56,1.71 8,0 C 17.22,7.53 18.61,8 20,8 m 0,-6 h 2 V 4 H 20 C 18.62,4 17.26,3.65 16,3 13.5,4.3 10.5,4.3 8,3 6.74,3.65 5.37,4 4,4 H 2 V 2 h 2 c 1.39,0 2.78,-0.47 4,-1.33 2.44,1.71 5.56,1.71 8,0 C 17.22,1.53 18.61,2 20,2"
        id="path4"
-       style="fill:#ffffff" />
+       style="fill:#ffffff;fill-opacity:0.25" />
   </g>
 </svg>

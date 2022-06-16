@@ -318,12 +318,16 @@ end
     /* mur.set_axis(index, power) */
 
     const movements_dropdown = [
-      item_image('arrow-forward', 'AXIS_MARCH_FORWARD', 'вперед'),
-      item_image('arrow-backward', 'AXIS_MARCH_BACKWARD', 'назад'),
-      item_image('rotate-left', 'AXIS_YAW_LEFT', 'против часовой (налево)'),
-      item_image('rotate-right', 'AXIS_YAW_RIGHT', 'по часовой (направо)'),
-      item_image('depth-up', 'AXIS_VERTICAL_UP', 'вверх (подниматься)'),
-      item_image('depth-down', 'AXIS_VERTICAL_DOWN', 'вниз (заглубляться)'),
+      item_image('arrow-march', 'AXIS_MARCH', 'вперед/назад'),
+      item_image('arrow-rotate', 'AXIS_YAW', 'налево/направо'),
+      item_image('arrow-depth', 'AXIS_DEPTH', 'подниматься/опускаться'),
+
+      // item_image('arrow-forward', 'AXIS_MARCH_FORWARD', 'вперед'),
+      // item_image('arrow-backward', 'AXIS_MARCH_BACKWARD', 'назад'),
+      // item_image('rotate-left', 'AXIS_YAW_LEFT', 'против часовой (налево)'),
+      // item_image('rotate-right', 'AXIS_YAW_RIGHT', 'по часовой (направо)'),
+      // item_image('depth-up', 'AXIS_VERTICAL_UP', 'вверх (подниматься)'),
+      // item_image('depth-down', 'AXIS_VERTICAL_DOWN', 'вниз (заглубляться)'),
       // item_image('transfer-left', 'AXIS_SIDE_LEFT', 'влево'),
       // item_image('transfer-right', 'AXIS_SIDE_RIGHT', 'вправо')
     ]
@@ -357,7 +361,7 @@ end
       init: function () {
         this.appendDummyInput()
         .appendField(new FieldGridDropdown(
-          movements_dropdown, undefined, {columns: 2, DEFAULT_VALUE: 'AXIS_MARCH_FORWARD'}), "MODE"
+          movements_dropdown, undefined, {columns: 3, DEFAULT_VALUE: 'AXIS_MARCH_FORWARD'}), "MODE"
         );
 
         this.appendValueInput('Power')
