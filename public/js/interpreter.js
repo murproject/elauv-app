@@ -137,10 +137,11 @@ const mur = {
     }
 
     this.threadsStates[scriptId] = false;
+
+    sendHighlight(true);
     self.postMessage({ type: 'thread_end', id: scriptId })
 
     if (!this.threadsStates.includes(true) && !this.mainThreadState) {
-      sendHighlight(true);
       setState('done');
     }
 
