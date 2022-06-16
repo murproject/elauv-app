@@ -9,6 +9,11 @@ function placeholderNum (defaultNum) {
 }
 
 
+function shadowNum (defaultNum) {
+  return { shadow: { type: 'mur_number', fields: { Value: defaultNum } } }
+}
+
+
 function shadowSlider() {
   return { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } };
 }
@@ -130,8 +135,8 @@ const CategoryColour = makeCategory(
       kind: 'block',
       type: 'mur_set_led',
       inputs: {
-        Index: placeholderNum(0),
-        Colour:  { block: { type: 'colour_picker', fields: { COLOUR: '#ffff00' } } }
+        Index: shadowNum(0),
+        Colour:  { shadow: { type: 'colour_picker', fields: { COLOUR: '#ffff00' } } }
       }
     },
     { kind: 'block', type: 'colour_picker', fields: { COLOUR: '#ffff00' } },
