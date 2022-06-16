@@ -537,6 +537,7 @@ article div {
 /*     font: 20px sans-serif !important; */
 }
 
+/* TODO: remove ".pretty" class? */
 
 /* #blocklyDiv text { */
     /* font-family: "Noto Sans" !important; */
@@ -562,9 +563,9 @@ article div {
 
 .blocklyEditableText text,
 .blocklyNonEditableText text {
-    font-weight: bold !important;
-    font-size: 14px !important;
-    left: 20px !important;
+    /* font-weight: bold !important; */
+    /* font-size: 14px !important; */
+    /* left: 20px !important; */
 }
 
 .blocklyMenuItem {
@@ -618,6 +619,7 @@ article div {
 
 .fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
     padding: 0.5em !important;
+    padding-bottom: 0.25em !important;
 }
 
 .blocklyColourTable>tr>td {
