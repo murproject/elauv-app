@@ -15,25 +15,15 @@ export default {
   name: 'Blocks',
 
   colours: {
-    // spec: 70,
-    // control: 70,
-    // mov:  20,
-    // loop: Blockly.Themes.Classic.categoryStyles.loop_category.colour,
-    // math: Blockly.Themes.Classic.categoryStyles.math_category.colour,
-    // colour: 1,
-
-    spec: 70,
-    mov:  20,
-
-    colour: 20,
-    list: 260,
-    logic: 210,
-    loop: 120,
-    math: 230,
-    procedure: 290,
-    text: 160,
-    variable: 330,
-    variable_dynamic: 310,
+    flow:            30,
+    mov:             80,
+    sensors:        120,
+    logic:          160,
+    loop:           200,
+    math:           240,
+    colour:         280,
+    variable:       320,
+    procedure:      360,
   },
 
 
@@ -196,7 +186,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(colours.spec)
+        this.setColour(colours.flow)
         this.setTooltip('Ждать указанное количество секунд')
       }
     }
@@ -224,7 +214,7 @@ end
 //         this.setPreviousStatement(false, '')
 //         this.setNextStatement(false, '')
 //         this.setInputsInline(true)
-//         this.setColour(colours.spec)
+//         this.setColour(colours.sensors)
 //         this.setTooltip('Поток')
 //       }
 //     }
@@ -328,41 +318,47 @@ end
     /* mur.set_axis(index, power) */
 
     const movements_dropdown = [
-      item_image('arrow-up-bold', 'AXIS_MARCH_FORWARD', 'вперед'),
-      item_image('arrow-down-bold', 'AXIS_MARCH_BACKWARD', 'назад'),
+      item_image('arrow-forward', 'AXIS_MARCH_FORWARD', 'вперед'),
+      item_image('arrow-backward', 'AXIS_MARCH_BACKWARD', 'назад'),
       item_image('rotate-left', 'AXIS_YAW_LEFT', 'против часовой (налево)'),
       item_image('rotate-right', 'AXIS_YAW_RIGHT', 'по часовой (направо)'),
       item_image('depth-up', 'AXIS_VERTICAL_UP', 'вверх (подниматься)'),
       item_image('depth-down', 'AXIS_VERTICAL_DOWN', 'вниз (заглубляться)'),
-      item_image('transfer-left', 'AXIS_SIDE_LEFT', 'влево'),
-      item_image('transfer-right', 'AXIS_SIDE_RIGHT', 'вправо')
+      // item_image('transfer-left', 'AXIS_SIDE_LEFT', 'влево'),
+      // item_image('transfer-right', 'AXIS_SIDE_RIGHT', 'вправо')
     ]
 
-    Blockly.Blocks.mur_set_axis_wait = {
-      init: function () {
-        this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown(movements_dropdown, null), 'MODE')
+    // Blockly.Blocks.mur_set_axis_wait = {
+    //   init: function () {
+    //     this.appendDummyInput()
+    //       .appendField(new FieldGridDropdown(
+    //         movements_dropdown,
+    //         undefined,
+    //         {columns: 2, DEFAULT_VALUE: 'AXIS_MARCH_FORWARD'}),
+    //         "MODE");
 
-        this.appendValueInput('Power')
-          .setCheck('Number')
-          .appendField(icon('speedometer', 'тяга'))
+    //     this.appendValueInput('Power')
+    //       .setCheck('Number')
+    //       .appendField(icon('speedometer', 'тяга'))
 
-        this.appendValueInput('Delay')
-          .setCheck('Number')
-          .appendField(icon('timer', 'длительность'))
+    //     this.appendValueInput('Delay')
+    //       .setCheck('Number')
+    //       .appendField(icon('timer', 'длительность'))
 
-        this.setPreviousStatement(true, 'action')
-        this.setNextStatement(true, 'action')
-        this.setInputsInline(true)
-        this.setColour(colours.mov)
-        this.setTooltip('Задать движение на ось')
-      }
-    }
+    //     this.setPreviousStatement(true, 'action')
+    //     this.setNextStatement(true, 'action')
+    //     this.setInputsInline(true)
+    //     this.setColour(colours.mov)
+    //     this.setTooltip('Задать движение на ось')
+    //   }
+    // }
 
     Blockly.Blocks.mur_set_axis = {
       init: function () {
         this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown(movements_dropdown, null), 'MODE')
+        .appendField(new FieldGridDropdown(
+          movements_dropdown, undefined, {columns: 2, DEFAULT_VALUE: 'AXIS_MARCH_FORWARD'}), "MODE"
+        );
 
         this.appendValueInput('Power')
           .setCheck('Number')
@@ -384,16 +380,16 @@ end
         //   .appendField(icon('axis-arrow', 'ось'))
 
         this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([
+          .appendField(new FieldGridDropdown([
             item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
             item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
-          ], null), 'MODE')
+          ], undefined, {columns: 2, DEFAULT_VALUE: 'SENSOR_COLOR_WHITE'}), "MODE")
           .appendField(icon('timer-sand', 'ждать'))
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(colours.spec)
+        this.setColour(colours.sensors)
         this.setTooltip('Задать движение на ось')
       }
     }
@@ -421,15 +417,15 @@ end
     Blockly.Blocks.mur_get_color = {
       init: function () {
         this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([
-            item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
-            item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
-          ], null), 'MODE')
+        .appendField(new FieldGridDropdown([
+          item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
+          item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
+        ], undefined, {columns: 2, DEFAULT_VALUE: 'SENSOR_COLOR_WHITE'}), "MODE")
 
         this.setOutput(true, 'Boolean')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(colours.spec)
+        this.setColour(colours.sensors)
         this.setTooltip('Проверка цвета')
       }
     }
@@ -483,6 +479,7 @@ end
 
     register_proto('mur_stop_motors', (gen) => {
       return (block) => {
+        // TODO: do better?
         return makeFunc(gen, `
           mur.set_power(0, 0)
           mur.set_power(1, 0)
@@ -538,18 +535,22 @@ end
     Blockly.Blocks.mur_get_imu_tap = {
       init: function () {
         this.appendDummyInput()
-          .appendField(icon('cursor-default-click', 'столкновение'))
+          .appendField(new FieldGridDropdown([
+            item_image('cursor-default-click',  'IMU_TAP_ONE',      'один стук'),
+            item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
+          ], undefined, {columns: 2, DEFAULT_VALUE: 'IMU_TAP_ONE'}), "MODE")
 
         this.setOutput(true, 'Boolean')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(colours.spec)
+        this.setColour(colours.sensors)
         this.setTooltip('Происходит ли столкновение')
       }
     }
 
     register_proto('mur_get_imu_tap', (gen) => {
       return (block) => {
+        // TODO: implement double tap
         return ['mur.get_imu_tap()', Blockly.JavaScript.ORDER_NONE]
         // return makeFunc(gen, 'mur.get_imu_tap()')
       }
@@ -562,17 +563,17 @@ end
         this.appendDummyInput()
           .appendField(icon('compass', 'ось'))
         this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([
+          .appendField(new FieldGridDropdown([
             item_image('rot-yaw', 'IMU_AXIS_YAW', 'Курс'),
             item_image('rot-pitch', 'IMU_AXIS_PITCH', 'Крен'),
             item_image('rot-roll', 'IMU_AXIS_ROLL', 'Дифферент')
-          ], null), 'MODE')
+          ], undefined, {columns: 3, DEFAULT_VALUE: 'IMU_AXIS_YAW'}), "MODE")
 
         this.setOutput(true, 'Number')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
         this.setInputsInline(true)
-        this.setColour(colours.spec)
+        this.setColour(colours.sensors)
         this.setTooltip('Ось')
       }
     }
@@ -596,17 +597,16 @@ end
     Blockly.Blocks.mur_wait_imu_tap = {
       init: function () {
         this.appendDummyInput()
-          // .appendField(icon('cursor-default-click', 'столкновение'))
-          .appendField(new Blockly.FieldDropdown([
-            item_image('cursor-default-click', 'IMU_TAP_ONE', 'один стук'),
-            item_image('cursor-click-2x', 'IMU_TAP_DOUBLE', 'два стука')
-          ], null), 'MODE')
+          .appendField(new FieldGridDropdown([
+            item_image('cursor-default-click',  'IMU_TAP_ONE',      'один стук'),
+            item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
+          ], undefined, {columns: 2, DEFAULT_VALUE: 'IMU_TAP_ONE'}), "MODE")
           .appendField(icon('timer-sand', 'ждать'))
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(colours.spec)
+        this.setColour(colours.sensors)
       }
     }
 
@@ -617,6 +617,7 @@ end
 
         // TODO: should implement a proper way to wait for event!
 
+        // TODO: implement double tap
         if (gen === Blockly.JavaScript) {
           return makeFunc(gen, 'while (!mur.get_imu_tap()) {await mur.delay(50);}')
         }
@@ -702,7 +703,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(colours.spec)
+        this.setColour(colours.colour)
         this.setTooltip('Задать цвет на светодиод')
       }
     }
@@ -796,7 +797,7 @@ end
         this.setOutput(true, 'Boolean')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(colours.spec)
+        this.setColour(colours.sensors)
         this.setTooltip('Проверка цвета')
       }
     }
@@ -840,7 +841,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(false)
         this.setInputsInline(true)
-        this.setColour(colours.spec)
+        this.setColour(colours.flow)
         this.setTooltip('Завершить выполнение')
       }
     }

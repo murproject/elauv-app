@@ -14,16 +14,6 @@ function shadowSlider() {
 }
 
 
-class Category {
-  constructor(name, contents) {
-    this.kind = 'categoryToolbox';
-    this.colour = 20;
-    this.name = name;
-    this.contents = contents;
-  }
-}
-
-
 function makeCategory(name, colour, contents) {
   return {
     kind: 'category',
@@ -35,9 +25,9 @@ function makeCategory(name, colour, contents) {
 
 
 const CategorySensors = makeCategory(
-  'Датчики', Blocks.colours.spec, [
-    { kind: 'block', type: 'mur_sensor_color_wait' },
+  'Датчики', Blocks.colours.sensors, [
     { kind: 'block', type: 'mur_get_color' },
+    { kind: 'block', type: 'mur_sensor_color_wait' },
     { kind: 'block', type: 'mur_get_imu_tap' },
     { kind: 'block', type: 'mur_wait_imu_tap' },
     { kind: 'block', type: 'mur_get_imu_axis' },
@@ -83,8 +73,6 @@ const CategoryMovements = makeCategory(
       kind: 'block',
       type: 'mur_actuator',
     },
-
-    { kind: 'block', type: 'mur_set_led' },
   ]
 );
 
@@ -131,20 +119,40 @@ const CategoryLoop = makeCategory(
     { kind: 'block', type: 'controls_whileUntil' },
     { kind: 'block', type: 'controls_for' },
     // { kind: 'block', type: 'controls_forEach' },
-    { kind: 'block', type: 'controls_flow_statements' },
+    { kind: 'block', type: 'controls_flow_statements' }, // TODO: incompatible with mur_loops!
   ]
 );
 
 
 const CategoryColour = makeCategory(
   'Цвета', Blocks.colours.colour, [
-    { kind: 'block', type: 'colour_picker' },
+    {
+      kind: 'block',
+      type: 'mur_set_led',
+      inputs: {
+        Index: placeholderNum(0),
+        Colour:  { block: { type: 'colour_picker', fields: { COLOUR: '#ffff00' } } }
+      }
+    },
+    { kind: 'block', type: 'colour_picker', fields: { COLOUR: '#ffff00' } },
     { kind: 'block', type: 'colour_random' },
     { kind: 'block', type: 'colour_rgb' },
     // { kind: 'block', type: 'colour_blend' },
   ]
 );
 
+const CategoryFlow = makeCategory(
+  'Управление', Blocks.colours.flow, [
+    {
+      kind: 'block',
+      type: 'mur_delay',
+      inputs: {
+        sleepSeconds: placeholderNum(1)
+      }
+    },
+    { kind: 'block', type: 'mur_end_thread' },
+  ]
+);
 
 const CategoryVariables = {
   kind: 'category',
@@ -165,11 +173,12 @@ const CategoryProcedures = {
 const MurToolbox = {
   kind: 'categoryToolbox',
   contents: [
-    CategorySensors,
+    CategoryFlow,
     CategoryMovements,
+    CategorySensors,
     CategoryLogic,
-    CategoryMath,
     CategoryLoop,
+    CategoryMath,
     CategoryColour,
     CategoryVariables,
     CategoryProcedures,
