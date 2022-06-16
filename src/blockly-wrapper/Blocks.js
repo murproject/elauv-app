@@ -9,15 +9,50 @@ import {FieldGridDropdown} from '@blockly/field-grid-dropdown';
 
 import './BlocklyPatches'
 
-const color_spec = 70
-const color_mov = 20
+let colours = {};
 
 export default {
   name: 'Blocks',
 
+  colours: {
+    // spec: 70,
+    // control: 70,
+    // mov:  20,
+    // loop: Blockly.Themes.Classic.categoryStyles.loop_category.colour,
+    // math: Blockly.Themes.Classic.categoryStyles.math_category.colour,
+    // colour: 1,
+
+    spec: 70,
+    mov:  20,
+
+    colour: 20,
+    list: 260,
+    logic: 210,
+    loop: 120,
+    math: 230,
+    procedure: 290,
+    text: 160,
+    variable: 330,
+    variable_dynamic: 310,
+  },
+
+
   /* mur.delay(sleepMs) */
 
   init: function () {
+    colours = this.colours;
+
+    for (const key in colours) {
+      if ((key + '_category') in Blockly.Themes.Classic.categoryStyles) {
+        Blockly.Themes.Classic.categoryStyles[key + '_category'].colour = colours[key];
+      }
+
+      if ((key + '_blocks') in Blockly.Themes.Classic.blockStyles) {
+        Blockly.Themes.Classic.blockStyles[key + '_blocks'].colourPrimary = colours[key];
+      }
+    }
+
+
     function getOrder (gen) {
       return gen === BlocklyLua ? BlocklyLua.ORDER_OVERRIDES
         : gen === Blockly.JavaScript ? Blockly.JavaScript.ORDER_NONE : null
@@ -161,7 +196,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Ждать указанное количество секунд')
       }
     }
@@ -189,7 +224,7 @@ end
 //         this.setPreviousStatement(false, '')
 //         this.setNextStatement(false, '')
 //         this.setInputsInline(true)
-//         this.setColour(color_spec)
+//         this.setColour(colours.spec)
 //         this.setTooltip('Поток')
 //       }
 //     }
@@ -237,7 +272,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Задать тягу на движитель')
       }
     }
@@ -278,7 +313,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Задать мощность на соленоид')
       }
     }
@@ -319,7 +354,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Задать движение на ось')
       }
     }
@@ -336,7 +371,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Задать движение на ось')
       }
     }
@@ -358,7 +393,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Задать движение на ось')
       }
     }
@@ -394,7 +429,7 @@ end
         this.setOutput(true, 'Boolean')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Проверка цвета')
       }
     }
@@ -441,7 +476,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Остановить движители')
       }
     }
@@ -482,7 +517,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Установить курс')
       }
     }
@@ -508,7 +543,7 @@ end
         this.setOutput(true, 'Boolean')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Происходит ли столкновение')
       }
     }
@@ -537,7 +572,7 @@ end
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Ось')
       }
     }
@@ -571,7 +606,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
       }
     }
 
@@ -607,7 +642,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.loop)
         this.setTooltip('цикл на время')
       }
     }
@@ -640,7 +675,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.loop)
         this.setTooltip('бесконечный цикл')
       }
     }
@@ -667,7 +702,7 @@ end
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Задать цвет на светодиод')
       }
     }
@@ -716,7 +751,7 @@ end
         this.setOutput(true, 'Number')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(color_mov)
+        this.setColour(colours.mov)
         this.setTooltip('Число')
       }
     }
@@ -736,7 +771,7 @@ end
         this.setOutput(true, 'Number')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(color_spec)
+        this.setColour(colours.math)
         this.setTooltip('Число')
       }
     }
@@ -761,7 +796,7 @@ end
         this.setOutput(true, 'Boolean')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Проверка цвета')
       }
     }
@@ -799,13 +834,13 @@ end
 
           .appendField(new FieldGridDropdown([
               ['Завершить программу', 'MODE_END_SCRIPT'],
-              ['Завершить поток',     'MODE_END_THREAD'],
+              ['Завершить процесс',   'MODE_END_THREAD'],
             ], undefined, {columns: 1, DEFAULT_VALUE: 'MODE_END_SCRIPT'}), "MODE");
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(false)
         this.setInputsInline(true)
-        this.setColour(color_spec)
+        this.setColour(colours.spec)
         this.setTooltip('Завершить выполнение')
       }
     }

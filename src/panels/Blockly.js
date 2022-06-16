@@ -9,7 +9,6 @@ import 'blockly/javascript';
 import BlocklyLua from 'blockly/lua'
 
 import MurToolbox from '../blockly-wrapper/Toolbox'
-import Blocks from '../blockly-wrapper/Blocks'
 import '../blockly-wrapper/BlocklyStyle'
 
 import mur from '../vehicle/apiGameMur'
@@ -89,7 +88,7 @@ export default class BlocklyPanel extends Panel {
     this.workspace = null;
     this.scriptWorker = null;
 
-    Blocks.init();
+
 
     // TODO: move locale overrides?
     Ru["CLEAN_UP"] = "Упорядочить блоки";
