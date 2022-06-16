@@ -92,7 +92,12 @@ export default class BlocklyPanel extends Panel {
 
     // TODO: move locale overrides?
     Ru["CLEAN_UP"] = "Упорядочить блоки";
-    Ru["PROCEDURE_VARIABLE"] = "аргумент";
+    Ru["PROCEDURE_VARIABLE"] = "аргументом";
+    Ru["MATH_RANDOM_INT_TITLE"] = "случайное целое число от %1 до %2";
+    // Ru["PROCEDURES_BEFORE_PARAMS"] = "";
+    // Ru["COLOUR_RGB_RED"] = "R";
+    // Ru["COLOUR_RGB_GREEN"] = "G";
+    // Ru["COLOUR_RGB_BLUE"] = "B";
     Ru["MATH_SUBTRACTION_SYMBOL"] = "–";
     Blockly.setLocale(Ru)
 
