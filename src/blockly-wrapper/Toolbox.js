@@ -144,7 +144,13 @@ const CategoryColour = makeCategory(
     },
     { kind: 'block', type: 'colour_picker', fields: { COLOUR: '#ffff00' } },
     { kind: 'block', type: 'colour_random' },
-    { kind: 'block', type: 'colour_rgb' },
+    { kind: 'block', type: 'colour_rgb',
+      inputs: {
+        RED:    shadowNum(0),
+        GREEN:  shadowNum(0),
+        BLUE:   shadowNum(0),
+      }
+    },
     // { kind: 'block', type: 'colour_blend' },
   ]
 );
