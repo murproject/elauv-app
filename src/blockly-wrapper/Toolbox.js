@@ -114,7 +114,6 @@ const CategoryMath = makeCategory(
     { kind: 'block', type: 'math_modulo' },
     { kind: 'block', type: 'math_constrain' },
     { kind: 'block', type: 'math_random_int' },
-    { kind: 'block', type: 'mur_random_number' },
     // { kind: 'block', type: 'math_random_float' }
   ]
 );

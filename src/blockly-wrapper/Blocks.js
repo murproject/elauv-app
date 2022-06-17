@@ -912,39 +912,6 @@ end
 
     */
 
-    /* mur_random_number */
-
-    Blockly.Blocks.mur_random_number = {
-      init: function () {
-        this.appendDummyInput()
-          .appendField('случайное число')
-
-        this.appendValueInput('ValueMin')
-          .appendField('от')
-          .setCheck('Number')
-
-        this.appendValueInput('ValueMax')
-          .appendField('до')
-          .setCheck('Number')
-
-        this.setOutput(true, 'Number')
-        this.setPreviousStatement(false, null)
-        this.setNextStatement(false, null)
-        this.setInputsInline(true);
-        this.setColour(colours.mov)
-        this.setTooltip('Случайное число')
-      }
-    }
-
-    register_proto('mur_random_number', (gen) => {
-      return (block) => {
-        const val_min = calcVal(gen, block, 'ValueMin')
-        const val_max = calcVal(gen, block, 'ValueMax')
-        return makeInlineFunc(gen, `mur.random_int(${val_min}, ${val_max})`)
-      }
-    })
-
-
     /* end thread */
 
     // TODO: rename!! to be consistent
