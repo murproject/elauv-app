@@ -112,9 +112,9 @@ const CategoryMath = makeCategory(
     // { kind: 'block', type: 'math_trig' },
     // { kind: 'block', type: 'math_constant' },
     { kind: 'block', type: 'math_number_property' },
-    { kind: 'block', type: 'math_round' },
+    // { kind: 'block', type: 'math_round' },
     // { kind: 'block', type: 'math_on_list' },
-    { kind: 'block', type: 'math_modulo' },
+    // { kind: 'block', type: 'math_modulo' },
     {
       kind: 'block', type: 'math_constrain',
       inputs: { LOW: shadowNum(0), HIGH: shadowNum(100) }
@@ -134,7 +134,10 @@ const CategoryLoop = makeCategory(
     { kind: 'block', type: 'mur_loop_timeout', inputs: { Delay: shadowNum(1) } },
     { kind: 'block', type: 'controls_repeat_ext', inputs: { TIMES: shadowNum(5) } },
     { kind: 'block', type: 'controls_whileUntil', inputs: { BOOL: { shadow: { type: 'logic_boolean' } } } },
-    { kind: 'block', type: 'controls_for' },
+    {
+      kind: 'block', type: 'controls_for',
+      inputs: { FROM: shadowNum(0), TO: shadowNum(10), BY: shadowNum(1) }
+    },
     // { kind: 'block', type: 'controls_forEach' },
     { kind: 'block', type: 'controls_flow_statements' }, // TODO: incompatible with mur_loops!
   ]

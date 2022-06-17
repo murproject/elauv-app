@@ -25,7 +25,7 @@ export default {
     // variable:       320,
     // procedure:      360,
 
-    flow:        "#889",
+    flow:        "#778",
     mov:         "#B70",
     sensors:     "#BA3",
     logic:          120,
@@ -188,10 +188,12 @@ end
       init: function () {
         this.appendDummyInput()
           .appendField(icon('timer-sand', 'ждать'))
-          // .appendField('ждать')
 
         this.appendValueInput('sleepSeconds')
           .setCheck('Number')
+
+        // this.appendDummyInput()
+        //   .appendField('секунд')
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
@@ -948,6 +950,78 @@ end
       const tuple = Blockly.JavaScript['procedures_callreturn'](block);
       return tuple[0] + ';\n';
     };
+
+    Blockly.Blocks['math_number_property'] = {
+      init: function () {
+        this.jsonInit({
+          'type': 'math_number_property',
+          'message0': '%1 %2',
+          'args0': [
+            {
+              'type': 'input_value',
+              'name': 'NUMBER_TO_CHECK',
+              'check': 'Number',
+            },
+            {
+              'type': 'field_dropdown',
+              'name': 'PROPERTY',
+              'options': [
+                ['%{BKY_MATH_IS_EVEN}', 'EVEN'],
+                ['%{BKY_MATH_IS_ODD}', 'ODD'],
+                // ['%{BKY_MATH_IS_PRIME}', 'PRIME'],
+                // ['%{BKY_MATH_IS_WHOLE}', 'WHOLE'],
+                ['%{BKY_MATH_IS_POSITIVE}', 'POSITIVE'],
+                ['%{BKY_MATH_IS_NEGATIVE}', 'NEGATIVE'],
+                ['%{BKY_MATH_IS_DIVISIBLE_BY}', 'DIVISIBLE_BY'],
+              ],
+            },
+          ],
+          'inputsInline': true,
+          'output': 'Boolean',
+          'style': 'math_blocks',
+          'tooltip': '%{BKY_MATH_IS_TOOLTIP}',
+          'mutator': 'math_is_divisibleby_mutator',
+        });
+      }
+    };
+
+    Blockly.Blocks['math_arithmetic'] = {
+      init: function () {
+        this.jsonInit({
+          'type': 'math_arithmetic',
+          'message0': '%1 %2 %3',
+          'args0': [
+            {
+              'type': 'input_value',
+              'name': 'A',
+              'check': 'Number',
+            },
+            {
+              'type': 'field_dropdown',
+              'name': 'OP',
+              'options': [
+                ['%{BKY_MATH_ADDITION_SYMBOL}', 'ADD'],
+                ['%{BKY_MATH_SUBTRACTION_SYMBOL}', 'MINUS'],
+                ['%{BKY_MATH_MULTIPLICATION_SYMBOL}', 'MULTIPLY'],
+                ['%{BKY_MATH_DIVISION_SYMBOL}', 'DIVIDE'],
+                // ['%{BKY_MATH_POWER_SYMBOL}', 'POWER'],
+              ],
+            },
+            {
+              'type': 'input_value',
+              'name': 'B',
+              'check': 'Number',
+            },
+          ],
+          'inputsInline': true,
+          'output': 'Number',
+          'style': 'math_blocks',
+          'helpUrl': '%{BKY_MATH_ARITHMETIC_HELPURL}',
+          'extensions': ['math_op_tooltip'],
+        });
+      }
+    };
+
 
   }
 }
