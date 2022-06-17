@@ -122,7 +122,7 @@ const CategoryMath = makeCategory(
 const CategoryLoop = makeCategory(
   'Циклы', Blocks.colours.loop, [
     { kind: 'block', type: 'mur_loop_infinite' },
-    { kind: 'block', type: 'mur_loop_timeout', inputs: { Delay: placeholderNum(2) } },
+    { kind: 'block', type: 'mur_loop_timeout', inputs: { Delay: shadowNum(1) } },
     { kind: 'block', type: 'controls_repeat_ext' },
     { kind: 'block', type: 'controls_whileUntil' },
     { kind: 'block', type: 'controls_for' },
@@ -155,11 +155,11 @@ const CategoryFlow = makeCategory(
       kind: 'block',
       type: 'mur_delay',
       inputs: {
-        sleepSeconds: placeholderNum(1)
+        sleepSeconds: shadowNum(1)
       }
     },
-    { kind: 'block', type: 'mur_end_thread' },
     { kind: 'block', type: 'mur_get_timestamp' },
+    { kind: 'block', type: 'mur_end_thread' },
   ]
 );
 

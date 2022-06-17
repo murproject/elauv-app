@@ -60,6 +60,7 @@ const mur = {
   threadsStates: [],
   mainThreadState: true,
   lastActiveBlock: {},
+  timeOfStart: new Date(),
 
   h: async function (scriptId, blockId) {
     highlightedBlocks[scriptId] = [blockId, 5]
@@ -134,6 +135,7 @@ const mur = {
       for (const i in scripts) {
         this.thread_end(i, false);
       }
+      // TODO: stop all motors and sendContext here? Or in BlocklyPanel before terminate?
     }
 
     this.threadsStates[scriptId] = false;
@@ -149,6 +151,14 @@ const mur = {
       await new Promise(() => {});
     }
   },
+
+  get_timestamp: function(isMilliseconds = false) {
+    if (isMilliseconds) {
+      return Math.round(Number(new Date - this.timeOfStart));
+    }
+    return Math.round(Number(new Date - this.timeOfStart) / 1000);
+  }
+
 }
 
 
@@ -186,7 +196,7 @@ function makeScript (index, code) {
     const lastBracket = code.lastIndexOf("}\n");
     code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_scriptId, null);\n" + code.slice(lastBracket)
 
-    script = `${strReplaceAll(code, '_scriptId', index)}`
+    script = `${strReplaceAll(code, '_scriptId', index)}\n`
   }
   else {
     script = `
@@ -237,6 +247,8 @@ mur.h(null);
 ${script}
 })();
 `
+
+    console.warn("Run script:")
     console.log(script)
 
     try {

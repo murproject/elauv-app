@@ -215,15 +215,21 @@ end
     Blockly.Blocks.mur_get_timestamp = {
       init: function () {
         this.appendDummyInput()
-          .appendField(icon('timer-outline', 'секунд'))
-          .appendField("секунд прошло")
+          .appendField(icon('timer-outline', 'время'))
+
+          .appendField(new FieldGridDropdown([
+            ['секунд',      'MODE_SEC'],
+            ['миллисекунд', 'MODE_MSEC'],
+          ], undefined, {columns: 1, DEFAULT_VALUE: 'MODE_SEC'}), "MODE")
+
+          .appendField("прошло с запуска")
 
         this.setOutput(true, 'Number')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
         this.setInputsInline(true)
         this.setColour(colours.flow)
-        this.setTooltip('Секунд прошло с запуска программы')
+        this.setTooltip('Сколько времени прошло с запуска программы')
       }
     }
 
@@ -232,37 +238,15 @@ end
     register_proto('mur_get_timestamp', (gen) => {
       return (block) => {
         // TODO //
-        return [`mur.get_timestamp()`, Blockly.JavaScript.ORDER_NONE]
+        const mode = block.getFieldValue('MODE')
+        // return [`mur.get_timestamp(${mode === 'MODE_MSEC'})`, Blockly.JavaScript.ORDER_NONE]
+        return makeInlineFunc(gen, `mur.get_timestamp(${mode === 'MODE_MSEC'})`)
         // return makeFunc(gen, 'mur.get_imu_tap()')
       }
     })
-
-    /* on start */
-
-    Blockly.Blocks.mur_on_start = {
-      init: function () {
-        this.appendDummyInput()
-          // .appendField(icon('timer-outline', 'секунд'))
-          .appendField("на старте")
-
-        this.setOutput(true, 'Number')
-        this.setPreviousStatement(false, null)
-        this.setNextStatement(false, null)
-        this.setInputsInline(true)
-        this.setColour(colours.flow)
-        this.setTooltip('Секунд прошло с запуска программы')
-      }
-    }
 
     // TODO (in all block with mode selection): use index/enum instead of text
 
-    register_proto('mur_get_timestamp', (gen) => {
-      return (block) => {
-        // TODO //
-        return [`mur.get_timestamp()`, Blockly.JavaScript.ORDER_NONE]
-        // return makeFunc(gen, 'mur.get_imu_tap()')
-      }
-    })
 
     /* thread */
 
