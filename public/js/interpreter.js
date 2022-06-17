@@ -164,15 +164,16 @@ function strReplaceAll(str, match, replace) {
 
 
 function makeScript (index, code) {
-  console.log('generated code:')
+  console.warn('generated code: ' + index)
   console.log(code)
 
   let script = '';
   let isFunction = false;
 
   const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
+  const funcUser = /^ *(function) (.*) {\n *await mur.h\(/gm;
 
-  if (funcRegex.test(code)) {
+  if (funcUser.test(code)) {
     isFunction = true;
 
     // make user-defined function async
