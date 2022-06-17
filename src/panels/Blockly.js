@@ -93,13 +93,23 @@ export default class BlocklyPanel extends Panel {
     // TODO: move locale overrides?
     Ru["CLEAN_UP"] = "Упорядочить блоки";
     Ru["PROCEDURE_VARIABLE"] = "аргументом";
-    Ru["MATH_RANDOM_INT_TITLE"] = "случайное целое число от %1 до %2";
-    // Ru["PROCEDURES_BEFORE_PARAMS"] = "";
+    Ru["MATH_RANDOM_INT_TITLE"] = "случайное число от %1 до %2";
+
+    // Ru["CONTROLS_IF_MSG_IF"] = "?";
+    // Ru["CONTROLS_IF_MSG_THEN"] = "✓";
+    // Ru["CONTROLS_IF_MSG_ELSE"] = "×";
+    // Ru["CONTROLS_IF_MSG_ELSEIF"] = "?";
+
+    // Ru["PROCEDURES_BEFORE_PARAMS"] = "с";
+    // Ru["PROCEDURES_CALL_BEFORE_PARAMS"] = "с";
+
     // Ru["COLOUR_RGB_RED"] = "R";
     // Ru["COLOUR_RGB_GREEN"] = "G";
     // Ru["COLOUR_RGB_BLUE"] = "B";
     Ru["MATH_SUBTRACTION_SYMBOL"] = "–";
     Blockly.setLocale(Ru)
+
+    Blockly.JavaScript.addReservedWords('mur');
 
     this.loadingDiv = document.createElement("div");
     this.loadingDiv.id = "loading-wrapper";
@@ -555,6 +565,8 @@ export default class BlocklyPanel extends Panel {
 
       mur.context = paramsContext // TODO: move context to global scope?
       mur.controlContext(paramsContext)
+
+      document.app.panels.telemetry.updateStats("");
     }
 
     if (data.type === 'state') {

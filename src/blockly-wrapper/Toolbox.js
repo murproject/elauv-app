@@ -114,6 +114,7 @@ const CategoryMath = makeCategory(
     { kind: 'block', type: 'math_modulo' },
     { kind: 'block', type: 'math_constrain' },
     { kind: 'block', type: 'math_random_int' },
+    { kind: 'block', type: 'mur_random_number' },
     // { kind: 'block', type: 'math_random_float' }
   ]
 );
@@ -159,6 +160,7 @@ const CategoryFlow = makeCategory(
       }
     },
     { kind: 'block', type: 'mur_end_thread' },
+    { kind: 'block', type: 'mur_get_timestamp' },
   ]
 );
 

@@ -15,10 +15,20 @@ export default {
   name: 'Blocks',
 
   colours: {
-    flow:            30,
-    mov:             80,
-    sensors:        120,
-    logic:          160,
+    // flow:            30,
+    // mov:             80,
+    // sensors:        120,
+    // logic:          160,
+    // loop:           200,
+    // math:           240,
+    // colour:         280,
+    // variable:       320,
+    // procedure:      360,
+
+    flow:        "#889",
+    mov:         "#B70",
+    sensors:     "#BA3",
+    logic:          120,
     loop:           200,
     math:           240,
     colour:         280,
@@ -177,7 +187,7 @@ end
     Blockly.Blocks.mur_delay = {
       init: function () {
         this.appendDummyInput()
-          .appendField(icon('timer', 'ждать'))
+          .appendField(icon('timer-sand', 'ждать'))
           // .appendField('ждать')
 
         this.appendValueInput('sleepSeconds')
@@ -197,6 +207,60 @@ end
         // console.log('delay is ' + calcVal(gen, block, 'sleepSeconds')
         const sleepMs = calcVal(gen, block, 'sleepSeconds')
         return makeDelay(gen, sleepMs)
+      }
+    })
+
+    /* get seconds */
+
+    Blockly.Blocks.mur_get_timestamp = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(icon('timer-outline', 'секунд'))
+          .appendField("секунд прошло")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setInputsInline(true)
+        this.setColour(colours.flow)
+        this.setTooltip('Секунд прошло с запуска программы')
+      }
+    }
+
+    // TODO (in all block with mode selection): use index/enum instead of text
+
+    register_proto('mur_get_timestamp', (gen) => {
+      return (block) => {
+        // TODO //
+        return [`mur.get_timestamp()`, Blockly.JavaScript.ORDER_NONE]
+        // return makeFunc(gen, 'mur.get_imu_tap()')
+      }
+    })
+
+    /* on start */
+
+    Blockly.Blocks.mur_on_start = {
+      init: function () {
+        this.appendDummyInput()
+          // .appendField(icon('timer-outline', 'секунд'))
+          .appendField("на старте")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setInputsInline(true)
+        this.setColour(colours.flow)
+        this.setTooltip('Секунд прошло с запуска программы')
+      }
+    }
+
+    // TODO (in all block with mode selection): use index/enum instead of text
+
+    register_proto('mur_get_timestamp', (gen) => {
+      return (block) => {
+        // TODO //
+        return [`mur.get_timestamp()`, Blockly.JavaScript.ORDER_NONE]
+        // return makeFunc(gen, 'mur.get_imu_tap()')
       }
     })
 
@@ -847,6 +911,38 @@ end
     })
 
     */
+
+    /* mur_random_number */
+
+    Blockly.Blocks.mur_random_number = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField('случайное число')
+
+        this.appendValueInput('ValueMin')
+          .appendField('от')
+          .setCheck('Number')
+
+        this.appendValueInput('ValueMax')
+          .appendField('до')
+          .setCheck('Number')
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setInputsInline(true);
+        this.setColour(colours.mov)
+        this.setTooltip('Случайное число')
+      }
+    }
+
+    register_proto('mur_random_number', (gen) => {
+      return (block) => {
+        const val_min = calcVal(gen, block, 'ValueMin')
+        const val_max = calcVal(gen, block, 'ValueMax')
+        return makeInlineFunc(gen, `mur.random_int(${val_min}, ${val_max})`)
+      }
+    })
 
 
     /* end thread */
