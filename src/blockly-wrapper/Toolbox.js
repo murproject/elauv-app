@@ -4,17 +4,20 @@ import Blocks from '../blockly-wrapper/Blocks'
 Blocks.init();
 
 
-function placeholderNum (defaultNum) {
+function placeholderNum (defaultNum = 0) {
   return { block: { type: 'mur_number', fields: { Value: defaultNum } } }
 }
 
 
-function shadowNum (defaultNum) {
+function shadowNum (defaultNum = 0) {
   return { shadow: { type: 'mur_number', fields: { Value: defaultNum } } }
 }
 
 
-function shadowSlider() {
+function shadowSlider(type = undefined) {
+  if (type === 'yaw') {
+    return { shadow: { type: 'mur_number_slider_yaw', fields: { Value: 0 } } };
+  }
   return { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } };
 }
 
@@ -54,7 +57,7 @@ const CategoryMovements = makeCategory(
       kind: 'block',
       type: 'mur_set_yaw',
       inputs: {
-        Angle: shadowSlider() // TODO: slider -180 ~ +180
+        Angle: shadowSlider('yaw')
       }
     },
 

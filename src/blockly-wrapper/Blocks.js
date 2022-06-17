@@ -512,8 +512,7 @@ end
           .setCheck('Number')
 
         // this.appendDummyInput()
-        // .appendField('°')
-        // .appendField(icon('timer', 'длительность'))
+        //   .appendField('градусов')
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
@@ -764,6 +763,26 @@ end
     }
 
     register_proto('mur_number_slider', (gen) => {
+      return (block) => {
+        const value = block.getFieldValue('Value')
+        return makeInlineFunc(gen, `(${value})`)
+      }
+    })
+
+    Blockly.Blocks.mur_number_slider_yaw = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new FieldSlider(0, -180, 180, false, 5), "Value")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(colours.mov)
+        this.setTooltip('Курс в градусах')
+      }
+    }
+
+    register_proto('mur_number_slider_yaw', (gen) => {
       return (block) => {
         const value = block.getFieldValue('Value')
         return makeInlineFunc(gen, `(${value})`)
