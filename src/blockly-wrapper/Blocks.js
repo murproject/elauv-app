@@ -743,6 +743,9 @@ end
       }
     })
 
+    Blockly.libraryBlocks.loops.loopTypes.add('mur_loop_infinite');
+    Blockly.libraryBlocks.loops.loopTypes.add('mur_loop_timeout');
+
     /* set led color */
 
     Blockly.Blocks.mur_set_led = {
@@ -950,6 +953,7 @@ end
       const tuple = Blockly.JavaScript['procedures_callreturn'](block);
       return tuple[0] + ';\n';
     };
+
 
     Blockly.Blocks['math_number_property'] = {
       init: function () {
