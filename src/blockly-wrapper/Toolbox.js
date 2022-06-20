@@ -178,6 +178,11 @@ const CategoryFlow = makeCategory(
     },
     { kind: 'block', type: 'mur_get_timestamp' },
     { kind: 'block', type: 'mur_end_thread' },
+    {
+      kind: 'block', type: 'mur_print',
+      fields: { Text: "Текст" },
+      // inputs: { Value: shadowNum(0) }
+    },
   ]
 );
 

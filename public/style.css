@@ -712,6 +712,20 @@ input[type="number"] {
     pointer-events: none;
 }
 
+.variables-div {
+    display: block;
+    width: 50%;
+    height: 50%;
+    z-index: 99;
+    opacity: 50%;
+    background: white;
+    position: fixed;
+    bottom: 0;
+    pointer-events: none;
+
+    font-family: monospace;
+}
+
 .loading-wrapper.active {
     /* display: block; */
     pointer-events: all;

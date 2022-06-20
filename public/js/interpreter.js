@@ -5,6 +5,7 @@ var script = null
 var scripts = []
 var telemetry = {}
 var highlightedBlocks = {}
+var msgToSend = {}
 
 var contextUpdater = null
 var highlightUpdater = null
@@ -53,6 +54,14 @@ function sendHighlight (bold = false) {
   }
 
   self.postMessage({ type: 'mur.h', blocks: highlightedBlocks })
+
+  if (msgToSend.length > 0) {
+    self.postMessage({ type: 'print', msg: msgToSend })
+    for (const key in msgToSend) {
+      delete msgToSend[key];
+    }
+  }
+
 }
 
 
@@ -157,6 +166,12 @@ const mur = {
       return Math.round(Number(new Date - this.timeOfStart));
     }
     return Math.round(Number(new Date - this.timeOfStart) / 1000);
+  },
+
+  print: function(name, value) {
+    // TODO: send only on highlight timer
+    msgToSend[name] = value;
+    console.error(name + " : " + value);
   }
 
 }

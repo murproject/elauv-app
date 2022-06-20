@@ -284,6 +284,37 @@ end
 //       }
 //     })
 
+    Blockly.Blocks.mur_print = {
+      init: function () {
+        // this.appendDummyInput()
+        //   // .appendField("Отобразить")
+
+        // this.appendDummyInput()
+        // .appendField(".")
+
+        this.appendValueInput('Value')
+          .appendField(icon('tooltip-text-outline', 'Текст'))
+          .appendField(new Blockly.FieldTextInput(), 'Text')
+          // .appendField(" ")
+        // this.appendDummyInput()
+        //   .appendField("3")
+
+        this.setPreviousStatement(true, 'action')
+        this.setNextStatement(true, 'action')
+        this.setInputsInline(false)
+        this.setColour(colours.flow)
+        this.setTooltip('Отобразить значение')
+      }
+    }
+
+    register_proto('mur_print', (gen) => {
+      return (block) => {
+        const text = block.getFieldValue('Text')
+        const value = calcVal(gen, block, 'Value')
+        return makeFunc(gen, `mur.print("${text}", ${value})`)
+      }
+    })
+
     /* mur.set_power(index, power) */
 
     const motors_dropdown = [
@@ -296,18 +327,12 @@ end
     Blockly.Blocks.mur_set_power = {
       init: function () {
         this.appendDummyInput()
-          // .setCheck('Number')
-          // .appendField('задать на мотор №')
           .appendField(icon('fan', 'движитель'))
-
-          // .appendField(new Blockly.FieldDropdown(movements_dropdown, null), 'MODE')
-
           .appendField(new FieldGridDropdown(motors_dropdown, undefined, {columns: 2, DEFAULT_VALUE: 'MOTOR_A'}), "Index");
 
         this.appendValueInput('Power')
           .setCheck('Number')
           .appendField(icon('speedometer', 'тяга'))
-          // .appendField('тяга')
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')

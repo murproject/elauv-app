@@ -111,6 +111,11 @@ export default class BlocklyPanel extends Panel {
 
     Blockly.JavaScript.addReservedWords('mur');
 
+    this.variablesDiv = document.createElement("div");
+    this.variablesDiv.id = "variables-div";
+    this.variablesDiv.classList.add("variables-div");
+    this.container.appendChild(this.variablesDiv);
+
     this.loadingDiv = document.createElement("div");
     this.loadingDiv.id = "loading-wrapper";
     this.loadingDiv.classList.add("loading-wrapper");
@@ -566,7 +571,7 @@ export default class BlocklyPanel extends Panel {
       mur.context = paramsContext // TODO: move context to global scope?
       mur.controlContext(paramsContext)
 
-      document.app.panels.telemetry.updateStats("");
+      // document.app.panels.telemetry.updateStats("");
     }
 
     if (data.type === 'state') {
@@ -586,6 +591,10 @@ export default class BlocklyPanel extends Panel {
 
     if (data.type === 'thread_end') {
       this.executionCursors[data.id].children[0].setAttribute('xlink:href', '/mdi/arrow-cursor-execution-off.svg')
+    }
+
+    if (data.type === 'print') {
+      console.log(data.msg);
     }
 
     // e = null
