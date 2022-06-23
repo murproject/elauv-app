@@ -435,8 +435,8 @@ export default class BlocklyPanel extends Panel {
 
     this.executionCursors["-1"] = document.querySelector(`#execution-cursor-glob`);
 
-    console.warn("EXECUTION CURSORS:");
-    console.log(this.executionCursors);
+    // console.warn("EXECUTION CURSORS:");
+    // console.log(this.executionCursors);
 
     let threadsDict = {};
     let threadsList = [];
@@ -449,10 +449,10 @@ export default class BlocklyPanel extends Panel {
       threadsList[index] = block.id;
     }
 
-    console.warn("THREAD DICT")
-    console.log(threadsDict)
-    console.warn("THREAD LIST")
-    console.log(threadsList)
+    // console.warn("THREAD DICT")
+    // console.log(threadsDict)
+    // console.warn("THREAD LIST")
+    // console.log(threadsList)
 
     this.scriptWorker.postMessage({ // TODO: copypasta
       type: 'telemetry',
@@ -650,7 +650,8 @@ export default class BlocklyPanel extends Panel {
       // if (this.scriptWorker) {
       //   this.scriptWorker.terminate()
       // }
-
+      // console.warn("thread end");
+      // console.warn(data.id)
       this.executionCursors[data.id].children[0].setAttribute('xlink:href', '/mdi/arrow-cursor-execution-off.svg')
     }
 
