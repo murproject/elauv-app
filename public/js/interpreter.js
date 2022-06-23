@@ -55,7 +55,7 @@ function sendHighlight (bold = false) {
 
   self.postMessage({ type: 'mur.h', blocks: highlightedBlocks })
 
-  if (msgToSend.length > 0) {
+  if (Object.keys(msgToSend).length > 0) {
     self.postMessage({ type: 'print', msg: msgToSend })
     for (const key in msgToSend) {
       delete msgToSend[key];
@@ -70,9 +70,11 @@ const mur = {
   mainThreadState: true,
   lastActiveBlock: {},
   timeOfStart: new Date(),
+  vars: {},
 
-  h: async function (scriptId, blockId) {
-    highlightedBlocks[scriptId] = [blockId, 5]
+  h: async function (threadId, blockId) {
+    highlightedBlocks[threadId] = [blockId, 5]
+    // console.log(`mur.h( "${threadId}", "${blockId}" )`);
 
     await mur.delay(3)
   },
@@ -137,11 +139,12 @@ const mur = {
   },
 
   thread_end: async function (scriptId, end_script = false, wait_forever = true) {
+    // return /* TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO */
 
     console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
 
     if (end_script) {
-      for (const i in scripts) {
+      for (const i in this.threadsStates) {
         this.thread_end(i, false);
       }
       // TODO: stop all motors and sendContext here? Or in BlocklyPanel before terminate?
@@ -171,7 +174,7 @@ const mur = {
   print: function(name, value) {
     // TODO: send only on highlight timer
     msgToSend[name] = value;
-    console.error(name + " : " + value);
+    // console.error(name + " : " + value);
   }
 
 }
@@ -189,14 +192,20 @@ function strReplaceAll(str, match, replace) {
 
 
 function makeScript (index, code) {
+  const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
+  code = code.replace(funcRegex, 'async $&')
+
+  return {script: code, isFunction: false};
+
   console.warn('generated code: ' + index)
   console.log(code)
 
   let script = '';
   let isFunction = false;
 
-  const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
+  // const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
   const funcUser = /^ *(function) (.*) {\n *await mur.h\(/gm;
+  // const varsDecl = /^\/\* MUR: User variables begin \*\//gm;
 
   if (funcUser.test(code)) {
     isFunction = true;
@@ -205,21 +214,29 @@ function makeScript (index, code) {
     code = code.replace(funcRegex, 'async $&')
 
     // clear blocks highlight on any return from function
-    code = code.replace(/^ *return/gm, 'await mur.h(_scriptId, null); return')
+    code = code.replace(/^ *return/gm, 'await mur.h(_threadId, null); return')
 
     // clear blocks highlight on end of function
     const lastBracket = code.lastIndexOf("}\n");
-    code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_scriptId, null);\n" + code.slice(lastBracket)
+    code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_threadId, null);\n" + code.slice(lastBracket)
 
-    script = `${strReplaceAll(code, '_scriptId', index)}\n`
+    // code = "/* USER_PROCEDURE_BEGIN */\n\n" + code + "\n\n/* USER_PROCEDURE_END */"
+    // console.error("USER_PROCEDURE")
+
+    // script = `${strReplaceAll(code, '_scriptId', index)}\n`
   }
   else {
     script = `
 (async () => {
-  ${strReplaceAll(code, '_scriptId', index)}
-  await mur.thread_end(${index});
+  ${code}
 })();
 `
+// await mur.thread_end(${index});
+  }
+
+  for (const variable in mur.vars) {
+    console.warn("replacing " + variable);
+    script = strReplaceAll(script, variable, `mur.vars["${variable}"]`);
   }
 
   return {script: script, isFunction: isFunction};
@@ -234,6 +251,10 @@ self.onmessage = function (e) {
   if (e.data.type === 'run') {
     scripts = e.data.scripts
 
+    // e.data.userVariables.forEach(variable => {
+    //   mur.vars[variable] = undefined;
+    // });
+
     contextUpdater = setInterval(sendContext,100)
     highlightUpdater = setInterval(sendHighlight, 50)
 
@@ -245,21 +266,28 @@ self.onmessage = function (e) {
     setState('running')
 
     script = ''
-    for (var i in scripts) {
-      mur.threadsStates[i] = true;
-      const currentScript = makeScript(i, scripts[i]);
-      if (currentScript.isFunction) {
-        mur.threadsStates[i] = false;
-        script = currentScript.script + script; // prepend
-      } else {
-        script += currentScript.script;
-      }
+    script = makeScript(0, scripts[0]).script // TODO //
+
+    for (const threadId in e.data.threads) {
+      mur.threadsStates[threadId] = true;
     }
+
+    // for (var i in scripts) {
+    //   mur.threadsStates[i] = true;
+    //   const currentScript = makeScript(i, scripts[i]);
+    //   if (currentScript.isFunction) {
+    //     mur.threadsStates[i] = false;
+    //     script = currentScript.script + script; // prepend
+    //   } else {
+    //     script += currentScript.script;
+    //   }
+    // }
 
     script = `
 (async () => {
-mur.h(null);
+const _threadId = -1;
 ${script}
+mur.h(-1, null);
 })();
 `
 

@@ -714,8 +714,8 @@ input[type="number"] {
 
 .variables-div {
     display: block;
-    width: 50%;
-    height: 50%;
+    /* width: 50%; */
+    /* height: 50%; */
     z-index: 99;
     opacity: 50%;
     background: white;
@@ -723,7 +723,14 @@ input[type="number"] {
     bottom: 0;
     pointer-events: none;
 
+    padding: 1em;
+    max-height: 50%;
+    max-width: 50%;
+
+    font-size: 16px;
     font-family: monospace;
+    border-top-right-radius: 5px;
+    white-space: pre;
 }
 
 .loading-wrapper.active {

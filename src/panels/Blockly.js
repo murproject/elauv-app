@@ -116,6 +116,8 @@ export default class BlocklyPanel extends Panel {
     this.variablesDiv.classList.add("variables-div");
     this.container.appendChild(this.variablesDiv);
 
+    this.userData = {}; // TODO //
+
     this.loadingDiv = document.createElement("div");
     this.loadingDiv.id = "loading-wrapper";
     this.loadingDiv.classList.add("loading-wrapper");
@@ -238,7 +240,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   generate_code(workspace) {
-    Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_scriptId, %1);\n'
+    Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_threadId, %1);\n'
     var code = Blockly.JavaScript.workspaceToCode(workspace)
 
     return code
@@ -259,6 +261,9 @@ export default class BlocklyPanel extends Panel {
     this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'dark', 'big');
     this.scriptStatus = 'stopped'
+
+    this.userData = {};
+    this.variablesDiv.innerText = '';
 
     if (this.scriptWorker) {
       this.scriptWorker.terminate()
@@ -343,8 +348,17 @@ export default class BlocklyPanel extends Panel {
 
     this.scriptStatus = 'running'
 
+    console.warn("workspaceToCode(workspace)")
     this.code = this.generate_code(this.workspace)
     console.log(this.code)
+    // TODO: this.code is unused!
+
+    // let userVariables = []
+    // console.warn("USER VARIABLES:");
+    // this.workspace.getAllVariableNames().forEach(item => {
+    //   console.warn(`${item} : ${Blockly.Names.prototype.safeName_(item)}`);
+    //   userVariables.push(Blockly.Names.prototype.safeName_(item));
+    // })
 
     this.reinject(true);
     // checkUndoRedo(true);
@@ -370,43 +384,75 @@ export default class BlocklyPanel extends Panel {
 
     // Load each block into the workspace individually and generate code.
     var allCode = []
+    this.allRootBlocks = []
+    // let variablesDeclaration = '/* MUR: User variables begin */\n\n'
+    // userVariables.forEach(item => {
+    //   variablesDeclaration += `var ${Blockly.Names.prototype.safeName_(item)};\n`;
+    // })
+    // variablesDeclaration += '\n/* End of user variables */\n\n';
+    // allCode.push(variablesDeclaration);
+
     var headless = new Blockly.Workspace()
 
     topBlocks.forEach(block => {
-      blocks.push(block)
+      // blocks.push(block)
+      this.allRootBlocks.push(block)
       Blockly.serialization.workspaces.load(json, headless)
       allCode.push(this.generate_code(headless))
-      blocks.length = 0
+      // blocks.length = 0
+      console.warn("gen from block");
+      console.log(block);
+      console.log(`${block.type} - ${block.id}`);
     });
 
-    console.log(allCode);
+    console.log(this.allRootBlocks);
 
     this.executionCursors = {};
 
-    for (const key in allCode) {
+    function makeCursorHtml(id) {
+      return `
+      <g id="execution-cursor-${id}" style="display: block;" opacity="0%">
+        <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
+      </g>`
+    }
+
+    for (const blockNum in this.allRootBlocks) {
+    // this.allRootBlocks.forEach(block => {
+      const key = this.allRootBlocks[blockNum].id
       if (!(key in this.executionCursors)) {
-        /* TODO --- */
-        const cursorHtml = `
-        <g id="execution-cursor-${key}" style="display: block;" opacity="0%">
-          <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
-        </g>`;
-
-        // let cursor = document.createElement("g");
-        // cursor.id = `execution-cursor-${key}`;
-        // cursor.setAttribute("style", "display: block;");
-        // cursor.innerHTML = `<image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>`;
-
-        document.querySelector(".blocklyBlockCanvas").innerHTML += cursorHtml;
-
-        for (let i = 0; i <= key; i++) { // need to query elements again after altering .blocklyBlockCanvas!
-          this.executionCursors[i] = document.querySelector(`#execution-cursor-${i}`);
-          // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
-          // TODO: fill executionCursors in reinject function instead of this highlight handler?
-        }
-
-        console.log(this.executionCursors);
+        document.querySelector(".blocklyBlockCanvas").innerHTML += makeCursorHtml(blockNum);
       }
     }
+
+    document.querySelector(".blocklyBlockCanvas").innerHTML += makeCursorHtml('glob');
+
+    for (const blockNum in this.allRootBlocks) { // need to query elements again after altering .blocklyBlockCanvas!
+      const block = this.allRootBlocks[blockNum];
+      this.executionCursors[block.id] = document.querySelector(`#execution-cursor-${blockNum}`);
+      // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
+      // TODO: fill executionCursors AFTER??
+    }
+
+    this.executionCursors["-1"] = document.querySelector(`#execution-cursor-glob`);
+
+    console.warn("EXECUTION CURSORS:");
+    console.log(this.executionCursors);
+
+    let threadsDict = {};
+    let threadsList = [];
+
+    for (const blockNum in this.allRootBlocks) {
+      const block = this.allRootBlocks[blockNum];
+      const index = Number(blockNum);
+
+      threadsDict[block.id] = index;
+      threadsList[index] = block.id;
+    }
+
+    console.warn("THREAD DICT")
+    console.log(threadsDict)
+    console.warn("THREAD LIST")
+    console.log(threadsList)
 
     this.scriptWorker.postMessage({ // TODO: copypasta
       type: 'telemetry',
@@ -418,7 +464,10 @@ export default class BlocklyPanel extends Panel {
     setTimeout(() => {
       this.scriptWorker.postMessage({
         type: 'run',
-        scripts: allCode
+        // scripts: allCode,
+        scripts: [this.code], // TODO //
+        threads: threadsList,
+        // userVariables: userVariables,
       })
     }, 500);
 
@@ -536,6 +585,11 @@ export default class BlocklyPanel extends Panel {
           const blockId = block[0];
           const blockTime = block[1];
 
+          if (!(key in this.executionCursors)) {
+            console.error(`ERROR: execution cursor with key ${key} doesn't exists!`);
+            continue;
+          }
+
           const blockElement = this.workspace.getBlockById(blockId);
           if (blockElement !== null) {
             const blockXY = blockElement.getRelativeToSurfaceXY();
@@ -544,8 +598,11 @@ export default class BlocklyPanel extends Panel {
 
             this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
             this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
+
+            // console.log(`Setting cursor "${key}" with block "${blockId}", html-id: ${this.executionCursors[key].id}`);
           } else {
             this.executionCursors[key].setAttribute("opacity", `0%`);
+            // console.log(`Setting cursor "${key}" as EMPTY`);
           }
         }
 
@@ -590,11 +647,34 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'thread_end') {
+      // if (this.scriptWorker) {
+      //   this.scriptWorker.terminate()
+      // }
+
       this.executionCursors[data.id].children[0].setAttribute('xlink:href', '/mdi/arrow-cursor-execution-off.svg')
     }
 
     if (data.type === 'print') {
-      console.log(data.msg);
+      let log = "";
+
+      for (const name in data.msg) {
+        this.userData[name] = data.msg[name];
+      }
+
+      for (const name in this.userData) {
+        let value = this.userData[name];
+        value = value === true  ? 'Истина' :
+                value === false ? 'Ложь' :
+                value === undefined ? 'Неизвестно' :
+                value;
+
+        log += `${name}: ${value}\n`
+      }
+
+      this.variablesDiv.innerText = log;
+
+      // console.error("PRINT");
+      // console.error(data.msg);
     }
 
     // e = null

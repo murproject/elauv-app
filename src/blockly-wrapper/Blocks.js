@@ -252,37 +252,46 @@ end
 
     /* thread */
 
-//     Blockly.Blocks.mur_thread = {
-//       init: function () {
-//         this.appendDummyInput()
-//           // .appendField(icon('parallel-thread-rotated', 'поток'))
-//           .appendField(icon('parallel-thread-rotated'), 'поток')
-//           // .appendField('поток')
-//           .appendField(new Blockly.FieldTextInput(), 'threadName')
+    Blockly.Blocks.mur_thread = {
+      init: function () {
+        this.appendDummyInput()
+          // .appendField(icon('parallel-thread-rotated', 'поток'))
+          .appendField(icon('parallel-thread-rotated'), 'процесс')
+          .appendField('Процесс')
+          .appendField(new Blockly.FieldTextInput(), 'ThreadName')
 
-//         this.appendStatementInput('STACK').appendField()
-//         this.setPreviousStatement(false, '')
-//         this.setNextStatement(false, '')
-//         this.setInputsInline(true)
-//         this.setColour(colours.sensors)
-//         this.setTooltip('Поток')
-//       }
-//     }
+        this.appendStatementInput('STACK').appendField()
+        this.setPreviousStatement(false, '')
+        this.setNextStatement(false, '')
+        this.setInputsInline(true)
+        this.setColour(colours.flow)
+        this.setTooltip('Процесс')
+      }
+    }
 
-//     register_proto('mur_thread', (gen) => {
-//       return (block) => {
-//         const branch = Blockly.JavaScript.statementToCode(block, 'STACK')
-//         return `
-// (async () => {
-// ${branch}
-// await mur.h(_scriptId, null);
-// await mur.thread_end(_scriptId);
-// })();
-// `
-//         // let sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
-//         // return makeDelay(gen, sleepMs)
-//       }
-//     })
+    register_proto('mur_thread', (gen) => {
+      return (block) => {
+        const branch = Blockly.JavaScript.statementToCode(block, 'STACK')
+        const name = block.getFieldValue('ThreadName')
+
+// mur.thread_start(${gen.injectId("%1", block)});
+        return `
+(async () => {
+/* MUR_THREAD:
+ - ${gen.injectId("ID: %1", block)}
+ - NAME: ${name}
+*/
+const _threadId = ${gen.injectId("%1", block)};
+
+${branch}
+await mur.h(_threadId, null);
+await mur.thread_end(_threadId);
+})();
+`
+        // let sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
+        // return makeDelay(gen, sleepMs)
+      }
+    })
 
     Blockly.Blocks.mur_print = {
       init: function () {
@@ -301,7 +310,7 @@ end
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
-        this.setInputsInline(false)
+        this.setInputsInline(true)
         this.setColour(colours.flow)
         this.setTooltip('Отобразить значение')
       }
@@ -311,7 +320,28 @@ end
       return (block) => {
         const text = block.getFieldValue('Text')
         const value = calcVal(gen, block, 'Value')
+        // const value = Blockly.JavaScript.valueToCode(block, 'Value', Blockly.JavaScript.ORDER_NONE);
         return makeFunc(gen, `mur.print("${text}", ${value})`)
+      }
+    })
+
+    Blockly.Blocks.mur_text = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new Blockly.FieldTextInput(), 'Text')
+
+        this.setOutput(true, 'String')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(colours.flow)
+        this.setTooltip('Отобразить значение')
+      }
+    }
+
+    register_proto('mur_text', (gen) => {
+      return (block) => {
+        const text = block.getFieldValue('Text')
+        return [`"${text}"`, Blockly.JavaScript.ORDER_ATOMIC];
       }
     })
 
@@ -585,9 +615,6 @@ end
 
         this.appendValueInput('Angle')
           .setCheck('Number')
-
-        // this.appendDummyInput()
-        //   .appendField('градусов')
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
@@ -951,7 +978,7 @@ end
     register_proto('mur_end_thread', (gen) => {
       return (block) => {
         const mode = block.getFieldValue('MODE')
-        return makeFunc(gen, `await mur.thread_end(_scriptId, ${mode == 'MODE_END_SCRIPT'})`)
+        return makeFunc(gen, `await mur.thread_end(_threadId, ${mode == 'MODE_END_SCRIPT'})`)
       }
     })
 
@@ -1050,6 +1077,9 @@ end
         });
       }
     };
+
+
+
 
 
   }
