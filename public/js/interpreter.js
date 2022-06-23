@@ -135,7 +135,7 @@ const mur = {
   },
 
   get_color_status: function (mode) {
-    return telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE')
+    return !!(telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE'))
   },
 
   thread_end: async function (scriptId, end_script = false, wait_forever = true) {
