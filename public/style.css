@@ -717,7 +717,7 @@ input[type="number"] {
     /* width: 50%; */
     /* height: 50%; */
     z-index: 99;
-    opacity: 50%;
+    opacity: 70%;
     background: white;
     position: fixed;
     bottom: 0;

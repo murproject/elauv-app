@@ -66,7 +66,7 @@ function sendHighlight (bold = false) {
 
 
 const mur = {
-  threadsStates: [],
+  threadsStates: {},
   mainThreadState: true,
   lastActiveBlock: {},
   timeOfStart: new Date(),
@@ -141,7 +141,7 @@ const mur = {
   thread_end: async function (scriptId, end_script = false, wait_forever = true) {
     // return /* TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO */
 
-    console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
+    // console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
 
     if (end_script) {
       for (const i in this.threadsStates) {
@@ -155,7 +155,9 @@ const mur = {
     sendHighlight(true);
     self.postMessage({ type: 'thread_end', id: scriptId })
 
-    if (!this.threadsStates.includes(true) && !this.mainThreadState) {
+    // console.log(this.threadsStates)
+
+    if (!Object.values(this.threadsStates).includes(true) && !this.mainThreadState) {
       setState('done');
     }
 
@@ -268,8 +270,8 @@ self.onmessage = function (e) {
     script = ''
     script = makeScript(0, scripts[0]).script // TODO //
 
-    for (const threadId in e.data.threads) {
-      mur.threadsStates[threadId] = true;
+    for (const i in e.data.threads) {
+      mur.threadsStates[e.data.threads[i]] = true;
     }
 
     // for (var i in scripts) {
