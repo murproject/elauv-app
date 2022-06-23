@@ -15,8 +15,9 @@ function shadowNum (defaultNum = 0) {
 
 
 function shadowSlider(type = undefined) {
-  if (type === 'yaw') {
-    return { shadow: { type: 'mur_number_slider_yaw', fields: { Value: 0 } } };
+  if (type === 'deg') {
+    // return { shadow: { type: 'mur_number_slider_yaw', fields: { Value: 0 } } };
+    return { shadow: { type: 'mur_number_degrees', fields: { Value: 0 } } };
   }
   return { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } };
 }
@@ -45,6 +46,11 @@ const CategorySensors = makeCategory(
 
 const CategoryMovements = makeCategory(
   'Движение', Blocks.colours.mov, [
+    // {
+    //   kind: 'block',
+    //   type: 'mur_number_degrees',
+    // },
+
     {
       kind: 'block',
       type: 'mur_set_axis',
@@ -57,7 +63,7 @@ const CategoryMovements = makeCategory(
       kind: 'block',
       type: 'mur_set_yaw',
       inputs: {
-        Angle: shadowSlider('yaw')
+        Angle: shadowSlider('deg')
       }
     },
 
