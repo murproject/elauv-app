@@ -584,6 +584,32 @@ end
       }
     })
 
+    Blockly.FieldAngle.HALF = 100;
+    Blockly.FieldAngle.RADIUS = 90;
+
+    Blockly.Blocks.mur_number_degrees = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new Blockly.FieldAngle(0, undefined, {
+            mode: 'compass',
+            wrap: 180,
+          }), "Value")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(colours.mov)
+        this.setTooltip('Курс в градусах')
+      }
+    }
+
+    register_proto('mur_number_degrees', (gen) => {
+      return (block) => {
+        const value = block.getFieldValue('Value')
+        return makeInlineFunc(gen, `(${value})`)
+      }
+    })
+
     /* mur.get_imu_tap */
     /* mur.get_color_status */
 
