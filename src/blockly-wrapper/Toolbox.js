@@ -18,6 +18,8 @@ function shadowSlider(type = undefined) {
   if (type === 'deg') {
     // return { shadow: { type: 'mur_number_slider_yaw', fields: { Value: 0 } } };
     return { shadow: { type: 'mur_number_degrees', fields: { Value: 0 } } };
+  } else if (type === 'rgb') {
+    return { shadow: { type: 'mur_number_slider_rgb', fields: { Value: 0 } } };
   }
   return { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } };
 }
@@ -164,9 +166,9 @@ const CategoryColour = makeCategory(
     { kind: 'block', type: 'colour_random' },
     { kind: 'block', type: 'colour_rgb',
       inputs: {
-        RED:    shadowNum(0),
-        GREEN:  shadowNum(0),
-        BLUE:   shadowNum(0),
+        RED:    shadowSlider('rgb'),
+        GREEN:  shadowSlider('rgb'),
+        BLUE:   shadowSlider('rgb'),
       }
     },
     // { kind: 'block', type: 'colour_blend' },
@@ -187,7 +189,7 @@ const CategoryFlow = makeCategory(
     {
       kind: 'block', type: 'mur_print',
       fields: { Text: "Заголовок" },
-      inputs: { Value: {shadow: { type: 'mur_text', fields: { Text: "Текст" } } } }
+      inputs: { Value: {shadow: { type: 'mur_text', fields: { Text: "Значение" } } } }
     },
     { kind: 'block', type: 'mur_thread', fields: { ThreadName: 'имя' }},
   ]

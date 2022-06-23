@@ -879,6 +879,14 @@ await mur.thread_end(_threadId);
 
     /* math_slider_number */
 
+    const proto_num_value = (gen) => {
+      return (block) => {
+        const value = block.getFieldValue('Value')
+        return makeInlineFunc(gen, `(${value})`)
+      }
+    }
+
+
     Blockly.Blocks.mur_number_slider = {
       init: function () {
         this.appendDummyInput()
@@ -892,12 +900,7 @@ await mur.thread_end(_threadId);
       }
     }
 
-    register_proto('mur_number_slider', (gen) => {
-      return (block) => {
-        const value = block.getFieldValue('Value')
-        return makeInlineFunc(gen, `(${value})`)
-      }
-    })
+    register_proto('mur_number_slider', proto_num_value)
 
     Blockly.Blocks.mur_number_slider_yaw = {
       init: function () {
@@ -912,12 +915,22 @@ await mur.thread_end(_threadId);
       }
     }
 
-    register_proto('mur_number_slider_yaw', (gen) => {
-      return (block) => {
-        const value = block.getFieldValue('Value')
-        return makeInlineFunc(gen, `(${value})`)
+    register_proto('mur_number_slider_yaw', proto_num_value)
+
+    Blockly.Blocks.mur_number_slider_rgb = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new FieldSlider(0, 0, 100, false, 5), "Value")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(colours.math)
+        this.setTooltip('Число')
       }
-    })
+    }
+
+    register_proto('mur_number_slider_rgb', proto_num_value)
 
     Blockly.Blocks.mur_number = {
       init: function () {
@@ -932,12 +945,8 @@ await mur.thread_end(_threadId);
       }
     }
 
-    register_proto('mur_number', (gen) => {
-      return (block) => {
-        const value = block.getFieldValue('Value')
-        return makeInlineFunc(gen, `(${value})`)
-      }
-    })
+    register_proto('mur_number', proto_num_value)
+
 
     /*
 
