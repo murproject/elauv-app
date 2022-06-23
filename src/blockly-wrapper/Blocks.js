@@ -607,11 +607,10 @@ await mur.thread_end(_threadId);
 
         this.appendDummyInput()
           .appendField(icon('rotate-360', 'курс'))
-          .appendField(new Blockly.FieldDropdown([
-            item_image('equal', 'SET_YAW_EQUAL', 'утсановить абсолютно'),
-            item_image('rotate-left', 'SET_YAW_LEFT', 'увеличить значение курса'),
-            item_image('rotate-right', 'SET_YAW_RIGHT', 'уменьшить значение курса')
-          ], null), 'MODE')
+          .appendField(new FieldGridDropdown([
+            item_image('equal', 'SET_YAW_ABSOLUTE', 'утсановить курс абсолютно'),
+            item_image('rotate-right', 'SET_YAW_RELATIVE', 'увеличить курс относительно'),
+          ], undefined, {columns: 2, DEFAULT_VALUE: 'SET_YAW_ABSOLUTE'}), "MODE")
 
         this.appendValueInput('Angle')
           .setCheck('Number')
