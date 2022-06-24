@@ -95,10 +95,12 @@ const mur = {
 
   set_led: async function (index, colour) {
     // TODO: check index
-    const rawColour = Number("0x" + colour.substring(1))
-    context.leds[index * 3 + 0] = (rawColour >> (16)) & 0xFF
-    context.leds[index * 3 + 1] = (rawColour >> ( 8)) & 0xFF
-    context.leds[index * 3 + 2] = (rawColour >> ( 0)) & 0xFF
+    if (typeof(index) === 'number' && index >= 0 && index <= 3) {
+      const rawColour = Number("0x" + colour.substring(1))
+      context.leds[index * 3 + 0] = (rawColour >> (8 * 2)) & 0xFF
+      context.leds[index * 3 + 1] = (rawColour >> (8 * 1)) & 0xFF
+      context.leds[index * 3 + 2] = (rawColour >> (8 * 0)) & 0xFF
+    }
   },
 
   actuator: async function (index, power) {
