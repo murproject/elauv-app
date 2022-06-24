@@ -770,7 +770,8 @@ input[type="number"] {
     position: fixed;
     bottom: 3em;
     left: 0;
-    width: 50%;
+    /* width: 50%; */
+    width: calc(100% - 80px);
     height: 25%;
     z-index: 999;
     transition: transform 0.1s;
@@ -812,6 +813,7 @@ input[type="number"] {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     z-index: -99;
+    opacity: 70%;
 }
 
 #flying-panel-wrapper .panel-button .icon {
@@ -820,9 +822,12 @@ input[type="number"] {
 
 .bottom-collapsed {
     transform: translate(calc(-100% - 2em), 0);
-    opacity: 30%;
+    /* opacity: 30%; */
 }
 
+.bottom-collapsed .panel-button {
+    opacity: 30% !important;
+}
 
 #console-welcome {
     font-family: monospace !important;

@@ -49,6 +49,13 @@ export default class BlocklyPanel extends Panel {
     if (this.toolButtons) {
       if (this.active) {
         this.toolButtons.classList.remove("hidden");
+
+        if (this.scriptStatus == 'running') {
+          document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
+        } else {
+          document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
+        }
+
       } else {
         this.toolButtons.classList.add("hidden");
       }
@@ -247,9 +254,12 @@ export default class BlocklyPanel extends Panel {
       this.setLoading(true, 0);
       setTimeout(() => this.run_js(), 100);
     }
+
+    document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
   }
 
   stop() {
+    document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
     this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'dark', 'big');
     this.scriptStatus = 'stopped'

@@ -45,6 +45,12 @@ const app = {
       } else {
         document.querySelector('#flying-panel-wrapper').classList.remove("bottom-collapsed");
       }
+    } else {
+      if (target === this.panels.blockly) {
+        document.querySelector('#flying-panel-wrapper').classList.remove("hidden");
+      } else {
+        document.querySelector('#flying-panel-wrapper').classList.add("hidden");
+      }
     }
 
     this[currentPanel] = target;
