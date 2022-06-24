@@ -1,4 +1,5 @@
-import Panel from './Panel'
+import Panel from './Panel';
+import Icon from '../components/Icon';
 
 export default class Console extends Panel {
 
@@ -6,6 +7,15 @@ export default class Console extends Panel {
     this.isBottomPanel = true;
 
     this.html = /*html*/`
+      <div id="console-welcome">
+        <p>
+          Здесь будут сообщения!
+        </p>
+        <p>
+          Отправляйте их в консоль<br>
+          с помощью блока ${Icon('../tooltip-text-outline')}
+        </p>
+      </div>
       <div id="variables-div" class="variables-div"></div>
     `
   }
@@ -16,10 +26,12 @@ export default class Console extends Panel {
 
     this.userData = {};
     this.variablesDiv = this.q("#variables-div");
+    this.welcomeDiv = this.q("#console-welcome");
     this.clear()
   }
 
   show(msg) {
+    this.welcomeDiv.classList.add('hidden')
     let log = "";
 
     for (const name in msg) {
@@ -54,6 +66,7 @@ export default class Console extends Panel {
     this.userData = {};
     this.variablesDiv.innerText = '';
     this.notify(false);
+    this.welcomeDiv.classList.remove('hidden')
   }
 
   notify(attention) {
