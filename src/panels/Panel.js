@@ -59,10 +59,10 @@ export default class Panel {
       this.container.classList.remove('active');
     }
 
-    this.onActiveChanged();
+    this.onActiveChanged(state);
   }
 
-  onActiveChanged() {}
+  onActiveChanged(isActive) {}
 
   setInterval(func, timeout) {
     return window.setInterval(() => { this[func.name]() }, timeout);

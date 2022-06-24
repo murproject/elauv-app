@@ -103,12 +103,12 @@ export default class BlocklyPanel extends Panel {
 
     Blockly.JavaScript.addReservedWords('mur');
 
-    this.variablesDiv = document.createElement("div");
-    this.variablesDiv.id = "variables-div";
-    this.variablesDiv.classList.add("variables-div");
-    this.container.appendChild(this.variablesDiv);
+    // this.variablesDiv = document.createElement("div");
+    // this.variablesDiv.id = "variables-div";
+    // this.variablesDiv.classList.add("variables-div");
+    // this.container.appendChild(this.variablesDiv);
 
-    this.userData = {}; // TODO //
+    // this.userData = {}; // TODO //
 
     this.loadingDiv = document.createElement("div");
     this.loadingDiv.id = "loading-wrapper";
@@ -254,8 +254,9 @@ export default class BlocklyPanel extends Panel {
     this.actionButtons.run.setIcon('play', 'dark', 'big');
     this.scriptStatus = 'stopped'
 
-    this.userData = {};
-    this.variablesDiv.innerText = '';
+    document.app.panels.console.clear();
+    // this.userData = {};
+    // this.variablesDiv.innerText = '';
 
     if (this.scriptWorker) {
       this.scriptWorker.terminate()
@@ -648,24 +649,7 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'print') {
-      let log = "";
-
-      for (const name in data.msg) {
-        this.userData[name] = data.msg[name];
-      }
-
-      for (const name in this.userData) {
-        let value = this.userData[name];
-        value = value === true  ? 'Истина' :
-                value === false ? 'Ложь' :
-                value === undefined ? 'Неизвестно' :
-                value;
-
-        log += `${name}: ${value}\n`
-      }
-
-      this.variablesDiv.innerText = log;
-
+      document.app.panels.console.show(data.msg);
       // console.error("PRINT");
       // console.error(data.msg);
     }

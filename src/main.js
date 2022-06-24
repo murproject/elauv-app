@@ -68,8 +68,6 @@ const app = {
 
       /* Bottom panels */
       console: new ConsolePanel(),
-      consoleee: new ConsolePanel(),
-      consoleeeeee: new ConsolePanel(),
     };
 
     this.panelSelect(this.panels.blockly);

@@ -273,7 +273,7 @@ export default {
 
     // debug("control payload:")
     // debug(payload)
-    console.log(payload);
+    // console.log(payload);
 
     var packet = this.makePacket(0, 'C', payload)
     return packet
