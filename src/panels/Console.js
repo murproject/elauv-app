@@ -60,6 +60,9 @@ export default class Console extends Panel {
     if (isActive) {
       this.notify(false);
     }
+    if ('blockly' in document.app.panels) {
+      document.app.panels.blockly.collapse(isActive);
+    }
   }
 
   clear() {

@@ -50,11 +50,11 @@ export default class BlocklyPanel extends Panel {
       if (this.active) {
         this.toolButtons.classList.remove("hidden");
 
-        if (this.scriptStatus == 'running') {
-          document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
-        } else {
-          document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
-        }
+        // if (this.scriptStatus == 'running') {
+        //   document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
+        // } else {
+        //   document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
+        // }
 
       } else {
         this.toolButtons.classList.add("hidden");
@@ -142,6 +142,14 @@ export default class BlocklyPanel extends Panel {
     this.executionCursors = {}; // one cursor per script thread
 
     this.scriptStatus = 'stopped';
+  }
+
+  collapse(collapsed) {
+    if (collapsed) {
+      this.container.classList.add('blockly-collapsed');
+    } else {
+      this.container.classList.remove('blockly-collapsed');
+    }
   }
 
   makeActionButtons() {
@@ -530,6 +538,7 @@ export default class BlocklyPanel extends Panel {
     blocklyConfig.zoom.controls = !readonly;
     blocklyConfig.zoom.wheel = !readonly;
     blocklyConfig.zoom.pinch = !readonly;
+    blocklyConfig.grid.colour = readonly ? "#fff" : "#ccc";
 
     blocklyConfig.move.drag = !readonly;
     blocklyConfig.move.wheel = !readonly;

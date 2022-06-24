@@ -768,10 +768,9 @@ input[type="number"] {
 
 #flying-panel-wrapper {
     position: fixed;
-    bottom: 3em;
+    bottom: 2em;
     left: 0;
-    /* width: 50%; */
-    width: calc(100% - 80px);
+    width: 100%;
     height: 25%;
     z-index: 999;
     transition: transform 0.1s;
@@ -797,21 +796,21 @@ input[type="number"] {
 }
 
 #flying-panel-wrapper .buttons-group {
-    flex-direction: column-reverse;
+    flex-direction: row;
     position: absolute;
-    right: -4.5em;
-    bottom: -1.5em;
+    left: 1em;
+    top: -2.5em;
     z-index: -20;
 }
 
 #flying-panel-wrapper .panel-button {
-    margin: 0.25em 0;
+    margin: 0.25em 0.15em;
     width: 0.5em;
     height: 2.5em;
-    box-shadow: -5px 0px 10px rgba(0,0,0,0.5);
+    /* box-shadow: -5px 0px 10px rgba(0,0,0,0.5);
     border-radius: 0;
     border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 5px; */
     z-index: -99;
     opacity: 70%;
 }
@@ -821,7 +820,7 @@ input[type="number"] {
 }
 
 .bottom-collapsed {
-    transform: translate(calc(-100% - 2em), 0);
+    transform: translate(0, calc(100% + 2.0em));
     /* opacity: 30%; */
 }
 
@@ -836,4 +835,13 @@ input[type="number"] {
     text-align: center;
     vertical-align: middle;
     opacity: 50%;
+}
+
+.blockly-collapsed {
+    transform: scale(0.7) translate(0, -20%);
+}
+
+.blocklyMainBackground {
+    stroke-width: 0;
+    /* stroke: #c6c6c6; */
 }
