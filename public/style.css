@@ -768,7 +768,7 @@ input[type="number"] {
 
 #flying-panel-wrapper {
     position: fixed;
-    bottom: 2em;
+    bottom: 0em;
     left: 0;
     width: 100%;
     height: 25%;
@@ -780,18 +780,19 @@ input[type="number"] {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: 1em;
+    /* padding: 1em; */
 
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
 }
 
 #bottom-panel-wrapper .panel {
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 2em);
+    height: calc(100% - 2em);
     margin: 0;
+    padding: 1em;
     overflow: auto;
 }
 
@@ -820,7 +821,7 @@ input[type="number"] {
 }
 
 .bottom-collapsed {
-    transform: translate(0, calc(100% + 2.0em));
+    transform: translate(0, calc(100% + 0em));
     /* opacity: 30%; */
 }
 
@@ -838,7 +839,7 @@ input[type="number"] {
 }
 
 .blockly-collapsed {
-    transform: scale(0.7) translate(0, -20%);
+    transform: scale(0.75) translate(0, -16.6%);
 }
 
 .blocklyMainBackground {
