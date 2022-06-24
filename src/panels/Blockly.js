@@ -95,6 +95,12 @@ export default class BlocklyPanel extends Panel {
     Ru["PROCEDURE_VARIABLE"] = "аргументом";
     Ru["MATH_RANDOM_INT_TITLE"] = "случайное число от %1 до %2";
 
+    Ru["CONTROLS_REPEAT_INPUT_DO"] = "";
+    Ru["CONTROLS_FOREACH_INPUT_DO"] = "";
+    Ru["CONTROLS_FOR_INPUT_DO"] = "";
+    Ru["CONTROLS_IF_MSG_THEN"] = "";
+    Ru["CONTROLS_WHILEUNTIL_INPUT_DO"] = "";
+
     // Ru["CONTROLS_IF_MSG_IF"] = "?";
     // Ru["CONTROLS_IF_MSG_THEN"] = "✓";
     // Ru["CONTROLS_IF_MSG_ELSE"] = "×";
