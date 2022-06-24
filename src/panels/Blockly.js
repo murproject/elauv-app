@@ -263,10 +263,12 @@ export default class BlocklyPanel extends Panel {
       setTimeout(() => this.run_js(), 100);
     }
 
+    // TODO: better interaction with console
     document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
   }
 
   stop() {
+    this.collapse(false);
     document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
     this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'dark', 'big');
