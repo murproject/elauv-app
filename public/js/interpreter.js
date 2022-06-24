@@ -175,6 +175,9 @@ const mur = {
 
   print: function(name, value) {
     // TODO: send only on highlight timer
+    if (typeof(value) === 'number') {
+      value = Math.round(value * 1e8) / 1e8;
+    }
     msgToSend[name] = value;
     // console.error(name + " : " + value);
   }
