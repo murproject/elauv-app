@@ -6,6 +6,7 @@ export default class Panel {
   constructor() {
     this.name = this.constructor.name;
     this.html = ``;
+    this.isBottomPanel = false;
 
     this.begin();
     this.inject();
@@ -15,19 +16,26 @@ export default class Panel {
   begin() {}
 
   inject() {
+    const wrapperPrefix = this.isBottomPanel ? "bottom" : "main"
+    this.wrapperPanel = document.querySelector(`#${wrapperPrefix}-panel-wrapper`);
+    this.wrapperButtons = document.querySelector(`#buttons-${wrapperPrefix}`);
+
     this.container = document.createElement("div");
     this.container.classList.add("panel");
     this.container.innerHTML = this.html;
-    document.querySelector("#panel-wrapper").appendChild(this.container);
+    this.wrapperPanel.appendChild(this.container);
 
     this.panelButton = new Button(
       this.name,
       '',
       'panel-button',
-      () => document.app.panelSelect(this)
+      () => document.app.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main')
     );
 
-    this.panelButton.inject(document.querySelector("#buttons-main"));
+    if (this.wrapperButtons) {
+      this.panelButton.inject(this.wrapperButtons);
+    }
+
     this.setActive(false);
   }
 

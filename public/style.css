@@ -367,7 +367,7 @@ article div {
 
 #head {
     width: 100%;
-    height: 2.5em;
+    height: 2.25em;
 
     display: flex;
     align-items: end;
@@ -378,12 +378,12 @@ article div {
     overflow-y: hidden;
 }
 
-#panel-wrapper {
+#main-panel-wrapper {
     flex-grow: 1;
 
     position: relative;
     width: 100vw;
-    height: 100%;
+    /* height: 100%; */
 
     display: flex;
     justify-content: center;
@@ -746,30 +746,79 @@ input[type="number"] {
     /* filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15)); */
 }
 
-
 .blocklyAngleCircle {
     stroke: #654;
     stroke-width: 4;
     fill: #ddd;
     fill-opacity: .8;
-  }
+}
 
-  .blocklyAngleMarks {
+.blocklyAngleMarks {
     stroke: #654;
     stroke-width: 4;
     stroke-linecap: round;
     stroke-linejoin: round;
-  }
+}
 
-  .blocklyAngleGauge {
+.blocklyAngleGauge {
     fill: #f88;
     fill-opacity: .5;
     pointer-events: none;
-  }
+}
 
-  .blocklyAngleLine {
+.blocklyAngleLine {
     stroke: #f00;
     stroke-width: 2;
     stroke-linecap: round;
     pointer-events: none;
-  }
+}
+
+#flying-panel-wrapper {
+    position: fixed;
+    bottom: 3em;
+    left: 0;
+    width: 50%;
+    height: 25%;
+    z-index: 999;
+    transition: 0.25s;
+}
+
+#bottom-panel-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 1em;
+
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#flying-panel-wrapper .buttons-group {
+    flex-direction: column-reverse;
+    position: absolute;
+    right: -4.5em;
+    bottom: -1.5em;
+    z-index: -20;
+}
+
+#flying-panel-wrapper .panel-button {
+    margin: 0.25em 0;
+    width: 0.5em;
+    height: 2.5em;
+    box-shadow: -5px 0px 10px rgba(0,0,0,0.5);
+    border-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    z-index: -99;
+}
+
+#flying-panel-wrapper .panel-button .icon {
+    font-size: 12px;
+}
+
+.bottom-collapsed {
+    transform: translate(calc(-100% - 2em), 0);
+    opacity: 30%;
+}

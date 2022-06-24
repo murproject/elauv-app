@@ -6,6 +6,7 @@ import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';
+import ConsolePanel from './panels/Console.js'
 
 const app = {
 
@@ -13,21 +14,41 @@ const app = {
     <header id="head">
       <div class="buttons-group" id="buttons-main"></div>
     </header>
-    <section id="panel-wrapper"></section>
+    <section id="main-panel-wrapper">
+    </section>
+
+    <div id="flying-panel-wrapper" class="bottom-collapsed">
+      <div id="bottom-panel-wrapper"></div>
+      <div class="buttons-group" id="buttons-bottom"></div>
+    </div>
   `,
 
   container: document.querySelector("#app"),
   panels: {},
-  currentPanel: null,
+  currentPanelMain: null,
+  currentPanelBottom: null,
   mur: mur,
 
-  panelSelect: function (target) {
-    if (this.currentPanel) {
-      this.currentPanel.setActive(false);
+  panelSelect: function (target, mode = 'main') {
+    const currentPanel =  mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';
+
+    if (this[currentPanel]) {
+      this[currentPanel].setActive(false);
     }
 
-    this.currentPanel = target;
-    this.currentPanel.setActive(true);
+    if (mode === 'bottom') {
+      if (this[currentPanel] === target) {
+        // TODO: don't query on each call, to it better
+        this[currentPanel] = null;
+        document.querySelector('#flying-panel-wrapper').classList.add("bottom-collapsed");
+        return;
+      } else {
+        document.querySelector('#flying-panel-wrapper').classList.remove("bottom-collapsed");
+      }
+    }
+
+    this[currentPanel] = target;
+    this[currentPanel].setActive(true);
   },
 
 
@@ -37,12 +58,18 @@ const app = {
     }
 
     this.panels = {
+      /* Main panels */
       about: new AboutPanel(),
       devices: new DevicesPanel(),
       telemetry: new TelemetryPanel(),
       joystick: new JoystickPanel(),
       projects: new ProjectsPanel(),
       blockly: new BlocklyPanel(),
+
+      /* Bottom panels */
+      console: new ConsolePanel(),
+      consoleee: new ConsolePanel(),
+      consoleeeeee: new ConsolePanel(),
     };
 
     this.panelSelect(this.panels.blockly);
@@ -80,8 +107,6 @@ const app = {
       'ui/stop',
       'ui/play'
     ]
-
-    const htmlHead = document.querySelector('head');
 
     preloadList.forEach(item => {
       var link = document.createElement('link');
