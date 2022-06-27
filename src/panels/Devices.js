@@ -1,37 +1,58 @@
 import Panel from './Panel'
 import mur from '/src/vehicle/apiGameMur.js'
 import Icon from '/src/components/Icon'
+import Button from '../components/Button';
 
 export default class Devices extends Panel {
 
   begin() {
     this.html = /*html*/`
-      <div class="row">
-        <span id="connStatus"></span>
-      </div>
-
-      <div class="row">
-        <div class="push-button" id="connScanDevices">Scan Devices</div>
-        <div class="push-button" id="connScanCode">Scan Code</div>
-        <div class="push-button" id="connDisconnect">Disconnect</div>
-      </div>
-
-      <div id="connDevicesWrapper" class="row list-wrapper">
+      <div id="connDevicesWrapper" class="list-wrapper">
         <div id="connDevicesList" class="width-fill"></div>
       </div>
+
+      <div class="list-end-mark"></div>
+      <div id="buttonsRow" class="row"></div>
+
+      <!-- <div class="row"><span id="connStatus"></span></div> -->
     `
   }
 
 
   init() {
-    this.statusEl = this.q("#connStatus");
-    this.statusEl.innerText = "Connection type: " + mur.conn.type;
+    // this.statusEl = this.q("#connStatus");
+    // this.statusEl.innerText = "Connection type: " + mur.conn.type;
 
     this.devicesListEl = this.q("#connDevicesList");
+    this.buttonsWrapper = this.q('#buttonsRow');
 
-    this.q("#connScanDevices").onclick = () => this.scanDevices();
-    this.q("#connScanCode").onclick = () => this.scanCode();
-    this.q("#connDisconnect").onclick = () => this.disconnect();
+    new Button({
+      name: 'scan-code',
+      text: 'Сканировать код',
+      action: () => this.scanCode(),
+      icon: 'qrcode-scan',
+      // classes: 'button-vertical',
+    }).inject(this.buttonsWrapper);
+
+    new Button({
+      name: 'scan-bluetooth',
+      text: 'Поиск устройств',
+      action: () => this.scanDevices(),
+      icon: 'broadcast',
+      // classes: 'button-vertical',
+    }).inject(this.buttonsWrapper);
+
+    new Button({
+      name: 'disconnect',
+      text: 'Отсоединиться',
+      action: () => this.disconnect(),
+      icon: 'broadcast-off',
+      // classes: 'button-vertical',
+    }).inject(this.buttonsWrapper);
+
+    // this.q("#connScanDevices").onclick = () => this.scanDevices();
+    // this.q("#connScanCode").onclick = () => this.scanCode();
+    // this.q("#connDisconnect").onclick = () => this.disconnect();
 
     if (mur.conn.type === "bluetooth") {
       mur.conn.onDeviceDiscovered = (devices) => this.onUpdateDevicesList(devices);
@@ -93,7 +114,8 @@ export default class Devices extends Panel {
       deviceEl.classList.add("device-item");
 
       const isOnline = (device.isOnline || (device.isActive && mur.conn.state == "open"));
-      this.addDeviceTag(deviceEl, isOnline ? "online" : "offline", ('isCompatible' in device & device.isCompatible));
+      // this.addDeviceTag(deviceEl, isOnline ? "online" : "offline", ('isCompatible' in device & device.isCompatible));
+      this.addDeviceTag(deviceEl, isOnline ? `${Icon('antenna', 'green-bright')}` : `${Icon('checkbox-blank-circle-outline', 'dark', 'opacity-25')}`, ('isCompatible' in device & device.isCompatible));
 
       let titleDiv = document.createElement("div");
       titleDiv.classList.add("device-title");
@@ -126,8 +148,11 @@ export default class Devices extends Panel {
 
       deviceEl.appendChild(titleDiv);
 
-      this.addDeviceTag(deviceEl, `${Icon('checkbox-marked-outline')}`, device.isActive);
-      this.addDeviceTag(deviceEl, `${Icon('content-save')}`, device.isPaired);
+      // this.addDeviceTag(deviceEl, `${Icon('checkbox-marked-outline')}`, device.isActive);
+      // this.addDeviceTag(deviceEl, `${Icon('content-save')}`, device.isPaired);
+
+      // this.addDeviceTag(deviceEl, `${Icon('checkbox-marked-outline')}`, device.isActive);
+      this.addDeviceTag(deviceEl, device.isActive ? `${Icon('checkbox-marked-outline')}` : `${Icon('content-save')}`, device.isPaired || device.isActive);
 
       if (!device.isCompatible) deviceEl.classList.add("inactive");
       if (device.isActive && mur.conn.state == "open") deviceEl.classList.add("active");
@@ -136,6 +161,11 @@ export default class Devices extends Panel {
 
       this.devicesListEl.appendChild(deviceEl);
     });
+
+    let emptyEl = document.createElement("div");
+    emptyEl.classList.add("device-item");
+    emptyEl.classList.add("opacity-0");
+    this.devicesListEl.appendChild(emptyEl);
   }
 
 
