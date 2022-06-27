@@ -25,12 +25,12 @@ export default class Panel {
     this.container.innerHTML = this.html;
     this.wrapperPanel.appendChild(this.container);
 
-    this.panelButton = new Button(
-      this.name,
-      '',
-      'panel-button',
-      () => document.app.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main')
-    );
+    this.panelButton = new Button({
+      name: this.name,
+      text: '',
+      type: 'panel-button',
+      action: () => document.app.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main')
+    });
 
     if (this.wrapperButtons) {
       this.panelButton.inject(this.wrapperButtons);

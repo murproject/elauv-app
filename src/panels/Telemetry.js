@@ -43,9 +43,14 @@ export default class Telemetry extends Panel {
     ];
 
     feedbacks.forEach(feedback => {
-      const feedbackIcon = new Button(
-        feedback.name, '', 'panel-feedback', undefined, feedback.icon, false
-      );
+      const feedbackIcon = new Button({
+        name: feedback.name,
+        text: '',
+        type: 'panel-feedback',
+        action: undefined,
+        icon: feedback.icon,
+        enabled: false,
+      });
 
       feedbackIcon.setIcon(feedback.icon, feedback.color, `big ${feedback.pulse ? 'pulse' : ''}`);
       feedbackIcon.inject(this.feedbackBox);
@@ -95,12 +100,12 @@ export default class Telemetry extends Panel {
 
       telemetryText += '\n\n';
       telemetryText += JSON.stringify(this.stats, null, '\t');
-      telemetryText += '\n\ncontext = ';
-      telemetryText += JSON.stringify(mur.context, null, '\t')
-
-      this.textElement.innerText = telemetryText;
-
     }
+
+    telemetryText += '\n\ncontext = ';
+    telemetryText += JSON.stringify(mur.context, null, '\t')
+
+    this.textElement.innerText = telemetryText;
   }
 
   updateBattery() {

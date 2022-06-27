@@ -2,18 +2,25 @@ import Icon from '/src/components/Icon'
 
 export default class Button {
 
-  constructor(
-    name = this.constructor.name,
-    text = name,
-    type = 'push-button',
-    action = undefined,
-    icon = undefined,
-    enabled = true,
-    timeout = 0
-  ) {
-    // this.begin();
-    // this.inject();
-    // this.init();
+  // constructor(
+  //   name = this.constructor.name,
+  //   text = name,
+  //   type = 'push-button',
+  //   action = undefined,
+  //   icon = undefined,
+  //   enabled = true,
+  //   timeout = 0,
+  // ) {
+
+  constructor(config) {
+    const name    = 'name'    in config ? config.name     : this.constructor.name;
+    const text    = 'text'    in config ? config.text     : name;
+    const type    = 'type'    in config ? config.type     : 'push-button';
+    const action  = 'action'  in config ? config.action   : undefined;
+    const icon    = 'icon'    in config ? config.icon     : undefined;
+    const enabled = 'enabled' in config ? config.enabled  : true;
+    const timeout = 'timeout' in config ? config.timeout  : 0;
+    const classes = 'classes' in config ? config.classes  : undefined;
 
     this.el = document.createElement("div");
     this.el.classList.add(type);
@@ -23,7 +30,7 @@ export default class Button {
     this.el.appendChild(this.iconEl);
 
     this.textEl = document.createElement("span");
-    this.textEl.classList.add("button-text")
+    this.textEl.classList.add("caption")
     this.el.appendChild(this.textEl);
 
     this.el.id = type + "-" + name;

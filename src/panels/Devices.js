@@ -16,7 +16,7 @@ export default class Devices extends Panel {
         <div class="push-button" id="connDisconnect">Disconnect</div>
       </div>
 
-      <div id="connDevicesWrapper" class="row">
+      <div id="connDevicesWrapper" class="row list-wrapper">
         <div id="connDevicesList" class="width-fill"></div>
       </div>
     `

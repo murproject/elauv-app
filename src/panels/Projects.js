@@ -1,5 +1,6 @@
 import Panel from './Panel'
 import Icon from '/src/components/Icon'
+import Button from '../components/Button';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -37,23 +38,41 @@ export default class Projects extends Panel {
 
   begin() {
     this.html = /*html*/`
-      <div class="row font-thin">
-        <div class="text" style="display: flex; align-items: center"><span>Projects</span></div>
-        <div class="push-button" id="">Сохранить</div>
-        <div class="push-button" id="">Импорт</div>
-        <div class="push-button" id="">Экспорт</div>
+      <div id="projects-head-buttons" class="row font-thin">
+        <div class="push-button button-vertical" id="">
+          ${Icon('content-save')}
+          <span class="caption">Сохранить</span>
+        </div>
+
+        <div class="push-button button-vertical" id="">
+          ${Icon('import')}
+          <span class="caption">Импорт из файла</span>
+        </div>
+
+        <div class="push-button button-vertical" id="">
+          ${Icon('export')}
+          <span class="caption">Экспорт в файл</span>
+        </div>
       </div>
 
       <div class="list-wrapper row">
         <div id="projects-list" class="width-fill"></div>
       </div>
-
     `
   }
 
   init() {
     this.setIcon('folder-open');
-    this.projectsListEl = this.q("#projects-list");
+    this.projectsListEl = this.q('#projects-list');
+    this.headButtonsEl = this.q('#projects-head-buttons')
+
+    new Button({
+      name: 'save',
+      text: 'Сохранить',
+      type: 'push-button',
+      action: () => {},
+      icon: 'content-save',
+    }).inject(this.headButtonsEl);
 
     this.projectsList = [];
     this.loadProjectsList();
@@ -61,8 +80,8 @@ export default class Projects extends Panel {
   }
 
   loadProjectsList() {
-    this.projectsList = example;
-    this.projectsList = this.projectsList.sort((a, b) => a.date - b.date);
+    this.projectsList = example; // TODO
+    this.projectsList = this.projectsList.sort((a, b) => b.date - a.date);
   }
 
   displayProjects() {
@@ -77,11 +96,19 @@ export default class Projects extends Panel {
     }
 
     this.projectsList.forEach((item, index) => {
+      const isEditing = index == 1; // TODO //
+
       let itemEl = document.createElement("div");
       itemEl.classList.add("list-item");
 
+      if (isEditing) {
+        itemEl.classList.add("active");
+      }
+
       itemEl.innerHTML = `
         <!-- ${Icon('file-table-outline', 'opacity-75')} -->
+
+        ${Icon(isEditing ? 'puzzle-edit' : 'puzzle', isEditing ? 'cyan opacity-75' : 'opacity-50')}
 
         <div class="list-item-title">
           ${item.name}

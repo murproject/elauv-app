@@ -50,11 +50,11 @@ export default class BlocklyPanel extends Panel {
       if (this.active) {
         this.toolButtons.classList.remove("hidden");
 
-        // if (this.scriptStatus == 'running') {
-        //   document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
-        // } else {
-        //   document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
-        // }
+        if (this.scriptStatus == 'running') {
+          document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
+        } else {
+          document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
+        }
 
       } else {
         this.toolButtons.classList.add("hidden");
@@ -170,21 +170,21 @@ export default class BlocklyPanel extends Panel {
       let actionButton = null;
 
       if (!('spacer' in action && action.spacer == true)) {
-        actionButton = new Button(
-          action.name,
-          '',
-          'panel-button',
-          () => this[action.func.name](),
-          action.icon,
-          true,
-          25
-        );
+        actionButton = new Button({
+          name: action.name,
+          text: '',
+          type: 'panel-button',
+          action: () => this[action.func.name](),
+          icon: action.icon,
+          enabled: true,
+          timeout: 25
+        });
       } else {
-        actionButton = new Button(
-          'spacer',
-          '',
-          'panel-spacer'
-        );
+        actionButton = new Button({
+          name: 'spacer',
+          text: '',
+          type: 'panel-spacer'
+        });
       }
 
       actionButton.inject(this.toolButtons);
