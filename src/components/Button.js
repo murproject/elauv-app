@@ -21,6 +21,8 @@ export default class Button {
     const enabled = 'enabled' in config ? config.enabled  : true;
     const timeout = 'timeout' in config ? config.timeout  : 0;
     const classes = 'classes' in config ? config.classes  : undefined;
+    const iconColor   = 'iconColor'   in config ? config.iconColor  : 'dark';
+    const iconClasses = 'iconClasses' in config ? config.iconClasses  : '';
 
     this.el = document.createElement("div");
     this.el.classList.add(type);
@@ -39,11 +41,19 @@ export default class Button {
     this.setText(text)
 
     if (icon) {
-      this.setIcon(icon);
+      this.setIcon(icon, iconColor, iconClasses);
     }
 
     if (action) {
       this.setAction(action, timeout);
+    }
+
+    if (classes) {
+      if (typeof(classes) === 'object') {
+        classes.forEach(item => this.el.classList.add(item));
+      } else {
+        this.el.classList.add(classes)
+      }
     }
   }
 
