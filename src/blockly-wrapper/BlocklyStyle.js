@@ -26,7 +26,8 @@ var CustomConstantsProvider = function () {
   // this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = 200
   // this.STATEMENT_INPUT_NOTCH_OFFSET
 
-  this.CORNER_RADIUS = 0
+  this.CORNER_RADIUS = 5
+  // this.FIELD_BORDER_RECT_RADIUS = 0
   this.TAB_WIDTH = 5
   this.TAB_HEIGHT = 14
 
