@@ -69,6 +69,8 @@ export default class Devices extends Panel {
 
     if (tag === 'online') {
       tagEl.classList.add('device-tag-online');
+    } else if (tag ==='offline') {
+      tagEl.classList.add('device-tag-offline');
     } else {
       tagEl.classList.add('device-tag');
       // tagEl.classList.add('float-rigth');
@@ -90,7 +92,8 @@ export default class Devices extends Panel {
       let deviceEl = document.createElement("div");
       deviceEl.classList.add("device-item");
 
-      this.addDeviceTag(deviceEl, "online", (device.isCompatible & device.isOnline) || (device.isActive && mur.conn.state == "open"));
+      const isOnline = (device.isOnline || (device.isActive && mur.conn.state == "open"));
+      this.addDeviceTag(deviceEl, isOnline ? "online" : "offline", ('isCompatible' in device & device.isCompatible));
 
       let titleDiv = document.createElement("div");
       titleDiv.classList.add("device-title");

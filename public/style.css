@@ -242,16 +242,24 @@ body {
     vertical-align: middle;
 }
 
-.device-tag-online {
+.device-tag-online,
+.device-tag-offline {
     display: inline-block;
     margin: 0 0.5em;
     margin-right: 1em;
     min-width: 1em;
     height: 1em;
     vertical-align: middle;
-    background-color: rgba(50,255,50,0.25);
     border: 1.5px solid rgba(0,0,0,0.1);
     border-radius: 99px;
+}
+
+.device-tag-online {
+    background-color: rgba(50,255,50,0.25);
+}
+
+.device-tag-offline {
+    background-color: rgba(100,100,100,0.1);
 }
 
 .icon {
