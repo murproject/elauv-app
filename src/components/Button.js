@@ -88,7 +88,7 @@ export default class Button {
   }
 
   setText(text) {
-    this.textEl.innerText = text;
+    this.textEl.outerHTML = `<span class="caption">${text}</span>`;
   }
 
   inject(parent) {
