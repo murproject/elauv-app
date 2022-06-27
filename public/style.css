@@ -230,6 +230,14 @@ body {
     width: 100%;
 }
 
+#devices-welcome {
+    text-align: center;
+    padding: 2em;
+    font-size: 16px;
+    /* font-family: Roboto !important; */
+    /* font-weight: 300; */
+}
+
 .device-item,
 .list-item {
     margin: 0.5em;

@@ -8,6 +8,12 @@ export default class Devices extends Panel {
   begin() {
     this.html = /*html*/`
       <div id="connDevicesWrapper" class="list-wrapper">
+        <div id="devices-welcome" class="opacity-50">
+          Устройств ещё нет!<br><br>
+          Включите ElementaryAUV<br>
+          и выполните поиск.
+        </div>
+
         <div id="connDevicesList" class="width-fill"></div>
       </div>
 
@@ -24,6 +30,7 @@ export default class Devices extends Panel {
     // this.statusEl.innerText = "Connection type: " + mur.conn.type;
 
     this.devicesListEl = this.q("#connDevicesList");
+    this.welcomeEl = this.q("#devices-welcome");
     this.buttonsWrapper = this.q('#buttonsRow');
 
     new Button({
@@ -109,6 +116,10 @@ export default class Devices extends Panel {
     this.devicesListEl.innerHtml = "";
     this.devicesListEl.innerText = "";
     this.devicesListEl.textContent = "";
+
+    if (devices.length > 0) {
+      this.welcomeEl.classList.add('hidden');
+    }
 
     devices.forEach(device => {
       let deviceEl = document.createElement("div");
