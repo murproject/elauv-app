@@ -441,6 +441,10 @@ body {
     font-weight: bold !important;
 }
 
+.small-text {
+    font-size: 11px;
+}
+
 .opacity-0 {
     opacity: 0% !important;
 }
