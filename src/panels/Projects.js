@@ -47,11 +47,12 @@ export default class Projects extends Panel {
 
   begin() {
     this.html = /*html*/`
-      <div id="projects-head-buttons" class="row font-thin"></div>
-
-      <div class="list-wrapper row">
+      <div class="list-wrapper">
         <div id="projects-list" class="width-fill"></div>
       </div>
+
+      <div class="list-end-mark"></div>
+      <div id="projects-head-buttons" class="row font-thin"></div>
     `
   }
 
@@ -71,24 +72,33 @@ export default class Projects extends Panel {
       name: 'save',
       text: 'Сохранить',
       action: () => {},
-      // classes: 'button-vertical',
       icon: 'content-save',
+      // classes: 'button-vertical',
     }).inject(this.headButtonsEl);
 
     new Button({
       name: 'import',
-      text: 'Импорт из файла',
+      text: 'Импорт из&nbsp;файла',
       action: () => {},
-      // classes: 'button-vertical',
       icon: 'import',
+      // classes: 'button-vertical',
     }).inject(this.headButtonsEl);
 
     new Button({
       name: 'export',
-      text: 'Экспорт в файл',
+      text: 'Экспорт в&nbsp;файл',
       action: () => {},
-      // classes: 'button-vertical',
       icon: 'export',
+      // classes: 'button-vertical',
+    }).inject(this.headButtonsEl);
+
+    new Button({
+      name: 'wipe',
+      text: 'Удалить всё',
+      action: () => {},
+      icon: 'trash-can-outline',
+      iconColor: 'red',
+      // classes: 'button-vertical',
     }).inject(this.headButtonsEl);
   }
 
@@ -168,9 +178,32 @@ export default class Projects extends Panel {
     return itemEl;
   }
 
+  makeReturnItem() {
+    let itemEl = document.createElement("div");
+    itemEl.classList.add("list-item");
+
+    itemEl.innerHTML = `
+      ${Icon('keyboard-backspace', 'dark opacity-50')}
+      <div class="list-item-title">Назад</div>
+
+      <div class="dateAbsolute">
+        <span><br><br></span>
+      </div>
+
+      <div class="dateRelative">
+        <span class="opacity-50">Вернуться в список проектов</span>
+      </div>
+    `;
+
+    itemEl.onclick = () => this.displayProjects(true); // TODO //
+    return itemEl;
+  }
+
   displayProjects(showExamples = false) {
     this.projectsListEl.innerHtml = '';
     this.projectsListEl.innerText = '';
+
+    this.projectsListEl.appendChild(this.makeReturnItem());
     this.projectsListEl.appendChild(this.makeExamplesItem());
 
     this.projectsList.forEach((item, index) => {
