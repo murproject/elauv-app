@@ -42,6 +42,7 @@ export default {
     this.conn.start()
 
     this.conn.onClose = (event) => {
+      this.telemetry = { timestamp: 0 }
       this.connect()
     }
 
@@ -163,6 +164,8 @@ export default {
   disconnect: function() {
     this.deviceAddress = null
     localStorage.lastDeviceAddress = null
+    this.conn.disconnect()
+    // conn.macAddress = null
   },
 
   updateStatus: function () {
@@ -221,7 +224,7 @@ export default {
     if (this.status === 'open') {
       this.conn.sendMessage(Protocol.packControlContext(data))
     }
-    // this.context = data
+    this.context = data
   },
 
   controlActuator: function (data) {

@@ -71,6 +71,7 @@ export default class Devices extends Panel {
       this.onUpdateDevicesList(JSON.parse(dev));
     }
 
+    this.disconnect();
     mur.conn.scanAll();
   }
 
@@ -143,6 +144,7 @@ export default class Devices extends Panel {
       let addrEl = document.createElement("div");
       addrEl.innerText = `[${device.address}]`;
       addrEl.classList.add("text");
+      addrEl.classList.add("small-text");
       if (device.isCompatible) addrEl.classList.add("opacity-25");
       titleDiv.appendChild(addrEl);
 

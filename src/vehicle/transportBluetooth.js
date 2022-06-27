@@ -288,9 +288,11 @@ export default {
 
   disconnect: async function () {
     // if (this.state !== 'closed') {
+    bluetoothClassicSerial.disconnect(this.macAddress)
     this.state = 'closed'
     this.onClose()
-    bluetoothClassicSerial.disconnect(this.macAddress)
+    // setTimeout(() => this.onClose(), 1000)
+
     // }
   },
 
