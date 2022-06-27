@@ -263,7 +263,7 @@ self.onmessage = function (e) {
     // });
 
     contextUpdater = setInterval(sendContext,100)
-    highlightUpdater = setInterval(sendHighlight, 50)
+    setTimeout(() => highlightUpdater = setInterval(sendHighlight, 50), 25)
 
     if (state === 'running') {
       return;

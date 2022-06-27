@@ -224,7 +224,7 @@ end
             ['миллисекунд', 'MODE_MSEC'],
           ], undefined, {columns: 1, DEFAULT_VALUE: 'MODE_SEC'}), "MODE")
 
-          .appendField("прошло с запуска")
+          .appendField("прошло")
 
         this.setOutput(true, 'Number')
         this.setPreviousStatement(false, null)
