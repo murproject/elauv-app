@@ -176,6 +176,7 @@ export default class BlocklyPanel extends Panel {
           type: 'panel-button',
           action: () => this[action.func.name](),
           icon: action.icon,
+          iconClasses: 'big',
           enabled: true,
           timeout: 25
         });
