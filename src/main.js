@@ -14,7 +14,9 @@ const app = {
     <header id="head">
       <div class="buttons-group" id="buttons-main"></div>
     </header>
+
     <section id="main-panel-wrapper">
+      <div id="loading-wrapper" class="loading-wrapper"></div>
     </section>
 
     <div id="flying-panel-wrapper" class="bottom-collapsed">
@@ -76,7 +78,7 @@ const app = {
       console: new ConsolePanel(),
     };
 
-    this.panelSelect(this.panels.blockly);
+    this.panelSelect(this.panels.projects);
   },
 
 
@@ -85,6 +87,8 @@ const app = {
 
     this.container.innerHTML = this.html;
     this.createPanels();
+
+    this.loadingWrapper = document.querySelector('#loading-wrapper');
 
     mur.create();
 
@@ -101,6 +105,16 @@ const app = {
     mur.onStatusUpdated = (status) => {
       this.panels.telemetry.update()
     }
+  },
+
+  setLoading(isLoading, timeout) {
+    setTimeout(() => {
+      if (isLoading) {
+        this.loadingWrapper.classList.add('active')
+      } else {
+        this.loadingWrapper.classList.remove('active');
+      }
+    }, timeout);
   },
 
   preloadIcons() {

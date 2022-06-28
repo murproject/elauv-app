@@ -117,10 +117,10 @@ export default class BlocklyPanel extends Panel {
 
     // this.userData = {}; // TODO //
 
-    this.loadingDiv = document.createElement("div");
-    this.loadingDiv.id = "loading-wrapper";
-    this.loadingDiv.classList.add("loading-wrapper");
-    this.container.appendChild(this.loadingDiv);
+    // this.loadingDiv = document.createElement("div");
+    // this.loadingDiv.id = "loading-wrapper";
+    // this.loadingDiv.classList.add("loading-wrapper");
+    // this.container.appendChild(this.loadingDiv);
 
     this.blocklyDiv = document.createElement("div");
     this.blocklyDiv.id = "blocklyDiv";
@@ -194,13 +194,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   setLoading(isLoading, timeout) {
-    setTimeout(() => {
-      if (isLoading) {
-        this.loadingDiv.classList.add('active')
-      } else {
-        this.loadingDiv.classList.remove('active');
-      }
-    }, timeout);
+    document.app.setLoading(isLoading, timeout);
   }
 
   onWorkspaceChange() {
@@ -321,6 +315,8 @@ export default class BlocklyPanel extends Panel {
     this.workspace.clearUndo();
     this.onWorkspaceChange();
     this.autoZoom();
+
+    this.setLoading(false, 0);
   }
 
   example() {
