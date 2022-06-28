@@ -8,13 +8,16 @@ export default class Devices extends Panel {
   begin() {
     this.html = /*html*/`
       <div id="connDevicesWrapper" class="list-wrapper">
+
         <div id="devices-welcome" class="opacity-50">
-          Устройств ещё нет!<br><br>
-          Включите ElementaryAUV<br>
-          и отсканируйте код.
+            Устройств ещё нет!<br><br>
+            Включите ElementaryAUV<br>
+            и отсканируйте код.
+          </div>
+
+          <div id="connDevicesList" class="width-fill"></div>
         </div>
 
-        <div id="connDevicesList" class="width-fill"></div>
       </div>
 
       <div class="list-end-mark"></div>
@@ -155,7 +158,7 @@ export default class Devices extends Panel {
       let addrEl = document.createElement("div");
       addrEl.innerText = `[${device.address}]`;
       addrEl.classList.add("text");
-      addrEl.classList.add("small-text");
+      addrEl.classList.add("text-tiny");
       if (device.isCompatible) addrEl.classList.add("opacity-25");
       titleDiv.appendChild(addrEl);
 
