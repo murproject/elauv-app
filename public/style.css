@@ -322,6 +322,12 @@ body {
     }
 }
 
+.vertical-filler {
+    flex-grow: 1;
+/*     height: 100%; */
+}
+
+
 .device-title div {
     display: inline-block;
 }
@@ -398,8 +404,8 @@ body {
     height: 1.5em;
     background-color: var(--color-dark);
     /* background-color: var(--color-blue); */
-    /* mask-size: cover !important; */
-    /* -webkit-mask-size: cover !important; */
+    mask-size: cover !important;
+    -webkit-mask-size: cover !important;
 }
 
 .icon.small {
@@ -565,9 +571,8 @@ article h1 {
     width: 100%;
 }
 
-/* Flexbox gap isn't supported on target Chromium version! */
-
 .row > .push-button {
+    /* Flexbox gap isn't supported on old / target Chromium versions! */
     margin: 0 0.25em;
 }
 
@@ -579,9 +584,19 @@ article h1 {
     margin-right: 0 !important;
 }
 
+.buttons-collapsed .push-button{
+    width: fit-content;
+    flex-grow: 0;
+}
+
+.buttons-collapsed {
+    justify-content: center !important;
+}
+
 .justify-content-center {
     justify-content: center;
 }
+
 .panel {
     position: absolute;
 
@@ -601,11 +616,11 @@ article h1 {
     height: 100%;
 }
 
-.panel.fluid {
+/* .panel.fluid {
     margin: 0 !important;
     width: 100%;
     height: 100%;
-}
+} */
 
 .panel.active {
     opacity: 100%;
@@ -1019,3 +1034,4 @@ input[type="number"] {
     stroke-width: 0;
     /* stroke: #c6c6c6; */
 }
+
