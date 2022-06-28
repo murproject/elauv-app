@@ -7,6 +7,7 @@ export default class Devices extends Panel {
 
   begin() {
     this.html = /*html*/`
+      <div class="list-mark-start"></div>
       <div id="connDevicesWrapper" class="list-wrapper">
 
         <div id="devices-welcome" class="opacity-50">
@@ -20,7 +21,7 @@ export default class Devices extends Panel {
 
       </div>
 
-      <div class="list-end-mark"></div>
+      <div class="list-mark-end"></div>
       <div id="buttonsRow" class="row"></div>
 
       <!-- <div class="row"><span id="connStatus"></span></div> -->

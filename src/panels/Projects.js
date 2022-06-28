@@ -96,11 +96,12 @@ export default class Projects extends Panel {
         <h1 id="projects-header-title"></h1>
       </div>
 
+      <div class="list-mark-start"></div>
       <div class="list-wrapper">
         <div id="projects-list" class="width-fill"></div>
       </div>
+      <div class="list-mark-end"></div>
 
-      <div class="list-end-mark"></div>
       <div id="projects-head-buttons" class="row font-thin"></div>
     `
   }
@@ -112,7 +113,7 @@ export default class Projects extends Panel {
 
     this.makeButtons();
     this.projectsList = [];
-    this.loadProjectsList();
+    this.loadProjectsList(true);
     this.displayProjects();
   }
 

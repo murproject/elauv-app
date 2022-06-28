@@ -216,12 +216,42 @@ body {
     /* flex-direction: column; */
 }
 
-.list-end-mark:after {
-    background: antiquewhite;
+
+/* .list-mark-start:after,
+.list-mark-end:after  {
     position: absolute;
     width: 100%;
     height: 2em;
     content: '';
+    z-index: 50;
+}
+
+.list-mark-start:after {
+    margin-top: 0;
+    background: linear-gradient(to bottom, white, transparent);
+}
+
+.list-mark-end:after {
+    margin-top: -2em;
+    background: linear-gradient(to bottom, transparent, white);
+} */
+
+.list-mark-start:after,
+.list-mark-end:after  {
+    position: absolute;
+    width: 100%;
+    height: 2em;
+    content: '';
+    z-index: 50;
+    pointer-events: none;
+}
+
+.list-mark-start:after {
+    margin-top: 0;
+    background: linear-gradient(to bottom, white, transparent);
+}
+
+.list-mark-end:after {
     margin-top: -2em;
     background: linear-gradient(to bottom, transparent, white);
 }
