@@ -91,6 +91,8 @@ function dateRelative(date) {
 export default class Projects extends Panel {
 
   begin() {
+    this.name = "Проекты";
+
     this.html = /*html*/`
       <div class="list-wrapper">
         <div id="projects-list" class="width-fill"></div>
@@ -103,7 +105,7 @@ export default class Projects extends Panel {
   init() {
     this.setIcon('folder-open');
     this.projectsListEl = this.q('#projects-list');
-    this.headerTitleEl = this.q('#projects-header-title');
+    // this.headerTitleEl = this.q('#projects-header-title');
 
     this.makeButtons();
     this.projectsList = [];
@@ -151,7 +153,7 @@ export default class Projects extends Panel {
   loadProjectsList(populate = false) {
     this.projectsList = example; // TODO
     if (populate) {
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 22; i++) {
         let name = '';
         const iter = Math.round(Math.random() * 6) + 1
         for (let j = 0; j < iter; j++) {
@@ -195,9 +197,9 @@ export default class Projects extends Panel {
         <span>${dateString(item.date)}</span>
       </div>
 
-      <div class="icon-button">
-        ${Icon('trash-can-outline', 'red opacity-75')}
-      </div>
+      <!-- <div class="icon-button">
+        ${Icon('trash-can-outline', 'red opacity-50')}
+      </div> -->
     `;
 
     itemEl.onclick = () => this.projectListSelect(index);
@@ -295,9 +297,9 @@ export default class Projects extends Panel {
         <span>${dateString(item.date)}</span>
       </div>
 
-      <div class="icon-button">
-        ${Icon('trash-can-outline', 'red opacity-75')}
-      </div>
+      <!-- <div class="icon-button">
+        ${Icon('trash-can-outline', 'red opacity-50')}
+      </div> -->
     `;
 
     itemEl.onclick = () => {
@@ -307,7 +309,10 @@ export default class Projects extends Panel {
   }
 
   displayProjects() {
-    this.headerTitleEl.innerText = 'Сохранённые проекты';
+    // this.headerTitleEl.innerText = 'Сохранённые проекты';
+    this.name = 'Проекты';
+    this.setActive(true);
+
     this.projectsListEl.innerText = '';
     this.projectsListEl.appendChild(this.makeExamplesFolderItem());
     this.projectsListEl.appendChild(this.makeAutosaveItem());
@@ -318,7 +323,10 @@ export default class Projects extends Panel {
   }
 
   displayExamples() {
-    this.headerTitleEl.innerText = 'Примеры';
+    // this.headerTitleEl.innerText = 'Примеры';
+    this.name = 'Примеры';
+    this.setActive(true);
+
     this.projectsListEl.innerText = '';
     this.projectsListEl.appendChild(this.makeReturnItem());
 

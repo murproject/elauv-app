@@ -5,6 +5,8 @@ import Button from '../components/Button';
 export default class About extends Panel {
 
   begin() {
+    this.name = 'О программе';
+
     this.html = /*html*/`
       <article class="">
         <div class="vertical-filler"></div>

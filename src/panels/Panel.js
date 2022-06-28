@@ -7,6 +7,7 @@ export default class Panel {
     this.name = this.constructor.name;
     this.html = ``;
     this.isBottomPanel = false;
+    this.noTitle = false;
 
     this.begin();
     this.inject();
@@ -55,6 +56,9 @@ export default class Panel {
 
     if (this.active) {
       this.container.classList.add('active');
+      if (!this.isBottomPanel) {
+        document.app.setTitle(this.noTitle ? '' : this.name);
+      }
     } else {
       this.container.classList.remove('active');
     }

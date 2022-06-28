@@ -39,7 +39,7 @@ const blocklyConfig = {
   trashcan: true,
   renderer: 'custom_renderer',
   horizontalLayout: true,
-  collapse: false,
+  collapse: false, // вкл/выкл пункт контекстного меню свернуть/развернуть блоки
   toolbox: MurToolbox,
 }
 
@@ -65,6 +65,7 @@ export default class BlocklyPanel extends Panel {
 
   init() {
     this.setIcon('puzzle');
+    this.noTitle = true;
 
     // this.container.classList.add("fluid");
 
@@ -162,7 +163,7 @@ export default class BlocklyPanel extends Panel {
       { spacer: true },
       { func: this.run,       name: 'run',      icon: 'play'},
       // { func: this.example,   name: 'example',  icon: 'star',},
-      { func: this.load,      name: 'load',     icon: 'file-upload',},
+      // { func: this.load,      name: 'load',     icon: 'file-upload',},
       { func: this.save,      name: 'save',     icon: 'content-save',},
     ];
 

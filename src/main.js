@@ -10,9 +10,18 @@ import ConsolePanel from './panels/Console.js'
 
 const app = {
 
+  // TODO: integrate loading wrapper into PANEL, not main!
+
   html: /*html*/`
     <header id="head">
       <div class="buttons-group" id="buttons-main"></div>
+
+      <div class="buttons-group header-titlebar" id="">
+        <div class="header-titlebar-caption">
+          <span id="main-titlebar-caption"></span>
+        </div>
+      </div>
+
     </header>
 
     <section id="main-panel-wrapper">
@@ -81,14 +90,19 @@ const app = {
     this.panelSelect(this.panels.projects);
   },
 
+  setTitle: function(title) {
+    this.titleBar.innerText = title;
+  },
 
   init: function () {
     this.preloadIcons();
 
     this.container.innerHTML = this.html;
-    this.createPanels();
 
     this.loadingWrapper = document.querySelector('#loading-wrapper');
+    this.titleBar = document.querySelector('#main-titlebar-caption');
+
+    this.createPanels();
 
     mur.create();
 

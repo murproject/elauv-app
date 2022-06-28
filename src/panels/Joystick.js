@@ -24,7 +24,7 @@ d = + x + y
 export default class Joystick extends Panel {
 
   begin() {
-    this.name = "Joystick";
+    this.name = "Телеуправление";
 
     this.html = /*html*/`
       <div class="row justify-content-center">

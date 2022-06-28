@@ -6,6 +6,8 @@ import Button from '../components/Button'
 export default class Telemetry extends Panel {
 
   begin() {
+    this.name = "Телеметрия";
+
     this.html = /*html*/`
       <div id="telemetryText">Waiting for connection…</div>
       <br>

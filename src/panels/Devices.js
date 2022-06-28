@@ -6,6 +6,8 @@ import Button from '../components/Button';
 export default class Devices extends Panel {
 
   begin() {
+    this.name = "Доступные устройства";
+
     this.html = /*html*/`
       <div id="connDevicesWrapper" class="list-wrapper">
 
