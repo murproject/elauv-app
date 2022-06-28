@@ -66,7 +66,7 @@ export default class BlocklyPanel extends Panel {
   init() {
     this.setIcon('puzzle');
 
-    this.container.classList.add("fluid");
+    // this.container.classList.add("fluid");
 
     this.toolButtons = document.createElement("div");
     this.toolButtons.classList.add("buttons-group");
