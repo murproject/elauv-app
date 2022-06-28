@@ -11,7 +11,7 @@ export default class Devices extends Panel {
         <div id="devices-welcome" class="opacity-50">
           Устройств ещё нет!<br><br>
           Включите ElementaryAUV<br>
-          и выполните поиск.
+          и отсканируйте код.
         </div>
 
         <div id="connDevicesList" class="width-fill"></div>
@@ -51,7 +51,7 @@ export default class Devices extends Panel {
 
     new Button({
       name: 'disconnect',
-      text: 'Отсоединиться',
+      text: 'Отключить',
       action: () => this.disconnect(),
       icon: 'broadcast-off',
       // classes: 'button-vertical',
