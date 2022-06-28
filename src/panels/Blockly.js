@@ -303,13 +303,23 @@ export default class BlocklyPanel extends Panel {
     localStorage.savedBlocks = JSON.stringify(savedBlocks)
   }
 
-  load() {
+  load(blocksToLoad = undefined) {
     this.stateOfUndo.savedUndoStack = [];
     this.stateOfUndo.savedRedoStack = [];
 
-    const savedBlocks = localStorage.savedBlocks
-    if (savedBlocks) {
-      Blockly.serialization.workspaces.load(JSON.parse(savedBlocks), this.workspace)
+    console.log("load:")
+    console.log(blocksToLoad)
+
+    if (typeof(blocksToLoad) === 'undefined') {
+      blocksToLoad = localStorage.savedBlocks;
+    }
+
+    if (typeof(blocksToLoad) === 'string') {
+      blocksToLoad = JSON.parse(blocksToLoad);
+    }
+
+    if (blocksToLoad) {
+      Blockly.serialization.workspaces.load(blocksToLoad, this.workspace)
     }
 
     this.workspace.clearUndo();
