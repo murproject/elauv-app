@@ -1,18 +1,42 @@
 import Panel from './Panel'
+import Icon from '/src/components/Icon'
+import Button from '../components/Button';
 
 export default class About extends Panel {
 
   begin() {
     this.html = /*html*/`
       <article class="">
-        <h1>ElementaryAUV App</h1>
+        <div class="vertical-filler"></div>
+
+        <!-- <div id="about-center"> -->
+
+        <!--
+        <h1>
+          Приложение для работы с<br>
+          ElementaryAUV.
+        </h1>
+        -->
+
+        <h1>
+          ElementaryAUV App<br>
+          <span class="opacity-50 text-small">
+            Версия 0.00 / 2022-06-28
+          </span>
+        </h1>
+
 
         <img src="/media/splash-anim.gif" class="about-splash"/>
 
         <p class="text-center">
           ООО "Центр робототехники"<br>
-          г. Владивосток
+          г. Владивосток, 2022 г.
         </p>
+        <!-- </div> -->
+
+        <div class="vertical-filler"></div>
+
+        <div id="about-buttons" class="row buttons-collapsed"></div>
       </article>
     `
   }
@@ -22,6 +46,37 @@ export default class About extends Panel {
     this.panelButton.el.classList.add('logo');
     this.panelButton.el.innerHTML = `<img src="/media/icon-small.png" />`;
 
-    this.setIcon('bluetooth-connect');
+    this.makeButtons();
+  }
+
+  makeButtons() {
+    this.headButtonsEl = this.q('#about-buttons')
+
+    // new Button({
+    //   name: 'licenses',
+    //   text: 'Сторонние компоненты',
+    //   action: () => {},
+    //   icon: 'star-outline',
+    //   iconClasses: 'small',
+    //   // classes: 'button-vertical'
+    // }).inject(this.headButtonsEl);
+
+    // new Button({
+    //   name: 'authors',
+    //   text: 'Авторы',
+    //   action: () => {},
+    //   icon: 'account',
+    //   iconClasses: 'small',
+    //   // classes: 'button-vertical'
+    // }).inject(this.headButtonsEl);
+
+    new Button({
+      name: 'settings',
+      text: 'Настройки',
+      action: () => {},
+      icon: 'format-list-bulleted-square',
+      iconClasses: 'small',
+      // classes: 'button-vertical'
+    }).inject(this.headButtonsEl);
   }
 }

@@ -411,6 +411,7 @@ body {
 .icon.small {
     width: 1em;
     height: 1em;
+    top: -0.1em;
 }
 
 .icon.mini {
@@ -459,8 +460,12 @@ body {
     font-weight: bold !important;
 }
 
-.small-text {
+.text-tiny {
     font-size: 11px;
+}
+
+.text-small {
+    font-size: 13px;
 }
 
 .opacity-0 {
@@ -500,12 +505,18 @@ article div {
 }
 
 article h1,
+article h2,
 article p {
     font-weight: 300;
+    text-align: center;
 }
 
 article h1 {
     font-size: 22px;
+}
+
+article h2 {
+    font-size: 16px;
 }
 
 .about-splash {
