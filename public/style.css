@@ -1122,9 +1122,12 @@ input[type="number"] {
 
 /* ----------------------------------------- */
 
-
-
 #head {
+    background: none;
+    width: calc(100% - 7px);
+}
+
+#app {
     background: linear-gradient(45deg, hsl(200, 100%, 10%), hsl(200, 35%, 45%));
 }
 
@@ -1138,7 +1141,7 @@ input[type="number"] {
 }
 
 .logo img {
-    filter: drop-shadow(0 0 1px white) drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    filter: drop-shadow(0 0 1px white) drop-shadow(0 0 var(--radius) rgba(255,255,255,0.5));
     opacity: 90%;
 }
 
