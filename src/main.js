@@ -167,7 +167,7 @@ if (typeof cordova !== 'undefined') {
     setTimeout(() => {
       window.IsekaiFakeSplash.hide();
       console.warn("ready!!");
-    }, 1500);
+    }, 2000);
   }, false)
 } else {
   window.onload = () => main();
