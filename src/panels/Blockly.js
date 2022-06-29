@@ -67,6 +67,7 @@ export default class BlocklyPanel extends Panel {
     this.setIcon('puzzle');
     this.noTitle = true;
     this.container.classList.add('background-white');
+    this.container.classList.add('round-top');
 
     // this.container.classList.add("fluid");
 
