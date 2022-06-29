@@ -310,10 +310,16 @@ export default class Projects extends Panel {
     return itemEl;
   }
 
+  updateTitle(title) {
+    this.name = title;
+    if (this.active) {
+      this.setActive(true);
+    }
+  }
+
   displayProjects() {
     // this.headerTitleEl.innerText = 'Сохранённые проекты';
-    this.name = 'Проекты';
-    this.setActive(true);
+    this.updateTitle('Проекты');
 
     this.projectsListEl.innerText = '';
     this.projectsListEl.appendChild(this.makeExamplesFolderItem());
@@ -326,8 +332,7 @@ export default class Projects extends Panel {
 
   displayExamples() {
     // this.headerTitleEl.innerText = 'Примеры';
-    this.name = 'Примеры';
-    this.setActive(true);
+    this.updateTitle('Примеры');
 
     this.projectsListEl.innerText = '';
     this.projectsListEl.appendChild(this.makeReturnItem());
