@@ -27,7 +27,10 @@
       },
       "cordova-plugin-statusbar": {},
       "cordova-plugin-isekai-fake-splash": {},
-      "cordova-plugin-cutout": {}
+      "cordova-plugin-cutout": {},
+      "cordova-plugin-file": {
+        "ANDROIDX_WEBKIT_VERSION": "1.4.0"
+      }
     }
   }
 }
