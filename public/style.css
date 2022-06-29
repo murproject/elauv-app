@@ -1260,3 +1260,8 @@ input[type="number"] {
     font-family: 'Nunito' !important;
     font-weight: 500 !important;
 }
+
+.blocklyMenuItemContent {
+    font-family: 'Nunito', 'Roboto' !important;
+    font-weight: 800 !important;
+}
