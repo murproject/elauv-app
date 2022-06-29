@@ -655,8 +655,10 @@ article h2 {
     justify-content: center;
 }
 
+
+
 .panel {
-    position: absolute;
+    position: fixed;
 
     /* margin-top: 0.5em; */
     /* width: calc(100% - 2em); */
@@ -672,7 +674,7 @@ article h2 {
 
     margin: 0 !important;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 }
 
 /* .panel.fluid {
@@ -684,7 +686,6 @@ article h2 {
 .panel.active {
     opacity: 100%;
     z-index: 10;
-    display: flex;
 }
 
 .panel.fluid.active {
@@ -729,8 +730,15 @@ article h2 {
 /* ---- Blockly ---- */
 
 #blocklyDiv {
-    height: 100%;
+    /* height: 100%; */
     /* box-shadow: 0 0 18px rgba(0, 0, 0, 0.25); */
+
+    width: 100%;
+    /* height: calc(100% - 2.25em); */
+    height: var(--height-minus-header);
+    position: fixed; /* Important! Best render performance when "fixed" */
+    bottom: 0;
+    z-index: 999;
 }
 
 /* Blocks MDI icons */
