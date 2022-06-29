@@ -62,6 +62,10 @@ var CustomConstantsProvider = function () {
   this.generateSecondaryColour_ = function (inputColour) {
     return Blockly.utils.colour.blend('#fff', inputColour, 0.3) || inputColour;
   }
+
+  this.generateTertiaryColour_ = function(inputColour) {
+    return Blockly.utils.colour.blend('#fff', inputColour, 0.2) || inputColour;
+  }
 }
 
 Blockly.utils.object.inherits(CustomConstantsProvider,

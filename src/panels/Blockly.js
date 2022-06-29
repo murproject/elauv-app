@@ -66,6 +66,7 @@ export default class BlocklyPanel extends Panel {
   init() {
     this.setIcon('puzzle');
     this.noTitle = true;
+    this.container.classList.add('background-white');
 
     // this.container.classList.add("fluid");
 
@@ -147,9 +148,9 @@ export default class BlocklyPanel extends Panel {
 
   collapse(collapsed) {
     if (collapsed) {
-      this.container.classList.add('blockly-collapsed');
+      this.blocklyDiv.classList.add('blockly-collapsed');
     } else {
-      this.container.classList.remove('blockly-collapsed');
+      this.blocklyDiv.classList.remove('blockly-collapsed');
     }
   }
 
