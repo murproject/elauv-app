@@ -30,7 +30,12 @@ export default class Panel {
       name: this.name,
       text: '',
       type: 'panel-button',
-      action: () => document.app.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main')
+      action: () => {
+        setTimeout(
+          () => document.app.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main'),
+          50
+        );
+      }
     });
 
     if (this.wrapperButtons) {
