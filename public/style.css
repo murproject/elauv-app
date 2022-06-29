@@ -36,6 +36,9 @@ body {
 
     --radius: 5px;
     --radius-round: 999px;
+
+    --header-height: 2.25em;
+    --height-minus-header: calc(100% - var(--header-height));
 }
 
 .hidden {
@@ -586,7 +589,7 @@ article h2 {
 
 #head {
     width: 100%;
-    height: 2.25em;
+    height: var(--header-height);
 
     display: flex;
     align-items: end;
@@ -657,7 +660,7 @@ article h2 {
 
     /* margin-top: 0.5em; */
     /* width: calc(100% - 2em); */
-    /* height: calc(100% - 1em); */
+    height: var(--height-minus-header);
 
     opacity: 0;
     z-index: -1;
