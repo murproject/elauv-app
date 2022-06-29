@@ -17,6 +17,7 @@ function generateId() {
 
 let autosave = {
   date: new Date(Date.parse('2022-06-28T13:18:31+1000')),
+  id: null,
   data: {},
   version: 0,
 }
@@ -182,7 +183,7 @@ export default class Projects extends Panel {
       itemEl.classList.add("active");
     }
 
-    itemEl.innerHTML = `
+    itemEl.innerHTML = /*html*/`
       <!-- ${Icon('file-table-outline', 'opacity-75')} -->
 
       ${Icon(isEditing ? 'puzzle-edit' : 'puzzle', isEditing ? 'cyan opacity-75' : 'opacity-50')}
@@ -204,7 +205,7 @@ export default class Projects extends Panel {
       </div> -->
     `;
 
-    itemEl.onclick = () => this.projectListSelect(index);
+    itemEl.onclick = () => setTimeout(() => this.projectListSelect(index), 50); // TODO //
 
     return itemEl;
   }
@@ -213,7 +214,7 @@ export default class Projects extends Panel {
     let itemEl = document.createElement("div");
     itemEl.classList.add("list-item");
 
-    itemEl.innerHTML = `
+    itemEl.innerHTML = /*html*/`
       ${Icon('star', 'opacity-50')}
 
       <div class="list-item-title">
@@ -238,20 +239,16 @@ export default class Projects extends Panel {
     let itemEl = document.createElement("div");
     itemEl.classList.add("list-item");
 
-    itemEl.innerHTML = `
-      ${Icon('folder', 'dark opacity-50')}
+    itemEl.innerHTML = /*html*/`
+      ${Icon('folder-outline', 'dark opacity-50')}
       <div class="list-item-title">Примеры</div>
-
-      <div class="dateAbsolute">
-        <span><br><br></span>
-      </div>
 
       <div class="dateRelative">
         <span class="opacity-50">Встроенные примеры программ</span>
       </div>
     `;
 
-    itemEl.onclick = () => this.displayExamples(); // TODO //
+    itemEl.onclick = () => setTimeout(() => this.displayExamples(), 50); // TODO //
     return itemEl;
   }
 
@@ -259,12 +256,12 @@ export default class Projects extends Panel {
     let itemEl = document.createElement("div");
     itemEl.classList.add("list-item");
 
-    itemEl.innerHTML = `
+    itemEl.innerHTML = /*html*/`
       ${Icon('keyboard-backspace', 'dark opacity-50')}
       <div class="list-item-title">Назад</div>
 
-      <div class="dateAbsolute">
-        <span><br><br></span>
+      <div>
+        <br><br>
       </div>
 
       <div class="dateRelative">
@@ -272,9 +269,7 @@ export default class Projects extends Panel {
       </div>
     `;
 
-    itemEl.onclick = () => {
-      this.displayProjects();
-    }; // TODO //
+    itemEl.onclick = () => setTimeout(() => this.displayProjects(), 100); // TODO //
     return itemEl;
   }
 
@@ -284,7 +279,7 @@ export default class Projects extends Panel {
 
     const item = autosave; // TODO //
 
-    itemEl.innerHTML = `
+    itemEl.innerHTML = /*html*/`
       ${Icon('clock-time-three-outline', 'dark opacity-50')}
 
       <div class="list-item-title">
@@ -310,6 +305,30 @@ export default class Projects extends Panel {
     return itemEl;
   }
 
+  makeNewProjectItem() {
+    let itemEl = document.createElement("div");
+    itemEl.classList.add("list-item");
+
+    const item = autosave; // TODO //
+
+    itemEl.innerHTML = /*html*/`
+      ${Icon('puzzle-outline', 'dark opacity-50')}
+
+      <div class="list-item-title">
+        Новый проект
+      </div>
+
+      <div class="dateRelative">
+        <span class="opacity-50">Создать чистый проект</span>
+      </div>
+    `;
+
+    itemEl.onclick = () => {
+
+    }; // TODO //
+    return itemEl;
+  }
+
   updateTitle(title) {
     this.name = title;
     if (this.active) {
@@ -323,6 +342,7 @@ export default class Projects extends Panel {
 
     this.projectsListEl.innerText = '';
     this.projectsListEl.appendChild(this.makeExamplesFolderItem());
+    this.projectsListEl.appendChild(this.makeNewProjectItem());
     this.projectsListEl.appendChild(this.makeAutosaveItem());
 
     this.projectsList.forEach((item, index) => {
