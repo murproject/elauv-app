@@ -37,13 +37,11 @@ export default {
   onStatusUpdated: (status) => {},
 
   create: function () {
-    console.info('Connecting to', this.url)
-
     this.conn.start()
 
     this.conn.onClose = (event) => {
       this.telemetry = { timestamp: 0 }
-      this.connect()
+      setTimeout(() => this.connect(), 1000)
     }
 
     this.conn.onScan = (event) => {
@@ -138,6 +136,7 @@ export default {
     }
 
     // console.warn('WebSocket: connecting…')
+    console.info('Connecting to', address)
     this.reconnecting = true
 
     if (transport.type === 'websocket') {

@@ -162,8 +162,12 @@ if (typeof cordova !== 'undefined') {
       }
     });
 
+
     main();
-    setTimeout(() => window.IsekaiFakeSplash.hide(), 250);
+    setTimeout(() => {
+      window.IsekaiFakeSplash.hide();
+      console.warn("ready!!");
+    }, 1500);
   }, false)
 } else {
   window.onload = () => main();
