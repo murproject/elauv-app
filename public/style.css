@@ -1196,7 +1196,7 @@ input[type="number"] {
 }
 
 #blocklyDiv.pretty .blocklyToolboxDiv {
-    background: linear-gradient(90deg, hsl(200, 20%, 85%), hsl(200, 20%, 100%));
+    background: linear-gradient(90deg, hsla(200, 20%, 85%, 0.85), hsla(200, 20%, 100%, 0.85));
 }
 
 .blocklyTreeLabel {
