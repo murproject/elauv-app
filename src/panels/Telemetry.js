@@ -9,9 +9,10 @@ export default class Telemetry extends Panel {
     this.name = "Телеметрия";
 
     this.html = /*html*/`
-      <div id="telemetryText">Waiting for connection…</div>
-      <br>
-      <div class="push-button" id="resetStats">Reset stats</div>
+      <div class="container">
+        <div id="telemetryText" class="monospace soft-edges">Waiting for connection…</div>
+        <div class="push-button" id="resetStats">Reset stats</div>
+      </div>
     `
   }
 

@@ -27,19 +27,23 @@ export default class Joystick extends Panel {
     this.name = "Телеуправление";
 
     this.html = /*html*/`
-      <div class="row justify-content-center">
-        <div class="nipple-wrapper" id="nipple0"></div>
-        <div class="nipple-wrapper" id="nipple1"></div>
-      </div>
+      <div class="container">
 
-      <div class="row">
-        <textarea id="axesFormula" spellcheck="false" rows="15" cols="40" name="text"></textarea>
-        <div id="formulaStatus"></div>
-        <br>
-      </div>
+        <div class="row justify-content-center">
+          <div class="nipple-wrapper" id="nipple0"></div>
+          <div class="nipple-wrapper" id="nipple1"></div>
+        </div>
 
-      <div class="row">
-        <div class="push-button" id="buttonSolenoidOn">Solenoid on</div>
+        <div class="row">
+          <textarea id="axesFormula" spellcheck="false" rows="15" cols="40" name="text"></textarea>
+          <div id="formulaStatus"></div>
+          <br>
+        </div>
+
+        <div class="row">
+          <div class="push-button" id="buttonSolenoidOn">Solenoid on</div>
+        </div>
+
       </div>
     `
   }

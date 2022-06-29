@@ -9,19 +9,20 @@ export default class Devices extends Panel {
     this.name = "Доступные устройства";
 
     this.html = /*html*/`
-      <div id="connDevicesWrapper" class="list-wrapper">
+      <div class="container">
 
-        <div id="devices-welcome" class="opacity-50">
-            Устройств ещё нет!<br><br>
-            Включите ElementaryAUV<br>
-            и отсканируйте код.
+        <div class="list-wrapper soft-edges monospace">
+          <div id="devices-welcome" class="opacity-50">
+              Устройств ещё нет!<br><br>
+              Включите ElementaryAUV<br>
+              и отсканируйте код.
           </div>
-
           <div id="connDevicesList" class="width-fill"></div>
         </div>
 
+        <div id="buttonsRow" class="row"></div>
+
       </div>
-      <div id="buttonsRow" class="row"></div>
 
       <!-- <div class="row"><span id="connStatus"></span></div> -->
     `

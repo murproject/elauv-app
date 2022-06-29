@@ -94,11 +94,13 @@ export default class Projects extends Panel {
     this.name = "Проекты";
 
     this.html = /*html*/`
-      <div class="list-wrapper">
-        <div id="projects-list" class="width-fill"></div>
-      </div>
+      <div class="container">
+        <div class="list-wrapper soft-edges">
+          <div id="projects-list" class="width-fill"></div>
+        </div>
 
-      <div id="projects-head-buttons" class="row font-thin"></div>
+        <div id="projects-head-buttons" class="row font-thin"></div>
+      </div>
     `
   }
 
