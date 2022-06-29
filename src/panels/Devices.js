@@ -10,8 +10,7 @@ export default class Devices extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-
-        <div class="list-wrapper soft-edges monospace">
+        <div class="list-wrapper soft-edges">
           <div id="devices-welcome" class="opacity-50">
               Устройств ещё нет!<br><br>
               Включите ElementaryAUV<br>
@@ -21,7 +20,6 @@ export default class Devices extends Panel {
         </div>
 
         <div id="buttonsRow" class="row"></div>
-
       </div>
 
       <!-- <div class="row"><span id="connStatus"></span></div> -->
@@ -159,6 +157,7 @@ export default class Devices extends Panel {
       let addrEl = document.createElement("div");
       addrEl.innerText = `[${device.address}]`;
       addrEl.classList.add("text");
+      addrEl.classList.add("monospace");
       addrEl.classList.add("text-tiny");
       if (device.isCompatible) addrEl.classList.add("opacity-25");
       titleDiv.appendChild(addrEl);
