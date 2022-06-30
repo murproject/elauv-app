@@ -1,21 +1,31 @@
 import Element from './Element.js'
 import Icon from '/src/components/Icon'
+import dayjs from '/src/utils/Dates.js'
 
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime'
-import isBetween from 'dayjs/plugin/isBetween'
-import 'dayjs/locale/ru'
-
-dayjs.locale('ru');
-dayjs.extend(relativeTime)
-dayjs.extend(isBetween)
-
-function dateString(date) {
-  return dayjs(date).format('D MMMM<br>HH:mm');
+function dateStringAbsolute(date) {
+  return date ? dayjs(date).format('D MMMM<br>HH:mm') : null;
 }
 
-function dateRelative(date) {
-  return dayjs(date).format('dddd<br>') + dayjs(date).fromNow();
+function dateStringRelative(date) {
+  return date ? dayjs(date).format('dddd<br>') + dayjs(date).fromNow() : null;
+}
+
+const icons = {
+  project:        Icon('puzzle', 'opacity-50'),
+  projectActive:  Icon('puzzle-edit', 'cyan opacity-75'),
+  projectNew:     Icon('puzzle-outline', 'dark opacity-50'),
+  autosave:       Icon('clock-time-three-outline', 'opacity-50'),
+  folderExamples: Icon('folder-outline', 'dark opacity-50'),
+  example:        Icon('star', 'opacity-50'),
+  return:         Icon('keyboard-backspace', 'opacity-50'),
+};
+
+function notNull(item, value) {
+  if (value) {
+    return item ? value : '';
+  } else {
+    return item ? item : '';
+  }
 }
 
 export default class ProjectListItem extends Element {
@@ -27,24 +37,26 @@ export default class ProjectListItem extends Element {
     return 'project-list-item'
   }
 
+  init() {
+    this.actionTimeout = 50;
+  }
+
   static get defaultAttrs() {
     return {
       type: 'project',
       name: {},
-      date: Date.now(),
-      active: false,
+      date: null,
+      description: '',
     };
   }
 
   render() {
-    const icon = Icon(
-      this.attrs.isEditing ? 'puzzle-edit' : 'puzzle',
-      this.attrs.isEditing ? 'cyan opacity-75' : 'opacity-50'
-    );
+    const icon = icons[this.attrs.type];
+    this.setClass('active', this.attrs.type === 'projectActive');
 
-    if (this.attrs.active) {
-      this.classList.add('active');
-    }
+    const dateAbsolute = notNull(dateStringAbsolute(this.attrs.date));
+    const dateRelative = notNull(dateStringRelative(this.attrs.date));
+    const description = notNull(this.attrs.description);
 
     return /*html*/`
       ${icon}
@@ -53,12 +65,16 @@ export default class ProjectListItem extends Element {
         ${this.attrs.name ? this.attrs.name : '(без названия)'}
       </div>
 
-      <div class="dateRelative">
-        <span class="opacity-50">${dateRelative(this.attrs.date)}</span>
+      <div class="dateRelative opacity-50">
+        ${description}
       </div>
 
-      <div class="dateAbsolute">
-        <span>${dateString(this.attrs.date)}</span>
+      <div class="dateRelative opacity-50">
+        ${dateRelative}
+      </div>
+
+      <div class="dateAbsolute ${notNull(!dateAbsolute, 'hidden')}">
+        ${dateAbsolute}
       </div>
     `;
   }

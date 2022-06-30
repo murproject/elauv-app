@@ -179,161 +179,6 @@ export default class Projects extends Panel {
     this.projectsList = this.projectsList.sort((a, b) => b.date - a.date);
   }
 
-  makeProjectItem(item, index) {
-
-    let itemEl = document.createElement("div");
-    itemEl.classList.add("list-item");
-
-    if (isEditing) {
-      itemEl.classList.add("active");
-    }
-
-    itemEl.innerHTML = /*html*/`
-      <!-- ${Icon('file-table-outline', 'opacity-75')} -->
-
-      ${Icon(isEditing ? 'puzzle-edit' : 'puzzle', isEditing ? 'cyan opacity-75' : 'opacity-50')}
-
-      <div class="list-item-title">
-        ${item.name ? item.name : '(без названия)'}
-      </div>
-
-      <div class="dateRelative">
-        <span class="opacity-50">${dateRelative(item.date)}</span>
-      </div>
-
-      <div class="dateAbsolute">
-        <span>${dateString(item.date)}</span>
-      </div>
-
-      <!-- <div class="icon-button">
-        ${Icon('trash-can-outline', 'red opacity-50')}
-      </div> -->
-    `;
-
-    itemEl.onclick = () => setTimeout(() => this.projectListSelect(index), 50); // TODO //
-
-    return itemEl;
-  }
-
-  makeExampleProjectItem(item, index) {
-    let itemEl = document.createElement("div");
-    itemEl.classList.add("list-item");
-
-    itemEl.innerHTML = /*html*/`
-      ${Icon('star', 'opacity-50')}
-
-      <div class="list-item-title">
-        ${item.name ? item.name : '(без названия)'}
-      </div>
-
-      <div class="dateRelative">
-        <span class="opacity-50">${item.description}</span>
-      </div>
-
-      <div>
-        <br><br>
-      </div>
-    `;
-
-    itemEl.onclick = () => this.projectListSelectExample(index);
-
-    return itemEl;
-  }
-
-  makeExamplesFolderItem() {
-    let itemEl = document.createElement("div");
-    itemEl.classList.add("list-item");
-
-    itemEl.innerHTML = /*html*/`
-      ${Icon('folder-outline', 'dark opacity-50')}
-      <div class="list-item-title">Примеры</div>
-
-      <div class="dateRelative">
-        <span class="opacity-50">Встроенные примеры программ</span>
-      </div>
-    `;
-
-    itemEl.onclick = () => setTimeout(() => this.displayExamples(), 50); // TODO //
-    return itemEl;
-  }
-
-  makeReturnItem() {
-    let itemEl = document.createElement("div");
-    itemEl.classList.add("list-item");
-
-    itemEl.innerHTML = /*html*/`
-      ${Icon('keyboard-backspace', 'dark opacity-50')}
-      <div class="list-item-title">Назад</div>
-
-      <div>
-        <br><br>
-      </div>
-
-      <div class="dateRelative">
-        <span class="opacity-50">Вернуться в список проектов</span>
-      </div>
-    `;
-
-    itemEl.onclick = () => setTimeout(() => this.displayProjects(), 100); // TODO //
-    return itemEl;
-  }
-
-  makeAutosaveItem() {
-    let itemEl = document.createElement("div");
-    itemEl.classList.add("list-item");
-
-    const item = autosave; // TODO //
-
-    itemEl.innerHTML = /*html*/`
-      ${Icon('clock-time-three-outline', 'dark opacity-50')}
-
-      <div class="list-item-title">
-        Авто-сохранение
-      </div>
-
-      <div class="dateRelative">
-        <span class="opacity-50">${dateRelative(item.date)}</span>
-      </div>
-
-      <div class="dateAbsolute">
-        <span>${dateString(item.date)}</span>
-      </div>
-
-      <!-- <div class="icon-button">
-        ${Icon('trash-can-outline', 'red opacity-50')}
-      </div> -->
-    `;
-
-    itemEl.onclick = () => {
-
-    }; // TODO //
-    return itemEl;
-  }
-
-  makeNewProjectItem() {
-    let itemEl = document.createElement("div");
-    itemEl.classList.add("list-item");
-
-    const item = autosave; // TODO //
-
-    itemEl.innerHTML = /*html*/`
-      ${Icon('puzzle-outline', 'dark opacity-50')}
-
-      <div class="list-item-title">
-        Новый проект
-      </div>
-
-      <div class="dateRelative">
-        <span class="opacity-50">Создать чистый проект</span>
-      </div>
-    `;
-
-    itemEl.onclick = () => {
-
-    }; // TODO //
-    return itemEl;
-  }
-
   updateTitle(title) {
     this.name = title;
     if (this.active) {
@@ -341,32 +186,52 @@ export default class Projects extends Panel {
     }
   }
 
+  addItem(item, action = undefined) {
+    this.projectsListEl.appendChild(new ProjectListItem(item, action));
+  }
+
   displayProjects() {
-    // this.headerTitleEl.innerText = 'Сохранённые проекты';
     this.updateTitle('Проекты');
 
     this.projectsListEl.innerText = '';
-    this.projectsListEl.appendChild(this.makeExamplesFolderItem());
-    this.projectsListEl.appendChild(this.makeNewProjectItem());
-    this.projectsListEl.appendChild(this.makeAutosaveItem());
+
+    this.addItem({
+      name: 'Примеры',
+      type: 'folderExamples'
+    }, () => this.displayExamples());
+
+    this.addItem({
+      type: 'projectNew',
+      name: 'Новый проект',
+    });
+
+    this.addItem({
+      type: 'autosave',
+      name: 'Авто-сохранение',
+      date: Date.now() // TODO //
+    });
 
     this.projectsList.forEach((item, index) => {
       const isEditing = index == 1; // TODO - TODO - TODO //
-      item.active = isEditing;
-      this.projectsListEl.appendChild(new ProjectListItem(item, () => this.projectListSelect(index)));
+      item.type = isEditing ? 'projectActive' : 'project';
+      this.addItem(item, () => this.projectListSelect(index));
     });
   }
 
   displayExamples() {
-    // this.headerTitleEl.innerText = 'Примеры';
     this.updateTitle('Примеры');
 
     this.projectsListEl.innerText = '';
-    this.projectsListEl.appendChild(this.makeReturnItem());
 
-    // this.examplesList.forEach((item, index) => {
+    this.addItem({
+      type: 'return',
+      name: 'Назад',
+      description: 'Вернуться в список проектов'
+    }, () => this.displayProjects());
+
     exampleList.forEach((item, index) => {
-      this.projectsListEl.appendChild(this.makeExampleProjectItem(item, index));
+      item.type = 'example';
+      this.addItem(item, () => alert(index));
     });
   }
 

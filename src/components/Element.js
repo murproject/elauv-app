@@ -1,5 +1,5 @@
 export default class Element extends HTMLElement {
-  constructor(attrs = undefined, action = undefined, actionTimeout = 0) {
+  constructor(attrs = undefined, action = undefined, actionTimeout = undefined) {
     super();
 
     this.attrs = Object(this.defaultAttrs);
@@ -9,33 +9,43 @@ export default class Element extends HTMLElement {
       }
     }
 
-    this.setAction(action, actionTimeout);
-    this.onclick = action;
+    this.actionTimeout = 0;
     this.hasRendered = false;
-    this.constructor.init();
-    // this.applyClasses();
+
+    this.init();
+    this.setAction(action, actionTimeout);
   }
 
-  static init() {
-    console.log('defa ' + this.constructor.defaultClasses);
+  init() {
     return;
   }
 
-  setAction(action, actionTimeout = 0) {
+  setClass(name, isActive) {
+    if (isActive) {
+      this.classList.add(name);
+    } else {
+      this.classList.remove(name);
+    }
+  }
+
+  setAction(action, actionTimeout = undefined) {
     this.action = action;
-    this.actionTimeout = actionTimeout;
-    this.onclick = setTimeout(() => this.action, 50);
+    if (actionTimeout !== null && actionTimeout !== undefined) {
+      this.actionTimeout = actionTimeout;
+    }
+
+    this.onclick = () => setTimeout(this.action, this.actionTimeout);
   }
 
   applyClasses() {
-    console.log("classes = " + this.constructor.defaultClasses);
+    // console.log("classes = " + this.constructor.defaultClasses);
     this.constructor.defaultClasses.forEach(item => {
       this.classList.add(item);
     });
   }
 
   update() {
-    console.log("UPD");
+    // console.log("UPD");
     this.hasRendered = true;
     this.innerHTML = this.render();
   }
@@ -54,8 +64,8 @@ export default class Element extends HTMLElement {
   }
 
   static get observedAttributes() {
-    console.log("observed:")
-    console.log(this.defaultAttrs)
+    // console.log("observed:")
+    // console.log(this.defaultAttrs)
     return Object.keys(this.defaultAttrs);
   }
 
