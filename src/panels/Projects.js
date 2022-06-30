@@ -11,6 +11,10 @@ dayjs.locale('ru');
 dayjs.extend(relativeTime)
 dayjs.extend(isBetween)
 
+import ProjectListItem from '/src/components/ProjectItem.js'
+
+
+
 function generateId() {
   return (+new Date()).toString(36) + Math.random().toString(36).substring(1);
 }
@@ -103,6 +107,8 @@ export default class Projects extends Panel {
         <div id="projects-head-buttons" class="row font-thin"></div>
       </div>
     `
+
+    // document.p = ProjectItem;
   }
 
   init() {
@@ -174,7 +180,6 @@ export default class Projects extends Panel {
   }
 
   makeProjectItem(item, index) {
-    const isEditing = index == 1; // TODO //
 
     let itemEl = document.createElement("div");
     itemEl.classList.add("list-item");
@@ -346,7 +351,9 @@ export default class Projects extends Panel {
     this.projectsListEl.appendChild(this.makeAutosaveItem());
 
     this.projectsList.forEach((item, index) => {
-      this.projectsListEl.appendChild(this.makeProjectItem(item, index));
+      const isEditing = index == 1; // TODO - TODO - TODO //
+      item.active = isEditing;
+      this.projectsListEl.appendChild(new ProjectListItem(item, () => this.projectListSelect(index)));
     });
   }
 

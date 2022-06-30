@@ -348,14 +348,17 @@ body {
         font-size: 11px !important;
     }
 
-    .dateRelative {
+    .dateRelative,
+    .descriptionSecondary {
         display: none;
     }
 }
 
 @media (max-width: 640px) {
     .dateRelative,
-    .dateAbsolute {
+    .dateAbsolute,
+    .descriptionMain,
+    .descriptionSecondary {
         font-size: 12px !important;
     }
 }
@@ -452,8 +455,8 @@ body {
     height: 1.5em;
     background-color: var(--color-dark);
     /* background-color: var(--color-blue); */
-    mask-size: cover !important;
-    -webkit-mask-size: cover !important;
+    /* mask-size: cover !important; */
+    /* -webkit-mask-size: cover !important; */
 }
 
 .icon.small {
