@@ -1,23 +1,8 @@
 import Panel from './Panel'
 import Icon from '/src/components/Icon'
 import Button from '../components/Button';
-
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime'
-import isBetween from 'dayjs/plugin/isBetween'
-import 'dayjs/locale/ru'
-
-dayjs.locale('ru');
-dayjs.extend(relativeTime)
-dayjs.extend(isBetween)
-
 import ProjectListItem from '/src/components/ProjectItem.js'
-
-
-
-function generateId() {
-  return (+new Date()).toString(36) + Math.random().toString(36).substring(1);
-}
+import Utils from '/src/utils/Utils';
 
 let autosave = {
   date: new Date(Date.parse('2022-06-28T13:18:31+1000')),
@@ -161,21 +146,21 @@ export default class Projects extends Panel {
 
   loadProjectsList(populate = false) {
     this.projectsList = example; // TODO
-    if (populate) {
-      for (let i = 0; i < 22; i++) {
-        let name = '';
-        const iter = Math.round(Math.random() * 6) + 1
-        for (let j = 0; j < iter; j++) {
-          name += Math.random().toString(36).slice(2, Math.random() * 8 + 3) + ' ';
-        }
-        const item = {
-          name: name,
-          date: new Date(+new Date - Math.round(Math.random() * 100000000000)),
-          data: {},
-        };
-        this.projectsList.push(item);
-      }
-    }
+    // if (populate) {
+    //   for (let i = 0; i < 22; i++) {
+    //     let name = '';
+    //     const iter = Math.round(Math.random() * 6) + 1
+    //     for (let j = 0; j < iter; j++) {
+    //       name += Math.random().toString(36).slice(2, Math.random() * 8 + 3) + ' ';
+    //     }
+    //     const item = {
+    //       name: name,
+    //       date: new Date(+new Date - Math.round(Math.random() * 100000000000)),
+    //       data: {},
+    //     };
+    //     this.projectsList.push(item);
+    //   }
+    // }
     this.projectsList = this.projectsList.sort((a, b) => b.date - a.date);
   }
 
