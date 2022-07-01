@@ -49,12 +49,15 @@ export default class Element extends HTMLElement {
     console.log("UPD");
     this.hasRendered = true;
     this.innerHTML = this.render();
+    this.afterRender();
   }
 
   render() {
     console.warn("Trying to render dummy element!");
     return `<!-- dummy element -->`;
   }
+
+  afterRender() { }
 
   static get defaultClasses() {
     return ['none'];
