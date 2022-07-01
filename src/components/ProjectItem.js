@@ -57,9 +57,11 @@ export default class ProjectListItem extends Element {
         ${dateRelative}
       </div>
 
-      <div class="dateAbsolute ${Utils.notNull(!dateAbsolute, 'hidden')}">
+      <div class="dateAbsolute ${!dateAbsolute ? 'hidden' : ''}">
         ${dateAbsolute}
       </div>
+
+      <br><br>
     `;
   }
 
