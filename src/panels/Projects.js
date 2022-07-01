@@ -136,7 +136,7 @@ export default class Projects extends Panel {
         icon: 'trash-can-outline',
         iconColor: 'red',
         text: 'Удалить всё',
-        action: () => this.wipeAllProject(), // TODO //
+        action: () => this.openWipeAllDialog(), // TODO //
       },
     ];
 
@@ -224,30 +224,68 @@ export default class Projects extends Panel {
   }
 
   projectListSelect(index) {
-    document.app.setLoading(true, 0);
+    // document.app.setLoading(true, 0);
 
     setTimeout(() => {
       console.log(this.projectsList[index]);
-      document.app.panels.blockly.load(this.projectsList[index].data);
-      document.app.panelSelect(document.app.panels.blockly);
+      // document.app.panels.blockly.load(this.projectsList[index].data);
+      // document.app.panelSelect(document.app.panels.blockly);
+      this.openProjectDialog(this.projectsList[index]);
     }, 75);
   }
 
-  wipeAllProject() {
+  openProjectDialog(item) {
+    document.app.showGlobalDialog(
+      new GlobalDialog({
+        closable: true,
+        title: item.name.length > 0 ? item.name : '(без названия)',
+        text: /*html*/`
+          Дата изменения: ${Utils.dateStringAbsolute(item.date)}
+        `,
+        classes: 'text-center',
+        buttons: [
+          new Button({
+            text: 'Открыть',
+            icon: 'puzzle',
+            classes: 'button-vertical',
+          }, () => document.app.closeGlobalDialog()), // TODO //
+          new Button({
+            text: 'В файл',
+            icon: 'export',
+            classes: 'button-vertical',
+          }, () => document.app.closeGlobalDialog()),
+          new Button({
+            text: 'Удалить',
+            icon: 'trash-can',
+            iconColor: 'red',
+            classes: 'button-vertical',
+          }, () => document.app.closeGlobalDialog()),
+          new Button({
+            text: 'Назад',
+            icon: 'keyboard-return',
+            classes: 'button-vertical',
+          }, () => document.app.closeGlobalDialog()),
+        ]
+      })
+    );
+  }
+
+  openWipeAllDialog() {
     document.app.showGlobalDialog(
       new GlobalDialog({
         title: 'Удалить все проекты?',
-        text: 'Все пользовательские проекты<br>будут безвозратно удалены.',
+        text: 'Все пользовательские проекты<br>будут безвозвратно удалены.',
+        classes: 'text-center',
         buttons: [
           new Button({
             text: 'Да, удалить',
             icon: 'trash-can',
             iconColor: 'red',
-          }, () => document.app.closeGlobagDialog()), // TODO //
+          }, () => document.app.closeGlobalDialog()), // TODO //
           new Button({
             text: 'Нет, оставить',
-            icon: 'content-save-check'
-          }, () => document.app.closeGlobagDialog()),
+            icon: 'content-save',
+          }, () => document.app.closeGlobalDialog()),
         ]
       })
     );

@@ -1196,7 +1196,8 @@ input[type="number"] {
 }
 
 #main-panel-wrapper {
-    background: linear-gradient(45deg, hsl(200, 20%, 85%), hsl(200, 20%, 100%));
+    /* background: linear-gradient(45deg, hsl(200, 20%, 85%), hsl(200, 20%, 100%)); */
+    background: linear-gradient(45deg, hsl(200, 10%, 90%), hsl(200, 25%, 95%));
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
 }
@@ -1353,10 +1354,10 @@ input[type="number"] {
     border-radius: var(--radius);
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 
-    min-width: 50vw;
+    min-width: 22em;
     max-width: 75vw;
 
-    min-height: 25vh;
+    /* min-height: 25vh; */
     max-height: 80vh;
 
     display: flex;
@@ -1368,6 +1369,8 @@ input[type="number"] {
 
 .global-dialog h1 {
     margin-bottom: 0;
+    margin-top: 0.5em;
+    /* width: calc(100% - 1.75em); */
 }
 
 .global-dialog .push-button {
@@ -1382,4 +1385,18 @@ input[type="number"] {
     100% {
         opacity: 1;
     }
+}
+
+.global-dialog-close {
+    text-align: right;
+/*     border: 1px solid red; */
+    /* position: absolute; */
+    height: 0;
+/*     display: none; */
+}
+
+.global-dialog-close span {
+    position: absolute;
+    margin-top: 1.0em;
+    margin-left: -1.5em;
 }

@@ -131,10 +131,10 @@ const app = {
   showGlobalDialog(dialog) {
     // TODO: dont'query each time
     document.querySelector('#global-wrapper').classList.add('active');
-    setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 350);
+    setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 80);
   },
 
-  closeGlobagDialog() {
+  closeGlobalDialog() {
     document.querySelector('#global-wrapper').classList.remove('active');
     document.querySelector('#global-wrapper-content').innerText = '';
   },

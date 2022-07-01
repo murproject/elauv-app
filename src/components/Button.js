@@ -3,7 +3,7 @@ import Icon from '/src/components/Icon'
 
 export default class Button extends Element {
   static get defaultClasses() {
-    return ['push-button'];
+    return [];
   }
 
   static get tag() {
@@ -11,7 +11,7 @@ export default class Button extends Element {
   }
 
   init() {
-    this.actionTimeout = 10;
+    this.actionTimeout = 50;
     this.setIcon(this.attrs.icon, this.attrs.iconColor, this.attrs.iconClasses);
   }
 
@@ -53,6 +53,7 @@ export default class Button extends Element {
 
   render() {
     this.setClass(this.attrs.type);
+    this.applyClasses(this.attrs.classes);
 
     return /*html*/`
       ${this.icon}

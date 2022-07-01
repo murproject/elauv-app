@@ -38,17 +38,27 @@ export default class Element extends HTMLElement {
     this.onclick = () => setTimeout(this.action, this.actionTimeout);
   }
 
-  applyClasses() {
+  applyClasses(classes = undefined) {
     // console.log("classes = " + this.constructor.defaultClasses);
     this.constructor.defaultClasses.forEach(item => {
       this.classList.add(item);
     });
+
+    if (typeof(classes) === 'array') {
+      classes.forEach(item => {
+        this.classList.add(item);
+      });
+    } else if (typeof(classes) === 'string') {
+      this.classList.add(classes);
+    }
   }
 
   update() {
     console.log("UPD");
+    this.innerHTML = "";
+    this.beforeRender();
     this.hasRendered = true;
-    this.innerHTML = this.render();
+    this.innerHTML += this.render();
     this.afterRender();
   }
 
@@ -56,6 +66,8 @@ export default class Element extends HTMLElement {
     console.warn("Trying to render dummy element!");
     return `<!-- dummy element -->`;
   }
+
+  beforeRender() {}
 
   afterRender() { }
 
