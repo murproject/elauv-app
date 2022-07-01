@@ -1,26 +1,35 @@
+function fillDefaults(incomingObject = {}, defaultObject = {}) {
+  let result = Object(defaultObject);
+
+  for (const key in incomingObject) {
+    result[key] = incomingObject[key];
+  }
+
+  return result;
+}
+
 export default class Element extends HTMLElement {
   constructor(attrs = undefined, action = undefined, actionTimeout = undefined) {
     super();
 
-    this.attrs = Object(this.defaultAttrs);
-    if (typeof(attrs) === 'object') {
-      for (const key in attrs) {
-        this.attrs[key] = attrs[key];
-      }
-    }
-
+    this.attrs = fillDefaults(attrs, this.constructor.defaultAttrs);
     this.actionTimeout = 0;
     this.hasRendered = false;
 
     this.init();
-    this.setAction(action, actionTimeout);
+
+    if (action) {
+      this.attrs.action = action;
+    }
+
+    this.setAction(this.attrs.action, this.actionTimeout);
   }
 
   init() {
     return;
   }
 
-  setClass(name, isActive) {
+  setClass(name, isActive = true) {
     if (isActive) {
       this.classList.add(name);
     } else {
@@ -45,7 +54,7 @@ export default class Element extends HTMLElement {
   }
 
   update() {
-    // console.log("UPD");
+    console.log("UPD");
     this.hasRendered = true;
     this.innerHTML = this.render();
   }
@@ -80,6 +89,10 @@ export default class Element extends HTMLElement {
       this.applyClasses();
       this.update();
     }
+  }
+
+  inject(parent) {
+    parent.appendChild(this);
   }
 
   static get tag() {

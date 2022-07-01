@@ -78,7 +78,7 @@ export default class Panel {
   }
 
   setIcon(name, color, modifier='') {
-    this.panelButton.setIcon(name, 'big ' + modifier, color); // TODO //
+    this.panelButton.setIcon(name, color, 'big ' + modifier); // TODO //
   }
 
 }

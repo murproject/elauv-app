@@ -23,7 +23,7 @@ export default class About extends Panel {
         <h1>
           ElementaryAUV App<br>
           <span class="opacity-50 text-small">
-            Версия 0.00 / 2022-06-28
+            Версия 0.00 / 2022-00-00
           </span>
         </h1>
 
@@ -44,9 +44,8 @@ export default class About extends Panel {
   }
 
   init() {
-    // this.panelButton.el.classList.remove('panel-button');
-    this.panelButton.el.classList.add('logo');
-    this.panelButton.el.innerHTML = `<img src="/media/icon-small.png" />`;
+    this.panelButton.setAttribute('type', 'logo');
+    this.panelButton.setText(`<img src="/media/icon-small.png" />`);
 
     this.makeButtons();
   }

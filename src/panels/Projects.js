@@ -214,7 +214,7 @@ export default class Projects extends Panel {
     this.projectsList.forEach((item, index) => {
       const isEditing = index == 1; // TODO - TODO - TODO //
       item.type = isEditing ? 'projectActive' : 'project';
-      this.addItem(item, () => this.projectListSelect(index));
+      this.addItem(item, () => {this.projectListSelect(index)});
     });
   }
 
