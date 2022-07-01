@@ -38,8 +38,8 @@ export default class ProjectListItem extends Element {
     const icon = icons[this.attrs.type];
     this.setClass('active', this.attrs.type === 'projectActive');
 
-    const dateAbsolute = Utils.notNull(Utils.dateStringAbsolute(this.attrs.date));
-    const dateRelative = Utils.notNull(Utils.dateStringRelative(this.attrs.date));
+    const dateAbsolute = Utils.notNull(Utils.dateStringAbsolute(this.attrs.date, true));
+    const dateRelative = Utils.notNull(Utils.dateStringRelative(this.attrs.date, true));
     const description = Utils.notNull(this.attrs.description);
 
     return /*html*/`
