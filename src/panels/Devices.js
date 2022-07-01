@@ -2,6 +2,7 @@ import Panel from './Panel'
 import mur from '/src/vehicle/apiGameMur.js'
 import Icon from '/src/components/Icon'
 import Button from '../components/Button';
+import DeviceListItem from '../components/DeviceItem';
 
 export default class Devices extends Panel {
 
@@ -70,6 +71,8 @@ export default class Devices extends Panel {
     }
 
     this.setIcon('bluetooth-connect'); // TODO //
+
+    setTimeout(() => this.scanDevices(), 200  )
   }
 
 
@@ -115,67 +118,15 @@ export default class Devices extends Panel {
 
 
   onUpdateDevicesList(devices) {
-    this.devicesListEl.innerHtml = "";
     this.devicesListEl.innerText = "";
-    this.devicesListEl.textContent = "";
 
     if (devices.length > 0) {
       this.welcomeEl.classList.add('hidden');
     }
 
     devices.forEach(device => {
-      let deviceEl = document.createElement("div");
-      deviceEl.classList.add("device-item");
-
-      const isOnline = (device.isOnline || (device.isActive && mur.conn.state == "open"));
-      // this.addDeviceTag(deviceEl, isOnline ? "online" : "offline", ('isCompatible' in device & device.isCompatible));
-      this.addDeviceTag(deviceEl, isOnline ? `${Icon('antenna', 'green-bright')}` : `${Icon('checkbox-blank-circle-outline', 'dark', 'opacity-25')}`, ('isCompatible' in device & device.isCompatible));
-
-      let titleDiv = document.createElement("div");
-      titleDiv.classList.add("device-title");
-
-      if (device.isCompatible) {
-        let nameEl = document.createElement("div");
-        nameEl.innerText = `${device.name.substring(0, device.name.search('-'))}`;
-        nameEl.classList.add("text");
-        titleDiv.appendChild(nameEl);
-
-        let nameIdEl = document.createElement("div");
-        nameIdEl.innerText = `${device.name.replace('ElementaryAUV-', '')}`;
-        nameIdEl.classList.add("text");
-        nameIdEl.classList.add("bold");
-        titleDiv.appendChild(nameIdEl);
-
-      } else if (device.name.length > 0) {
-        let nameEl = document.createElement("div");
-        nameEl.innerText = `${device.name}`;
-        nameEl.classList.add("text");
-        titleDiv.appendChild(nameEl);
-      }
-
-
-      let addrEl = document.createElement("div");
-      addrEl.innerText = `[${device.address}]`;
-      addrEl.classList.add("text");
-      addrEl.classList.add("monospace");
-      addrEl.classList.add("text-tiny");
-      if (device.isCompatible) addrEl.classList.add("opacity-25");
-      titleDiv.appendChild(addrEl);
-
-      deviceEl.appendChild(titleDiv);
-
-      // this.addDeviceTag(deviceEl, `${Icon('checkbox-marked-outline')}`, device.isActive);
-      // this.addDeviceTag(deviceEl, `${Icon('content-save')}`, device.isPaired);
-
-      // this.addDeviceTag(deviceEl, `${Icon('checkbox-marked-outline')}`, device.isActive);
-      this.addDeviceTag(deviceEl, device.isActive ? `${Icon('checkbox-marked-outline')}` : `${Icon('content-save')}`, device.isPaired || device.isActive);
-
-      if (!device.isCompatible) deviceEl.classList.add("inactive");
-      if (device.isActive && mur.conn.state == "open") deviceEl.classList.add("active");
-
-      deviceEl.onclick = () => mur.connect(device.address);
-
-      this.devicesListEl.appendChild(deviceEl);
+      device.isOnline = (device.isOnline || (device.isActive && mur.conn.state == "open"));
+      this.devicesListEl.appendChild(new DeviceListItem(device, () => mur.connect(device.address)));
     });
 
     let emptyEl = document.createElement("div");
