@@ -1,18 +1,10 @@
-function fillDefaults(incomingObject = {}, defaultObject = {}) {
-  let result = Object(defaultObject);
-
-  for (const key in incomingObject) {
-    result[key] = incomingObject[key];
-  }
-
-  return result;
-}
+import Utils from "/src/utils/Utils";
 
 export default class Element extends HTMLElement {
   constructor(attrs = undefined, action = undefined, actionTimeout = undefined) {
     super();
 
-    this.attrs = fillDefaults(attrs, this.constructor.defaultAttrs);
+    this.attrs = Utils.fillDefaults(attrs, this.constructor.defaultAttrs);
     this.actionTimeout = 0;
     this.hasRendered = false;
 
@@ -69,7 +61,10 @@ export default class Element extends HTMLElement {
   }
 
   static get defaultAttrs() {
-    return {};
+    return {
+      active: false,
+      enabled: true,
+    };
   }
 
   static get observedAttributes() {

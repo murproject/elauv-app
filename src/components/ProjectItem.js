@@ -1,14 +1,6 @@
 import Element from './Element.js'
 import Icon from '/src/components/Icon'
-import dayjs from '/src/utils/Dates.js'
-
-function dateStringAbsolute(date) {
-  return date ? dayjs(date).format('D MMMM<br>HH:mm') : null;
-}
-
-function dateStringRelative(date) {
-  return date ? dayjs(date).format('dddd<br>') + dayjs(date).fromNow() : null;
-}
+import Utils from "/src/utils/Utils";
 
 const icons = {
   project:        Icon('puzzle', 'opacity-50'),
@@ -19,14 +11,6 @@ const icons = {
   example:        Icon('star', 'opacity-50'),
   return:         Icon('keyboard-backspace', 'opacity-50'),
 };
-
-function notNull(item, value) {
-  if (value) {
-    return item ? value : '';
-  } else {
-    return item ? item : '';
-  }
-}
 
 export default class ProjectListItem extends Element {
   static get defaultClasses() {
@@ -54,9 +38,9 @@ export default class ProjectListItem extends Element {
     const icon = icons[this.attrs.type];
     this.setClass('active', this.attrs.type === 'projectActive');
 
-    const dateAbsolute = notNull(dateStringAbsolute(this.attrs.date));
-    const dateRelative = notNull(dateStringRelative(this.attrs.date));
-    const description = notNull(this.attrs.description);
+    const dateAbsolute = Utils.notNull(Utils.dateStringAbsolute(this.attrs.date));
+    const dateRelative = Utils.notNull(Utils.dateStringRelative(this.attrs.date));
+    const description = Utils.notNull(this.attrs.description);
 
     return /*html*/`
       ${icon}
@@ -73,7 +57,7 @@ export default class ProjectListItem extends Element {
         ${dateRelative}
       </div>
 
-      <div class="dateAbsolute ${notNull(!dateAbsolute, 'hidden')}">
+      <div class="dateAbsolute ${Utils.notNull(!dateAbsolute, 'hidden')}">
         ${dateAbsolute}
       </div>
     `;
