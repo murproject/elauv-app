@@ -16,10 +16,24 @@ export default class GlobalDialog extends Element {
       title: '',
       text: '',
       buttons: [],
+      closable: false,
     };
   }
 
+  beforeRender() {
+    // if (this.attrs.closable) {
+    //   this.closeButton = document.createElement('div');
+    //   this.appendChild(this.closeButton);
+    //   this.closeButton.innerHTML = /*html*/`
+    //     <div class="global-dialog-close">${Icon('close')}</div>
+    //   `;
+    //   this.closeButton.querySelector(".global-dialog-close").onclick = document.app.closeGlobalDialog;
+    // }
+  }
+
   render() {
+    this.applyClasses(this.attrs.classes);
+
     return /*html*/`
       <h1>${this.attrs.title}</h1>
       <p>${this.attrs.text}</p>

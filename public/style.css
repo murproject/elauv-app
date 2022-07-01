@@ -88,7 +88,7 @@ body {
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: var(--radius);
 
-    font-weight: 300;
+    /* font-weight: 300; */
 }
 
 .button-vertical {
@@ -312,7 +312,7 @@ body {
 }
 
 .list-item-title {
-    font-weight: 300;
+    /* font-weight: 300; */
     font-size: 18px;
 }
 
@@ -1157,7 +1157,7 @@ input[type="number"] {
 
 .header-titlebar-caption {
     padding: 0 1em;
-    font-weight: 300;
+    /* font-weight: 300; */
     font-size: 1rem !important;
 }
 
@@ -1349,7 +1349,7 @@ input[type="number"] {
 }
 
 .global-dialog {
-    background: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.65);
     padding: 1em 2em;
     border-radius: var(--radius);
     box-shadow: 0 0 10px rgba(0,0,0,0.5);

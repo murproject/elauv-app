@@ -2,10 +2,21 @@
 
 export default {
   saved: [],
+  autosave: {},
+  current: {},
+  examples: [],
 
   loadSavedProjects() {
+    this.examples = examples;
     this.saved = example; // TODO: localstorage //
     this.saved = this.saved.sort((a, b) => b.date - a.date);
+    this.autosave = {
+      name: 'Авто-сохранение',
+      date: new Date(Date.parse('2022-06-28T13:18:31+1000')),
+      id: null,
+      data: {},
+      version: 0,
+    }
   },
 
   loadProject(item) {
@@ -49,6 +60,34 @@ let example = [
     id: 'l4xobdi4.wyq2mi425fd',
     name: '',
     date: new Date(Date.parse('2022-05-27T11:25:17+1000')),
+    data: {},
+    version: 0,
+  },
+];
+
+
+const examples = [
+  {
+    name: 'Простые движения',
+    description: 'Движения вперёд и назад',
+    data: {},
+    version: 0,
+  },
+  {
+    name: 'Пропорциональный регулятор',
+    description: 'Удержание курса с помощью<br>пропорционального регулятора',
+    data: {},
+    version: 0,
+  },
+  {
+    name: 'Исследователь стенок',
+    description: 'Ехать вперёд и назад до<br>удара в стену аквариума',
+    data: {},
+    version: 0,
+  },
+  {
+    name: 'Кладоискатель',
+    description: 'Дойти до чёрной зоны и<br>поднять монетку из сундука',
     data: {},
     version: 0,
   },
