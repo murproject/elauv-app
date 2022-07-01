@@ -4,6 +4,8 @@ import Button from '../components/Button';
 import ProjectListItem from '/src/components/ProjectItem.js'
 import Utils from '/src/utils/Utils';
 
+import GlobalDialog from '/src/components/GlobalDialog.js';
+
 let autosave = {
   date: new Date(Date.parse('2022-06-28T13:18:31+1000')),
   id: null,
@@ -134,7 +136,7 @@ export default class Projects extends Panel {
         icon: 'trash-can-outline',
         iconColor: 'red',
         text: 'Удалить всё',
-        action: () => { }, // TODO //
+        action: () => this.wipeAllProject(), // TODO //
       },
     ];
 
@@ -175,6 +177,7 @@ export default class Projects extends Panel {
   }
 
   displayProjects() {
+    this.headButtonsEl.classList.remove('hidden');
     this.updateTitle('Проекты');
 
     this.projectsListEl.innerText = '';
@@ -203,6 +206,7 @@ export default class Projects extends Panel {
   }
 
   displayExamples() {
+    this.headButtonsEl.classList.add('hidden');
     this.updateTitle('Примеры');
 
     this.projectsListEl.innerText = '';
@@ -227,6 +231,26 @@ export default class Projects extends Panel {
       document.app.panels.blockly.load(this.projectsList[index].data);
       document.app.panelSelect(document.app.panels.blockly);
     }, 75);
+  }
+
+  wipeAllProject() {
+    document.app.showGlobalDialog(
+      new GlobalDialog({
+        title: 'Удалить все проекты?',
+        text: 'Все пользовательские проекты<br>будут безвозратно удалены.',
+        buttons: [
+          new Button({
+            text: 'Да, удалить',
+            icon: 'trash-can',
+            iconColor: 'red',
+          }, () => document.app.closeGlobagDialog()), // TODO //
+          new Button({
+            text: 'Нет, оставить',
+            icon: 'content-save-check'
+          }, () => document.app.closeGlobagDialog()),
+        ]
+      })
+    );
   }
 
 }
