@@ -221,6 +221,10 @@ export default class BlocklyPanel extends Panel {
     const newStateUndo = this.workspace.getUndoStack().length > 0;
     const newStateRedo = this.workspace.getRedoStack().length > 0;
 
+    // TODO: check for modifications in correct way!
+    // TODO: check old status (currently causes emitting lots of updates)
+    this.setIcon((newStateUndo || newStateRedo) ? 'puzzle-edit' : 'puzzle');
+
     if (this.stateOfUndo.undo !== newStateUndo) {
       this.stateOfUndo.undo = newStateUndo;
       this.actionButtons.undo.setEnabled(newStateUndo)
