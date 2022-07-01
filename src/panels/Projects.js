@@ -169,7 +169,7 @@ export default class Projects extends Panel {
           new Button({
             text: 'Открыть',
             icon: 'puzzle',
-          }, () => ProjectsStorage.loadProject(item)), // TODO //
+          }, () => this.openProject(item)), // TODO //
           new Button({
             text: 'Назад',
             icon: 'keyboard-return',
@@ -195,7 +195,7 @@ export default class Projects extends Panel {
             text: 'Открыть',
             icon: 'puzzle',
             classes: 'button-vertical',
-          }, () => ProjectsStorage.loadProject(item)), // TODO //
+          }, () => this.openProject(item)), // TODO //
           new Button({
             text: 'В файл',
             icon: 'export',
@@ -230,8 +230,33 @@ export default class Projects extends Panel {
             iconColor: 'red',
           }, () => document.app.closeGlobalDialog()), // TODO //
           new Button({
-            text: 'Нет, оставить',
-            icon: 'content-save',
+            text: 'Назад',
+            icon: 'keyboard-return',
+          }, () => document.app.closeGlobalDialog()),
+        ]
+      })
+    );
+  }
+
+  openProject(item) {
+    document.app.closeGlobalDialog();
+    this.openConfirmUnsavedDialog(() => ProjectsStorage.loadProject(item));
+  }
+
+  openConfirmUnsavedDialog(action) {
+    document.app.showGlobalDialog(
+      new GlobalDialog({
+        title: 'Редактируемый проект<br>будет закрыт!',
+        text: 'Несохранённые изменения<br>будут безвозвратно удалены.',
+        classes: 'text-center',
+        buttons: [
+          new Button({
+            text: 'Открыть',
+            icon: 'puzzle',
+          }, () => { document.app.closeGlobalDialog(); action() }), // TODO //
+          new Button({
+            text: 'Назад',
+            icon: 'keyboard-return',
           }, () => document.app.closeGlobalDialog()),
         ]
       })
