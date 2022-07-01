@@ -27,7 +27,6 @@ export default class Devices extends Panel {
     `
   }
 
-
   init() {
     // this.statusEl = this.q("#connStatus");
     // this.statusEl.innerText = "Connection type: " + mur.conn.type;
@@ -60,10 +59,6 @@ export default class Devices extends Panel {
       // classes: 'button-vertical',
     }).inject(this.buttonsWrapper);
 
-    // this.q("#connScanDevices").onclick = () => this.scanDevices();
-    // this.q("#connScanCode").onclick = () => this.scanCode();
-    // this.q("#connDisconnect").onclick = () => this.disconnect();
-
     if (mur.conn.type === "bluetooth") {
       mur.conn.onDeviceDiscovered = (devices) => this.onUpdateDevicesList(devices);
     } else {
@@ -95,25 +90,6 @@ export default class Devices extends Panel {
 
   disconnect() {
     mur.disconnect();
-  }
-
-
-  addDeviceTag(item, tag, active = true) {
-    let tagEl = document.createElement("span");
-
-    if (tag === 'online') {
-      tagEl.classList.add('device-tag-online');
-    } else if (tag ==='offline') {
-      tagEl.classList.add('device-tag-offline');
-    } else {
-      tagEl.classList.add('device-tag');
-      // tagEl.classList.add('float-rigth');
-      tagEl.innerHTML = tag;
-    }
-
-    if (!active) tagEl.classList.add('opacity-0');
-
-    item.appendChild(tagEl);
   }
 
 
