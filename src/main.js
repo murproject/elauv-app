@@ -8,6 +8,8 @@ import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';
 import ConsolePanel from './panels/Console.js'
 
+import Button from './components/Button.js';
+
 const app = {
 
   // TODO: integrate loading wrapper into PANEL, not main!
@@ -26,6 +28,11 @@ const app = {
 
     <section id="main-panel-wrapper">
       <div id="loading-wrapper" class="loading-wrapper"></div>
+    </section>
+
+    <section id="global-wrapper" class="">
+      <div class="global-wrapper-background"></div>
+      <div id="global-wrapper-content"></div>
     </section>
 
     <div id="flying-panel-wrapper" class="bottom-collapsed">
@@ -119,6 +126,17 @@ const app = {
     mur.onStatusUpdated = (status) => {
       this.panels.telemetry.update()
     }
+  },
+
+  showGlobalDialog(dialog) {
+    // TODO: dont'query each time
+    document.querySelector('#global-wrapper').classList.add('active');
+    setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 350);
+  },
+
+  closeGlobagDialog() {
+    document.querySelector('#global-wrapper').classList.remove('active');
+    document.querySelector('#global-wrapper-content').innerText = '';
   },
 
   setLoading(isLoading, timeout) {
