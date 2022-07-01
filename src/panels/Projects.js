@@ -110,38 +110,37 @@ export default class Projects extends Panel {
   makeButtons() {
     this.headButtonsEl = this.q('#projects-head-buttons')
 
-    new Button({
-      name: 'save',
-      text: 'Сохранить',
-      action: () => {},
-      icon: 'content-save',
-      // classes: 'button-vertical',
-    }).inject(this.headButtonsEl);
+    const buttons = [
+      {
+        name: 'save',
+        icon: 'content-save',
+        text: 'Сохранить',
+        action: () => { }, // TODO //
+      },
+      {
+        name: 'import',
+        icon: 'import',
+        text: 'Импорт из&nbsp;файла',
+        action: () => { }, // TODO //
+      },
+      {
+        name: 'export',
+        icon: 'export',
+        text: 'Экспорт в&nbsp;файл',
+        action: () => { }, // TODO //
+      },
+      {
+        name: 'wipe',
+        icon: 'trash-can-outline',
+        iconColor: 'red',
+        text: 'Удалить всё',
+        action: () => { }, // TODO //
+      },
+    ];
 
-    new Button({
-      name: 'import',
-      text: 'Импорт из&nbsp;файла',
-      action: () => {},
-      icon: 'import',
-      // classes: 'button-vertical',
-    }).inject(this.headButtonsEl);
-
-    new Button({
-      name: 'export',
-      text: 'Экспорт в&nbsp;файл',
-      action: () => {},
-      icon: 'export',
-      // classes: 'button-vertical',
-    }).inject(this.headButtonsEl);
-
-    new Button({
-      name: 'wipe',
-      text: 'Удалить всё',
-      action: () => {},
-      icon: 'trash-can-outline',
-      iconColor: 'red',
-      // classes: 'button-vertical',
-    }).inject(this.headButtonsEl);
+    buttons.forEach(config => {
+      new Button(config).inject(this.headButtonsEl)
+    });
   }
 
   loadProjectsList(populate = false) {
