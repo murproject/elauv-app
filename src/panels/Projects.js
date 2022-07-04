@@ -45,18 +45,21 @@ export default class Projects extends Panel {
         name: 'save',
         icon: 'content-save',
         text: 'Сохранить',
+        classes: 'button-vertical',
         action: () => { }, // TODO //
       },
       {
         name: 'import',
         icon: 'import',
         text: 'Импорт из&nbsp;файла',
+        classes: 'button-vertical',
         action: () => { }, // TODO //
       },
       {
         name: 'export',
         icon: 'export',
         text: 'Экспорт в&nbsp;файл',
+        classes: 'button-vertical',
         action: () => { }, // TODO //
       },
       {
@@ -64,6 +67,7 @@ export default class Projects extends Panel {
         icon: 'trash-can-outline',
         iconColor: 'red',
         text: 'Удалить всё',
+        classes: 'button-vertical',
         action: () => this.openWipeAllDialog(), // TODO //
       },
     ];

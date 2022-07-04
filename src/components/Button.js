@@ -38,7 +38,7 @@ export default class Button extends Element {
     this.setClass('active', isActive);
   }
 
-  setIcon(name, color = 'dark', modifier = 'big') {
+  setIcon(name, color = 'dark', modifier = 'mini') {
     this.attrs.icon = name;
     this.attrs.iconColor = color;
     this.attrs.iconClasses = modifier;
