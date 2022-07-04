@@ -236,8 +236,8 @@ export default {
       // return
     }
 
-    if (!this.macAddress) {
-      // this.scanPaired()
+    if (!this.macAddress || this.state === 'connecting') {
+      this.scanPaired()
       return
     }
 
@@ -247,11 +247,6 @@ export default {
     bluetoothClassicSerial.isEnabled(
       () => {
         this.scanPaired()
-
-        if (!this.macAddress) {
-          return;
-        }
-
         bluetoothClassicSerial.connect(
           this.macAddress,
           [this.spp],
@@ -270,9 +265,7 @@ export default {
                 }
               })
             })
-            if (!this.macAddress) {
-              setTimeout(() => { this.scanPaired() }, 1000)
-            }
+            setTimeout(() => { this.scanPaired() }, 100)
           },
           (error) => {
             // EventBus.$emit('notify', { text: 'ОШИБКА! ' + error })
