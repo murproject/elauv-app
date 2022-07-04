@@ -174,6 +174,7 @@ if (typeof cordova !== 'undefined') {
   document.addEventListener('deviceready', () => {
     window.cutout.has().then(hasCutout => {
       if (hasCutout) {
+        document.querySelector('#app').classList.add('with-statusbar-spacer');
         // TODO: make it better?
         document.addEventListener("resume", triggerStatusbar, false);
         triggerStatusbar();
@@ -194,11 +195,11 @@ if (typeof cordova !== 'undefined') {
 
 function triggerStatusbar() {
   setTimeout(() => {
-    window.StatusBar.overlaysWebView(false);
     window.StatusBar.show();
-    window.StatusBar.backgroundColorByHexString("FFF");
-    window.StatusBar.styleDefault();
-  }, 250);
+    window.StatusBar.overlaysWebView(true);
+    // window.StatusBar.backgroundColorByHexString("FFF");
+    // window.StatusBar.styleDefault();
+  }, 500);
 }
 
 
