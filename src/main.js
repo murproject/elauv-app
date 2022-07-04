@@ -178,9 +178,11 @@ if (typeof cordova !== 'undefined') {
         // TODO: make it better?
         document.addEventListener("resume", triggerStatusbar, false);
         triggerStatusbar();
+
+        // TODO: stupid fix (statusbar disappers after activating android menu)
+        setInterval(() => window.StatusBar.overlaysWebView(true), 500);
       }
     });
-
 
     main();
     setTimeout(() => {
