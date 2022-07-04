@@ -114,7 +114,7 @@ const app = {
     mur.create();
 
     mur.telemetryUpdated = (t, f) => {
-      const prettyTelemetry = JSON.stringify(f, null, '\t');
+      const prettyTelemetry = JSON.stringify(f, null, '  ');
       this.panels.telemetry.update(prettyTelemetry);
       this.panels.blockly.updateTelemetry(t);
     };

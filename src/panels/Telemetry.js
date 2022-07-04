@@ -102,11 +102,11 @@ export default class Telemetry extends Panel {
 
 
       telemetryText += '\n\n';
-      telemetryText += JSON.stringify(this.stats, null, '\t');
+      telemetryText += JSON.stringify(this.stats, null, '  ');
     }
 
     telemetryText += '\n\ncontext = ';
-    telemetryText += JSON.stringify(mur.context, null, '\t')
+    telemetryText += JSON.stringify(mur.context, null, '  ')
 
     this.textElement.innerText = telemetryText;
   }
