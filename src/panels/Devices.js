@@ -66,8 +66,7 @@ export default class Devices extends Panel {
     }
 
     this.setIcon('bluetooth-connect'); // TODO //
-
-    setTimeout(() => this.scanDevices(), 200  )
+    // setTimeout(() => this.scanDevices(), 200  )
   }
 
 
@@ -102,7 +101,12 @@ export default class Devices extends Panel {
 
     devices.forEach(device => {
       device.isOnline = (device.isOnline || (device.isActive && mur.conn.state == "open"));
-      this.devicesListEl.appendChild(new DeviceListItem(device, () => mur.connect(device.address)));
+      device.isConnected = device.isActive && mur.conn.state == "open";
+
+      this.devicesListEl.appendChild(new DeviceListItem(device, () => {
+        mur.connect(device.address);
+        mur.conn.scanPaired();
+      }));
     });
 
     let emptyEl = document.createElement("div");

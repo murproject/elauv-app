@@ -2,6 +2,13 @@ import Element from './Element.js'
 import Icon from '/src/components/Icon'
 import Utils from "/src/utils/Utils";
 
+const icons = {
+  online: Icon('antenna', 'green-bright'),
+  offline: Icon('checkbox-blank-circle-outline', 'dark', 'opacity-25'),
+  active: Icon('checkbox-marked-outline'),
+  paired: Icon('content-save'),
+};
+
 export default class DeviceListItem extends Element {
   static get defaultClasses() {
     return ['list-item', 'device-item'];
@@ -21,20 +28,22 @@ export default class DeviceListItem extends Element {
       address: '',
       isActive: false,
       isOnline: false,
+      isConnected: false,
       isCompatible: false,
     };
   }
 
   render() {
     this.setClass('inactive', !this.attrs.isCompatible);
+    this.setClass('active', this.attrs.isConnected);
 
     this.iconOnline =
       !this.attrs.isCompatible ? '' :
-       this.attrs.isOnline ? Icon('antenna', 'green-bright') : Icon('checkbox-blank-circle-outline', 'dark', 'opacity-25')
+       this.attrs.isOnline ? icons.online : icons.offline
 
     this.iconStatus =
       !(this.attrs.isPaired || this.attrs.isActive) ? '' :
-        this.attrs.isActive ? Icon('checkbox-marked-outline') : Icon('content-save');
+        this.attrs.isActive ? icons.active : icons.paired;
 
     const nameDivider = this.attrs.name.search('-');
 
