@@ -130,11 +130,13 @@ export default class Projects extends Panel {
       date: Date.now(),
     }));
 
-    this.addItem({
-      type: 'autosave',
-      name: ProjectsStorage.autosave.name,
-      date: ProjectsStorage.autosave.date,
-    }, () => this.openProjectDialog(ProjectsStorage.autosave));
+    if ('data' in ProjectsStorage.autosave) {
+      this.addItem({
+        type: 'autosave',
+        name: ProjectsStorage.autosave.name,
+        date: ProjectsStorage.autosave.date,
+      }, () => this.openProjectDialog(ProjectsStorage.autosave));
+    }
 
     ProjectsStorage.saved.forEach((item, index) => {
       const isEditing = index == 1; // TODO - TODO - TODO //

@@ -10,12 +10,8 @@ export default {
   },
 
 
-  notNull(item, value, defaultValue = '') {
-    if (value) {
-      return item ? value : defaultValue;
-    } else {
-      return item ? item : defaultValue;
-    }
+  notNull(item, defaultValue = '') {
+    return item ? item : defaultValue;
   },
 
   fillDefaults(incomingObject = {}, defaultObject = {}) {
