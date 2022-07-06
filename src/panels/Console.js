@@ -1,3 +1,4 @@
+import App from "/src/App.js";
 import Panel from './Panel';
 import Icon from '../components/Icon';
 
@@ -60,8 +61,8 @@ export default class Console extends Panel {
     if (isActive) {
       this.notify(false);
     }
-    if ('blockly' in document.app.panels) {
-      document.app.panels.blockly.collapse(isActive);
+    if ('blockly' in App.panels) {
+      App.panels.blockly.collapse(isActive);
     }
   }
 

@@ -1,3 +1,4 @@
+import App from "/src/App.js";
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 
@@ -32,7 +33,7 @@ export default class Panel {
       type: 'panel-button',
       action: () => {
         setTimeout(
-          () => document.app.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main'),
+          () => App.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main'),
           50
         );
       }
@@ -62,7 +63,7 @@ export default class Panel {
     if (this.active) {
       this.container.classList.add('active');
       if (!this.isBottomPanel) {
-        document.app.setTitle(this.noTitle ? '' : this.name);
+        App.setTitle(this.noTitle ? '' : this.name);
       }
     } else {
       this.container.classList.remove('active');

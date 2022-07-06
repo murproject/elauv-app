@@ -1,3 +1,5 @@
+import App from "/src/App.js";
+
 import Panel from './Panel'
 import Button from '/src/components/Button';
 
@@ -197,7 +199,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   setLoading(isLoading, timeout) {
-    document.app.setLoading(isLoading, timeout);
+    App.setLoading(isLoading, timeout);
   }
 
   onWorkspaceChange() {
@@ -278,7 +280,7 @@ export default class BlocklyPanel extends Panel {
     this.actionButtons.run.setIcon('play', 'dark', 'big');
     this.scriptStatus = 'stopped'
 
-    document.app.panels.console.clear();
+    App.panels.console.clear();
     // this.userData = {};
     // this.variablesDiv.innerText = '';
 
@@ -658,7 +660,7 @@ export default class BlocklyPanel extends Panel {
       mur.context = paramsContext // TODO: move context to global scope?
       mur.controlContext(paramsContext)
 
-      // document.app.panels.telemetry.updateStats("");
+      // App.panels.telemetry.updateStats("");
     }
 
     if (data.type === 'state') {
@@ -686,7 +688,7 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'print') {
-      document.app.panels.console.show(data.msg);
+      App.panels.console.show(data.msg);
       // console.error("PRINT");
       // console.error(data.msg);
     }

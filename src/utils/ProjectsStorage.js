@@ -1,4 +1,5 @@
 // TODO: use unique IDs instead of index
+import App from "/src/App.js";
 
 export default {
   saved: [],
@@ -20,18 +21,18 @@ export default {
   },
 
   loadProject(item) {
-    document.app.closeGlobalDialog();
-    document.app.panels.blockly.load(item.data);
-    document.app.panelSelect(document.app.panels.blockly);
+    App.closeGlobalDialog();
+    App.panels.blockly.load(item.data);
+    App.panelSelect(App.panels.blockly);
   },
 
   saveProject(data, name) {},
 
   exportProject(item) {},
 
-  importProject() {},
-
   exportAllProjects() {},
+
+  importProject() {},
 }
 
 let example = [

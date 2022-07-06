@@ -27,7 +27,7 @@ export default class GlobalDialog extends Element {
     //   this.closeButton.innerHTML = /*html*/`
     //     <div class="global-dialog-close">${Icon('close')}</div>
     //   `;
-    //   this.closeButton.querySelector(".global-dialog-close").onclick = document.app.closeGlobalDialog;
+    //   this.closeButton.querySelector(".global-dialog-close").onclick = App.closeGlobalDialog;
     // }
   }
 
