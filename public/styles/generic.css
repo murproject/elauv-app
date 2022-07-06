@@ -1,0 +1,149 @@
+
+/* disallow user to select text in UI */
+* {
+  user-select: none;
+}
+
+html {
+  overflow: hidden;
+}
+
+textarea {
+  user-select: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+article div {
+  width: 100%;
+}
+
+article h1,
+article h2,
+article p {
+  font-weight: 300;
+  text-align: center;
+}
+
+article h1 {
+  font-size: 22px;
+}
+
+article h2 {
+  font-size: 16px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* custom generic elements */
+
+#app {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+  background:
+        linear-gradient(to bottom, transparent,  white),
+        linear-gradient(to right, hsl(200, 100%, 10%), hsl(200, 35%, 45%));
+}
+
+/* spacer for statusbar (on screens with cutout) */
+#app.with-statusbar-spacer {
+  --statusbar-height: 2em;
+  --header-height: calc(2.25em + var(--statusbar-height)) !important;
+  --height-minus-header: calc(100% - var(--header-height)) !important;
+}
+
+#app.with-statusbar-spacer #head {
+  margin-top: var(--statusbar-height);
+  height: calc(var(--header-height) - var(--statusbar-height)) !important;
+}
+
+/* application header with tabs/buttons */
+#head {
+  background: none;
+  width: 100%;
+  height: var(--header-height);
+
+  display: flex;
+  align-items: end;
+  justify-content: start;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+
+  -webkit-mask-image: linear-gradient(
+      to right,
+      transparent calc(0%),
+      black calc(  0% + 5px),
+      black calc(100% - 5px),
+      transparent calc(100%)
+  );
+}
+
+#head div {
+  font-size: 10px;
+  padding: 0 3px;
+}
+
+.container {
+  height: 100%;
+  width: calc(100% - 1em);
+  max-width: 700px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  margin: 0.5em 0;
+}
+
+.row > .push-button {
+  flex-grow: 1;
+  margin: 0;
+  width: 100%;
+}
+
+.row > .push-button {
+  /* Flexbox gap property isn't supported on old / target Chromium versions! */
+  margin: 0 0.25em;
+}
+
+.row > .push-button:first-child {
+  margin-left: 0!important;
+}
+
+.row > .push-button:last-child {
+  margin-right: 0 !important;
+}

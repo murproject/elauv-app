@@ -1,0 +1,92 @@
+.hidden {
+  display: none !important;
+}
+
+.font-thin {
+  font-weight: 300;
+}
+
+.monospace {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.width-fill {
+  width: 100%;
+}
+
+.vertical-filler {
+  flex-grow: 1;
+}
+
+.float-rigth {
+  float: right;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+.text-tiny {
+  font-size: 11px;
+}
+
+.text-small {
+  font-size: 13px;
+}
+
+.opacity-0 {
+  opacity: 0% !important;
+}
+
+.opacity-25 {
+  opacity: 25% !important;
+}
+
+.opacity-50 {
+  opacity: 50% !important;
+}
+
+.opacity-75 {
+  opacity: 75% !important;
+}
+
+.opacity-100 {
+  opacity: 100% !important;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.soft-edges-vertical {
+  -webkit-mask-image: linear-gradient(
+      transparent calc(0% + 0.1em),
+      black calc(0% + 2em),
+      black calc(100% - 2em),
+      transparent calc(100% - 0.1em)
+  );
+  padding: 1em 0;
+}
+
+.background-white {
+  background: white !important;
+}
+
+.round-top {
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+.round-bottom {
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
+.justify-content-center {
+  justify-content: center;
+}

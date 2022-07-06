@@ -71,8 +71,6 @@ export default class BlocklyPanel extends Panel {
     this.container.classList.add('background-white');
     this.container.classList.add('round-top');
 
-    // this.container.classList.add("fluid");
-
     this.toolButtons = document.createElement("div");
     this.toolButtons.classList.add("buttons-group");
     this.toolButtons.id = "buttons-blockly";
@@ -129,7 +127,6 @@ export default class BlocklyPanel extends Panel {
 
     this.blocklyDiv = document.createElement("div");
     this.blocklyDiv.id = "blocklyDiv";
-    this.blocklyDiv.classList.add("pretty");
     this.container.appendChild(this.blocklyDiv);
 
     this.stateOfUndo = {

@@ -1,0 +1,52 @@
+@keyframes spin {
+  100% {
+      -webkit-transform: rotate(360deg);
+      transform:rotate(360deg);
+  }
+}
+
+.anim-spin {
+  animation: spin 4s linear infinite;
+}
+
+@keyframes pulse {
+  50% {
+      opacity: 50%;
+  }
+
+  100% {
+      opacity: 100%;
+  }
+}
+
+.pulse {
+  animation: 1s linear 0s infinite alternate pulse;
+}
+
+.pulse-once {
+  animation: 1s linear 0s 1 alternate pulse;
+}
+
+@keyframes soft-appear {
+  0% {
+      opacity: 0;
+  }
+
+  100% {
+      opacity: 1;
+  }
+}
+
+@keyframes delayed-appear {
+  0% {
+      opacity: 0%;
+  }
+
+  25% {
+      opacity: 0%;
+  }
+
+  100% {
+      opacity: 100%;
+  }
+}

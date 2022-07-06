@@ -1,0 +1,23 @@
+body {
+  font-family: "Nunito", "Roboto", "Noto Sans", "Open Sans", "Segoe UI", sans-serif;
+
+  --color-dark:   hsl(0, 0%, 20%);
+  --color-light:  hsl(0, 0%, 80%);
+
+  --color-mur:    hsl(200, 100%, 15%);
+  --color-green-bright:  hsl( 90, 70%, 35%);
+
+  --color-red:    hsl(  0, 70%, 25%);
+  --color-orange: hsl( 30, 70%, 25%);
+  --color-yellow: hsl( 50, 70%, 25%);
+  --color-green:  hsl( 90, 70%, 25%);
+  --color-cyan:   hsl(170, 70%, 25%);
+  --color-blue:   hsl(200, 70%, 25%);
+  --color-purple: hsl(290, 70%, 25%);
+
+  --radius: 5px;
+  --radius-round: 999px;
+
+  --header-height: 2.25em;
+  --height-minus-header: calc(100% - var(--header-height));
+}

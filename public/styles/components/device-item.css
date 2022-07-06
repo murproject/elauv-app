@@ -1,0 +1,73 @@
+.device-item {
+  width: 42%;
+  min-width: 16em;
+  margin: 0.5em 0;
+}
+
+.device-tag:last-child {
+  padding-right: 0.75em;
+}
+
+.device-title div {
+  display: inline-block;
+}
+
+.device-item.active,
+.list-item.active {
+  background-color: rgba(50,255,50,0.15);
+}
+
+.device-item:active,
+.list-item:active {
+  background-color: rgba(0,0,0,0.15);
+  box-shadow: inset 0 0 7px rgba(0,0,0,0.35);
+}
+
+.device-item.inactive,
+.list-item.inactive {
+  opacity: 25%;
+  pointer-events: none;
+}
+
+.device-item .text {
+  vertical-align: middle;
+  margin-right: 0.25em;
+}
+
+.device-tag {
+  display: inline-block;
+  margin: 0 0.25em;
+  padding: 0 0.25em;
+  width: 1em;
+  border-radius: var(--radius-round);
+  vertical-align: middle;
+}
+
+.device-tag:first-child {
+  margin-right: 0.75em;
+}
+
+.device-tag-online,
+.device-tag-offline {
+  display: inline-block;
+  margin: 0 0.5em;
+  min-width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--radius-round);
+}
+
+.device-tag-online {
+  background-color: rgba(50,255,50,0.25);
+}
+
+.device-tag-offline {
+  background-color: rgba(100,100,100,0.1);
+}
+
+.device-title {
+  text-align: center;
+  line-height: 1;
+  font-size: 16px;
+}

@@ -10,7 +10,7 @@ export default class Telemetry extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-        <div id="telemetryText" class="monospace soft-edges">Waiting for connection…</div>
+        <div id="telemetryText" class="monospace soft-edges-vertical">Waiting for connection…</div>
         <div class="push-button" id="resetStats">Reset stats</div>
       </div>
     `

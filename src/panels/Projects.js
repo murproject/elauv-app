@@ -15,7 +15,7 @@ export default class Projects extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-        <div class="list-wrapper soft-edges">
+        <div class="list-wrapper soft-edges-vertical">
           <div id="projects-list" class="width-fill"></div>
         </div>
 

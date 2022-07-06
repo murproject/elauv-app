@@ -1,0 +1,280 @@
+#blocklyDiv {
+  width: 100%;
+  height: var(--height-minus-header);
+  position: fixed; /* Important! Best render performance when "fixed" */
+  bottom: 0;
+  z-index: 999;
+}
+
+/* group of blockly-related buttons in main app header */
+#buttons-blockly {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+/* Blocks MDI icons */
+#blocklyDiv g image[*|href^="/mdi"] {
+    height: 34px;
+}
+
+/* Mutator plus icon */
+/* TODO? */
+#blocklyDiv g g:nth-of-type(1) image[*|href^="data:image/svg+xml;"] {
+    width: 19px;
+    height: 19px;
+}
+
+#blocklyDiv g text {
+    pointer-events: none;
+}
+
+#blocklyDiv .blocklyToolboxDiv {
+    padding-left: 0.35em;
+    box-shadow: 0 -3px 20px rgba(0, 0, 0, 0.5);
+}
+
+#blocklyDiv .blocklyToolboxContents {
+    flex-wrap: nowrap !important;
+}
+
+#blocklyDiv .blocklyToolboxContents .blocklyTreeRow {
+    margin-bottom: 0em;
+}
+
+.blocklyTreeLabel {
+    cursor: pointer;
+}
+
+
+#blocklyDiv .blocklyEditableText > text,
+#blocklyDiv .blocklyNonEditableText > text {
+    fill: #fff !important;
+}
+
+#blocklyDiv .blocklyEditableText > rect,
+#blocklyDiv .blocklyNonEditableText > rect {
+    fill: #000;
+    fill-opacity: 0.2;
+}
+
+.blocklyPath {
+    stroke-width: 2px;
+    stroke-opacity: 1.0;
+}
+
+.blocklyMenuItem {
+    min-width: auto !important;
+    border-radius: var(--radius);
+}
+
+.blocklyMenu:not(.blocklyContextMenu) .blocklyMenuItemContent {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: left;
+}
+
+.blocklyMenuItemContent img {
+    outline: solid 2px rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.blocklyMenuItemSelected {
+    border: 3px solid rgba(0,0,0,0.25);
+}
+
+.blocklyMenuItemSelected .blocklyMenuItemCheckbox {
+    background: url('/mdi/check-bold.svg') !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    width: 16px;
+    height: 16px;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    border: none !important;
+    border-radius: var(--radius);
+    color: white;
+    padding-left: 0 !important;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    padding: 1em !important;
+}
+
+.fieldGridDropDownContainer.blocklyMenu .blocklyMenuItem {
+    padding: 0.5em !important;
+    padding-bottom: 0.25em !important;
+}
+
+.blocklyColourTable>tr>td {
+    width: 42px;
+    height: 42px;
+    border: 2.5px solid rgba(0,0,0,0.24);
+    border-radius: var(--radius);
+    margin: 0.2em;
+}
+
+.blocklyColourSelected {
+    outline-width: 3px;
+}
+
+.blocklyMainWorkspaceScrollbar {
+    opacity: 50%;
+}
+
+.blocklyScrollbarHandle {
+    fill: black;
+    fill-opacity: 0.15;
+    transition: fill-opacity 0.1s;
+}
+
+.blocklyScrollbarBackground:hover+.blocklyScrollbarHandle,
+.blocklyScrollbarHandle:hover {
+    fill: black;
+    fill-opacity: 0.25;
+
+}
+
+#blocklyDiv .injectionDiv,
+.blocklyToolboxDiv {
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+}
+
+#blocklyDiv .blocklyToolboxDiv {
+  background: rgba(221, 221, 221, 0.8);
+  z-index: 55;
+}
+
+.blocklyTreeRow {
+  border-radius: 5px;
+  padding-left: 5px !important;
+  border-width: 5px !important;
+}
+
+.blocklyTreeRow:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 5px;
+  height: calc(100% - 10px);
+  margin-left: -10px;
+  width: 5px;
+  border-left: inherit;
+  border-radius: 5px;
+  transform: scale(-1, 1);
+}
+
+.blocklyDropDownDiv {
+  border-radius: var(--radius);
+}
+
+.blocklyToolboxCategory:last-child {
+  padding-right: 10px !important;
+}
+
+.blocklyFlyout {
+  box-shadow: 0 0px 15px rgb(0 0 0 / 25%);
+  animation: 0.07s linear 0s 1 delayed-appear;
+  background: rgba(221, 221, 221, 0.8);
+
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
+.blocklyFlyoutBackground {
+  fill-opacity: 0;
+}
+
+.blocklyTreeLabel {
+  font-family: 'Nunito' !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.05em !important;
+}
+
+.blocklyMenuItemContent {
+  font-family: 'Nunito' !important;
+  font-weight: 800 !important;
+}
+
+.blocklyAngleCircle {
+  stroke: #654;
+  stroke-width: 4;
+  fill: #ddd;
+  fill-opacity: .8;
+}
+
+.blocklyAngleMarks {
+  stroke: #654;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.blocklyAngleGauge {
+  fill: #f88;
+  fill-opacity: .5;
+  pointer-events: none;
+}
+
+.blocklyAngleLine {
+  stroke: #f00;
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+/* TODO: fix .blockly-collapsed */
+.blockly-collapsed {
+  transform-origin: 50% 0%;
+  transform: scale(0.735);
+  top: 2.5em;
+  height: 100%;
+  position: fixed;
+}
+
+.blocklyMainBackground {
+  stroke-width: 0;
+}
+
+.fieldSliderContainer {
+  width: 350px !important;
+}
+
+.fieldSliderContainer::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 0;
+  top: 0em;
+  left: 50%;
+  height: 0.3em;
+  margin: auto;
+  border-radius: --radius-round;
+  border-left: 1px solid rgba(255,255,255,0.5);
+}
+
+.variables-div {
+  opacity: 70%;
+  pointer-events: none;
+  font-size: 16px;
+  font-family: monospace;
+  white-space: pre;
+  height: 100%;
+  width: 100%;
+}
+
+#console-welcome {
+  font-family: monospace !important;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+  opacity: 50%;
+}
+
+.blocklyTreeRow,
+.blocklyTreeRow .blocklyTreeLabel {
+    transition: 0.25s !important;
+}

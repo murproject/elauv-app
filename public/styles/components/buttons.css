@@ -1,0 +1,123 @@
+.panel-button {
+  background: rgba(255,255,255,0.5);
+  height: 100%;
+  text-align: center;
+  transition: 0.05s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0 1em;
+  margin: 0 0.25em;
+  margin-top: 0.1em;
+
+  box-shadow: 0 8px 4px rgba(0,0,0,0.2);
+  border-top-right-radius: var(--radius);
+  border-top-left-radius: var(--radius);
+}
+
+.push-button {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.1));
+  transition: 0.05s;
+  text-align: center;
+  box-shadow: 0 0 var(--radius) rgba(0,0,0,0.1);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0.5em;
+  margin: 0.5em;
+  z-index: unset;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--radius);
+}
+
+.panel-spacer {
+  width: 1em;
+}
+
+.button-text:nth-child(2):not(:empty) {
+  padding-left: 0.3em;
+  margin-top: -0.2em;
+}
+
+.push-button .caption {
+  font-size: 14px;
+}
+
+
+.button-vertical {
+  flex-direction: column;
+}
+
+.push-button .icon + .caption,
+.push-button .button-icon + .caption {
+  padding-left: 0.25em !important;
+}
+
+.push-button.disabled,
+.panel-button.disabled {
+  opacity: 30% !important;
+  pointer-events: none !important;
+}
+
+.panel-button:active {
+  background-color: rgba(255,255,255, 0.3) !important;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.push-button:active {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.2)) !important;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.panel-logo {
+  height: 100%;
+  font-weight: bold;
+  padding: 0 1em;
+  margin: 0 0.25em;
+  opacity: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.panel-button.active {
+  background: rgba(255,255,255,0.75);
+}
+
+.panel-feedback {
+  height: 100%;
+  transition: 0.05s;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1em;
+  margin: 0 0.25em;
+  margin-top: 0.1em;
+}
+
+.panel-feedback:not(.active) .icon {
+  animation: none !important;
+}
+
+.panel-feedback:not(.active) {
+  display: none;
+}
+
+.panel-button .icon {
+  top: -0.1em;
+}
+
+.buttons-collapsed .push-button{
+  width: fit-content !important;
+  flex-grow: 0 !important;
+}
+
+.buttons-collapsed {
+  justify-content: center !important;
+}

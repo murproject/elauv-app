@@ -58,7 +58,7 @@ export default class DeviceListItem extends Element {
         ${this.iconOnline}
       </span>
 
-      <div class="device-title">
+      <div class="device-title list-item-title">
         <div>${deviceName}</div>
         <div class="bold">${shortId}</div>
         <div class="monospace text-tiny ${this.attrs.isCompatible ? 'opacity-25' : ''}">

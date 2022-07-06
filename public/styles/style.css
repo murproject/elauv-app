@@ -1,0 +1,51 @@
+@import "config.css";
+@import "utils.css";
+@import "generic.css";
+@import "animations.css";
+
+@import "components/blockly.css";
+@import "components/icon.css";
+@import "components/buttons.css";
+@import "components/panel.css";
+@import "components/list-item.css";
+@import "components/device-item.css";
+@import "components/global-dialog.css";
+
+@media (max-width: 450px) {
+    .device-title div {
+        font-size: 12px !important;
+    }
+
+    .push-button .caption {
+        font-size: 11px !important;
+    }
+
+    .dateRelative,
+    .descriptionSecondary {
+        display: none;
+    }
+
+    .header-titlebar {
+        display: none !important;
+    }
+
+    .global-dialog {
+        padding: 0.25em 0.75em !important;
+        min-width: 18em !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .dateRelative,
+    .dateAbsolute,
+    .descriptionMain,
+    .descriptionSecondary {
+        font-size: 12px !important;
+    }
+}
+
+.zdog-canvas {
+    cursor: move;
+    /* background: #444; */
+    /* filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15)); */
+}

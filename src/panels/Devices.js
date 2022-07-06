@@ -11,7 +11,7 @@ export default class Devices extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-        <div class="list-wrapper soft-edges">
+        <div class="list-wrapper soft-edges-vertical">
           <div id="devices-welcome" class="opacity-50">
               Устройств ещё нет!<br><br>
               Включите ElementaryAUV<br>
@@ -111,6 +111,7 @@ export default class Devices extends Panel {
 
     let emptyEl = document.createElement("div");
     emptyEl.classList.add("device-item");
+    emptyEl.classList.add("list-item");
     emptyEl.classList.add("opacity-0");
     this.devicesListEl.appendChild(emptyEl);
   }

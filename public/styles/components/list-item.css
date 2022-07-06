@@ -1,0 +1,56 @@
+.list-wrapper {
+  height: 100%;
+  overflow: auto;
+  width: 100%;
+  margin: auto;
+}
+
+.list-item {
+  margin: 0.5em 0;
+  padding: 0.5em;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--radius);
+  box-shadow: 0 0 7px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+}
+
+.list-item-title {
+  padding-left: 0.25em;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.list-item-title {
+  font-size: 18px;
+}
+
+.list-item .icon {
+  min-width: 1.25em;
+}
+
+#connDevicesList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: stretch;
+}
+
+#devices-welcome {
+  text-align: center;
+  padding: 2em;
+  font-size: 16px;
+}
+
+.dateRelative {
+  padding: 0 0.5em;
+  text-align: right;
+  font-weight: 300;
+  max-width: 40%;
+}
+
+.dateAbsolute {
+  min-width: 6em;
+  font-weight: 300;
+}
