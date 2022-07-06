@@ -21,6 +21,8 @@ d = + x + y
 // z = depth
 `;
 
+const nippleConfig = {};
+
 export default class Joystick extends Panel {
 
   begin() {
@@ -29,20 +31,27 @@ export default class Joystick extends Panel {
     this.html = /*html*/`
       <div class="container">
 
-        <div class="row justify-content-center">
-          <div class="nipple-wrapper" id="nipple0"></div>
-          <div class="nipple-wrapper" id="nipple1"></div>
-        </div>
-
         <div class="row">
-          <textarea id="axesFormula" spellcheck="false" rows="15" cols="40" name="text"></textarea>
+          <textarea id="axesFormula" spellcheck="false"
+                    rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
+          </textarea>
           <div id="formulaStatus"></div>
           <br>
         </div>
 
         <div class="row">
           <div class="push-button" id="buttonSolenoidOn">Solenoid on</div>
+          <div class="push-button" id="buttonSolenoidOff">Solenoid off</div>
         </div>
+
+        <div class="vertical-filler"></div>
+
+        <div class="row justify-content-center">
+          <div class="nipple-wrapper" id="nipple0"></div>
+          <div class="nipple-wrapper" id="nipple1"></div>
+        </div>
+
+        <div class="vertical-filler"></div>
 
       </div>
     `
@@ -73,7 +82,14 @@ export default class Joystick extends Panel {
       this.solenoidButton.classList.add('disabled');
       this.solenoidTriggered = true;
       setTimeout(() => this.solenoidTriggered = false, this.solenoidTime);
-      setTimeout(() => this.solenoidButton.classList.remove('disabled'), this.solenoidTime + 10000);
+      // TODO: bug, need to clear timer on solenoidOff!!
+      // setTimeout(() => this.solenoidButton.classList.remove('disabled'), this.solenoidTime + 10000);
+    };
+
+    this.solenoidOffButton = this.q("#buttonSolenoidOff");
+    this.solenoidOffButton.onclick = () => {
+      this.solenoidButton.classList.remove('disabled');
+      this.solenoidTriggered = false;
     };
   }
 
@@ -88,14 +104,14 @@ export default class Joystick extends Panel {
         zone: this.q('#nipple0'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: 'black'
+        color: '#001122'
     });
 
     this.nipple1 = nipplejs.create({
         zone: this.q('#nipple1'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: 'black',
+        color: '#001122',
         lockY: true
     });
 
