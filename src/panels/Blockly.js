@@ -222,8 +222,15 @@ export default class BlocklyPanel extends Panel {
 
     // TODO: check for modifications in correct way!
     // TODO: check old status (currently causes emitting lots of updates)
+    const currentUntouched = !(newStateUndo || newStateRedo);
+
     if (this.scriptStatus !== 'running') {
-      this.setIcon((newStateUndo || newStateRedo) ? 'puzzle-edit' : 'puzzle');
+      if (this.wasUntouched !== currentUntouched) {
+        this.setIcon((newStateUndo || newStateRedo) ? 'puzzle-edit' : 'puzzle');
+        this.wasUntouched = currentUntouched;
+      }
+    } else {
+      this.wasUntouched = undefined;
     }
 
     if (this.stateOfUndo.undo !== newStateUndo) {
