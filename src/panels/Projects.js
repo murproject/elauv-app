@@ -123,7 +123,12 @@ export default class Projects extends Panel {
     this.addItem({
       type: 'projectNew',
       name: 'Новый проект',
-    });
+    }, () => this.openProject({
+      name: '',
+      id: Utils.generateId(),
+      data: {},
+      date: Date.now(),
+    }));
 
     this.addItem({
       type: 'autosave',
