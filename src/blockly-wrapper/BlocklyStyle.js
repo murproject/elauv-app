@@ -8,6 +8,18 @@ Blockly.utils.object.inherits(CustomRenderer, Blockly.thrasos.Renderer)
 
 Blockly.blockRendering.register('custom_renderer', CustomRenderer)
 
+Blockly.ToolboxCategory.prototype.addColourBorder_ = function (colour) {
+  if (colour) {
+    const border = Blockly.ToolboxCategory.borderWidth + 'px solid ' + (colour || '#ddd');
+    this.rowDiv_.style.color = Blockly.utils.colour.blend((colour || '#ddd'), "#000", 0.75);
+    if (this.workspace_.RTL) {
+      this.rowDiv_.style.borderRight = border;
+    } else {
+      this.rowDiv_.style.borderLeft = border;
+    }
+  }
+}
+
 var CustomConstantsProvider = function () {
   // Set up all of the constants from the base provider.
   CustomConstantsProvider.superClass_.constructor.call(this)
