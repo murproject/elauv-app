@@ -52,6 +52,8 @@ export default {
         id: id,
         date: this.projects.saved[id].date
       })
+
+      this.projects.saved[id].id = id;
     }
 
     this.projects.savedSorted = this.projects.savedSorted.sort((a, b) => b.date - a.date)
@@ -69,13 +71,15 @@ export default {
   },
 
   setCurrentProject(item) {
-    item.id = Utils.notNull(item.id, Utils.generateId());
+    // item.id = Utils.notNull(item.id, Utils.generateId());
     this.projects.current = item;
     this.projects.current.autosaved = true;
     this.onChanged();
+    console.log(item)
   },
 
   loadProject(item) {
+    item = JSON.parse(JSON.stringify(item)) // depp clone
     this.setCurrentProject(item);
     App.closeGlobalDialog();
     App.panels.blockly.load(item.data);
@@ -93,6 +97,8 @@ export default {
   },
 
   saveProject() {
+    console.warn("\n S A V I N G \n")
+
     if (!this.projects.current.name || this.projects.current.name.length == 0) {
       this.projects.current.name = "Проект №" + this.projects.emptyCounter;
       this.projects.emptyCounter++;
