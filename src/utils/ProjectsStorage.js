@@ -3,6 +3,9 @@ import App from "/src/App.js";
 import Utils from "./Utils.js";
 import ProjectsExamples from "./ProjectsExamples.js";
 
+import GlobalDialog from "/src/components/GlobalDialog.js";
+import Button from "/src/components/Button.js";
+
 /* TODO: сделать безымянные проекты с нумерацией "Проект №" */
 
 export default {
@@ -16,24 +19,27 @@ export default {
     },
     current: {
       id: Utils.generateId(),
+      name: "",
       date: Date.now(),
       data: {},
       autosaved: true,
     },
-    emptyCounter: 0,
+    emptyCounter: 1,
   },
 
   onChanged() {},
 
-  loadSavedProjects() {
+  loadStorage() {
     document.storage = this;
 
     console.warn(this.currentProject);
 
     this.projects.saved = JSON.parse(Utils.notNull(localStorage.savedProjects, "{}"));
+    console.log(this.projects.saved);
 
-    if (!this.projects.saved || typeof(this.projects.saved) !== 'array') {
-      this.projects.saved = [];
+    if (!this.projects.saved || typeof(this.projects.saved) !== 'object') {
+      this.projects.saved = {};
+      localStorage.savedProjects = JSON.stringify({});
       this.saveStorage();
     }
 
@@ -41,9 +47,9 @@ export default {
       this.projects.autosaved = JSON.parse(localStorage.autosavedProject);
     }
 
-    this.projects.emptyCounter = Utils.notNull(localStorage.emptyCounter, 0);
+    this.projects.emptyCounter = Utils.notNull(localStorage.emptyCounter, 1);
 
-    this.projects.saved = example; // TODO // // // //
+    // this.projects.saved = example; // TODO // // // //
 
     this.projects.savedSorted = [];
 
@@ -93,32 +99,56 @@ export default {
     this.projects.autosaved.date = Date.now();
     localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
     this.projects.current.autosaved = true;
+    this.saveStorage();
     this.onChanged();
   },
 
   saveProject() {
     console.warn("\n S A V I N G \n")
 
-    if (!this.projects.current.name || this.projects.current.name.length == 0) {
-      this.projects.current.name = "Проект №" + this.projects.emptyCounter;
-      this.projects.emptyCounter++;
-    }
-
     if (this.projects.current.id in this.projects.saved) {
       // this.autoSave();
-      this.projects.current.date = Date.now();
-      this.projects.saved[id] = this.projects.current;
-      saveStorage();
-    } else {
-      /* TODO: prompt user for name of project */
-    }
+      if (!this.projects.current.name || this.projects.current.name.length == 0) {
+        this.projects.current.name = "Проект №" + this.projects.emptyCounter;
+        this.projects.emptyCounter++;
+      }
 
-    this.onChanged();
+      this.projects.current.date = Date.now();
+      this.projects.saved[this.projects.current.id] = JSON.parse(JSON.stringify(this.projects.current));
+
+      this.projects.autosaved.date = Date.now();
+      this.projects.current.autosaved = true;
+
+      this.saveStorage();
+      App.closeGlobalDialog();
+    } else {
+      let projectName = "";
+
+      App.showGlobalDialog(
+        new GlobalDialog({
+          title: 'Введите имя проекта',
+          classes: 'text-center',
+          textInput: value => projectName = value,
+          buttons: [
+            new Button({
+              text: 'Сохранить',
+              icon: 'content-save',
+            }, () => this.createProject(projectName, true)), // TODO
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ]
+        })
+      );
+    }
   }, // TODO //
 
   saveStorage() {
     localStorage.savedProjects = JSON.stringify(this.projects.saved);
     localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
+    localStorage.emptyCounter = this.projects.emptyCounter;
+    this.loadStorage();
     this.onChanged();
   },
 
@@ -127,6 +157,20 @@ export default {
   exportAllProjects() {}, // TODO //
 
   importProject() {}, // TODO //
+
+  createProject(name, doSaveProject = false) {
+    console.warn("CREATING " + name);
+    const id = Utils.generateId();
+    this.projects.current.id = id;
+    this.projects.current.name = name;
+    this.projects.saved[id] = JSON.parse(JSON.stringify(this.projects.current));
+
+    if (doSaveProject) {
+      this.saveProject();
+    }
+
+    this.onChanged();
+  },
 }
 
 let example = {

@@ -44,7 +44,7 @@ export default class Element extends HTMLElement {
       this.classList.add(item);
     });
 
-    if (typeof(classes) === 'array') {
+    if (typeof(classes) === 'object') {
       classes.forEach(item => {
         this.classList.add(item);
       });

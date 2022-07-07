@@ -33,7 +33,7 @@ export default class Projects extends Panel {
 
     this.makeButtons();
     this.projectsList = [];
-    ProjectsStorage.loadSavedProjects();
+    ProjectsStorage.loadStorage();
     // this.loadProjectsList(true);
     this.displayProjects();
 
@@ -57,7 +57,7 @@ export default class Projects extends Panel {
       {
         name: 'save',
         icon: 'content-save',
-        text: 'Сохранить',
+        text: 'Сохранить новый',
         classes: 'button-vertical',
         action: () => { }, // TODO //
       },

@@ -17,6 +17,7 @@ export default class GlobalDialog extends Element {
       text: '',
       buttons: [],
       closable: false,
+      textInput: false,
     };
   }
 
@@ -36,7 +37,15 @@ export default class GlobalDialog extends Element {
 
     return /*html*/`
       <h1>${this.attrs.title}</h1>
-      <p>${this.attrs.text}</p>
+
+      ${this.attrs.text ? /*html*/`
+        <p>${this.attrs.text}</p>
+      ` : ''}
+
+      ${this.attrs.textInput ? /*html*/`
+        <input id="text-input" class="text-input" type="text" name="sometext" />
+      ` : ''}
+
       <div class="vertical-filler"></div>
     `
   }
@@ -46,6 +55,11 @@ export default class GlobalDialog extends Element {
     this.buttonsRow.classList.add("row");
     this.attrs.buttons.forEach(button => button.inject(this.buttonsRow));
     this.appendChild(this.buttonsRow);
+
+    if (this.attrs.textInput) {
+      this.textInputEl = this.querySelector("#text-input");
+      this.textInputEl.onchange = event => this.attrs.textInput(this.textInputEl.value);
+    }
   }
 
 }
