@@ -46,6 +46,7 @@ export default class ProjectListItem extends Element {
       ${icon}
 
       <div class="list-item-title">
+        ${this.attrs.type === 'autosave' ? 'Авто-сохранение<br>' : ''}
         ${this.attrs.name ? this.attrs.name : '(без названия)'}
       </div>
 

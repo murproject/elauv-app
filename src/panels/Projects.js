@@ -38,6 +38,12 @@ export default class Projects extends Panel {
     this.displayProjects();
   }
 
+  onActiveChanged(active) {
+    if (active) {
+      this.displayProjects();
+    }
+  }
+
   makeButtons() {
     this.headButtonsEl = this.q('#projects-head-buttons')
 
@@ -98,13 +104,6 @@ export default class Projects extends Panel {
   //   this.projectsList = this.projectsList.sort((a, b) => b.date - a.date);
   // }
 
-  updateTitle(title) {
-    this.name = title;
-    if (this.active) {
-      this.setActive(true);
-    }
-  }
-
   addItem(item, action = undefined) {
     this.projectsListEl.appendChild(new ProjectListItem(item, action));
   }
@@ -130,17 +129,19 @@ export default class Projects extends Panel {
       date: Date.now(),
     }));
 
-    if ('data' in ProjectsStorage.autosave) {
+    if ('data' in ProjectsStorage.projects.autosaved) {
       this.addItem({
         type: 'autosave',
-        name: ProjectsStorage.autosave.name,
-        date: ProjectsStorage.autosave.date,
-      }, () => this.openProjectDialog(ProjectsStorage.autosave));
+        name: ProjectsStorage.projects.autosaved.name,
+        date: ProjectsStorage.projects.autosaved.date,
+      }, () => this.openProjectDialog(ProjectsStorage.projects.autosaved));
     }
 
-    ProjectsStorage.saved.forEach((item, index) => {
+    ProjectsStorage.projects.savedSorted.forEach((item, index) => {
       const isEditing = index == 1; // TODO - TODO - TODO //
-      item.type = isEditing ? 'projectActive' : 'project';
+
+      item = ProjectsStorage.projects.saved[item.id];
+      item.type = item.id == ProjectsStorage.projects.current.id ? 'projectActive' : 'project';
       this.addItem(item, () => {this.openProjectDialog(item)});
     });
   }
@@ -157,7 +158,7 @@ export default class Projects extends Panel {
       description: 'Вернуться в список проектов'
     }, () => this.displayProjects());
 
-    ProjectsStorage.examples.forEach((item, index) => {
+    ProjectsStorage.projects.examples.forEach(item => {
       item.type = 'example';
       this.addItem(item, () => this.openExampleDialog(item));
     });

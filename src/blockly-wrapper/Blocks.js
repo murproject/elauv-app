@@ -25,7 +25,7 @@ export default {
     // variable:       320,
     // procedure:      360,
 
-    flow:        "#778",
+    flow:             0,
     mov:         "#B70",
     sensors:     "#BA3",
     logic:          120,
@@ -33,7 +33,17 @@ export default {
     math:           240,
     colour:         280,
     variable:       320,
-    procedure:      360,
+    procedure:   "#778",
+
+    // flow:        "#778",
+    // mov:              0,
+    // sensors:     "#B70",
+    // logic:       "#BA3",
+    // loop:           120,
+    // math:           200,
+    // colour:         240,
+    // variable:       280,
+    // procedure:      320,
   },
 
 

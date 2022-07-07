@@ -14,6 +14,7 @@ import MurToolbox from '../blockly-wrapper/Toolbox'
 import '../blockly-wrapper/BlocklyStyle'
 
 import mur from '../vehicle/apiGameMur'
+import ProjectsStorage from "/src/utils/ProjectsStorage";
 
 
 const blocklyConfig = {
@@ -139,6 +140,8 @@ export default class BlocklyPanel extends Panel {
 
     this.onWorkspaceChange();
 
+    this.setInterval(this.autoSave, 500);
+
     /* --- Cursor --- */
 
     this.executionCursors = {}; // one cursor per script thread
@@ -199,8 +202,21 @@ export default class BlocklyPanel extends Panel {
     App.setLoading(isLoading, timeout);
   }
 
-  onWorkspaceChange() {
+  onWorkspaceChange(event) {
+    if (event && event.type === 'viewport_change') {
+      return;
+    }
+
+    const delta = (Date.now() - this.lastEditTime);
+
+    if (this.scriptStatus !== "running" && (delta > 500)) {
+      console.warn("EMIT EDIT");
+      ProjectsStorage.projects.current.autosaved = false;
+      this.lastEditTime = Date.now();
+    }
+
     this.checkUndoRedo();
+    this.updatePuzzleIcon();
   }
 
   checkUndoRedo(force = undefined) {
@@ -222,15 +238,14 @@ export default class BlocklyPanel extends Panel {
 
     // TODO: check for modifications in correct way!
     // TODO: check old status (currently causes emitting lots of updates)
-    const currentUntouched = !(newStateUndo || newStateRedo);
+    const currentlyTouched = (newStateUndo || newStateRedo);
 
     if (this.scriptStatus !== 'running') {
-      if (this.wasUntouched !== currentUntouched) {
-        this.setIcon((newStateUndo || newStateRedo) ? 'puzzle-edit' : 'puzzle');
-        this.wasUntouched = currentUntouched;
+      if (this.wasTouched !== currentlyTouched) {
+        this.wasTouched = currentlyTouched;
       }
     } else {
-      this.wasUntouched = undefined;
+      this.wasTouched = undefined;
     }
 
     if (this.stateOfUndo.undo !== newStateUndo) {
@@ -256,6 +271,24 @@ export default class BlocklyPanel extends Panel {
     this.workspace.undo(true);
   }
 
+  updatePuzzleIcon(forced = false) {
+    if (this.scriptStatus !== "running") {
+      const autosavedLongAgo = (Date.now() - ProjectsStorage.projects.autosaved.date) > 2000;
+      const autosaved = ProjectsStorage.projects.current.autosaved;
+      console.log('long ago: ' + autosavedLongAgo);
+
+      const newPuzzleIcon = this.wasTouched && !autosaved ? 'puzzle-edit' :
+                            autosaved && !autosavedLongAgo ? 'puzzle-check' : 'puzzle';
+
+      if (this.currentPuzzleIcon !== newPuzzleIcon || forced) {
+        this.setIcon(newPuzzleIcon);
+        console.log("set puzzle icon: " + newPuzzleIcon);
+      }
+
+      this.currentPuzzleIcon = newPuzzleIcon;
+    }
+  }
+
   generate_code(workspace) {
     Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_threadId, %1);\n'
     var code = Blockly.JavaScript.workspaceToCode(workspace)
@@ -270,6 +303,7 @@ export default class BlocklyPanel extends Panel {
       setTimeout(() => this.stop(), 100);
     } else {
       this.setLoading(true, 0);
+      this.autoSave(true);
       setTimeout(() => this.run_js(), 100);
     }
 
@@ -280,7 +314,7 @@ export default class BlocklyPanel extends Panel {
   stop() {
     this.collapse(false);
     document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
-    this.setIcon('puzzle');
+    // this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'dark', 'big');
     this.scriptStatus = 'stopped'
 
@@ -309,18 +343,42 @@ export default class BlocklyPanel extends Panel {
 
     this.workspace.highlightBlock(null)
     this.reinject(false);
+    this.updatePuzzleIcon(true);
     this.setLoading(false, 100);
   }
 
+  autoSave(forced = false) {
+    const timeFromLastEdit = (Date.now() - this.lastEditTime);
+
+    if ((!ProjectsStorage.projects.current.autosaved && timeFromLastEdit > 3000) || forced) {
+      console.log(`Autosaving: ${ProjectsStorage.projects.current.autosaved}, ${timeFromLastEdit}`);
+      const savedBlocks = Blockly.serialization.workspaces.save(this.workspace);
+      ProjectsStorage.autoSave(JSON.stringify(savedBlocks));
+      // this.updatePuzzleIcon();
+    } else if (timeFromLastEdit > 6000 && this.wasTouched) {
+    }
+
+    this.updatePuzzleIcon();
+
+    console.log(timeFromLastEdit);
+  }
+
   save() {
-    const savedBlocks = Blockly.serialization.workspaces.save(this.workspace)
-    console.log(savedBlocks)
-    localStorage.savedBlocks = JSON.stringify(savedBlocks)
+    // const startTime = Date.now();
+    // const savedBlocks = Blockly.serialization.workspaces.save(this.workspace)
+    // console.log(savedBlocks)
+    // localStorage.savedBlocks = JSON.stringify(savedBlocks)
+    // console.log("Serialization duration: " + (Date.now() - startTime));
   }
 
   load(blocksToLoad = undefined) {
+    if (this.scriptStatus === 'running') {
+      this.stop();
+    }
+
     this.stateOfUndo.savedUndoStack = [];
     this.stateOfUndo.savedRedoStack = [];
+    this.reinject(false);
 
     console.log("load:")
     console.log(blocksToLoad)
@@ -337,9 +395,12 @@ export default class BlocklyPanel extends Panel {
       Blockly.serialization.workspaces.load(blocksToLoad, this.workspace)
     }
 
+    // this.workspace.trashcan.emptyContents();
     this.workspace.clearUndo();
     this.onWorkspaceChange();
     this.autoZoom();
+
+    setTimeout(() => this.workspace.trashcan.emptyContents(), 500);
 
     this.setLoading(false, 0);
   }
@@ -545,6 +606,8 @@ export default class BlocklyPanel extends Panel {
   */
 
   reinject (readonly = false) {
+    this.lastEditTime = Date.now();
+
     this.executionCursors = {};
 
     if (this.workspace) {
@@ -599,7 +662,7 @@ export default class BlocklyPanel extends Panel {
       this.stateOfUndo.savedRedoStack = [];
     }
 
-    this.workspace.addChangeListener(() => { this.onWorkspaceChange() });
+    this.workspace.addChangeListener(event => { this.onWorkspaceChange(event) });
     // this.checkUndoRedo(false);
 
     // TODO: CURSOR
