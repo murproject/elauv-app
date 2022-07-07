@@ -60,15 +60,7 @@ export default class Panel {
     this.active = state;
     this.panelButton.setActive(state);
 
-    if (this.active) {
-      this.container.classList.add('active');
-      if (!this.isBottomPanel) {
-        App.setTitle(this.noTitle ? '' : this.name);
-      }
-    } else {
-      this.container.classList.remove('active');
-    }
-
+    this.updateTitle();
     this.onActiveChanged(state);
   }
 
@@ -80,6 +72,21 @@ export default class Panel {
 
   setIcon(name, color, modifier='') {
     this.panelButton.setIcon(name, color, 'big ' + modifier); // TODO //
+  }
+
+  updateTitle(title) {
+    if (title) {
+      this.name = title;
+    }
+
+    if (this.active) {
+      this.container.classList.add('active');
+      if (!this.isBottomPanel) {
+        App.setTitle(this.noTitle ? '' : this.name);
+      }
+    } else {
+      this.container.classList.remove('active');
+    }
   }
 
 }
