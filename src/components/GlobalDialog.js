@@ -43,7 +43,7 @@ export default class GlobalDialog extends Element {
       ` : ''}
 
       ${this.attrs.textInput ? /*html*/`
-        <input id="text-input" class="text-input" type="text" name="sometext" />
+        <input id="text-input" maxlength="65" class="text-input" type="text" name="sometext" />
       ` : ''}
 
       <div class="vertical-filler"></div>

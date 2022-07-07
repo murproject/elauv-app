@@ -87,6 +87,8 @@ export default {
   },
 
   loadProject(item) {
+    // TODO: what if script is running? 1) forbid; 2) stop script.
+
     item = JSON.parse(JSON.stringify(item)) // depp clone
     this.setCurrentProject(item);
     App.closeGlobalDialog();
@@ -107,7 +109,7 @@ export default {
   },
 
   saveProject() {
-    console.warn("\n S A V I N G \n")
+    // console.warn("\n S A V I N G \n")
 
     if (this.projects.current.id in this.projects.saved) {
       // this.autoSave();
@@ -116,6 +118,7 @@ export default {
         this.projects.emptyCounter++;
       }
 
+      this.projects.current.description = "";
       this.projects.current.date = Date.now();
       this.projects.saved[this.projects.current.id] = JSON.parse(JSON.stringify(this.projects.current));
 
@@ -174,6 +177,10 @@ export default {
 
     this.onChanged();
   },
+
+  deleteProject(id) {},
+
+  deleteAllProjects() {},
 }
 
 let example = {
@@ -202,4 +209,3 @@ let example = {
     version: 0,
   },
 };
-
