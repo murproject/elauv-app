@@ -144,10 +144,10 @@ export default class Projects extends Panel {
     }
 
     ProjectsStorage.projects.savedSorted.forEach((item, index) => {
-      const isEditing = index == 1; // TODO - TODO - TODO //
+      // const isEditing = index == 1; // TODO - TODO - TODO //
 
       item = ProjectsStorage.projects.saved[item.id];
-      item.type = item.id == ProjectsStorage.projects.current.id ? 'projectActive' : 'project';
+      item.type = item.id === ProjectsStorage.projects.current.id ? 'projectActive' : 'project';
       this.addItem(item, () => {this.openProjectDialog(item)});
     });
   }

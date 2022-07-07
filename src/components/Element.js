@@ -54,7 +54,6 @@ export default class Element extends HTMLElement {
   }
 
   update() {
-    console.log("UPD");
     this.innerHTML = "";
     this.beforeRender();
     this.hasRendered = true;

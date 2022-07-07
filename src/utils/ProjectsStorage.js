@@ -79,7 +79,9 @@ export default {
   setCurrentProject(item) {
     // item.id = Utils.notNull(item.id, Utils.generateId());
     this.projects.current = item;
+    console.log(item.id);
     this.projects.current.autosaved = true;
+    // this.projects.autosaved.id = item.id
     this.onChanged();
     console.log(item)
   },
@@ -94,6 +96,7 @@ export default {
 
   autoSave() {
     // TODO: fill projects.current outside, and don't pass 'data' to this method?
+    this.projects.autosaved.id = this.projects.current.id;
     this.projects.autosaved.name = this.projects.current.name;
     this.projects.autosaved.data = this.projects.current.data;
     this.projects.autosaved.date = Date.now();

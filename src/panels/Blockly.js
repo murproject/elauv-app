@@ -275,8 +275,6 @@ export default class BlocklyPanel extends Panel {
     if (this.scriptStatus !== "running") {
       const autosavedLongAgo = (Date.now() - ProjectsStorage.projects.autosaved.date) > 2000;
       const autosaved = ProjectsStorage.projects.current.autosaved;
-      console.log('long ago: ' + autosavedLongAgo);
-
       const newPuzzleIcon = this.wasTouched && !autosaved ? 'puzzle-edit' :
                             autosaved && !autosavedLongAgo ? 'puzzle-check' : 'puzzle';
 
@@ -355,13 +353,9 @@ export default class BlocklyPanel extends Panel {
       const savedBlocks = Blockly.serialization.workspaces.save(this.workspace);
       ProjectsStorage.projects.current.data = JSON.stringify(savedBlocks);
       ProjectsStorage.autoSave();
-      // this.updatePuzzleIcon();
-    } else if (timeFromLastEdit > 6000 && this.wasTouched) {
     }
 
     this.updatePuzzleIcon();
-
-    console.log(timeFromLastEdit);
   }
 
   save() {
@@ -377,6 +371,8 @@ export default class BlocklyPanel extends Panel {
   }
 
   load(blocksToLoad = undefined) {
+    this.wasTouched = false;
+
     if (this.scriptStatus === 'running') {
       this.stop();
     }
