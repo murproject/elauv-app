@@ -3,6 +3,8 @@ import App from "/src/App.js";
 import Utils from "./Utils.js";
 import ProjectsExamples from "./ProjectsExamples.js";
 
+/* TODO: сделать безымянные проекты с нумерацией "Проект №" */
+
 export default {
   projects: {
     examples: ProjectsExamples,
@@ -18,6 +20,7 @@ export default {
       data: {},
       autosaved: true,
     },
+    emptyCounter: 0,
   },
 
   onChanged() {},
@@ -37,6 +40,8 @@ export default {
     if (localStorage.autosavedProject) {
       this.projects.autosaved = JSON.parse(localStorage.autosavedProject);
     }
+
+    this.projects.emptyCounter = Utils.notNull(localStorage.emptyCounter, 0);
 
     this.projects.saved = example; // TODO // // // //
 
@@ -77,21 +82,38 @@ export default {
     App.panelSelect(App.panels.blockly);
   },
 
-  autoSave(data) {
+  autoSave() {
     // TODO: fill projects.current outside, and don't pass 'data' to this method?
-    this.projects.current.data = data;
     this.projects.autosaved.name = this.projects.current.name;
-    this.projects.autosaved.data = data;
+    this.projects.autosaved.data = this.projects.current.data;
     this.projects.autosaved.date = Date.now();
     localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
     this.projects.current.autosaved = true;
     this.onChanged();
   },
 
-  saveProject(data, name) {}, // TODO //
+  saveProject() {
+    if (!this.projects.current.name || this.projects.current.name.length == 0) {
+      this.projects.current.name = "Проект №" + this.projects.emptyCounter;
+      this.projects.emptyCounter++;
+    }
+
+    if (this.projects.current.id in this.projects.saved) {
+      // this.autoSave();
+      this.projects.current.date = Date.now();
+      this.projects.saved[id] = this.projects.current;
+      saveStorage();
+    } else {
+      /* TODO: prompt user for name of project */
+    }
+
+    this.onChanged();
+  }, // TODO //
 
   saveStorage() {
     localStorage.savedProjects = JSON.stringify(this.projects.saved);
+    localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
+    this.onChanged();
   },
 
   exportProject(item) {}, // TODO //

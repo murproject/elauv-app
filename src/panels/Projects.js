@@ -263,6 +263,12 @@ export default class Projects extends Panel {
   }
 
   openConfirmUnsavedDialog(action) {
+    console.log(App.panels.blockly.wasTouched);
+    if (!App.panels.blockly.wasTouched) {
+      action();
+      return;
+    }
+
     App.showGlobalDialog(
       new GlobalDialog({
         title: 'Редактируемый проект<br>будет закрыт!',
