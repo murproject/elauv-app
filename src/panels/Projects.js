@@ -36,6 +36,12 @@ export default class Projects extends Panel {
     ProjectsStorage.loadSavedProjects();
     // this.loadProjectsList(true);
     this.displayProjects();
+
+    ProjectsStorage.onChanged = () => {
+      if (this.active) {
+        this.displayProjects();
+      }
+    };
   }
 
   onActiveChanged(active) {

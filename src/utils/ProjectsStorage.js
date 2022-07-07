@@ -20,7 +20,7 @@ export default {
     },
   },
 
-  eventChanged: null,
+  onChanged() {},
 
   loadSavedProjects() {
     document.storage = this;
@@ -67,6 +67,7 @@ export default {
     item.id = Utils.notNull(item.id, Utils.generateId());
     this.projects.current = item;
     this.projects.current.autosaved = true;
+    this.onChanged();
   },
 
   loadProject(item) {
@@ -84,6 +85,7 @@ export default {
     this.projects.autosaved.date = Date.now();
     localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
     this.projects.current.autosaved = true;
+    this.onChanged();
   },
 
   saveProject(data, name) {}, // TODO //
