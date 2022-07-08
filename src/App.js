@@ -43,6 +43,7 @@ export default {
   currentPanelMain: null,
   currentPanelBottom: null,
   mur: mur,
+  isCordova: false,
 
   panelSelect: function (target, mode = 'main') {
     const currentPanel = mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';

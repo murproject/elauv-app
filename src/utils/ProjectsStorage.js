@@ -159,7 +159,7 @@ export default {
         })
       );
     }
-  }, // TODO //
+  },
 
   saveStorage() {
     localStorage.savedProjects = JSON.stringify(this.projects.saved);
@@ -183,19 +183,76 @@ export default {
     this.onChanged();
   },
 
-  exportProject(item) {   // TODO //
+  checkCordova() {
+    App.closeGlobalDialog();
 
+    if (!App.isCordova) {
+      alert("This feature is available only in Android app!");
+      return false;
+    } else {
+      return true;
+    }
+  },
+
+  exportProject(item) {   // TODO //
+    if (!this.checkCordova()) return;
+
+    const autosaveLabel = 'type' in item && item.type === 'autosave' ? 'Авто-сохранение ' : '';
+    const name = `${autosaveLabel}${item.name} (${Utils.dateShortAbsolute(item.date)})`;
+    this.exportProjectsArray(name, [item]);
   },
 
   exportAllProjects() {   // TODO //
+    if (!this.checkCordova()) return;
 
+    let projectsArray = [];
+    for (const id in this.projects.saved) {
+      projectsArray.push(this.projects.saved[id]);
+    }
+
+    const name = `Все проекты (${Utils.dateShortAbsolute(Date.now())})`;
+    this.exportProjectsArray(name, projectsArray)
   },
 
-  importProject() {       // TODO //
+  exportProjectsArray(name, projects) {
+    let fileData = {
+      type: "MUR-ELAUV-PROJECTS",
+      version: 0,
+      date: Date.now(),
+      name: name,
+      projects: projects
+    }
 
+    this.saveFile(name, JSON.stringify(fileData));
   },
 
-  deleteProject(id) {     // TODO //
+  importProject() {
+    if (!this.checkCordova()) return;
+    this.openFiles();
+  },
+
+  saveFile(name, data) {
+    const blob = new Blob([data], { type: "application/json" });
+    const fileName = name + ".mur.json";
+
+    window.cordova.plugins.saveDialog.saveFile(blob, fileName).then(() => {
+      console.info("The file has been successfully saved");
+    }).catch(reason => {
+      console.warn(reason);
+    });
+  },
+
+  openFiles() {
+    window.chooser.getFiles("application/json").then(files => {
+      files.forEach(file => this.processImportFile(file));
+    });
+  },
+
+  processImportFile(file) {
+    console.log(file);
+  },
+
+  deleteProject(id) {
     if (id in this.projects.saved) {
       delete this.projects.saved[id];
     } else if (id === "autosave") {

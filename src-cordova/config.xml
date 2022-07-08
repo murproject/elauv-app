@@ -31,4 +31,23 @@
     <splash src="../src/assets/splash.png" density="port-xhdpi" />
     <splash src="../src/assets/splash.png" density="port-xxhdpi" />
     <splash src="../src/assets/splash.png" density="port-xxxhdpi" />
+
+    <platform name="android">
+        <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+        </config-file>
+
+        <!-- <config-file parent="application/activity" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.elauv-proj" />
+                <data android:host="*" />
+            </intent-filter>
+        </config-file> -->
+    </platform>
+
 </widget>

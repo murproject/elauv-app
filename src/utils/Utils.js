@@ -9,6 +9,9 @@ export default {
     return date ? dayjs(date).format(`dddd${multiline ? '<br>' : ', '}`) + dayjs(date).fromNow() : null;
   },
 
+  dateShortAbsolute(date) {
+    return date ? dayjs(date).format(`YYYY-MM-DD, HH-mm-ss`) : null;
+  },
 
   notNull(item, defaultValue = '') {
     return item ? item : defaultValue;

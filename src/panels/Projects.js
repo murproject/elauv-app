@@ -66,14 +66,14 @@ export default class Projects extends Panel {
         icon: 'import',
         text: 'Импорт из&nbsp;файла',
         classes: 'button-vertical',
-        action: () => { }, // TODO //
+        action: () => ProjectsStorage.importProject(), // TODO //
       },
       {
         name: 'export',
         icon: 'export',
         text: 'Экспорт в&nbsp;файл',
         classes: 'button-vertical',
-        action: () => { }, // TODO //
+        action: () => ProjectsStorage.exportAllProjects(), // TODO //
       },
       {
         name: 'wipe',
@@ -219,18 +219,18 @@ export default class Projects extends Panel {
             text: 'В файл',
             icon: 'export',
             classes: 'button-vertical',
-          }, () => App.closeGlobalDialog()), // TODO //
+          }, () => ProjectsStorage.exportProject(item)),
           new Button({
             text: 'Удалить',
             icon: 'trash-can',
             iconColor: 'red',
             classes: 'button-vertical',
-          }, () => this.openConfirmDeleteDialog(item)), // TODO //
+          }, () => this.openConfirmDeleteDialog(item)),
           new Button({
             text: 'Назад',
             icon: 'keyboard-return',
             classes: 'button-vertical',
-          }, () => App.closeGlobalDialog()), // TODO //
+          }, () => App.closeGlobalDialog()),
         ]
       })
     );
