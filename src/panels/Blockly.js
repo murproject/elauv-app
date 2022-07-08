@@ -203,14 +203,22 @@ export default class BlocklyPanel extends Panel {
   }
 
   onWorkspaceChange(event) {
-    if (event && event.type === 'viewport_change') {
-      return;
+    if (event) {
+      if (event.type === 'viewport_change') {
+        return;
+      }
+
+      if (event.type === 'finished_loading') {
+        ProjectsStorage.projects.current.autosaved = true;
+        this.lastEditTime = Date.now();
+      }
+
+      console.log("Change event: " + event.type);
     }
 
     const delta = (Date.now() - this.lastEditTime);
 
     if (this.scriptStatus !== "running" && (delta > 500)) {
-      console.warn("EMIT EDIT");
       ProjectsStorage.projects.current.autosaved = false;
       this.lastEditTime = Date.now();
     }
@@ -372,6 +380,7 @@ export default class BlocklyPanel extends Panel {
 
   load(blocksToLoad = undefined) {
     this.wasTouched = false;
+    this.lastEditTime = Date.now();
 
     if (this.scriptStatus === 'running') {
       this.stop();
