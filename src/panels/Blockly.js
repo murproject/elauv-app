@@ -366,10 +366,10 @@ export default class BlocklyPanel extends Panel {
     this.updatePuzzleIcon();
   }
 
-  save() {
+  save(forcedNew = false) {
     const savedBlocks = Blockly.serialization.workspaces.save(this.workspace);
     ProjectsStorage.projects.current.data = JSON.stringify(savedBlocks);
-    ProjectsStorage.saveProject();
+    ProjectsStorage.saveProject(forcedNew);
 
     // const startTime = Date.now();
     // const savedBlocks = Blockly.serialization.workspaces.save(this.workspace)

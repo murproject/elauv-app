@@ -123,8 +123,8 @@ export default {
     this.onChanged();
   },
 
-  saveProject() {
-    if (this.projects.current.id in this.projects.saved) {
+  saveProject(forcedNew = false) {
+    if ((this.projects.current.id in this.projects.saved) && !forcedNew) {
       // this.autoSave();
       if (!this.projects.current.name || this.projects.current.name.length == 0) {
         this.projects.current.name = "Проект №" + this.projects.emptyCounter;

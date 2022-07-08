@@ -55,11 +55,11 @@ export default class Projects extends Panel {
 
     const buttons = [
       {
-        name: 'save',
+        name: 'save-as-new',
         icon: 'content-save',
         text: 'Сохранить новый',
         classes: 'button-vertical',
-        action: () => { }, // TODO //
+        action: () => App.panels.blockly.save(true), // TODO //
       },
       {
         name: 'import',
