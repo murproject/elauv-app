@@ -196,7 +196,13 @@ export default {
   },
 
   deleteProject(id) {     // TODO //
+    if (id in this.projects.saved) {
+      delete this.projects.saved[id];
+    } else if (id === "autosave") {
+      this.projects.autosaved = makeEmptyProject(true);
+    }
 
+    this.saveStorage();
   },
 
   deleteAllProjects() {

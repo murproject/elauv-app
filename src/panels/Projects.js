@@ -262,8 +262,13 @@ export default class Projects extends Panel {
     this.openConfirmUnsavedDialog(() => ProjectsStorage.loadProject(item));
   }
 
-  deleteProject(id) {
-
+  deleteProject(item) {
+    App.closeGlobalDialog();
+    if ('type' in item && item.type === 'autosave') {
+      ProjectsStorage.deleteProject("autosave");
+    } else {
+      ProjectsStorage.deleteProject(item.id);
+    }
   }
 
   deleteAllProjects() {
@@ -313,7 +318,7 @@ export default class Projects extends Panel {
             text: 'Удалить',
             icon: 'trash-can',
             iconColor: 'red',
-          }, () => this.deleteProject(item.id) ), // TODO //
+          }, () => this.deleteProject(item) ), // TODO //
           new Button({
             text: 'Назад',
             icon: 'keyboard-return',
