@@ -8,22 +8,37 @@ import Button from "/src/components/Button.js";
 
 /* TODO: сделать безымянные проекты с нумерацией "Проект №" */
 
-export default {
-  projects: {
-    examples: ProjectsExamples,
-    saved: {},
-    savedSorted: [],
-    autosaved: {
+const emptyAutosaved =  {
+  type: "autosave",
+  name: "",
+  date: 0,
+};
+
+function makeEmptyProject(isAutosave = false) {
+  if (isAutosave) {
+    return {
+      type: "autosave",
       name: "",
       date: 0,
-    },
-    current: {
+    };
+  } else {
+    return {
       id: Utils.generateId(),
       name: "",
       date: Date.now(),
       data: {},
       autosaved: true,
-    },
+    };
+  }
+}
+
+export default {
+  projects: {
+    examples: ProjectsExamples,
+    saved: {},
+    savedSorted: [],
+    autosaved: makeEmptyProject(true),
+    current: makeEmptyProject(),
     emptyCounter: 1,
   },
 
@@ -35,6 +50,7 @@ export default {
     console.warn(this.currentProject);
 
     this.projects.saved = JSON.parse(Utils.notNull(localStorage.savedProjects, "{}"));
+    // this.projects.saved = example;
     console.log(this.projects.saved);
 
     if (!this.projects.saved || typeof(this.projects.saved) !== 'object') {
@@ -97,20 +113,17 @@ export default {
   },
 
   autoSave() {
-    // TODO: fill projects.current outside, and don't pass 'data' to this method?
+    this.projects.autosaved.type = "autosave";
     this.projects.autosaved.id = this.projects.current.id;
     this.projects.autosaved.name = this.projects.current.name;
     this.projects.autosaved.data = this.projects.current.data;
     this.projects.autosaved.date = Date.now();
-    localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
     this.projects.current.autosaved = true;
     this.saveStorage();
     this.onChanged();
   },
 
   saveProject() {
-    // console.warn("\n S A V I N G \n")
-
     if (this.projects.current.id in this.projects.saved) {
       // this.autoSave();
       if (!this.projects.current.name || this.projects.current.name.length == 0) {
@@ -121,8 +134,6 @@ export default {
       this.projects.current.description = "";
       this.projects.current.date = Date.now();
       this.projects.saved[this.projects.current.id] = JSON.parse(JSON.stringify(this.projects.current));
-
-      this.projects.autosaved.date = Date.now();
       this.projects.current.autosaved = true;
 
       this.saveStorage();
@@ -158,12 +169,6 @@ export default {
     this.onChanged();
   },
 
-  exportProject(item) {}, // TODO //
-
-  exportAllProjects() {}, // TODO //
-
-  importProject() {}, // TODO //
-
   createProject(name, doSaveProject = false) {
     console.warn("CREATING " + name);
     const id = Utils.generateId();
@@ -178,9 +183,28 @@ export default {
     this.onChanged();
   },
 
-  deleteProject(id) {},
+  exportProject(item) {   // TODO //
 
-  deleteAllProjects() {},
+  },
+
+  exportAllProjects() {   // TODO //
+
+  },
+
+  importProject() {       // TODO //
+
+  },
+
+  deleteProject(id) {     // TODO //
+
+  },
+
+  deleteAllProjects() {
+    this.projects.autosaved = makeEmptyProject(true);
+    this.projects.saved = {};
+    this.projects.emptyCounter = 1;
+    this.saveStorage();
+  },
 }
 
 let example = {

@@ -214,23 +214,23 @@ export default class Projects extends Panel {
             text: 'Открыть',
             icon: 'puzzle',
             classes: 'button-vertical',
-          }, () => this.openProject(item)), // TODO //
+          }, () => this.openProject(item)),
           new Button({
             text: 'В файл',
             icon: 'export',
             classes: 'button-vertical',
-          }, () => App.closeGlobalDialog()),
+          }, () => App.closeGlobalDialog()), // TODO //
           new Button({
             text: 'Удалить',
             icon: 'trash-can',
             iconColor: 'red',
             classes: 'button-vertical',
-          }, () => App.closeGlobalDialog()),
+          }, () => this.openConfirmDeleteDialog(item)), // TODO //
           new Button({
             text: 'Назад',
             icon: 'keyboard-return',
             classes: 'button-vertical',
-          }, () => App.closeGlobalDialog()),
+          }, () => App.closeGlobalDialog()), // TODO //
         ]
       })
     );
@@ -244,10 +244,10 @@ export default class Projects extends Panel {
         classes: 'text-center',
         buttons: [
           new Button({
-            text: 'Да, удалить',
+            text: 'Удалить всё',
             icon: 'trash-can',
             iconColor: 'red',
-          }, () => App.closeGlobalDialog()), // TODO //
+          }, () => this.deleteAllProjects()), // TODO //
           new Button({
             text: 'Назад',
             icon: 'keyboard-return',
@@ -262,8 +262,16 @@ export default class Projects extends Panel {
     this.openConfirmUnsavedDialog(() => ProjectsStorage.loadProject(item));
   }
 
+  deleteProject(id) {
+
+  }
+
+  deleteAllProjects() {
+    App.closeGlobalDialog();
+    ProjectsStorage.deleteAllProjects();
+  }
+
   openConfirmUnsavedDialog(action) {
-    console.log(App.panels.blockly.wasTouched);
     if (!App.panels.blockly.wasTouched) {
       action();
       return;
@@ -279,6 +287,33 @@ export default class Projects extends Panel {
             text: 'Открыть',
             icon: 'puzzle',
           }, () => { App.closeGlobalDialog(); action() }), // TODO //
+          new Button({
+            text: 'Назад',
+            icon: 'keyboard-return',
+          }, () => App.closeGlobalDialog()),
+        ]
+      })
+    );
+  }
+
+  openConfirmDeleteDialog(item) {
+    App.closeGlobalDialog();
+
+    const isAutosave = 'type' in item && item.type === 'autosave';
+    const projectName = item.name ? item.name : 'без названия';
+    const name = isAutosave ? `авто-сохранённый проект<br>«${projectName}»` : `проект<br>«${projectName}»`;
+
+    App.showGlobalDialog(
+      new GlobalDialog({
+        title: 'Действительно удалить проект?',
+        text: `Будет удалён ${name}`,
+        classes: 'text-center',
+        buttons: [
+          new Button({
+            text: 'Удалить',
+            icon: 'trash-can',
+            iconColor: 'red',
+          }, () => this.deleteProject(item.id) ), // TODO //
           new Button({
             text: 'Назад',
             icon: 'keyboard-return',
