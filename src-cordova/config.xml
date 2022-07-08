@@ -32,10 +32,20 @@
     <splash src="../src/assets/splash.png" density="port-xxhdpi" />
     <splash src="../src/assets/splash.png" density="port-xxxhdpi" />
 
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,root,downloads" />
+
     <platform name="android">
         <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
             <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+            <uses-permission android:name="android.permission.BLUETOOTH" />
         </config-file>
+
+        <!-- <preference name="android-manifest/@android:requestLegacyExternalStorage" value="true" /> -->
+
+        <!-- <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest"> -->
+            <!-- <application android:requestLegacyExternalStorage="true" /> -->
+        <!-- </edit-config> -->
 
         <!-- <config-file parent="application/activity" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
             <intent-filter>
