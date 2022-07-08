@@ -47,10 +47,21 @@
   padding: 0 0.5em;
   text-align: right;
   font-weight: 300;
-  max-width: 40%;
+  /* max-width: 40%; */
 }
 
 .dateAbsolute {
   min-width: 6em;
   font-weight: 300;
+}
+
+.dateRelative,
+.dateAbsolute {
+  max-width: max-content !important;
+  width: 100% !important;
+}
+
+#projects-list .icon {
+  max-width: max-content !important;
+  margin-right: 0.25em;
 }
