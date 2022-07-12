@@ -15,6 +15,8 @@ export default {
     <header id="head">
       <div class="buttons-group" id="buttons-main"></div>
 
+      <div class="buttons-group" id="telemetry-feedback-box"></div>
+
       <div class="buttons-group header-titlebar" id="">
         <div class="header-titlebar-caption">
           <span id="main-titlebar-caption"></span>
