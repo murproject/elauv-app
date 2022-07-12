@@ -9,7 +9,12 @@ function clamp (value, min, max) {
 }
 
 const axesFormulaDefault = `max_power = 100
+threshold = 10
 solenoid_time = 30000
+
+x = limit(x)
+y = limit(y)
+z = limit(z)
 
 a = - x + y
 b = + z
@@ -155,6 +160,12 @@ export default class Joystick extends Panel {
     var b = 0;
     var c = 0;
     var d = 0;
+
+    var threshold = 0;
+
+    function limit(val) {
+      return Math.abs(val) >= threshold ? val : 0.0;
+    }
 
     var axisFormulaOk = false;
 
