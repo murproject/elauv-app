@@ -47,27 +47,27 @@ const CategorySensors = makeCategory(
 
 
 const CategoryMovements = makeCategory(
-  'Движение', Blocks.colours.mov, [
+  'Движения', Blocks.colours.mov, [
     // {
     //   kind: 'block',
     //   type: 'mur_number_degrees',
     // },
 
-    {
-      kind: 'block',
-      type: 'mur_set_axis',
-      inputs: {
-        Power: shadowSlider()
-      }
-    },
+    // {
+    //   kind: 'block',
+    //   type: 'mur_set_axis',
+    //   inputs: {
+    //     Power: shadowSlider()
+    //   }
+    // },
 
-    {
-      kind: 'block',
-      type: 'mur_set_yaw',
-      inputs: {
-        Angle: shadowSlider('deg')
-      }
-    },
+    // {
+    //   kind: 'block',
+    //   type: 'mur_set_yaw',
+    //   inputs: {
+    //     Angle: shadowSlider('deg')
+    //   }
+    // },
 
     {
       kind: 'block',
