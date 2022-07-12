@@ -24,25 +24,29 @@ export default class Telemetry extends Panel {
     this.textElement = this.q("#telemetryText");
 
     this.stats = {};
-    this.resetStats();
 
     this.resetStatsButton = this.q("#resetStats");
     this.resetStatsButton.onclick = () => this.resetStats();
 
     this.makeFeedbackIcons()
+
+    this.resetStats();
+    // this.setInterval(this.updateFeedbacks, 1000);
   }
 
   makeFeedbackIcons() {
-    this.feedbackBox = document.createElement("div");
-    this.feedbackBox.classList.add("buttons-group");
-    this.feedbackBox.id = "telemetry-feedback-box";
+    // this.feedbackBox = document.createElement("div");
+    // this.feedbackBox.classList.add("buttons-group");
+    // this.feedbackBox.id = "telemetry-feedback-box";
+
+    this.feedbackBox = document.querySelector('#telemetry-feedback-box');
 
     this.feedbackIcons = {};
 
     const feedbacks = [
-      {name: 'solenoid',  color: 'red',   pulse: true,  icon: '../magnet-off'},
-      {name: 'motors',    color: 'red',   pulse: true,  icon: '../fan-off'},
-      {name: 'tap',       color: 'cyan',  pulse: true,  icon: '../cursor-default-click'},
+      {name: 'solenoid',  color: 'light',   pulse: true,  icon: '../magnet-off'},
+      {name: 'motors',    color: 'light',   pulse: true,  icon: '../fan-off'},
+      {name: 'tap',       color: 'light',  pulse: true,  icon: '../cursor-default-click'},
     ];
 
     feedbacks.forEach(feedback => {
@@ -60,7 +64,7 @@ export default class Telemetry extends Panel {
       this.feedbackIcons[feedback.name] = feedbackIcon;
     });
 
-    document.querySelector("#head").appendChild(this.feedbackBox);
+    // document.querySelector("#head").appendChild(this.feedbackBox);
   }
 
   resetStats() {
@@ -135,6 +139,13 @@ export default class Telemetry extends Panel {
   }
 
   updateFeedbacks() {
+    // mur.telemetry.feedback = {imuTap: true};
+    // this.feedbackIcons.solenoid.setActive(true);
+    // this.feedbackIcons.motors.setActive(true);
+    // if (!'tap' in this.feedbackIcons) {
+    //   return;
+    // }
+
     if ('feedback' in mur.telemetry) {
       // mur.telemetry.feedback.motors.setActive(mur.telemetry.feedback.motorsDisabled);
       // mur.telemetry.feedback.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
@@ -142,6 +153,7 @@ export default class Telemetry extends Panel {
       if (mur.telemetry.feedback.imuTap) {
         this.feedbackIcons.tap.setActive(true);
         setTimeout(() => this.feedbackIcons.tap.setActive(false), 500);
+        navigator.vibrate(125);
       }
     }
   }
