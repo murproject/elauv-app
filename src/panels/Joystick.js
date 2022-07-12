@@ -35,23 +35,23 @@ export default class Joystick extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-
         <div class="row">
-          <textarea id="axesFormula" spellcheck="false"
-                    rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
-          </textarea>
-          <div id="formulaStatus"></div>
-          <br>
-        </div>
-
-        <div class="row">
-          <div class="push-button" id="buttonSolenoidOn">Solenoid on</div>
-          <div class="push-button" id="buttonSolenoidOff">Solenoid off</div>
+          <div class="push-button" id="buttonSolenoidOn">Включить<br>магнит</div>
+          <div class="push-button" id="buttonSolenoidOff">Выключить<br>магнит</div>
         </div>
 
         <div class="vertical-filler"></div>
 
-        <div class="row justify-content-center">
+        <div class="row">
+          <textarea id="axesFormula" spellcheck="false" class="hidden"
+                    rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
+          </textarea>
+          <div style="margin:auto" id="formulaStatus"></div>
+        </div>
+
+        <div class="vertical-filler"></div>
+
+        <div class="row justify-content-center joystick-outer-margin">
           <div class="nipple-wrapper" id="nipple0"></div>
           <div class="nipple-wrapper" id="nipple1"></div>
         </div>
@@ -109,15 +109,21 @@ export default class Joystick extends Panel {
         zone: this.q('#nipple0'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: '#001122'
+        color: '#003355',
+        restOpacity: 1.0,
+        size: 150,
+
     });
 
     this.nipple1 = nipplejs.create({
         zone: this.q('#nipple1'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: '#001122',
-        lockY: true
+        color: '#003355',
+        lockY: true,
+        restOpacity: 1.0,
+        size: 150,
+
     });
 
     this.nipple0.on("move", (evt, data) => {
@@ -192,8 +198,24 @@ export default class Joystick extends Panel {
     c = clamp(c, -max_power, max_power);
     d = clamp(d, -max_power, max_power);
 
-    this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
-    this.formulaStatusText.innerText += `\npowers: ${a}, ${b}, ${c}, ${d}`;
+    const pretty = {
+      a: String(a).padStart(4),
+      b: String(b).padStart(4),
+      c: String(c).padStart(4),
+      d: String(d).padStart(4),
+    };
+
+    // this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
+    // this.formulaStatusText.innerText = ""
+    this.formulaStatusText.innerText =
+      `
+  Тяга на
+движителях:
+
+  A:${pretty.a}
+  B:${pretty.b}
+  C:${pretty.c}
+  D:${pretty.d}`;
 
     this.solenoidTime = solenoid_time;
 
