@@ -71,13 +71,13 @@ export default class About extends Panel {
     //   // classes: 'button-vertical'
     // }).inject(this.headButtonsEl);
 
-    new Button({
-      name: 'settings',
-      text: 'Настройки',
-      action: () => {},
-      icon: 'format-list-bulleted-square',
-      iconClasses: 'small',
-      // classes: 'button-vertical'
-    }).inject(this.headButtonsEl);
+    // new Button({
+    //   name: 'settings',
+    //   text: 'Настройки',
+    //   action: () => {},
+    //   icon: 'format-list-bulleted-square',
+    //   iconClasses: 'small',
+    //   // classes: 'button-vertical'
+    // }).inject(this.headButtonsEl);
   }
 }
