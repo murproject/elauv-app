@@ -277,6 +277,7 @@
   white-space: pre;
   height: 100%;
   width: 100%;
+  column-count: 2;
 }
 
 #console-welcome {

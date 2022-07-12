@@ -25,7 +25,7 @@ export default {
     // variable:       320,
     // procedure:      360,
 
-    flow:             0,
+    flow:        "#A44",
     mov:         "#B70",
     sensors:     "#BA3",
     logic:          120,

@@ -3,6 +3,7 @@ body {
 
   --color-dark:   hsl(0, 0%, 20%);
   --color-light:  hsl(0, 0%, 80%);
+  --color-white:  hsl(0, 0%, 100%);
 
   --color-mur:    hsl(200, 100%, 15%);
   --color-green-bright:  hsl( 90, 70%, 35%);

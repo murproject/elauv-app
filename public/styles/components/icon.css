@@ -59,3 +59,11 @@
 .icon.green-bright {
   background-color: var(--color-green-bright) !important;
 }
+
+.icon.white {
+  background-color: var(--color-white) !important;
+}
+
+.icon.light {
+  background-color: var(--color-light) !important;
+}

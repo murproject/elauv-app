@@ -109,7 +109,7 @@ export default class BlocklyPanel extends Panel {
     // Ru["COLOUR_RGB_RED"] = "R";
     // Ru["COLOUR_RGB_GREEN"] = "G";
     // Ru["COLOUR_RGB_BLUE"] = "B";
-    Ru["MATH_SUBTRACTION_SYMBOL"] = "–";
+    Ru["MATH_SUBTRACTION_SYMBOL"] = "−";
     Blockly.setLocale(Ru)
 
     Blockly.JavaScript.addReservedWords('mur');
