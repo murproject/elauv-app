@@ -16,7 +16,7 @@
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="Fullscreen" value="true" />
 
-    <preference name="Orientation" value="portrait" />
+    <!-- <preference name="Orientation" value="portrait" /> -->
     <icon src="../src/assets/icon.png" platform="android" width="512" height="512" density="mdpi" />
 
     <splash src="../src/assets/splash.png" density="land-hdpi" />
