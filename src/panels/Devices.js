@@ -35,13 +35,13 @@ export default class Devices extends Panel {
     this.welcomeEl = this.q("#devices-welcome");
     this.buttonsWrapper = this.q('#buttonsRow');
 
-    new Button({
-      name: 'scan-code',
-      text: 'Сканировать код',
-      action: () => this.scanCode(),
-      icon: 'qrcode-scan',
-      // classes: 'button-vertical',
-    }).inject(this.buttonsWrapper);
+    // new Button({
+    //   name: 'scan-code',
+    //   text: 'Сканировать код',
+    //   action: () => this.scanCode(),
+    //   icon: 'qrcode-scan',
+    //   // classes: 'button-vertical',
+    // }).inject(this.buttonsWrapper);
 
     new Button({
       name: 'scan-bluetooth',
