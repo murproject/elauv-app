@@ -220,6 +220,7 @@ export default {
   },
 
   controlContext: function (data) {
+    this.context = data;
     if (this.status === 'open') {
       this.conn.sendMessage(Protocol.packControlContext(data))
     }

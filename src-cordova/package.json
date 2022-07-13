@@ -24,6 +24,7 @@
     "cordova-plugin-filepath": "^1.6.0",
     "cordova-plugin-save-dialog": "^1.0.0",
     "cordova-plugin-simple-file-chooser": "^3.0.2",
+    "cordova-plugin-vibration": "^3.1.1",
     "wg-cordova-plugin-filepath": "^1.6.0-3"
   },
   "cordova": {
@@ -45,7 +46,8 @@
       "cordova-plugin-simple-file-chooser": {},
       "cordova-plugin-filepath": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-chooser": {}
+      "cordova-plugin-chooser": {},
+      "cordova-plugin-vibration": {}
     }
   }
 }

@@ -4,6 +4,9 @@ import Panel from './Panel'
 import mur from '../vehicle/apiGameMur.js'
 import protocol from '../vehicle/protocolGameMur'
 
+import VizAuv from '/src/panels/VizAuv.js';
+import App from '../App';
+
 function clamp (value, min, max) {
   return Math.min(Math.max(min, Math.round(value)), max)
 }
@@ -40,8 +43,6 @@ export default class Joystick extends Panel {
           <div class="push-button" id="buttonSolenoidOff">Выключить<br>магнит</div>
         </div>
 
-        <div class="vertical-filler"></div>
-
         <div class="row">
           <textarea id="axesFormula" spellcheck="false" class="hidden"
                     rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
@@ -49,7 +50,7 @@ export default class Joystick extends Panel {
           <div style="margin:auto" id="formulaStatus"></div>
         </div>
 
-        <div class="vertical-filler"></div>
+        <canvas class="zdog-canvas" width="400" height="400"></canvas>
 
         <div class="row justify-content-center joystick-outer-margin">
           <div class="nipple-wrapper" id="nipple0"></div>
@@ -96,6 +97,41 @@ export default class Joystick extends Panel {
       this.solenoidButton.classList.remove('disabled');
       this.solenoidTriggered = false;
     };
+
+    this.vizauv = VizAuv.makeVizauv(this);
+
+    setInterval(() => {
+      let context = {
+        motors: {
+          hl: 0,
+          hr: 0,
+          vl: 0,
+          vr: 0,
+        },
+
+        rot: {
+          yaw: 0,
+          pitch: 0,
+          roll: 0,
+        }
+      };
+
+      if ('direct_power' in mur.context) {
+        context.motors.hl = mur.context.direct_power[0];
+        context.motors.vl = mur.context.direct_power[1];
+        context.motors.vr = mur.context.direct_power[2];
+        context.motors.hr = mur.context.direct_power[3];
+      }
+
+      if ('imuYaw' in mur.telemetry) {
+        context.rot.yaw = mur.telemetry.imuYaw;
+        context.rot.pitch = mur.telemetry.imuPitch;
+        context.rot.roll = mur.telemetry.imuRoll;
+      }
+
+      this.vizauv.updContext(context);
+
+    }, 100);
   }
 
 
@@ -109,7 +145,7 @@ export default class Joystick extends Panel {
         zone: this.q('#nipple0'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: '#003355',
+        color: '#004466',
         restOpacity: 1.0,
         size: 150,
 
@@ -119,7 +155,7 @@ export default class Joystick extends Panel {
         zone: this.q('#nipple1'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: '#003355',
+        color: '#004466',
         lockY: true,
         restOpacity: 1.0,
         size: 150,
@@ -229,6 +265,10 @@ export default class Joystick extends Panel {
   update() {
     if (this.active) {
       const powers = this.computePowers();
+
+      if (App.panels.blockly.scriptStatus === 'running') {
+        return;
+      }
 
       var regs = protocol.regulators;
       regs.yaw = false; // TODO

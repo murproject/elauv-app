@@ -58,12 +58,21 @@ export default class Console extends Panel {
   }
 
   onActiveChanged(isActive) {
+<<<<<<< HEAD
     if (isActive) {
       this.notify(false);
     }
     if ('blockly' in App.panels) {
       App.panels.blockly.collapse(isActive);
     }
+=======
+    // if (isActive) {
+    //   this.notify(false);
+    // }
+    // if ('blockly' in document.app.panels) {
+    //   document.app.panels.blockly.collapse(isActive);
+    // }
+>>>>>>> vizauv-bottom-panel
   }
 
   clear() {

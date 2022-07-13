@@ -31,6 +31,24 @@ export default class Telemetry extends Panel {
     this.makeFeedbackIcons()
 
     this.resetStats();
+
+    setInterval(() => {
+      if ('direct_power' in mur.context) {
+        context.motors.hl = mur.context.direct_power[0];
+        context.motors.vl = mur.context.direct_power[1];
+        context.motors.vr = mur.context.direct_power[2];
+        context.motors.hr = mur.context.direct_power[3];
+      }
+
+      if ('imuYaw' in mur.telemetry) {
+        context.rot.yaw = mur.telemetry.imuYaw;
+        context.rot.pitch = mur.telemetry.imuPitch;
+        context.rot.roll = mur.telemetry.imuRoll;
+      }
+
+    }, 100);
+
+
     // this.setInterval(this.updateFeedbacks, 1000);
   }
 
@@ -165,3 +183,9 @@ export default class Telemetry extends Panel {
   }
 
 }
+
+
+
+
+
+

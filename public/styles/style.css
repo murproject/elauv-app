@@ -44,12 +44,6 @@
     }
 }
 
-.zdog-canvas {
-    cursor: move;
-    /* background: #444; */
-    /* filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15)); */
-}
-
 .joystick-outer-margin {
     margin: 1.5em;
 }

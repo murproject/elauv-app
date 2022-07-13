@@ -97,21 +97,19 @@
   flex-direction: row;
   position: absolute;
   left: 1em;
-  top: -2.5em;
+  top: -2.75em;
   z-index: -20;
 }
 
 #flying-panel-wrapper .panel-button {
   margin: 0.25em 0.15em;
-  width: 0.5em;
+  padding: 0 0.5em;
+  width: 1.5em;
   height: 2.5em;
   z-index: -99;
   opacity: 70%;
 }
 
-#flying-panel-wrapper .panel-button .icon {
-  font-size: 12px;
-}
 
 .bottom-collapsed {
   transform: translate(0, calc(100% + 0em));

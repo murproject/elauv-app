@@ -92,6 +92,7 @@ export default {
 
       /* Bottom panels */
       console: new ConsolePanel(),
+      // vizauv: new VizAuvPanel(),
     };
 
     this.panelSelect(this.panels.projects);
