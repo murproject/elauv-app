@@ -102,7 +102,7 @@ function makeVizauv (parent) {
     dragRotate: true,
     // rotate: {x: Zdog.TAU/8, y: Zdog.TAU/8},
     // rotate: {x: -Zdog.TAU/8, y: Zdog.TAU/8 * 3},
-    rotate: {x: -Zdog.TAU/8 * 1, y: Zdog.TAU/8 * 3},
+    rotate: {x: -Zdog.TAU/8 * 1, y: Zdog.TAU/8 * 4},
     zoom: 1.5,
     onDragStart: function() {
         dragged = true;
@@ -246,13 +246,13 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     // });
 
     vehicle.bodyTop  = new Zdog.RoundedRect({
-        addTo: vehicle.gr,
+        addTo: parent,
         width: 100,
         height: 100,
         fill: true,
         cornerRadius: 30,
         stroke: 5,
-        color: '#58A1',
+        color: '#59B1',
         translate: {z: 0, y: -15},
         rotate: {x:  Zdog.TAU/4},
     });
@@ -264,10 +264,26 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
         fill: true,
         cornerRadius: 30,
         stroke: 5,
-        color: '#58A1',
+        color: '#59B1',
         translate: {z: 0, y:  15},
         rotate: {x:  Zdog.TAU/4},
     });
+
+
+    // vehicle.bodyBottomBalance  = new Zdog.RoundedRect({
+    //     addTo: vehicle.gr,
+    //     width: 100,
+    //     height: 100,
+    //     visible: false,
+    //     translate: {z: 0, y:  100},
+    //     rotate: {x:  Zdog.TAU/4},
+    // });
+
+    new Zdog.Shape({
+        addTo: vehicle.gr,
+        visible: false,
+        translate: {z: 0, y:  200},
+      });
 
 
     // vehicle.bodyColba = new Zdog.RoundedRect({
@@ -283,7 +299,7 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     // });
 
     vehicle.bodycolba =  new Zdog.Cylinder({
-        addTo: vehicle.gr,
+        addTo: parent,
         diameter: 40,
         length: 18,
         fill: true,
@@ -596,24 +612,30 @@ function animate() {
 
     // illo.rotate.y += 0.01;
 
+    illo.rotate.x = illo.rotate.x > (-Zdog.TAU / 32) ? -Zdog.TAU / 32 :
+                    illo.rotate.x < (-Zdog.TAU /  4) ? -Zdog.TAU /  4 :
+                    illo.rotate.x;
+    // console.log(illo.rotate.x);
+
     // if (!skip) {
-    contextSmoothed.motors.hl = ease(contextSmoothed.motors.hl, context.motors.hl);
-    contextSmoothed.motors.hr = ease(contextSmoothed.motors.hr, context.motors.hr);
-    contextSmoothed.motors.vl = ease(contextSmoothed.motors.vl, context.motors.vl);
-    contextSmoothed.motors.vr = ease(contextSmoothed.motors.vr, context.motors.vr);
-
-    contextSmoothed.rot.yaw = ease(contextSmoothed.rot.yaw, context.rot.yaw / 50);
-    contextSmoothed.rot.roll = ease(contextSmoothed.rot.roll, context.rot.roll / 50);
-    contextSmoothed.rot.pitch = ease(contextSmoothed.rot.pitch, context.rot.pitch / 50);
-
-    // console.log(context);
-
-    th_hl.update(contextSmoothed.motors.hl + 0);
-    th_hr.update(contextSmoothed.motors.hr + 0);
-    th_vl.update(contextSmoothed.motors.vl + 0);
-    th_vr.update(contextSmoothed.motors.vr + 0);
 
     if (parent_obj.active) {
+        contextSmoothed.motors.hl = ease(contextSmoothed.motors.hl, context.motors.hl);
+        contextSmoothed.motors.hr = ease(contextSmoothed.motors.hr, context.motors.hr);
+        contextSmoothed.motors.vl = ease(contextSmoothed.motors.vl, context.motors.vl);
+        contextSmoothed.motors.vr = ease(contextSmoothed.motors.vr, context.motors.vr);
+
+        contextSmoothed.rot.yaw = ease(contextSmoothed.rot.yaw, context.rot.yaw / 50);
+        contextSmoothed.rot.roll = ease(contextSmoothed.rot.roll, context.rot.roll / 50);
+        contextSmoothed.rot.pitch = ease(contextSmoothed.rot.pitch, context.rot.pitch / 50);
+
+        // console.log(context);
+
+        th_hl.update(contextSmoothed.motors.hl + 0);
+        th_hr.update(contextSmoothed.motors.hr + 0);
+        th_vl.update(contextSmoothed.motors.vl + 0);
+        th_vr.update(contextSmoothed.motors.vr + 0);
+
 
         illo.updateRenderGraph();
     }

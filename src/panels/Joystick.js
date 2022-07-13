@@ -50,7 +50,11 @@ export default class Joystick extends Panel {
           <div style="margin:auto" id="formulaStatus"></div>
         </div>
 
-        <canvas class="zdog-canvas" width="400" height="400"></canvas>
+        <div class="vertical-filler"></div>
+
+        <canvas class="zdog-canvas" width="350" height="350"></canvas>
+
+        <div class="vertical-filler"></div>
 
         <div class="row justify-content-center joystick-outer-margin">
           <div class="nipple-wrapper" id="nipple0"></div>
@@ -145,7 +149,7 @@ export default class Joystick extends Panel {
         zone: this.q('#nipple0'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: '#004466',
+        color: '#006688',
         restOpacity: 1.0,
         size: 150,
 
@@ -155,7 +159,7 @@ export default class Joystick extends Panel {
         zone: this.q('#nipple1'),
         mode: 'static',
         position: {left: '50%', top: '50%'},
-        color: '#004466',
+        color: '#006688',
         lockY: true,
         restOpacity: 1.0,
         size: 150,

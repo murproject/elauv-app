@@ -162,7 +162,7 @@ input[type="number"] {
 .zdog-canvas {
   cursor: move;
   margin: auto;
-  margin-top: -15%;
-  margin-bottom: -15%;
+  margin-top: -20%;
+  margin-bottom: -30%;
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
 }
