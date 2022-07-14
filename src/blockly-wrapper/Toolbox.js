@@ -120,6 +120,7 @@ const CategoryMath = makeCategory(
     // { kind: 'block', type: 'math_trig' },
     // { kind: 'block', type: 'math_constant' },
     { kind: 'block', type: 'math_number_property' },
+    { kind: 'block', type: 'math_single' },
     // { kind: 'block', type: 'math_round' },
     // { kind: 'block', type: 'math_on_list' },
     // { kind: 'block', type: 'math_modulo' },
@@ -131,6 +132,7 @@ const CategoryMath = makeCategory(
       kind: 'block', type: 'math_random_int',
       inputs: { FROM: shadowNum(0), TO: shadowNum(10) }
     },
+    { kind: 'block', type: 'mur_angle_norm' },
     // { kind: 'block', type: 'math_random_float' }
   ]
 );

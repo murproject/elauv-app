@@ -1026,6 +1026,31 @@ await mur.thread_end(_threadId);
       }
     })
 
+    Blockly.Blocks.mur_angle_norm = {
+      init: function () {
+        // this.appendDummyInput()
+
+        this.appendValueInput('Value')
+          .setCheck('Number')
+          .appendField("нормализовать угол")
+
+        this.setOutput(true, 'Number')
+        this.setPreviousStatement(false, null)
+        this.setNextStatement(false, null)
+        this.setColour(colours.math)
+        this.setInputsInline(false);
+        this.setTooltip('Нормализовать угол')
+      }
+    }
+
+    register_proto('mur_angle_norm', (gen) => {
+      return (block) => {
+        const value = calcVal(gen, block, 'Value')
+        return makeInlineFunc(gen, `(Math.abs(((${value}) + 180) % 360 ) - 180)`)
+        // return makeInlineFunc(gen, `(${value})`)
+      }
+    })
+
     /* Procedures: should await for execution! */
 
     Blockly.JavaScript['procedures_callreturn'] = function(block) {
