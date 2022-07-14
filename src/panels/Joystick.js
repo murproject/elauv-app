@@ -13,7 +13,7 @@ function clamp (value, min, max) {
 
 const axesFormulaDefault = `max_power = 100
 threshold = 10
-solenoid_time = 30000
+solenoid_time = 3000000
 
 x = limit(x)
 y = limit(y)

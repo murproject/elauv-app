@@ -95,7 +95,7 @@ export default {
       // vizauv: new VizAuvPanel(),
     };
 
-    this.panelSelect(this.panels.projects);
+    this.panelSelect(this.panels.joystick);
   },
 
   setTitle: function (title) {

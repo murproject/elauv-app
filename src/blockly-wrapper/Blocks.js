@@ -679,7 +679,7 @@ await mur.thread_end(_threadId);
         this.appendDummyInput()
           .appendField(new FieldGridDropdown([
             item_image('cursor-default-click',  'IMU_TAP_ONE',      'один стук'),
-            item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
+            // item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
           ], undefined, {columns: 2, DEFAULT_VALUE: 'IMU_TAP_ONE'}), "MODE")
 
         this.setOutput(true, 'Boolean')
@@ -741,7 +741,7 @@ await mur.thread_end(_threadId);
         this.appendDummyInput()
           .appendField(new FieldGridDropdown([
             item_image('cursor-default-click',  'IMU_TAP_ONE',      'один стук'),
-            item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
+            // item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
           ], undefined, {columns: 2, DEFAULT_VALUE: 'IMU_TAP_ONE'}), "MODE")
           .appendField(icon('timer-sand', 'ждать'))
 

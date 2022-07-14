@@ -116,7 +116,7 @@ const CategoryMath = makeCategory(
       kind: 'block', type: 'math_arithmetic',
       inputs: { A: shadowNum(1), B: shadowNum(2) }
     },
-    // { kind: 'block', type: 'math_single' },
+    { kind: 'block', type: 'math_single' },
     // { kind: 'block', type: 'math_trig' },
     // { kind: 'block', type: 'math_constant' },
     { kind: 'block', type: 'math_number_property' },
