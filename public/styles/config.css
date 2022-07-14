@@ -19,6 +19,6 @@ body {
   --radius: 5px;
   --radius-round: 999px;
 
-  --header-height: 2.25em;
+  --header-height: 2.5em;
   --height-minus-header: calc(100% - var(--header-height));
 }
