@@ -16,6 +16,11 @@ if (typeof cordova !== 'undefined') {
       }
     });
 
+    document.addEventListener("backbutton", function (e) {
+      e.preventDefault();
+    });
+
+
     main();
     setTimeout(() => {
       window.IsekaiFakeSplash.hide();
