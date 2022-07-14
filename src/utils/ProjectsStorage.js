@@ -243,7 +243,7 @@ export default {
   },
 
   openFiles() {
-    chooser.getFile("application/json", file => this.processImportFile(file), err => console.war(err))
+    chooser.getFile("*/*", file => this.processImportFile(file), err => console.war(err))
   },
 
   /*
