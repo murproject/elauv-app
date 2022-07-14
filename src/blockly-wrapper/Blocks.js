@@ -1122,6 +1122,39 @@ await mur.thread_end(_threadId);
       }
     };
 
+    Blockly.Blocks['math_single'] = {
+      init: function () {
+        this.jsonInit({
+          'type': 'math_single',
+          'message0': '%1 %2',
+          'args0': [
+            {
+              'type': 'field_dropdown',
+              'name': 'OP',
+              'options': [
+                // ['%{BKY_MATH_SINGLE_OP_ROOT}', 'ROOT'],
+                ['%{BKY_MATH_SINGLE_OP_ABSOLUTE}', 'ABS'],
+                ['-', 'NEG'],
+                // ['ln', 'LN'],
+                // ['log10', 'LOG10'],
+                // ['e^', 'EXP'],
+                // ['10^', 'POW10'],
+              ],
+            },
+            {
+              'type': 'input_value',
+              'name': 'NUM',
+              'check': 'Number',
+            },
+          ],
+          'output': 'Number',
+          'style': 'math_blocks',
+          'helpUrl': '%{BKY_MATH_SINGLE_HELPURL}',
+          'extensions': ['math_op_tooltip'],
+        });
+      }
+    };
+
 
 
 
