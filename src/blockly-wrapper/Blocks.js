@@ -303,6 +303,30 @@ await mur.thread_end(_threadId);
       }
     })
 
+    Blockly.Extensions.register('auto_print_name', function () {
+      this.setOnChange(function (changeEvent) {
+        if (!(changeEvent.type === "move")) {
+          return;
+        }
+
+        if ("childBlocks_" in this && this.childBlocks_.length > 0) {
+          const fieldName = this.inputList[0].fieldRow[1];
+
+          this.childBlocks_.forEach(item => {
+            if (item.id !== changeEvent.blockId) {
+              return;
+            }
+
+            if (item.type == 'variables_get') {
+              const variableName = item.inputList[0].fieldRow[0].selectedOption_[0];
+              fieldName.setEditorValue_(variableName);
+            }
+          });
+        }
+      });
+    });
+
+
     Blockly.Blocks.mur_print = {
       init: function () {
         // this.appendDummyInput()
@@ -323,6 +347,8 @@ await mur.thread_end(_threadId);
         this.setInputsInline(true)
         this.setColour(colours.flow)
         this.setTooltip('Отобразить значение')
+
+        Blockly.Extensions.apply('auto_print_name', this)
       }
     }
 
