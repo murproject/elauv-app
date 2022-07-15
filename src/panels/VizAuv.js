@@ -80,7 +80,14 @@ let context = {
       yaw: 0,
       pitch: 0,
       roll: 0,
-    }
+    },
+
+    leds: [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+    ]
 };
 
 let illo = null;
@@ -177,6 +184,14 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     };
 
     vehicle.gr = new Zdog.Group({
+        translate: vehicle.pos,
+        rotate: vehicle.rot,
+        addTo: parent,
+        color: transparent,
+        stroke: false,
+    });
+
+    vehicle.grBody = new Zdog.Group({
         translate: vehicle.pos,
         rotate: vehicle.rot,
         addTo: parent,
@@ -283,7 +298,7 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
         addTo: vehicle.gr,
         visible: false,
         translate: {z: 0, y:  200},
-      });
+    });
 
 
     // vehicle.bodyColba = new Zdog.RoundedRect({
@@ -299,18 +314,59 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     // });
 
     vehicle.bodycolba =  new Zdog.Cylinder({
-        addTo: parent,
-        diameter: 40,
+        addTo: vehicle.grBody,
+        diameter: 35,
         length: 18,
         fill: true,
         stroke: 5,
-        color: '#5AC',
-        frontFace: '#7BD',
+        color: '#ADF2',
+        // frontFace: '#7BD',
         // fillColor: "#000",
         translate: {z: 0, y: 0},
         rotate: {x:  Zdog.TAU/4},
-        backface: black,
+        // backface: black,
     });
+
+    vehicle.bodyColbaBottom =  new Zdog.Ellipse({
+        addTo: vehicle.grBody,
+        diameter: 35,
+        length: 18,
+        fill: true,
+        stroke: 5,
+        color: '#79AF',
+        translate: {z: 0, y: 10},
+        rotate: {x:  Zdog.TAU/4},
+    });
+
+    vehicle.bodyColbaTop =  new Zdog.Ellipse({
+        addTo: vehicle.grBody,
+        diameter: 40,
+        length: 18,
+        fill: true,
+        stroke: 0,
+        color: '#FFF7',
+        translate: {z: 0, y: -10},
+        rotate: {x:  Zdog.TAU/4},
+    });
+
+    function makeLed(x, z) {
+        return new Zdog.Shape({
+            addTo: vehicle.grBody,
+            stroke: 3,
+            // width: 1,
+            // height: 1,
+            // depth: 2,
+            translate: {x: x, y: +10, z: z},
+            color: '#fff7',
+        });
+    }
+
+    vehicle.leds = [
+        makeLed(-10,  10),
+        makeLed(-10, -10),
+        makeLed( 10, -10),
+        makeLed( 10,  10),
+    ]
 
     return vehicle;
 }
@@ -578,10 +634,32 @@ let contextSmoothed = {
       yaw: 0,
       roll: 0,
       pitch: 0,
-    }
+    },
+
+    leds: [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+    ],
 };
 
 let skip = false;
+
+function makeHexColor(r, g, b) {
+    r = Math.min(Math.abs(Math.round(r)) + 0, 255);
+    g = Math.min(Math.abs(Math.round(g)) + 0, 255);
+    b = Math.min(Math.abs(Math.round(b)) + 0, 255);
+
+    const result = "#" +
+            (r).toString(16).padStart(2, '0') +
+            (g).toString(16).padStart(2, '0') +
+            (b).toString(16).padStart(2, '0');
+
+    // console.log(result);
+
+    return result;
+  }
 
 function animate() {
     c = new Date();
@@ -629,6 +707,12 @@ function animate() {
         contextSmoothed.rot.roll = ease(contextSmoothed.rot.roll, context.rot.roll / 50);
         contextSmoothed.rot.pitch = ease(contextSmoothed.rot.pitch, context.rot.pitch / 50);
 
+        contextSmoothed.leds.forEach((led, ledIndex) => {
+            contextSmoothed.leds[ledIndex].forEach((color, colorIndex) => {
+                contextSmoothed.leds[ledIndex][colorIndex] = ease(contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 1);
+            });
+        });
+
         // console.log(context);
 
         th_hl.update(contextSmoothed.motors.hl + 0);
@@ -636,6 +720,15 @@ function animate() {
         th_vl.update(contextSmoothed.motors.vl + 0);
         th_vr.update(contextSmoothed.motors.vr + 0);
 
+        if ('leds' in context) {
+            vehicle.leds.forEach((led, index) => {
+                const rgb = contextSmoothed.leds[index];
+                // console.log(rgb);
+                led.color = makeHexColor(rgb[0], rgb[1], rgb[2]) + 'CC'
+                // led.color = context.leds[index] + 'AA';
+                // console.log(led.color);
+            });
+        }
 
         illo.updateRenderGraph();
     }

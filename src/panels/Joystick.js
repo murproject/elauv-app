@@ -117,7 +117,14 @@ export default class Joystick extends Panel {
           yaw: 0,
           pitch: 0,
           roll: 0,
-        }
+        },
+
+        leds: [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ]
       };
 
       if ('direct_power' in mur.context) {
@@ -125,6 +132,20 @@ export default class Joystick extends Panel {
         context.motors.vl = mur.context.direct_power[1];
         context.motors.vr = mur.context.direct_power[2];
         context.motors.hr = mur.context.direct_power[3];
+
+        if (App.panels.blockly.scriptStatus === 'running') {
+          context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
+          context.leds[1] = [mur.context.leds[1 * 3 + 0], mur.context.leds[1 * 3 + 1], mur.context.leds[1 * 3 + 0 + 2]];
+          context.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
+          context.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
+        } else {
+          context.leds[2] = [0, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55];
+          context.leds[3] = [0, context.motors.vl < 0 ? 0 : context.motors.vl * 2.55, context.motors.vl > 0 ? 0 : context.motors.vl * 2.55];
+          context.leds[0] = [0, context.motors.vr < 0 ? 0 : context.motors.vr * 2.55, context.motors.vr > 0 ? 0 : context.motors.vr * 2.55];
+          context.leds[1] = [0, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55];
+        }
+
+        // console.log(context.leds[0]);
       }
 
       if ('imuYaw' in mur.telemetry) {
@@ -134,7 +155,6 @@ export default class Joystick extends Panel {
       }
 
       this.vizauv.updContext(context);
-
     }, 100);
   }
 
