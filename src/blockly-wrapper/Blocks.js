@@ -887,6 +887,36 @@ await mur.thread_end(_threadId);
       }
     })
 
+
+    Blockly.Blocks.mur_set_leds_all = {
+      init: function () {
+        this.appendDummyInput('Index')
+          .appendField(icon('white-balance-iridescent', 'светодиод'))
+
+        this.appendValueInput('Colour')
+          .setCheck('Colour')
+          .appendField(icon('palette', 'цвет'))
+
+        this.setPreviousStatement(true, 'action')
+        this.setNextStatement(true, 'action')
+        this.setInputsInline(true)
+        this.setColour(colours.colour)
+        this.setTooltip('Задать цвет на светодиод')
+      }
+    }
+
+    register_proto('mur_set_leds_all', (gen) => {
+      return (block) => {
+        const index = calcVal(gen, block, 'Index')
+        const colour = calcVal(gen, block, 'Colour')
+        return makeFunc(gen, `
+for (let i = 0; i < 4; i++) {
+  await mur.set_led(i, ${colour});
+}
+        `)
+      }
+    })
+
     Blockly.FieldColour.COLOURS = [
       '#000000',
       '#ffffff',
