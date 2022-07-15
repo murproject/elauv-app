@@ -108,7 +108,7 @@ export default {
       this.devices.active = currentDevice
     }
 
-    this.devices.all = newAllDevices.sort((a, b) => a.tag.localeCompare(b.tag));
+    this.devices.all = newAllDevices.sort((a, b) => a.tag.localeCompare(b.tag, 'en', { numeric: true }));
 
     // this.devices.all = newAllDevices
     // this.devices.all = newAllDevices
