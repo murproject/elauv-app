@@ -139,10 +139,10 @@ export default class Joystick extends Panel {
           context.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
           context.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
         } else {
-          context.leds[2] = [0, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55];
-          context.leds[3] = [0, context.motors.vl < 0 ? 0 : context.motors.vl * 2.55, context.motors.vl > 0 ? 0 : context.motors.vl * 2.55];
-          context.leds[0] = [0, context.motors.vr < 0 ? 0 : context.motors.vr * 2.55, context.motors.vr > 0 ? 0 : context.motors.vr * 2.55];
-          context.leds[1] = [0, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55];
+          context.leds[1] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
+          context.leds[0] = [0, context.motors.vl > 0 ? 0 : context.motors.vl * 2.55, context.motors.vl < 0 ? 0 : context.motors.vl * 2.55];
+          context.leds[3] = [0, context.motors.vr > 0 ? 0 : context.motors.vr * 2.55, context.motors.vr < 0 ? 0 : context.motors.vr * 2.55];
+          context.leds[2] = [0, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55];
         }
 
         // console.log(context.leds[0]);

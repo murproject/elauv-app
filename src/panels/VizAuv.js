@@ -349,23 +349,24 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
         rotate: {x:  Zdog.TAU/4},
     });
 
-    function makeLed(x, z) {
-        return new Zdog.Shape({
+    function makeLed(x, z, rot) {
+        return new Zdog.Box({
             addTo: vehicle.grBody,
             stroke: 3,
-            // width: 1,
-            // height: 1,
-            // depth: 2,
+            width: 0.5,
+            height: 0.5,
+            depth: 1.5,
             translate: {x: x, y: +10, z: z},
+            rotate: {y: rot != 0 ? Zdog.TAU / rot : 0},
             color: '#fff7',
         });
     }
 
     vehicle.leds = [
-        makeLed(-10,  10),
-        makeLed(-10, -10),
-        makeLed( 10, -10),
-        makeLed( 10,  10),
+        makeLed(-14,  5, -16),
+        makeLed(-14, -5,  16),
+        makeLed( 14, -5, -16),
+        makeLed( 14,  5,  16),
     ]
 
     return vehicle;
@@ -644,7 +645,7 @@ let contextSmoothed = {
     ],
 };
 
-let skip = false;
+let skip = 0;
 
 function makeHexColor(r, g, b) {
     r = Math.min(Math.abs(Math.round(r)) + 0, 255);
@@ -660,6 +661,8 @@ function makeHexColor(r, g, b) {
 
     return result;
   }
+
+// setInterval(() => animate(), 1000 / 25);
 
 function animate() {
     c = new Date();
@@ -709,7 +712,7 @@ function animate() {
 
         contextSmoothed.leds.forEach((led, ledIndex) => {
             contextSmoothed.leds[ledIndex].forEach((color, colorIndex) => {
-                contextSmoothed.leds[ledIndex][colorIndex] = ease(contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 1);
+                contextSmoothed.leds[ledIndex][colorIndex] = ease(contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 0.5);
             });
         });
 
@@ -724,17 +727,24 @@ function animate() {
             vehicle.leds.forEach((led, index) => {
                 const rgb = contextSmoothed.leds[index];
                 // console.log(rgb);
-                led.color = makeHexColor(rgb[0], rgb[1], rgb[2]) + 'CC'
+                led.color = makeHexColor(rgb[0], rgb[1], rgb[2]) + '22'
                 // led.color = context.leds[index] + 'AA';
                 // console.log(led.color);
             });
         }
 
-        illo.updateRenderGraph();
+        // if (skip <= 1) {
+            illo.updateRenderGraph();
+        // }
     }
     // }
 
-    skip = !skip;
+    // skip++;
+
+    // if (skip >= 3) {
+    //     skip = 0;
+    // }
+
     requestAnimationFrame(animate);
 }
 
