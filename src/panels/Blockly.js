@@ -695,27 +695,39 @@ export default class BlocklyPanel extends Panel {
     this.workspace.addChangeListener(event => { this.onWorkspaceChange(event) });
     // this.checkUndoRedo(false);
 
-
-    this.backpack = new Backpack.Backpack(this.workspace);
-    this.backpack.onDropOriginal = this.backpack.onDrop;
-    this.backpack.onDrop = (block) => {
-      this.backpack.onDropOriginal(block)
-      const undoStack = this.workspace.getUndoStack();
-      if (undoStack.length > 0 ) {
-        const oldParentId = undoStack[undoStack.length - 1].oldParentId;
-        const oldInputName = undoStack[undoStack.length - 1].oldInputName;
-        if (oldParentId && oldInputName) {
-          this.workspace.undo();
+    if (!readonly) {
+      this.backpack = new Backpack.Backpack(this.workspace);
+      this.backpack.onDropOriginal = this.backpack.onDrop;
+      this.backpack.onDrop = (block) => { // TODO: move to separate function
+        this.backpack.onDropOriginal(block)
+        let undoStack = this.workspace.getUndoStack();
+        console.log(undoStack);
+        if (undoStack.length > 0 ) {
+          const oldParentId = undoStack[undoStack.length - 1].oldParentId;
+          const oldInputName = undoStack[undoStack.length - 1].oldInputName;
+          if (oldParentId && oldInputName) {
+            this.workspace.undo();
+          }
         }
+
+        // undoStack = this.workspace.getUndoStack();
+        console.log(undoStack);
+        if (undoStack.length > 1 ) {
+          const newParentId = undoStack[undoStack.length - 2].newParentId;
+          if (newParentId) {
+            this.workspace.undo();
+          }
+        }
+
+        const backpackEl = document.getElementsByClassName("blocklyBackpack")[0];
+        backpackEl.classList.add("bounce-once");
+        setTimeout(() => backpackEl.classList.remove("bounce-once"), 750);
       }
 
-      const backpackEl = document.getElementsByClassName("blocklyBackpack")[0];
-      backpackEl.classList.add("bounce-once");
-      setTimeout(() => backpackEl.classList.remove("bounce-once"), 750);
-    }
+      this.backpack.init();
+      this.backpack.setContents(ProjectsStorage.projects.backpack);
 
-    this.backpack.init();
-    this.backpack.setContents(ProjectsStorage.projects.backpack);
+    }
   }
 
   workerMsgHandler(e) {
