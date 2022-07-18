@@ -700,8 +700,14 @@ export default class BlocklyPanel extends Panel {
     this.backpack.onDropOriginal = this.backpack.onDrop;
     this.backpack.onDrop = (block) => {
       this.backpack.onDropOriginal(block)
-      console.log(block);
-      this.workspace.undo();
+      const undoStack = this.workspace.getUndoStack();
+      if (undoStack.length > 0 ) {
+        const oldParentId = undoStack[undoStack.length - 1].oldParentId;
+        const oldInputName = undoStack[undoStack.length - 1].oldInputName;
+        if (oldParentId && oldInputName) {
+          this.workspace.undo();
+        }
+      }
     }
 
     this.backpack.init();
