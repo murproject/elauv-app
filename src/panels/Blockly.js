@@ -113,6 +113,13 @@ export default class BlocklyPanel extends Panel {
     // Ru["COLOUR_RGB_GREEN"] = "G";
     // Ru["COLOUR_RGB_BLUE"] = "B";
     Ru["MATH_SUBTRACTION_SYMBOL"] = "−";
+
+    Ru['COPY_ALL_TO_BACKPACK'] = 'Копировать все блоки в рюкзак';
+    Ru['COPY_TO_BACKPACK'] = 'Копировать в рюказ';
+    Ru['EMPTY_BACKPACK'] = 'Очистить рюказ';
+    Ru['PASTE_ALL_FROM_BACKPACK'] = 'Вставить всё из рюкзака';
+    Ru['REMOVE_FROM_BACKPACK'] = 'Удалить из рюкзака';
+
     Blockly.setLocale(Ru)
 
     Blockly.JavaScript.addReservedWords('mur');
