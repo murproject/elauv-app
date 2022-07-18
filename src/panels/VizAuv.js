@@ -350,16 +350,39 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     });
 
     function makeLed(x, z, rot) {
-        return new Zdog.Box({
-            addTo: vehicle.grBody,
-            stroke: 3,
-            width: 0.5,
-            height: 0.5,
-            depth: 1.5,
-            translate: {x: x, y: +10, z: z},
-            rotate: {y: rot != 0 ? Zdog.TAU / rot : 0},
-            color: '#fff7',
-        });
+        // new Zdog.Box({
+        //     addTo: vehicle.grBody,
+        //     stroke: 4,
+        //     width: 0.5,
+        //     height: 0.5,
+        //     depth: 1.5,
+        //     translate: {x: x, y: +10, z: z},
+        //     rotate: {y: rot != 0 ? Zdog.TAU / rot : 0},
+        //     color: '#0002',
+        // });
+
+        return [
+            new Zdog.Box({
+                addTo: vehicle.grBody,
+                stroke: 3,
+                width: 1.5,
+                height: 1.5,
+                depth: 2.5,
+                translate: {x: x, y: +10, z: z},
+                rotate: {y: rot != 0 ? Zdog.TAU / rot : 0},
+                color: '#0007',
+            }),
+            new Zdog.Box({
+                addTo: vehicle.grBody,
+                stroke: 1,
+                width: 0.25,
+                height: 0.25,
+                depth: 0.75,
+                translate: {x: x, y: +10, z: z},
+                rotate: {y: rot != 0 ? Zdog.TAU / rot : 0},
+                color: '#0007',
+            }),
+        ];
     }
 
     vehicle.leds = [
@@ -727,7 +750,10 @@ function animate() {
             vehicle.leds.forEach((led, index) => {
                 const rgb = contextSmoothed.leds[index];
                 // console.log(rgb);
-                led.color = makeHexColor(rgb[0], rgb[1], rgb[2]) + '22'
+                const glowOpacity = Math.round(Math.max(Math.abs(rgb[0]), Math.abs(rgb[1]), Math.abs(rgb[2])) * 0.1).toString(16).padStart(2, '0');
+                const mainOpacity = Math.round(Math.max(Math.abs(rgb[0]) + 50, Math.abs(rgb[1]) + 50, Math.abs(rgb[2]) + 50) * 0.5).toString(16).padStart(2, '0');
+                led[0].color = makeHexColor(rgb[0], rgb[1], rgb[2]) + glowOpacity;
+                led[1].color = makeHexColor(rgb[0], rgb[1], rgb[2]) + mainOpacity;
                 // led.color = context.leds[index] + 'AA';
                 // console.log(led.color);
             });
