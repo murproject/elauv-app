@@ -11,7 +11,7 @@ import 'blockly/javascript';
 import BlocklyLua from 'blockly/lua'
 
 // import Backpack from '@blockly/workspace-backpack';
-import * as Backpack from '../blockly-wrapper/workspace-backpack';
+import * as Backpack from '../blockly-wrapper/workspace-backpack/src';
 
 import MurToolbox from '../blockly-wrapper/Toolbox'
 import '../blockly-wrapper/BlocklyStyle'
@@ -705,7 +705,7 @@ export default class BlocklyPanel extends Panel {
         if (undoStack.length > 0 ) {
           const oldParentId = undoStack[undoStack.length - 1].oldParentId;
           const oldInputName = undoStack[undoStack.length - 1].oldInputName;
-          if (oldParentId && oldInputName) {
+          if (oldParentId || oldInputName) {
             this.workspace.undo();
           }
         }
