@@ -708,6 +708,10 @@ export default class BlocklyPanel extends Panel {
           this.workspace.undo();
         }
       }
+
+      const backpackEl = document.getElementsByClassName("blocklyBackpack")[0];
+      backpackEl.classList.add("bounce-once");
+      setTimeout(() => backpackEl.classList.remove("bounce-once"), 750);
     }
 
     this.backpack.init();
