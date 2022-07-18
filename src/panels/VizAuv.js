@@ -660,6 +660,12 @@ let contextSmoothed = {
       pitch: 0,
     },
 
+    illoRot: {
+        x: 0,
+        y: 0,
+        z: 0,
+    },
+
     leds: [
         [0, 0, 0],
         [0, 0, 0],
@@ -739,6 +745,14 @@ function animate() {
             });
         });
 
+        // contextSmoothed.illoRot.x = ease(contextSmoothed.illoRot.x, illo.rotate.x, 2);
+        // contextSmoothed.illoRot.y = ease(contextSmoothed.illoRot.y, illo.rotate.y, 2);
+        // contextSmoothed.illoRot.z = ease(contextSmoothed.illoRot.z, illo.rotate.z, 2);
+
+        // illo.rotate.x += (illo.rotate.x - contextSmoothed.illoRot.x) * 0.1;
+        // illo.rotate.y += (illo.rotate.y - contextSmoothed.illoRot.y) * 0.1;
+        // illo.rotate.z += (illo.rotate.z - contextSmoothed.illoRot.z) * 0.1;
+
         // console.log(context);
 
         th_hl.update(contextSmoothed.motors.hl + 0);
@@ -752,8 +766,8 @@ function animate() {
                 // console.log(rgb);
                 const glowOpacity = Math.round(Math.max(Math.abs(rgb[0]), Math.abs(rgb[1]), Math.abs(rgb[2])) * 0.1).toString(16).padStart(2, '0');
                 const mainOpacity = Math.round(Math.max(Math.abs(rgb[0]) + 50, Math.abs(rgb[1]) + 50, Math.abs(rgb[2]) + 50) * 0.5).toString(16).padStart(2, '0');
-                led[0].color = makeHexColor(rgb[0], rgb[1], rgb[2]) + glowOpacity;
-                led[1].color = makeHexColor(rgb[0], rgb[1], rgb[2]) + mainOpacity;
+                led[0].color = makeHexColor(Math.abs(rgb[0]), Math.abs(rgb[1]),Math.abs(rgb[2])) + glowOpacity;
+                led[1].color = makeHexColor(Math.abs(rgb[0]) + 100, Math.abs(rgb[1]) + 130,Math.abs(rgb[2]) + 150) + mainOpacity;
                 // led.color = context.leds[index] + 'AA';
                 // console.log(led.color);
             });
