@@ -10,6 +10,9 @@ import 'blockly/blocks';
 import 'blockly/javascript';
 import BlocklyLua from 'blockly/lua'
 
+// import Backpack from '@blockly/workspace-backpack';
+import * as Backpack from '../blockly-wrapper/workspace-backpack';
+
 import MurToolbox from '../blockly-wrapper/Toolbox'
 import '../blockly-wrapper/BlocklyStyle'
 
@@ -136,6 +139,10 @@ export default class BlocklyPanel extends Panel {
       savedUndoStack: [],
       savedRedoStack: [],
     }
+
+    console.log("Backpack!!");
+    console.log(Backpack);
+
     this.reinject(false);
 
     this.onWorkspaceChange();
@@ -204,6 +211,12 @@ export default class BlocklyPanel extends Panel {
 
   onWorkspaceChange(event) {
     if (event) {
+      if (event.type === 'backpack_change') {
+        ProjectsStorage.setBackpack(this.backpack.getContents());
+        // this.workspace.undo();
+        return;
+      }
+
       if (event.type === 'viewport_change') {
         return;
       }
@@ -675,7 +688,17 @@ export default class BlocklyPanel extends Panel {
     this.workspace.addChangeListener(event => { this.onWorkspaceChange(event) });
     // this.checkUndoRedo(false);
 
-    // TODO: CURSOR
+
+    this.backpack = new Backpack.Backpack(this.workspace);
+    this.backpack.onDropOriginal = this.backpack.onDrop;
+    this.backpack.onDrop = (block) => {
+      this.backpack.onDropOriginal(block)
+      console.log(block);
+      this.workspace.undo();
+    }
+
+    this.backpack.init();
+    this.backpack.setContents(ProjectsStorage.projects.backpack);
   }
 
   workerMsgHandler(e) {

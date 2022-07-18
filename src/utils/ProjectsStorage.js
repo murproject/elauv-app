@@ -40,6 +40,7 @@ export default {
     autosaved: makeEmptyProject(true),
     current: makeEmptyProject(),
     emptyCounter: 1,
+    backpack: [],
   },
 
   onChanged() {},
@@ -79,6 +80,8 @@ export default {
     }
 
     this.projects.savedSorted = this.projects.savedSorted.sort((a, b) => b.date - a.date)
+
+    this.projects.backpack = JSON.parse(localStorage.backpack ? localStorage.backpack : "[]")
 
     // this.projects.saved = this.projects.saved.sort((a, b) => b.date - a.date);
     // this.autosave = Utils.notNull(localStorage.autosave, {})
@@ -165,6 +168,7 @@ export default {
     localStorage.savedProjects = JSON.stringify(this.projects.saved);
     localStorage.autosavedProject = JSON.stringify(this.projects.autosaved);
     localStorage.emptyCounter = this.projects.emptyCounter;
+    localStorage.backpack = JSON.stringify(this.projects.backpack);
     this.loadStorage();
     this.onChanged();
   },
@@ -299,6 +303,11 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
     this.projects.emptyCounter = 1;
     this.saveStorage();
   },
+
+  setBackpack(contents) {
+    this.projects.backpack = contents;
+    localStorage.backpack = JSON.stringify(contents);
+  }
 }
 
 let example = {
