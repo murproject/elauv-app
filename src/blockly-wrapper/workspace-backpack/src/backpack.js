@@ -734,7 +734,7 @@ export class Backpack extends Blockly.DragTarget {
    */
   blockMouseDownWhenOpenable_(e) {
     if (!Blockly.utils.isRightButton(e) && this.isOpenable_()) {
-      e.stopPropagation(); // Don't start a workspace scroll.
+//       e.stopPropagation(); // Don't start a workspace scroll.
     }
   }
 }
