@@ -250,30 +250,6 @@ export default {
     chooser.getFile("*/*", file => this.processImportFile(file), err => console.war(err))
   },
 
-  /*
-
-path = "file:///storage/emulated/0/Download/Все проекты (2022-07-08, 15-17-33).mur.json"
-
-newPath = window.resolveLocalFileSystemURL(path)
-
-console.log(newPath)
-
-window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
-
-    console.log('file system open: ' + fs.name);
-    fs.root.getFile(newPath, { create: false, exclusive: false }, function (fileEntry) {
-
-        console.log("fileEntry is file?" + fileEntry.isFile.toString());
-        // fileEntry.name == 'someFile.txt'
-        // fileEntry.fullPath == '/someFile.txt'
-        writeFile(fileEntry, null);
-
-    }, err => console.error(err));
-
-}, err => console.error(err));
-
-  */
-
   processImportFile(file) {
     const dataString = new TextDecoder().decode(file.data);
     const data = JSON.parse(dataString);
@@ -299,6 +275,7 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
 
   deleteAllProjects() {
     localStorage.savedProjectsBackup = JSON.stringify(this.projects.saved);
+    localStorage.backpackBackup = JSON.stringify(this.projects.backpack);
     this.projects.autosaved = makeEmptyProject(true);
     this.projects.saved = {};
     this.projects.emptyCounter = 1;
