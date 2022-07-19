@@ -64,6 +64,9 @@ export default class BlocklyPanel extends Panel {
 
       } else {
         this.toolButtons.classList.add("hidden");
+        if (this.workspace) {
+          Blockly.hideChaff();
+        }
       }
     }
   }
