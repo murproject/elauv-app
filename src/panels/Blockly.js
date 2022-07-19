@@ -700,30 +700,25 @@ export default class BlocklyPanel extends Panel {
 
     if (!readonly) {
       this.backpack = new Backpack.Backpack(this.workspace);
+
+      this.backpack.shouldPreventMove = () => false;
+
       this.backpack.onDropOriginal = this.backpack.onDrop;
       this.backpack.onDrop = (block) => { // TODO: move to separate function
         this.backpack.onDropOriginal(block)
-        let undoStack = this.workspace.getUndoStack();
-        console.log(undoStack);
-        if (undoStack.length > 0 ) {
-          const oldParentId = undoStack[undoStack.length - 1].oldParentId;
-          const oldInputName = undoStack[undoStack.length - 1].oldInputName;
-          if (oldParentId || oldInputName) {
-            this.workspace.undo();
-          }
-        }
 
-        // undoStack = this.workspace.getUndoStack();
-        console.log(undoStack);
-        if (undoStack.length > 1 ) {
-          const newParentId = undoStack[undoStack.length - 2].newParentId;
-          if (newParentId) {
+        setTimeout(() => {
+          const undoStack = this.workspace.getUndoStack();
+          if (undoStack.length > 0 && undoStack[undoStack.length - 1].type != 'create') {
             this.workspace.undo();
+          } else {
+            const blockSize = block.getHeightWidth();
+            block.moveBy(-blockSize.width,0)
           }
-        }
+        }, 150);
 
         const backpackEl = document.getElementsByClassName("blocklyBackpack")[0];
-        backpackEl.classList.add("bounce-once");
+        setTimeout(() => backpackEl.classList.add("bounce-once"), 100);
         setTimeout(() => backpackEl.classList.remove("bounce-once"), 750);
       }
 
