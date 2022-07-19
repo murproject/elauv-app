@@ -153,7 +153,7 @@ export default {
             new Button({
               text: 'Сохранить',
               icon: 'content-save',
-            }, () => this.createProject(projectName, true)), // TODO
+            }, () => this.createProject(projectName, true)),
             new Button({
               text: 'Назад',
               icon: 'keyboard-return',
@@ -298,6 +298,7 @@ window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
   },
 
   deleteAllProjects() {
+    localStorage.savedProjectsBackup = JSON.stringify(this.projects.saved);
     this.projects.autosaved = makeEmptyProject(true);
     this.projects.saved = {};
     this.projects.emptyCounter = 1;
