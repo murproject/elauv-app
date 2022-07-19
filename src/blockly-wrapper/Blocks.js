@@ -983,7 +983,7 @@ for (let i = 0; i < 4; i++) {
 
     register_proto('mur_number_slider_yaw', proto_num_value)
 
-    Blockly.Blocks.mur_number_slider_rgb = {
+    Blockly.Blocks.mur_number_slider_positive = {
       init: function () {
         this.appendDummyInput()
           .appendField(new FieldSlider(0, 0, 100, false, 5), "Value")
@@ -991,12 +991,12 @@ for (let i = 0; i < 4; i++) {
         this.setOutput(true, 'Number')
         this.setPreviousStatement(false, null)
         this.setNextStatement(false, null)
-        this.setColour(colours.math)
+        this.setColour(colours.mov)
         this.setTooltip('Число')
       }
     }
 
-    register_proto('mur_number_slider_rgb', proto_num_value)
+    register_proto('mur_number_slider_positive', proto_num_value)
 
     Blockly.Blocks.mur_number = {
       init: function () {

@@ -14,14 +14,13 @@ function shadowNum (defaultNum = 0) {
 }
 
 
-function shadowSlider(type = undefined) {
+function shadowSlider(type = undefined, defaultNum = 0) {
   if (type === 'deg') {
-    // return { shadow: { type: 'mur_number_slider_yaw', fields: { Value: 0 } } };
-    return { shadow: { type: 'mur_number_degrees', fields: { Value: 0 } } };
-  } else if (type === 'rgb') {
-    return { shadow: { type: 'mur_number_slider_rgb', fields: { Value: 0 } } };
+    return { shadow: { type: 'mur_number_degrees', fields: { Value: defaultNum } } };
+  } else if (type === 'positive') {
+    return { shadow: { type: 'mur_number_slider_positive', fields: { Value: defaultNum } } };
   }
-  return { shadow: { type: 'mur_number_slider', fields: { Value: 0 } } };
+  return { shadow: { type: 'mur_number_slider', fields: { Value: defaultNum } } };
 }
 
 
@@ -174,9 +173,9 @@ const CategoryColour = makeCategory(
     { kind: 'block', type: 'colour_random' },
     { kind: 'block', type: 'colour_rgb',
       inputs: {
-        RED:    shadowSlider('rgb'),
-        GREEN:  shadowSlider('rgb'),
-        BLUE:   shadowSlider('rgb'),
+        RED:    shadowSlider('positive'),
+        GREEN:  shadowSlider('positive'),
+        BLUE:   shadowSlider('positive'),
       }
     },
     // { kind: 'block', type: 'colour_blend' },
