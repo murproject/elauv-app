@@ -52,27 +52,28 @@ const CategoryMovements = makeCategory(
     //   type: 'mur_number_degrees',
     // },
 
-    // {
-    //   kind: 'block',
-    //   type: 'mur_set_axis',
-    //   inputs: {
-    //     Power: shadowSlider()
-    //   }
-    // },
+    {
+      kind: 'block',
+      type: 'mur_set_axis',
+      inputs: {
+        Power: shadowSlider('default', 25)
+      }
+    },
 
-    // {
-    //   kind: 'block',
-    //   type: 'mur_set_yaw',
-    //   inputs: {
-    //     Angle: shadowSlider('deg')
-    //   }
-    // },
+    {
+      kind: 'block',
+      type: 'mur_set_yaw',
+      inputs: {
+        Angle: shadowSlider('deg'),
+        Power: shadowSlider('positive', 50)
+      }
+    },
 
     {
       kind: 'block',
       type: 'mur_set_power',
       inputs: {
-        Power: shadowSlider(),
+        Power: shadowSlider('default', 25),
       },
       fields: {
         Index: 'MOTOR_A'

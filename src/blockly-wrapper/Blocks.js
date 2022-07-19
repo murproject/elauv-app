@@ -507,7 +507,7 @@ await mur.thread_end(_threadId);
 
         this.appendValueInput('Power')
           .setCheck('Number')
-          .appendField(icon('speedometer', 'тяга'))
+          .appendField(icon('speedometer', 'мощность'))
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
@@ -637,6 +637,14 @@ await mur.thread_end(_threadId);
     /* set yaw */
 
     Blockly.Blocks.mur_set_yaw = {
+      /*
+        1) регулируемся до того как курс будет приемлемым
+           ИЛИ по внутреннему (невидимому) таймуту 10~15 секунд
+
+        2) сделать для тестов два блока, один с заданием мощности (коэф. P), другой без задания мощности
+
+      */
+
       init: function () {
         // this.appendDummyInput()
         //   .appendField(icon('axis-arrow', 'ось'))
@@ -650,6 +658,10 @@ await mur.thread_end(_threadId);
 
         this.appendValueInput('Angle')
           .setCheck('Number')
+
+        this.appendValueInput('Power')
+          .setCheck('Number')
+          .appendField(icon('speedometer', 'мощность'))
 
         this.setPreviousStatement(true, 'action')
         this.setNextStatement(true, 'action')
