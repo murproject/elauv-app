@@ -289,3 +289,17 @@
   opacity: 50%;
 }
 
+.backpack-empty-notify {
+  content: 'aaa';
+  width: calc(100% - 4em);
+  bottom: 0em;
+  text-align: center;
+  position: fixed;
+  display: block;
+  z-index: 999999;
+  opacity: 1;
+  transform: none;
+  background: rgba(200,200,200,0.5);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  padding: 2em;
+}

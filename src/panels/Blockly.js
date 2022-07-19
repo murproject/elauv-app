@@ -227,6 +227,15 @@ export default class BlocklyPanel extends Panel {
         return;
       }
 
+      if (event.type === 'backpack_open') {
+        if (this.backpack.isOpen() && this.backpack.getCount() === 0) {
+          console.log(this.backpack.flyout_);
+          this.backpackEmptyNotify.classList.remove("hidden")
+        } else {
+          this.backpackEmptyNotify.classList.add("hidden")
+        }
+      }
+
       if (event.type === 'viewport_change') {
         return;
       }
@@ -718,8 +727,19 @@ export default class BlocklyPanel extends Panel {
         }, 150);
 
         const backpackEl = document.getElementsByClassName("blocklyBackpack")[0];
-        setTimeout(() => backpackEl.classList.add("bounce-once"), 100);
-        setTimeout(() => backpackEl.classList.remove("bounce-once"), 750);
+        setTimeout(() => backpackEl.classList.add("bounce-once"), 200);
+        setTimeout(() => backpackEl.classList.remove("bounce-once"), 1000);
+      }
+
+      this.backpackEmptyNotify = document.createElement("div");
+      this.backpackEmptyNotify.classList.add("backpack-empty-notify");
+      this.backpackEmptyNotify.classList.add("hidden")
+      this.backpackEmptyNotify.innerHTML = "Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>использовать их в других проектах!";
+
+      this.backpack.initFlyoutOriginal = this.backpack.initFlyout_;
+      this.backpack.initFlyout_ = () => {
+        this.backpack.initFlyoutOriginal();
+        this.backpack.flyout_.svgGroup_.parentElement.appendChild(this.backpackEmptyNotify);
       }
 
       this.backpack.init();
