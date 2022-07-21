@@ -121,7 +121,7 @@ export default {
     };
 
     this.timerKeepAlive = setInterval(() => {
-      mur.controlInfo(); // TODO: use separate keepalive packet?
+      mur.controlPing(); // TODO: use separate keepalive packet?
     }, 1500);
 
     mur.onStatusUpdated = (status) => {

@@ -8,7 +8,7 @@ const packetId = {
   ControlContextStop      : 0x02,
 
   /* Service control */
-  ControlKeepAlive        : 0x11,
+  ControlPing             : 0x11,
   ControlDiagnosticInfo   : 0x12,
   ControlReboot           : 0x13,
   ControlErase            : 0x14,
@@ -22,7 +22,7 @@ const packetId = {
   ReplyTelemetry          : 0xA1,
 
   /* Service reply */
-  ReplyIsAlive            : 0xB1,
+  ReplyPong               : 0xB1,
   ReplyDiagnosticInfo     : 0xB2,
 
   /* Settings reply */
@@ -173,6 +173,10 @@ export default {
       result = this.parseDiagnosticInfo(packet)
     }
 
+    if (packet.type === packetId.ReplyPong) {
+      result = this.parsePong(packet)
+    }
+
     return result
   },
 
@@ -224,6 +228,16 @@ export default {
       text: data[0]
     }
     // writeLog(info)
+    return info
+  },
+
+  parsePong: function (packet) {
+    var data = packet.payload
+    var info = {
+      type: packet.type,
+      counter: data[0]
+    }
+
     return info
   },
 
@@ -314,10 +328,10 @@ export default {
     return packet
   },
 
-  packControlKeepAlive: function (data) {
+  packControlPing: function (data) {
     var payload = []
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlKeepAlive, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlPing, payload)
     return packet
   },
 

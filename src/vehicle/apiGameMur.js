@@ -107,7 +107,7 @@ export default {
         this.telemetryUpdated(this.telemetry, this.formattedTelemetry)
         break
 
-      case Protocol.packetTypes.ReplyDiagnosticInfo:
+      case Protocol.packetTypes.ReplyPong:
         this.timePong = new Date();
         this.timePingDelta = this.timePong - this.timePing;
         // EventBus.$emit('log-received', message)
@@ -237,22 +237,16 @@ export default {
     }
   },
 
-  controlInfo: function () {
+  controlDiagnosticInfo: function () {
     if (this.status === 'open') {
       this.conn.sendMessage(Protocol.packControlDiagnosticInfo({ }))
+    }
+  },
+
+  controlPing: function () {
+    if (this.status === 'open') {
+      this.conn.sendMessage(Protocol.packControlPing({ }))
       this.timePing = new Date();
     }
   },
-
-  controlScriptRun: function (data) {
-    if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlScriptRun(data))
-    }
-  },
-
-  controlScriptStop: function (data) {
-    if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlScriptStop(data))
-    }
-  }
 }
