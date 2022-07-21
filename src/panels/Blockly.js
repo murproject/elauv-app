@@ -366,7 +366,7 @@ export default class BlocklyPanel extends Panel {
 
     // TODO: make function to return empty context! (in mur)
 
-    mur.controlScriptStop()
+    // mur.controlScriptStop()
     const paramsContext = {
       direct_power: [0, 0, 0, 0],
       direct_mode: 0b00001111,
