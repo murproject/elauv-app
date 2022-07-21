@@ -247,7 +247,7 @@ export default {
 
   controlInfo: function () {
     if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlInfo({ }))
+      this.conn.sendMessage(Protocol.packControlDiagnosticInfo({ }))
       this.timePing = new Date();
     }
   },

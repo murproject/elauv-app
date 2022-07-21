@@ -2,6 +2,37 @@ import { encode, decode } from '@msgpack/msgpack'
 // import MessagePack from '@msgpack/msgpack'
 // const MessagePack = require('@msgpack/msgpack')
 
+const curProtoVer = 0; // protocol version
+
+const packedId = {
+  /* General user control */
+  ControlContext          : 0x01,
+  ControlContextStop      : 0x02,
+
+  /* Service control */
+  ControlKeepAlive        : 0x11,
+  ControlDiagnosticInfo   : 0x12,
+  ControlReboot           : 0x13,
+  ControlErase            : 0x14,
+
+  /* Settings control */
+  ControlBatterySettings  : 0x21,
+  ControlMotorsSettings   : 0x22,
+  ControlImuSettings      : 0x23,
+
+  /* General feedback */
+  ReplyTelemetry          : 0xA1,
+
+  /* Service reply */
+  ReplyIsAlive            : 0xB1,
+  ReplyDiagnosticInfo     : 0xB2,
+
+  /* Settings reply */
+  ReplyBatterySettings    : 0xC1,
+  ReplyMotorsSettings     : 0xC2,
+  ReplyImuSettings        : 0xC3,
+}
+
 function checkBit (value, mask) {
   return ((value & mask) === mask)
 }
@@ -137,21 +168,21 @@ export default {
 
     var result = {}
 
-    if (packet.type === 't') {
+    if (packet.type === packedId.ReplyTelemetry) {
       result = this.parseTelemetry(packet)
     }
 
-    if (packet.type === 'i') {
+    if (packet.type === packedId.ReplyDiagnosticInfo) {
       result = this.parseDiagnosticInfo(packet)
     }
 
-    if (packet.type === 'o') {
-      result = this.parseScriptOutput(packet)
-    }
+    // if (packet.type === packedId.) {
+    //   result = this.parseScriptOutput(packet)
+    // }
 
-    if (packet.type === 'h') {
-      result = this.parseScriptHighlight(packet)
-    }
+    // if (packet.type === packedId.) {
+    //   result = this.parseScriptHighlight(packet)
+    // }
 
     return result
   },
@@ -275,77 +306,53 @@ export default {
     // debug(payload)
     // console.log(payload);
 
-    var packet = this.makePacket(0, 'C', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlContext, payload)
     return packet
   },
 
-  packControlActuator: function (data) {
-    var payload = [
-      data.index,
-      data.power,
-      data.duration
-    ]
+  // packControlActuator: function (data) {
+  //   var payload = [
+  //     data.index,
+  //     data.power,
+  //     data.duration
+  //   ]
 
-    var packet = this.makePacket(0, 'A', payload)
-    return packet
-  },
+  //   var packet = this.makePacket(curProtoVer, packedId., payload)
+  //   return packet
+  // },
 
   packControlReboot: function (data) {
     var payload = [
       data.delay
     ]
 
-    var packet = this.makePacket(0, 'R', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlReboot, payload)
     return packet
   },
 
-  packControlInfo: function (data) {
+  packControlDiagnosticInfo: function (data) {
     var payload = []
 
-    var packet = this.makePacket(0, 'I', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlDiagnosticInfo, payload)
+    console.log(packet);
     return packet
   },
 
   packControlErase: function (data) {
     var payload = []
 
-    var packet = this.makePacket(0, 'E', payload)
-    return packet
-  },
-
-  packControlScriptRun: function (data) {
-    var binData = new TextEncoder().encode(data.script)
-
-    var payload = [
-      binData
-    ]
-
-    var packet = this.makePacket(0, 'S', payload)
-    return packet
-  },
-
-  packControlScriptStop: function (data) {
-    var payload = []
-
-    var packet = this.makePacket(0, 'P', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlErase, payload)
     return packet
   },
 
   packControlKeepAlive: function (data) {
     var payload = []
 
-    var packet = this.makePacket(0, 'K', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlKeepAlive, payload)
     return packet
   },
 
-  packControlResetFuelGauge: function (data) {
-    var payload = []
-
-    var packet = this.makePacket(0, 'F', payload)
-    return packet
-  },
-
-  packControlSetBatterySettings: function (data) {
+  packControlBatterySettings: function (data) {
     var payload = [
       data.designCapacity,
       data.ccGain,
@@ -353,28 +360,28 @@ export default {
       data.taperCurrent,
     ]
 
-    var packet = this.makePacket(0, 'B', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlBatterySettings, payload)
     return packet
   },
 
-  packControlSetMotorsSettings: function (data) {
+  packControlMotorsSettings: function (data) {
     var payload = [
       data.motorsPorts,
       data.motorsMultipliers,
     ]
 
-    var packet = this.makePacket(0, 'M', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlMotorsSettings, payload)
     return packet
   },
 
-  packControlSetMotorsSettings: function (data) {
+  packControlImuSettings: function (data) {
     var payload = [
       data.recalibrate == true ? 1 : 0,
       data.tapTimeout,
       data.tapTreshold,
     ]
 
-    var packet = this.makePacket(0, 'G', payload)
+    var packet = this.makePacket(curProtoVer, packedId.ControlImuSettings, payload)
     return packet
   }
 
