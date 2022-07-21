@@ -89,7 +89,7 @@ export default {
     this.lastUpdatedDate = date
 
     switch (message.type) {
-      case 'telemetry':
+      case Protocol.packetTypes.ReplyTelemetry:
         this.oldImuTapState = !this.oldImuTapState; // TODO: delete!
         // console.log(this.oldImuTapState);
 
@@ -107,18 +107,10 @@ export default {
         this.telemetryUpdated(this.telemetry, this.formattedTelemetry)
         break
 
-      case 'diagnostic-info':
+      case Protocol.packetTypes.ReplyDiagnosticInfo:
         this.timePong = new Date();
         this.timePingDelta = this.timePong - this.timePing;
         // EventBus.$emit('log-received', message)
-        break
-
-      case 'script-output':
-        // EventBus.$emit('output-received', message)
-        break
-
-      case 'script-highlight':
-        // EventBus.$emit('script-highlight', message)
         break
     }
   },

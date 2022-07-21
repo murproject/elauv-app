@@ -1,10 +1,8 @@
 import { encode, decode } from '@msgpack/msgpack'
-// import MessagePack from '@msgpack/msgpack'
-// const MessagePack = require('@msgpack/msgpack')
 
-const curProtoVer = 0; // protocol version
+const curProtoVer = 0; // current protocol version
 
-const packedId = {
+const packetId = {
   /* General user control */
   ControlContext          : 0x01,
   ControlContextStop      : 0x02,
@@ -71,6 +69,7 @@ var feedbackMask = {
 export default {
   name: 'Protocol',
   protocol: this,
+  packetTypes: packetId,
 
   regulators: {
     yaw: false,
@@ -164,25 +163,15 @@ export default {
       payload: data[3]
     }
 
-    // debug(packet)
-
     var result = {}
 
-    if (packet.type === packedId.ReplyTelemetry) {
+    if (packet.type === packetId.ReplyTelemetry) {
       result = this.parseTelemetry(packet)
     }
 
-    if (packet.type === packedId.ReplyDiagnosticInfo) {
+    if (packet.type === packetId.ReplyDiagnosticInfo) {
       result = this.parseDiagnosticInfo(packet)
     }
-
-    // if (packet.type === packedId.) {
-    //   result = this.parseScriptOutput(packet)
-    // }
-
-    // if (packet.type === packedId.) {
-    //   result = this.parseScriptHighlight(packet)
-    // }
 
     return result
   },
@@ -206,7 +195,7 @@ export default {
     var data = packet.payload
 
     var telemetry = {
-      type: 'telemetry',
+      type: packet.type,
       lastProtoVer: this.prettyHex([data[0]]),
       hardwareRev: this.prettyHex([data[1]]), // TODO: should do formatting outisde
       macAddress: this.prettyHex(data[2], true),
@@ -231,28 +220,8 @@ export default {
   parseDiagnosticInfo: function (packet) {
     var data = packet.payload
     var info = {
-      type: 'diagnostic-info',
+      type: packet.type,
       text: data[0]
-    }
-    // writeLog(info)
-    return info
-  },
-
-  parseScriptOutput: function (packet) {
-    var data = packet.payload
-    var info = {
-      type: 'script-output',
-      text: data[0]
-    }
-    // writeLog(info)
-    return info
-  },
-
-  parseScriptHighlight: function (packet) {
-    var data = packet.payload
-    var info = {
-      type: 'script-highlight',
-      blockId: data[0]
     }
     // writeLog(info)
     return info
@@ -306,7 +275,7 @@ export default {
     // debug(payload)
     // console.log(payload);
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlContext, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlContext, payload)
     return packet
   },
 
@@ -317,7 +286,7 @@ export default {
   //     data.duration
   //   ]
 
-  //   var packet = this.makePacket(curProtoVer, packedId., payload)
+  //   var packet = this.makePacket(curProtoVer, packetId., payload)
   //   return packet
   // },
 
@@ -326,14 +295,14 @@ export default {
       data.delay
     ]
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlReboot, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlReboot, payload)
     return packet
   },
 
   packControlDiagnosticInfo: function (data) {
     var payload = []
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlDiagnosticInfo, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlDiagnosticInfo, payload)
     console.log(packet);
     return packet
   },
@@ -341,14 +310,14 @@ export default {
   packControlErase: function (data) {
     var payload = []
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlErase, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlErase, payload)
     return packet
   },
 
   packControlKeepAlive: function (data) {
     var payload = []
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlKeepAlive, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlKeepAlive, payload)
     return packet
   },
 
@@ -360,7 +329,7 @@ export default {
       data.taperCurrent,
     ]
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlBatterySettings, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlBatterySettings, payload)
     return packet
   },
 
@@ -370,7 +339,7 @@ export default {
       data.motorsMultipliers,
     ]
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlMotorsSettings, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload)
     return packet
   },
 
@@ -381,7 +350,7 @@ export default {
       data.tapTreshold,
     ]
 
-    var packet = this.makePacket(curProtoVer, packedId.ControlImuSettings, payload)
+    var packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload)
     return packet
   }
 
