@@ -366,18 +366,20 @@ export default class BlocklyPanel extends Panel {
 
     // TODO: make function to return empty context! (in mur)
 
-    // mur.controlScriptStop()
-    const paramsContext = {
-      direct_power: [0, 0, 0, 0],
-      direct_mode: 0b00001111,
-      axes_speed: [0, 0, 0, 0],
-      axes_regulators: 0,
-      target_yaw: null,
-      actuator_power: [0, 0],
-      leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    }
-    mur.context = paramsContext // TODO: move context to global scope?
-    mur.controlContext(paramsContext)
+    // this.resetContext();
+
+    setTimeout(() => this.resetContext(0), 0);
+
+    let ledPower = 50;
+
+    this.fadeoffTimer = setInterval(() => {
+      this.resetContext(ledPower);
+      if (ledPower <= 0) {
+        clearInterval(this.fadeoffTimer);
+      } else {
+        ledPower -= 5;
+      }
+    }, 100);
 
     this.workspace.highlightBlock(null)
     this.reinject(false);
@@ -452,6 +454,21 @@ export default class BlocklyPanel extends Panel {
     Blockly.serialization.workspaces.load(example_code, this.workspace)
   }
 
+  resetContext(ledsPower = 0) {
+    const l = Math.max(ledsPower, 0);
+    const contextParams = {
+      direct_power: [0, 0, 0, 0],
+      direct_mode: 0b00001111,
+      axes_speed: [0, 0, 0, 0],
+      axes_regulators: 0,
+      target_yaw: null,
+      actuator_power: [0, 0],
+      leds: [l, l, l, l, l, l, l, l, l, l, l, l],
+    };
+
+    mur.controlContext(contextParams);
+  }
+
   run_lua() {
     BlocklyLua.STATEMENT_PREFIX = 'h(%1)\n'
     this.code = BlocklyLua.workspaceToCode(this.workspace)
@@ -485,6 +502,35 @@ export default class BlocklyPanel extends Panel {
     this.actionButtons.run.setIcon('stop', 'dark', 'big');
 
     this.scriptStatus = 'running'
+
+    ////////
+
+    mur.controlImuSettingsResetYaw();
+
+    const contextLedsOn = {
+      direct_power: [0, 0, 0, 0],
+      direct_mode: 0b00001111,
+      axes_speed: [0, 0, 0, 0],
+      axes_regulators: 0,
+      target_yaw: null,
+      actuator_power: [0, 0],
+      leds: [255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
+    };
+
+    const contextLedsOff = {
+      direct_power: [0, 0, 0, 0],
+      direct_mode: 0b00001111,
+      axes_speed: [0, 0, 0, 0],
+      axes_regulators: 0,
+      target_yaw: null,
+      actuator_power: [0, 0],
+      leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    };
+
+    this.resetContext(50);
+    setTimeout(() => this.resetContext(), 250);
+
+    ////////
 
     console.warn("workspaceToCode(workspace)")
     this.code = this.generate_code(this.workspace)
@@ -591,8 +637,6 @@ export default class BlocklyPanel extends Panel {
     // console.log(threadsDict)
     // console.warn("THREAD LIST")
     // console.log(threadsList)
-
-    mur.controlImuSettingsResetYaw();
 
     this.scriptWorker.postMessage({ // TODO: copypasta
       type: 'telemetry',
