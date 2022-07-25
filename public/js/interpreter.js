@@ -14,14 +14,32 @@ var highlightUpdater = null
 
 // TODO: regulators!!!
 
+
 var context = {
-  motor_axes: [0, 0, 0, 0],
-  regulators: 0,
+  axes_speed: [0, 0, 0, 0],
+  regulators: 0b00000000,
   motor_powers: [0, 0, 0, 0],
-  directMode: 0,
+  direct_mode: 0b00001111,
   actuators: [0, 0],
   leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 }
+
+
+function checkBit (value, mask) {
+  return ((value & mask) === mask)
+}
+
+
+function setBit (value, mask, state) {
+  if (state === true || state == 1) {
+    value |= mask
+  } else {
+    value &= ~mask
+  }
+
+  return value
+}
+
 
 function clamp(value, maxPower = 100) {
   return Math.min(Math.max(value, -maxPower), maxPower)
@@ -64,6 +82,10 @@ function sendHighlight (bold = false) {
 
 }
 
+function setDirectMode(index, mode) {
+  context.direct_mode = setBit(context.direct_mode, 1 << index, mode);
+  console.log(`index = ${index}, mode = ${mode}, mask = ${1 << index}, new val: ${context.direct_mode}`);
+}
 
 const mur = {
   threadsStates: {},
@@ -84,13 +106,29 @@ const mur = {
   set_axis: async function (index, speed) {
     // TODO: check index and constrain power
     speed = clamp(speed);
-    context.motor_axes[index] = Math.round(speed)
+    context.axes_speed[index] = Math.round(speed);
+
+    // setDirectMode(0, false);
+    // setDirectMode(1, false);
+    // setDirectMode(2, false);
+    // setDirectMode(3, false);
+
+    if (index == 0 || index == 1) { // AXIS_MARCH or AXIS_YAW
+      setDirectMode(0, false);
+      setDirectMode(1, false);
+    } else if (index == 2) { // AXIS_DEPTH
+      setDirectMode(2, false);
+      setDirectMode(3, false);
+    }
+
+    console.log(context);
   },
 
   set_power: async function (index, power) {
     // TODO: check index and constrain power
     power = clamp(power);
     context.motor_powers[index] = Math.round(power)
+    setDirectMode(index, true)
   },
 
   set_led: async function (index, colour) {
