@@ -182,6 +182,10 @@ const mur = {
     }
     msgToSend[name] = value;
     // console.error(name + " : " + value);
+  },
+
+  angle_norm: function(angle) {
+    return (Math.abs(((angle) + 180) % 360 ) - 180) * ((angle % 360) >= -180 ? 1.0 : - 1.0);
   }
 
 }

@@ -1114,8 +1114,8 @@ for (let i = 0; i < 4; i++) {
     register_proto('mur_angle_norm', (gen) => {
       return (block) => {
         const value = calcVal(gen, block, 'Value')
-        return makeInlineFunc(gen, `(Math.abs(((${value}) + 180) % 360 ) - 180)`)
-        // return makeInlineFunc(gen, `(${value})`)
+        // return makeInlineFunc(gen, `(Math.abs(((${value}) + 180) % 360 ) - 180)`)
+        return makeInlineFunc(gen, `mur.angle_norm(${value})`)
       }
     })
 
