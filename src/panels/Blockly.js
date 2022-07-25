@@ -368,7 +368,7 @@ export default class BlocklyPanel extends Panel {
 
     // this.resetContext();
 
-    setTimeout(() => this.resetContext(0), 0);
+    setTimeout(() => this.resetContext(50), 0);
 
     let ledPower = 50;
 
@@ -377,7 +377,7 @@ export default class BlocklyPanel extends Panel {
       if (ledPower <= 0) {
         clearInterval(this.fadeoffTimer);
       } else {
-        ledPower -= 5;
+        ledPower -= 10;
       }
     }, 100);
 
@@ -840,13 +840,15 @@ export default class BlocklyPanel extends Panel {
 
       const paramsContext = {
         direct_power: ctx.motor_powers,
-        direct_mode: 0b00001111, // TODO
-        axes_speed: ctx.motor_axes,
+        direct_mode: ctx.direct_mode, // TODO
+        axes_speed: ctx.axes_speed,
         axes_regulators: ctx.regulators,
-        target_yaw: null, // TODO
+        target_yaw: -9900, // TODO
         actuator_power: ctx.actuators,
         leds: ctx.leds,
       }
+
+      console.log(JSON.stringify(paramsContext, null, ' '));
 
       // TODO: fill context correctly in inpertreter and don't fill it here
 

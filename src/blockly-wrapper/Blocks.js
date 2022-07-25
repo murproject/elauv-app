@@ -675,9 +675,10 @@ await mur.thread_end(_threadId);
       return (block) => {
         // TODO
         const mode = block.getFieldValue('MODE')
-        const index = mode == 'AXIS_MARCH'  ? 0 :
-                      mode == 'AXIS_YAW'    ? 1 :
-                      mode == 'AXIS_DEPTH'  ? 2 : 0;
+        const index =
+          mode == 'AXIS_YAW'    ? 0 :
+          mode == 'AXIS_MARCH'  ? 1 :
+          mode == 'AXIS_DEPTH'  ? 2 : 0;
         const power = calcVal(gen, block, 'Power')
         return makeFunc(gen, `mur.set_axis(${index}, ${power})`)
       }

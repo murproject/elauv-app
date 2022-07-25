@@ -73,8 +73,8 @@ let context = {
     motors: {
         hl: 0,
         hr: 0,
-        vl: 0,
-        vr: 0,
+        vf: 0,
+        vb: 0,
     },
 
     rot: {
@@ -98,8 +98,8 @@ let gizmo = null;
 let vehicle = null;
 let th_hl = null;
 let th_hr = null;
-let th_vl = null;
-let th_vr = null;
+let th_vf = null;
+let th_vb = null;
 
 let parent_obj = undefined;
 
@@ -127,10 +127,15 @@ function makeVizauv (parent) {
   gizmo = makeGizmo(origin);
 
   vehicle = makeVehicle(origin, zero_xyz);
-  th_hl = makeThruster(vehicle.origin, { x: -35, y: 0, z: -35}, {y:  Zdog.TAU/8});
-  th_hr = makeThruster(vehicle.origin, { x:  35, y: 0, z: -35}, {y: -Zdog.TAU/8});
-  th_vl = makeThruster(vehicle.origin, { x:   0, y: 0, z:  35}, {x:  Zdog.TAU/4});
-  th_vr = makeThruster(vehicle.origin, { x:   0, y: 0, z: -35}, {x:  Zdog.TAU/4});
+//   th_hl = makeThruster(vehicle.origin, { x: -35, y: 0, z: -35}, {y:  Zdog.TAU/8});
+//   th_hr = makeThruster(vehicle.origin, { x:  35, y: 0, z: -35}, {y: -Zdog.TAU/8});
+//   th_vl = makeThruster(vehicle.origin, { x:   0, y: 0, z:  35}, {x:  Zdog.TAU/4});
+//   th_vr = makeThruster(vehicle.origin, { x:   0, y: 0, z: -35}, {x:  Zdog.TAU/4});
+
+th_hl = makeThruster(vehicle.origin, { x:  35, y: 0, z: -35}, {y: -Zdog.TAU/8});
+th_hr = makeThruster(vehicle.origin, { x: -35, y: 0, z: -35}, {y:  Zdog.TAU/8});
+th_vf = makeThruster(vehicle.origin, { x:   0, y: 0, z:  35}, {x:  Zdog.TAU/4});
+th_vb = makeThruster(vehicle.origin, { x:   0, y: 0, z: -35}, {x:  Zdog.TAU/4});
 
   console.log(vehicle);
 
@@ -138,8 +143,8 @@ function makeVizauv (parent) {
     vehicle: vehicle,
     th_hl: th_hl,
     th_hr: th_hr,
-    th_vl: th_vl,
-    th_vr: th_vr,
+    th_vf: th_vf,
+    th_vb: th_vb,
   }
 
   animate();
@@ -680,8 +685,8 @@ let contextSmoothed = {
     motors: {
         hl: 0,
         hr: 0,
-        vl: 0,
-        vr: 0,
+        vf: 0,
+        vb: 0,
     },
 
     rot: {
@@ -774,8 +779,8 @@ function animate() {
     if (parent_obj.active) {
         contextSmoothed.motors.hl = ease(contextSmoothed.motors.hl, context.motors.hl);
         contextSmoothed.motors.hr = ease(contextSmoothed.motors.hr, context.motors.hr);
-        contextSmoothed.motors.vl = ease(contextSmoothed.motors.vl, context.motors.vl);
-        contextSmoothed.motors.vr = ease(contextSmoothed.motors.vr, context.motors.vr);
+        contextSmoothed.motors.vf = ease(contextSmoothed.motors.vf, context.motors.vf);
+        contextSmoothed.motors.vb = ease(contextSmoothed.motors.vb, context.motors.vb);
 
         // contextSmoothed.rot.yaw = ease(contextSmoothed.rot.yaw, context.rot.yaw / 50);
         // contextSmoothed.rot.roll = ease(contextSmoothed.rot.roll, context.rot.roll / 50);
@@ -826,8 +831,8 @@ function animate() {
 
         th_hl.update(contextSmoothed.motors.hl + 0);
         th_hr.update(contextSmoothed.motors.hr + 0);
-        th_vl.update(contextSmoothed.motors.vl + 0);
-        th_vr.update(contextSmoothed.motors.vr + 0);
+        th_vf.update(contextSmoothed.motors.vf + 0);
+        th_vb.update(contextSmoothed.motors.vb + 0);
 
         if ('leds' in context) {
             // console.log(vehicle.leds);

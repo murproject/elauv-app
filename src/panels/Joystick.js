@@ -19,10 +19,10 @@ x = limit(x)
 y = limit(y)
 z = limit(z)
 
-a = - x + y
-b = + z
+a = + x + y
+b = - x + y
 c = + z
-d = + x + y
+d = + z
 
 // x = yaw
 // y = forward
@@ -109,8 +109,8 @@ export default class Joystick extends Panel {
         motors: {
           hl: 0,
           hr: 0,
-          vl: 0,
-          vr: 0,
+          vf: 0,
+          vb: 0,
         },
 
         rot: {
@@ -129,9 +129,11 @@ export default class Joystick extends Panel {
 
       if ('direct_power' in mur.context) {
         context.motors.hl = mur.context.direct_power[0];
-        context.motors.vl = mur.context.direct_power[1];
-        context.motors.vr = mur.context.direct_power[2];
-        context.motors.hr = mur.context.direct_power[3];
+        context.motors.hr = mur.context.direct_power[1];
+        context.motors.vf = mur.context.direct_power[2];
+        context.motors.vb = mur.context.direct_power[3];
+
+        console.log(context.motors);
 
         if (App.panels.blockly.scriptStatus === 'running') {
           context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
@@ -139,10 +141,10 @@ export default class Joystick extends Panel {
           context.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
           context.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
         } else {
-          context.leds[1] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
-          context.leds[0] = [0, context.motors.vl > 0 ? 0 : context.motors.vl * 2.55, context.motors.vl < 0 ? 0 : context.motors.vl * 2.55];
-          context.leds[3] = [0, context.motors.vr > 0 ? 0 : context.motors.vr * 2.55, context.motors.vr < 0 ? 0 : context.motors.vr * 2.55];
-          context.leds[2] = [0, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55];
+          context.leds[0] = [0, context.motors.vf > 0 ? 0 : context.motors.vf * 2.55, context.motors.vf < 0 ? 0 : context.motors.vf * 2.55];
+          context.leds[1] = [0, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55];
+          context.leds[2] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
+          context.leds[3] = [0, context.motors.vb > 0 ? 0 : context.motors.vb * 2.55, context.motors.vb < 0 ? 0 : context.motors.vb * 2.55];
         }
 
         // console.log(context.leds[0]);
@@ -314,8 +316,8 @@ export default class Joystick extends Panel {
         axes_speed: [
           powers.axes.x,
           powers.axes.y,
+          powers.axes.z,
           0, // TODO: rearrange
-          powers.axes.z
         ],
         axes_regulators: regs.pack(), // TODO
         target_yaw: null,
