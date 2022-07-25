@@ -211,36 +211,31 @@ export default {
     return value
   },
 
-  controlContext: function (data) {
-    this.context = data;
+  sendMessage: function (data) {
     if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlContext(data))
+      this.conn.sendMessage(data)
     }
+  },
+
+  controlContext: function (data) {
+    this.sendMessage(Protocol.packControlContext(data))
     this.context = data
   },
 
   controlActuator: function (data) {
-    if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlActuator(data))
-    }
+    this.sendMessage(Protocol.packControlActuator(data))
   },
 
   controlReboot: function () {
-    if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlReboot({ delay: 500 }))
-    }
+    this.sendMessage(Protocol.packControlReboot({ delay: 500 }))
   },
 
   controlErase: function () {
-    if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlErase({ }))
-    }
+    this.sendMessage(Protocol.packControlErase({ }))
   },
 
   controlDiagnosticInfo: function () {
-    if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlDiagnosticInfo({ }))
-    }
+    this.sendMessage(Protocol.packControlDiagnosticInfo({ }))
   },
 
   controlPing: function () {
@@ -249,4 +244,25 @@ export default {
       this.timePing = new Date();
     }
   },
+
+  controlImuSettingsUpdate: function (data) {
+    data.action = Protocol.imuActions.UpdateSettings
+    this.sendMessage(Protocol.packControlImuSettings(data))
+  },
+
+  controlImuSettingsRecalibrate: function (data) {
+    this.sendMessage(Protocol.packControlImuSettings({
+      action: Protocol.imuActions.Recalibrate,
+      tapTimeout: 0,
+      tapTreshold: 0
+    }))
+  },
+
+  controlImuSettingsResetYaw: function (data) {
+    this.sendMessage(Protocol.packControlImuSettings({
+      action: Protocol.imuActions.ResetZero,
+      tapTimeout: 0,
+      tapTreshold: 0
+    }))
+  }
 }

@@ -71,6 +71,12 @@ export default {
   protocol: this,
   packetTypes: packetId,
 
+  imuActions: {
+    UpdateSettings: 0,
+    Recalibrate: 1,
+    ResetZero: 2,
+  },
+
   regulators: {
     yaw: false,
     pitch: false,
@@ -359,7 +365,7 @@ export default {
 
   packControlImuSettings: function (data) {
     var payload = [
-      data.recalibrate == true ? 1 : 0,
+      data.action,
       data.tapTimeout,
       data.tapTreshold,
     ]
