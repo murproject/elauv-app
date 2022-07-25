@@ -592,6 +592,8 @@ export default class BlocklyPanel extends Panel {
     // console.warn("THREAD LIST")
     // console.log(threadsList)
 
+    mur.controlImuSettingsResetYaw();
+
     this.scriptWorker.postMessage({ // TODO: copypasta
       type: 'telemetry',
       telemetry: JSON.parse(JSON.stringify(mur.telemetry))
