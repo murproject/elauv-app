@@ -671,6 +671,17 @@ await mur.thread_end(_threadId);
       }
     }
 
+    register_proto('mur_set_yaw', (gen) => {
+      return (block) => {
+        // TODO
+        const mode = block.getFieldValue('MODE')
+        const absolute = mode === 'SET_YAW_ABSOLUTE';
+        const angle = calcVal(gen, block, 'Angle')
+        const power = calcVal(gen, block, 'Power')
+        return makeFunc(gen, `mur.set_yaw(${angle}, ${absolute})`)
+      }
+    })
+
     register_proto('mur_set_axis', (gen) => {
       return (block) => {
         // TODO

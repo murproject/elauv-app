@@ -461,7 +461,7 @@ export default class BlocklyPanel extends Panel {
       direct_mode: 0b00001111,
       axes_speed: [0, 0, 0, 0],
       axes_regulators: 0,
-      target_yaw: null,
+      target_yaw: 0,
       actuator_power: [0, 0],
       leds: [l, l, l, l, l, l, l, l, l, l, l, l],
     };
@@ -512,7 +512,7 @@ export default class BlocklyPanel extends Panel {
       direct_mode: 0b00001111,
       axes_speed: [0, 0, 0, 0],
       axes_regulators: 0,
-      target_yaw: null,
+      target_yaw: 0,
       actuator_power: [0, 0],
       leds: [255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
     };
@@ -522,7 +522,7 @@ export default class BlocklyPanel extends Panel {
       direct_mode: 0b00001111,
       axes_speed: [0, 0, 0, 0],
       axes_regulators: 0,
-      target_yaw: null,
+      target_yaw: 0,
       actuator_power: [0, 0],
       leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
@@ -843,7 +843,7 @@ export default class BlocklyPanel extends Panel {
         direct_mode: ctx.direct_mode, // TODO
         axes_speed: ctx.axes_speed,
         axes_regulators: ctx.regulators,
-        target_yaw: -9900, // TODO
+        target_yaw: ctx.target_yaw, // TODO
         actuator_power: ctx.actuators,
         leds: ctx.leds,
       }

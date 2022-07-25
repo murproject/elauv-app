@@ -14,6 +14,12 @@ var highlightUpdater = null
 
 // TODO: regulators!!!
 
+const motorsIndex = {
+  hl: 0,
+  hr: 1,
+  vf: 2,
+  vb: 3,
+};
 
 var context = {
   axes_speed: [0, 0, 0, 0],
@@ -21,6 +27,7 @@ var context = {
   motor_powers: [0, 0, 0, 0],
   direct_mode: 0b00001111,
   actuators: [0, 0],
+  target_yaw: 0,
   leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 }
 
@@ -108,20 +115,33 @@ const mur = {
     speed = clamp(speed);
     context.axes_speed[index] = Math.round(speed);
 
-    // setDirectMode(0, false);
-    // setDirectMode(1, false);
-    // setDirectMode(2, false);
-    // setDirectMode(3, false);
-
-    if (index == 0 || index == 1) { // AXIS_MARCH or AXIS_YAW
-      setDirectMode(0, false);
-      setDirectMode(1, false);
+    if (index == 0) { // AXIS_YAW
+      setDirectMode(motorsIndex.hl, false);
+      setDirectMode(motorsIndex.hr, false);
+      context.regulators = 0; // disable yaw regulator if set speed on yaw axis
+    } else if (index == 1) { // AXIS_MARCH
+      setDirectMode(motorsIndex.hl, false);
+      setDirectMode(motorsIndex.hr, false);
     } else if (index == 2) { // AXIS_DEPTH
-      setDirectMode(2, false);
-      setDirectMode(3, false);
+      setDirectMode(motorsIndex.vf, false);
+      setDirectMode(motorsIndex.vb, false);
     }
 
     console.log(context);
+  },
+
+  set_yaw: async function(yaw, absolute = true) {
+    if (absolute) {
+      context.target_yaw = yaw;
+    } else {
+      context.target_yaw = this.angle_norm(context.target_yaw + yaw);
+    }
+
+    // disable direct mode on horizontal motors
+    setDirectMode(motorsIndex.hl, false);
+    setDirectMode(motorsIndex.hr, false);
+
+    context.regulators = 1;
   },
 
   set_power: async function (index, power) {
@@ -129,6 +149,10 @@ const mur = {
     power = clamp(power);
     context.motor_powers[index] = Math.round(power)
     setDirectMode(index, true)
+
+    if (index == 0 || index == 1) {
+      context.regulators = 0;
+    }
   },
 
   set_led: async function (index, colour) {
