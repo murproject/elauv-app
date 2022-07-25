@@ -53,9 +53,10 @@ const black = '#333';
 const grey = '#555';
 const acryl = '#777';
 const orange = '#E62';
-const garnet = '#C25';
-const purple = '#636';
-const cyan = '#39B';
+const garnet = '#CC2255';
+const purple = '#663366';
+const cyan = '#3399BB';
+const green = '#22AA22';
 // const cyan = 'rgba(68, 170, 204, 1.0);'
 
 let dragged = false;
@@ -93,6 +94,7 @@ let context = {
 let illo = null;
 let origin = null;
 
+let gizmo = null;
 let vehicle = null;
 let th_hl = null;
 let th_hr = null;
@@ -122,12 +124,15 @@ function makeVizauv (parent) {
     // color: purple,
   });
 
+  gizmo = makeGizmo(origin);
 
   vehicle = makeVehicle(origin, zero_xyz);
   th_hl = makeThruster(vehicle.origin, { x: -35, y: 0, z: -35}, {y:  Zdog.TAU/8});
   th_hr = makeThruster(vehicle.origin, { x:  35, y: 0, z: -35}, {y: -Zdog.TAU/8});
   th_vl = makeThruster(vehicle.origin, { x:   0, y: 0, z:  35}, {x:  Zdog.TAU/4});
   th_vr = makeThruster(vehicle.origin, { x:   0, y: 0, z: -35}, {x:  Zdog.TAU/4});
+
+  console.log(vehicle);
 
   let vizauv = {
     vehicle: vehicle,
@@ -157,12 +162,32 @@ function makeGizmo(parent) {
         stroke: false,
     })
 
+    // function makeGizmoLine(axis, color = cyan) {
+    //     for (let i = -3; i <= 3; i++) {
+    //         let line = new Zdog.Shape({
+    //             addTo: gizmo.origin,
+    //             path: [ {}, {} ],
+    //             translate: {x: 0, y: 0, z: 0},
+    //             stroke: 1,
+    //             color: color + '22',
+    //         });
+    //         line.path[0][axis] = -50;
+    //         line.path[1][axis] =  50;
+    //         line.translate[axis == 'x' ? 'z' :
+    //                        axis == 'y' ? 'z' :
+    //                        axis == 'z' ? 'x' : 0] = i * 17;
+    //         line.updatePath();
+
+    //     }
+    //     // return line;
+    // }
+
     function makeGizmoLine(axis, color = cyan) {
         let line = new Zdog.Shape({
             addTo: gizmo.origin,
             path: [ {}, {} ],
             stroke: 1,
-            color: color,
+            color: color + '22',
         });
         line.path[0][axis] = -50;
         line.path[1][axis] =  50;
@@ -170,9 +195,10 @@ function makeGizmo(parent) {
         return line;
     }
 
-    gizmo.lineX = makeGizmoLine('x', cyan);
-    gizmo.lineY = makeGizmoLine('y', purple);
+    gizmo.lineX = makeGizmoLine('x', green);
+    // gizmo.lineY = makeGizmoLine('y', purple);
     gizmo.lineZ = makeGizmoLine('z', garnet);
+
 
     return gizmo;
 }
@@ -183,22 +209,6 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
         rot: {x: rot.x, y: rot.y, z: rot.z},
     };
 
-    vehicle.gr = new Zdog.Group({
-        translate: vehicle.pos,
-        rotate: vehicle.rot,
-        addTo: parent,
-        color: transparent,
-        stroke: false,
-    });
-
-    vehicle.grBody = new Zdog.Group({
-        translate: vehicle.pos,
-        rotate: vehicle.rot,
-        addTo: parent,
-        color: transparent,
-        stroke: false,
-    });
-
     vehicle.origin = new Zdog.Polygon({
         addTo: parent,
         translate: vehicle.pos,
@@ -206,6 +216,22 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
         color: transparent,
         stroke: false,
     })
+
+    vehicle.gr = new Zdog.Group({
+        translate: vehicle.pos,
+        rotate: vehicle.rot,
+        addTo: vehicle.origin,
+        color: transparent,
+        stroke: false,
+    });
+
+    vehicle.grBody = new Zdog.Group({
+        translate: vehicle.pos,
+        rotate: vehicle.rot,
+        addTo: vehicle.origin,
+        color: transparent,
+        stroke: false,
+    });
 
     // vehicle.cylinder = new Zdog.Cylinder({
     //     addTo: vehicle.origin,
@@ -261,7 +287,7 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     // });
 
     vehicle.bodyTop  = new Zdog.RoundedRect({
-        addTo: parent,
+        addTo: vehicle.origin,
         width: 100,
         height: 100,
         fill: true,
@@ -508,15 +534,15 @@ function makeArrow(parent, pos = zero_xyz, rot = zero_xyz, color = cyan) {
         // this.scale.y = (power < 0 ? 1 : -1);
         // this.scale.x = this.scale.y * 1.25;
 
-        arrow.trig.rotate.y =
-            (illo.rotate.y * (arrow.parent.origin.rotate.x / (Zdog.TAU/4))) +
+        // arrow.trig.rotate.y =
+            // (illo.rotate.y * (arrow.parent.origin.rotate.x / (Zdog.TAU/4))) +
 
             // (illo.rotate.x * (arrow.parent.origin.rotate.y / (Zdog.TAU/4))) +
             // (illo.rotate.y * (arrow.parent.origin.rotate.y / (Zdog.TAU/4))) +
 
             // (illo.rotate.x * (arrow.parent.origin.rotate.x / (Zdog.TAU/4))) +
             // (illo.rotate.z * (arrow.parent.origin.rotate.y / (Zdog.TAU/4))) +
-            0;
+            // 0;
 
         // console.log(arrow.parent);
 
@@ -554,16 +580,16 @@ function makeArrow(parent, pos = zero_xyz, rot = zero_xyz, color = cyan) {
         power *= 0.75;
         this.y = 7 * sign(power);
 
-        this.opacity = min(abs(power) * 0.03, 1.0);
-        this.color = this.colorBase + Math.floor((arrow.opacity * 15.0)).toString(16);
+        this.opacity = Math.pow(abs(power * 0.5), 2);
+        this.color = this.colorBase + decToHex(arrow.opacity);
 
         // arrow.trig.rotate.y;
         arrow.trig.upd(power);
 
         // this.opacity = min(abs(power) * 0.03, 1.0);
         // this.opacity = max(this.opacity - (0.75 - abs(power) * 0.01), 0.0);
-        this.opacity = abs(power) > 50 ? 1 : Math.pow(abs(power * 0.02), 3);
-        this.color = this.colorBase + Math.floor((arrow.opacity * 15.0)).toString(16);
+        this.opacity = Math.pow(abs(power * 0.3), 2);
+        this.color = this.colorBase + decToHex(arrow.opacity);
 
         arrow.line.upd(power);
     }
@@ -614,9 +640,13 @@ function makeSprinkle(parent, color = cyan) {
         line.translate.z = r / 3 + (-sign(power) * 20);
         line.height = r / 2;
         line.stroke = rand(5) + 30;
-        line.color = sprinkle.color + (abs(power) < 5 ? 0 : abs(Math.floor(power * 0.04)).toString());
-        // console.log(line.color);
-
+        // line.color = sprinkle.color + (abs(power) < 5 ? 0 : abs(Math.floor(power * 0.04)).toString()); // TODO: use number to hex here
+        line.color = sprinkle.color + (Math.floor(abs(power * 0.5))).toString(16).padStart(2, '0');
+        if (abs(power) > 5) {
+            // console.log(line.color);
+            // console.log((Math.floor(abs(power * 0.5))).toString(16).padStart(2, '0'));
+        }
+//
         line.updatePath()
     }
     return sprinkle;
@@ -655,6 +685,14 @@ let contextSmoothed = {
     },
 
     rot: {
+      yawOld: 0,
+      rollOld: 0,
+      pitchOld: 0,
+
+      yawDelta: 0,
+      rollDelta: 0,
+      pitchDelta: 0,
+
       yaw: 0,
       roll: 0,
       pitch: 0,
@@ -676,15 +714,19 @@ let contextSmoothed = {
 
 let skip = 0;
 
+function decToHex(value) {
+    return (Math.min(Math.floor(Math.abs(value)), 255)).toString(16).padStart(2, '0') ;
+}
+
 function makeHexColor(r, g, b) {
     r = Math.min(Math.abs(Math.round(r)) + 0, 255);
     g = Math.min(Math.abs(Math.round(g)) + 0, 255);
     b = Math.min(Math.abs(Math.round(b)) + 0, 255);
 
     const result = "#" +
-            (r).toString(16).padStart(2, '0') +
-            (g).toString(16).padStart(2, '0') +
-            (b).toString(16).padStart(2, '0');
+            decToHex(r) +
+            decToHex(g) +
+            decToHex(b);
 
     // console.log(result);
 
@@ -735,15 +777,42 @@ function animate() {
         contextSmoothed.motors.vl = ease(contextSmoothed.motors.vl, context.motors.vl);
         contextSmoothed.motors.vr = ease(contextSmoothed.motors.vr, context.motors.vr);
 
-        contextSmoothed.rot.yaw = ease(contextSmoothed.rot.yaw, context.rot.yaw / 50);
-        contextSmoothed.rot.roll = ease(contextSmoothed.rot.roll, context.rot.roll / 50);
-        contextSmoothed.rot.pitch = ease(contextSmoothed.rot.pitch, context.rot.pitch / 50);
+        // contextSmoothed.rot.yaw = ease(contextSmoothed.rot.yaw, context.rot.yaw / 50);
+        // contextSmoothed.rot.roll = ease(contextSmoothed.rot.roll, context.rot.roll / 50);
+        // contextSmoothed.rot.pitch = ease(contextSmoothed.rot.pitch, context.rot.pitch / 50);
+
+        // console.log(Zdog.TAU)
+        const rot = (Math.PI/180);
+
+        function normalizeAngle(angle) {
+            return (Math.abs(((angle) + 180) % 360 ) - 180) * ((angle % 360) >= -180 ? 1.0 : - 1.0);
+        }
+
+
+        contextSmoothed.rot.yawDelta = normalizeAngle(ease(contextSmoothed.rot.yawDelta, -normalizeAngle(contextSmoothed.rot.yawOld - (context.rot.yaw))));
+        origin.rotate.y += contextSmoothed.rot.yawDelta * rot;
+        contextSmoothed.rot.yawOld = (context.rot.yaw);
+
+        contextSmoothed.rot.rollDelta = normalizeAngle(ease(contextSmoothed.rot.rollDelta, -normalizeAngle(contextSmoothed.rot.rollOld - (context.rot.roll))));
+        vehicle.origin.rotate.z -= contextSmoothed.rot.rollDelta * rot;
+        contextSmoothed.rot.rollOld = (context.rot.roll);
+
+        contextSmoothed.rot.pitchDelta = normalizeAngle(ease(contextSmoothed.rot.pitchDelta, -normalizeAngle(contextSmoothed.rot.pitchOld - (context.rot.pitch))));
+        vehicle.origin.rotate.x += contextSmoothed.rot.pitchDelta * rot;
+        contextSmoothed.rot.pitchOld = (context.rot.pitch);
+
+        // gizmo.origin.rotate.y = vehicle.origin.rotate.y;
+
 
         contextSmoothed.leds.forEach((led, ledIndex) => {
             contextSmoothed.leds[ledIndex].forEach((color, colorIndex) => {
-                contextSmoothed.leds[ledIndex][colorIndex] = ease(contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 0.5);
+                contextSmoothed.leds[ledIndex][colorIndex] = Math.round(ease(contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 0.5));
             });
         });
+
+        // illo.rotate.y += contextSmoothed.rot.yaw;
+        // illo.rotate.x += -contextSmoothed.rot.pitch - (45/50);
+        // illo.rotate.z += -contextSmoothed.rot.roll;
 
         // contextSmoothed.illoRot.x = ease(contextSmoothed.illoRot.x, illo.rotate.x, 2);
         // contextSmoothed.illoRot.y = ease(contextSmoothed.illoRot.y, illo.rotate.y, 2);
@@ -761,6 +830,7 @@ function animate() {
         th_vr.update(contextSmoothed.motors.vr + 0);
 
         if ('leds' in context) {
+            // console.log(vehicle.leds);
             vehicle.leds.forEach((led, index) => {
                 const rgb = contextSmoothed.leds[index];
                 // console.log(rgb);
@@ -773,17 +843,19 @@ function animate() {
             });
         }
 
-        // if (skip <= 1) {
+        if (skip == 0) {
             illo.updateRenderGraph();
-        // }
+        } else {
+            // console.log("Frame skipped " + skip);
+        }
     }
     // }
 
-    // skip++;
+    skip++;
 
-    // if (skip >= 3) {
-    //     skip = 0;
-    // }
+    if (skip >= 2) {
+        skip = 0;
+    }
 
     requestAnimationFrame(animate);
 }
