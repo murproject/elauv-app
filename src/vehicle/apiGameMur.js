@@ -112,6 +112,15 @@ export default {
         this.timePingDelta = this.timePong - this.timePing;
         // EventBus.$emit('log-received', message)
         break
+
+      case Protocol.packetTypes.ReplyAllSettings:
+        console.log(message);
+        break;
+
+      default:
+        console.warn("unknown")
+        console.log(JSON.stringify(message, null, ' '));
+        break;
     }
   },
 
@@ -252,6 +261,10 @@ export default {
       this.conn.sendMessage(Protocol.packControlPing({ }))
       this.timePing = new Date();
     }
+  },
+
+  controlGetAllSettings: function () {
+    this.sendMessage(Protocol.packControlGetAllSettings());
   },
 
   controlImuSettingsUpdate: function (data) {

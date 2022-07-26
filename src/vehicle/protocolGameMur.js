@@ -14,9 +14,10 @@ const packetId = {
   ControlErase            : 0x14,
 
   /* Settings control */
-  ControlBatterySettings  : 0x21,
-  ControlMotorsSettings   : 0x22,
-  ControlImuSettings      : 0x23,
+  ControlGetAllSettings   : 0x21,
+  ControlBatterySettings  : 0x22,
+  ControlMotorsSettings   : 0x23,
+  ControlImuSettings      : 0x24,
 
   /* General feedback */
   ReplyTelemetry          : 0xA1,
@@ -26,9 +27,7 @@ const packetId = {
   ReplyDiagnosticInfo     : 0xB2,
 
   /* Settings reply */
-  ReplyBatterySettings    : 0xC1,
-  ReplyMotorsSettings     : 0xC2,
-  ReplyImuSettings        : 0xC3,
+  ReplyAllSettings        : 0xC1,
 }
 
 function checkBit (value, mask) {
@@ -207,6 +206,10 @@ export default {
       result = this.parsePong(packet)
     }
 
+    if (packet.type === packetId.ReplyAllSettings) {
+      result = this.parseAllSettings(packet)
+    }
+
     return result
   },
 
@@ -271,6 +274,25 @@ export default {
     return info
   },
 
+  parseAllSettings: function (packet) {
+    var data = packet.payload
+
+    var settings = {
+      type: packet.type,
+      startupsCount: data[0],
+      motorsPorts: data[1],
+      motorsMultipliers: data[2],
+      actuatorsPorts: data[3],
+      fuelGaugeBattCapacity: data[4],
+      fuelGaugeTerminateVolts: data[5],
+      fuelGaugeTaperCurrent: data[6],
+      imuTapTimeout: data[7],
+      imuTapThreshold: data[8] * 0.01,
+    }
+
+    return settings
+  },
+
   makePacket: function (protoVer, type, payload) {
     var packet = [
       'MUR',
@@ -323,17 +345,6 @@ export default {
     return packet
   },
 
-  // packControlActuator: function (data) {
-  //   var payload = [
-  //     data.index,
-  //     data.power,
-  //     data.duration
-  //   ]
-
-  //   var packet = this.makePacket(curProtoVer, packetId., payload)
-  //   return packet
-  // },
-
   packControlReboot: function (data) {
     var payload = [
       data.delay
@@ -365,6 +376,13 @@ export default {
     return packet
   },
 
+  packControlGetAllSettings: function (data) {
+    var payload = []
+
+    var packet = this.makePacket(curProtoVer, packetId.ControlGetAllSettings, payload)
+    return packet
+  },
+
   packControlBatterySettings: function (data) {
     var payload = [
       data.designCapacity,
@@ -391,7 +409,7 @@ export default {
     var payload = [
       data.action,
       data.tapTimeout,
-      data.tapTreshold,
+      data.tapTreshold / 0.01,
     ]
 
     var packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload)
