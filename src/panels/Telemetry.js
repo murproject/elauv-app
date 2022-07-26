@@ -113,7 +113,7 @@ export default class Telemetry extends Panel {
     telemetryText += '\n\ncontext = ';
     telemetryText += JSON.stringify(mur.context, null, '  ')
 
-    this.textElement.innerText = telemetryText;
+    this.textElement.innerHTML = telemetryText;
   }
 
   updateBattery() {

@@ -62,8 +62,15 @@ var regulatorsMask = {
 }
 
 var feedbackMask = {
-  imuTap: 1 << 0,
-  colorStatus: 1 << 1
+  // imuTap: 1 << 0,
+  // colorStatus: 1 << 1
+  imuTap:           1 << 0,
+  imuDoubleTap:     1 << 1,
+  imuCalibrating:   1 << 2,
+  colorStatus:      1 << 3,
+  solenoidRelaxing: 1 << 4,
+  pilotingMode:     1 << 5,
+  yawStabilized:    1 << 6,
 }
 
 export default {
@@ -106,18 +113,35 @@ export default {
 
   feedback: {
     imuTap: false,
+    imuDoubleTap: false,
+    imuCalibrating: false,
     colorStatus: false,
+    solenoidRelaxing: false,
+    pilotingMode: false,
+    yawStabilized: false,
 
     unpack: function (data) {
-      this.imuTap = checkBit(data, feedbackMask.imuTap)
-      this.colorStatus = checkBit(data, feedbackMask.colorStatus)
+      this.imuTap = checkBit(data, feedbackMask.imuTap);
+      this.imuDoubleTap = checkBit(data, feedbackMask.imuDoubleTap);
+      this.imuCalibrating = checkBit(data, feedbackMask.imuCalibrating);
+      this.colorStatus = checkBit(data, feedbackMask.colorStatus);
+      this.solenoidRelaxing = checkBit(data, feedbackMask.solenoidRelaxing);
+      this.pilotingMode = checkBit(data, feedbackMask.pilotingMode);
+      this.yawStabilized = checkBit(data, feedbackMask.yawStabilized);
+
       return this
     },
 
     pack: function () {
       var data = 0
-      data = setBit(data, this.feedbackMask.imuTap, this.imuTap)
-      data = setBit(data, this.feedbackMask.colorStatus, this.colorStatus)
+
+      data = setBit(data, this.feedbackMask.imuTap, this.imuTap);
+      data = setBit(data, this.feedbackMask.imuDoubleTap, this.imuDoubleTap);
+      data = setBit(data, this.feedbackMask.imuCalibrating, this.imuCalibrating);
+      data = setBit(data, this.feedbackMask.colorStatus, this.colorStatus);
+      data = setBit(data, this.feedbackMask.solenoidRelaxing, this.solenoidRelaxing);
+      data = setBit(data, this.feedbackMask.pilotingMode, this.pilotingMode);
+      data = setBit(data, this.feedbackMask.yawStabilized, this.yawStabilized);
 
       return data
     }

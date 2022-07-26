@@ -196,10 +196,19 @@ export default {
     }
 
     if (typeof value === 'object') {
+
+      // if (name === 'feedback') {
+      //   return JSON.stringify(value, null, ' ');
+      // }
+
       let result = ''
       for (const key in value) {
         if (typeof value[key] !== 'function') {
-          result += key + ': ' + value[key] + '; '
+          const v = value[key] === true  ? '1' :
+                    value[key] === false ? '0' :
+                    value[key];
+
+          result += "\<br>     " + key + ': ' + v + '; '
         }
         // if (value[key] === true) {
         // result.push(key)

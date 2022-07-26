@@ -133,7 +133,7 @@ export default class Joystick extends Panel {
         context.motors.vf = mur.context.direct_power[2];
         context.motors.vb = mur.context.direct_power[3];
 
-        console.log(context.motors);
+        // console.log(context.motors);
 
         if (App.panels.blockly.scriptStatus === 'running') {
           context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
