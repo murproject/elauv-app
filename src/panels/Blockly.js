@@ -527,8 +527,9 @@ export default class BlocklyPanel extends Panel {
       leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
 
-    this.resetContext(50);
-    setTimeout(() => this.resetContext(), 250);
+    setTimeout(() => this.resetContext(0), 0);
+    setTimeout(() => this.resetContext(50), 100);
+    setTimeout(() => this.resetContext(0), 350);
 
     ////////
 

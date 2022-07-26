@@ -108,6 +108,20 @@ const mur = {
     await mur.delay(3)
   },
 
+  stop_all: async function() {
+    for (let i = 0; i < 4; i++) {
+      context.axes_speed[i] = 0;
+    }
+
+    for (let i = 0; i < 2; i++) {
+      context.actuators[i] = 0
+    }
+
+    for (let i = 0; i < 4; i++) {
+      await this.set_power(i, 0);
+    }
+  },
+
   // TODO: clamp here or in context handler?
 
   set_axis: async function (index, speed) {
@@ -126,8 +140,6 @@ const mur = {
       setDirectMode(motorsIndex.vf, false);
       setDirectMode(motorsIndex.vb, false);
     }
-
-    console.log(context);
   },
 
   set_yaw: async function(yaw, power, absolute = true) {
@@ -146,6 +158,18 @@ const mur = {
     setDirectMode(motorsIndex.hr, false);
 
     context.regulators = 1;
+    telemetry.feedback.yawStabilized = false; // force, to prevent accidentally claiming as already stabilized
+
+    await this.delay(200);
+
+    const _wait_yaw_begin_timestamp = Date.now();
+    while (Date.now() - _wait_yaw_begin_timestamp < (10 * 1000)) {
+      await this.delay(150);
+      if (telemetry.feedback.yawStabilized === true) {
+        break;
+      }
+      console.log("not stabilized, need to wait! " + Math.round(Date.now() - _wait_yaw_begin_timestamp));
+    }
   },
 
   set_power: async function (index, power) {

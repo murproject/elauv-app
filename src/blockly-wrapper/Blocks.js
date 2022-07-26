@@ -626,10 +626,7 @@ await mur.thread_end(_threadId);
       return (block) => {
         // TODO: do better?
         return makeFunc(gen, `
-          mur.set_power(0, 0)
-          mur.set_power(1, 0)
-          mur.set_power(2, 0)
-          mur.set_power(3, 0)
+          await mur.stop_all()
         `)
       }
     })
@@ -678,7 +675,7 @@ await mur.thread_end(_threadId);
         const absolute = mode === 'SET_YAW_ABSOLUTE';
         const angle = calcVal(gen, block, 'Angle')
         const power = calcVal(gen, block, 'Power')
-        return makeFunc(gen, `mur.set_yaw(${angle}, ${power}, ${absolute})`)
+        return makeFunc(gen, `await mur.set_yaw(${angle}, ${power}, ${absolute})`)
       }
     })
 
