@@ -48,8 +48,8 @@ function setBit (value, mask, state) {
 }
 
 
-function clamp(value, maxPower = 100) {
-  return Math.min(Math.max(value, -maxPower), maxPower)
+function clamp(value, minPower = -100, maxPower = 100) {
+  return Math.min(Math.max(value, minPower), maxPower)
 }
 
 // var contextOld = Object.assign({}, context)
@@ -130,12 +130,16 @@ const mur = {
     console.log(context);
   },
 
-  set_yaw: async function(yaw, absolute = true) {
+  set_yaw: async function(yaw, power, absolute = true) {
+    power = clamp(power, 0, 100);
+
     if (absolute) {
       context.target_yaw = yaw;
     } else {
       context.target_yaw = this.angle_norm(context.target_yaw + yaw);
     }
+
+    context.axes_speed[0] = power;
 
     // disable direct mode on horizontal motors
     setDirectMode(motorsIndex.hl, false);

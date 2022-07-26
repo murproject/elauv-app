@@ -678,7 +678,7 @@ await mur.thread_end(_threadId);
         const absolute = mode === 'SET_YAW_ABSOLUTE';
         const angle = calcVal(gen, block, 'Angle')
         const power = calcVal(gen, block, 'Power')
-        return makeFunc(gen, `mur.set_yaw(${angle}, ${absolute})`)
+        return makeFunc(gen, `mur.set_yaw(${angle}, ${power}, ${absolute})`)
       }
     })
 
