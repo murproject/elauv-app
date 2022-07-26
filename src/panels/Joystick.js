@@ -320,7 +320,7 @@ export default class Joystick extends Panel {
           0, // TODO: rearrange
         ],
         axes_regulators: regs.pack(), // TODO
-        target_yaw: null,
+        target_yaw: 0,
         actuator_power: [solenoidPower, solenoidPower],
         leds: [0,0,0,0,0,0,0,0,0,0,0,0],
       };

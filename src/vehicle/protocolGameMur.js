@@ -310,7 +310,7 @@ export default {
       data.direct_mode,
       data.axes_speed,
       data.axes_regulators,
-      data.target_yaw !== null ? packFloat(data.target_yaw) : packFloat(-9900),
+      data.target_yaw !== null ? packFloat(data.target_yaw) : packFloat(0),
       data.actuator_power,
       data.leds,
     ]
