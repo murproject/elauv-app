@@ -41,9 +41,9 @@
     "not dead"
   ],
   "dependencies": {
-    "@blockly/block-plus-minus": "^3.0.15",
-    "@blockly/field-grid-dropdown": "^1.0.38",
-    "@blockly/field-slider": "^3.0.13",
+    "@blockly/block-plus-minus": "^3.0.19",
+    "@blockly/field-grid-dropdown": "^1.0.44",
+    "@blockly/field-slider": "^3.0.19",
     "@blockly/theme-modern": "^2.1.33",
     "@msgpack/msgpack": "^2.7.2",
     "blockly": "^8.0.3",
