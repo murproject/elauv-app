@@ -65,7 +65,7 @@ const CategoryMovements = makeCategory(
       type: 'mur_set_yaw',
       inputs: {
         Angle: shadowSlider('deg'),
-        Power: shadowSlider('positive', 50)
+        Power: shadowSlider('positive', 75)
       }
     },
 

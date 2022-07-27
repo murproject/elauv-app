@@ -10,10 +10,6 @@ var msgToSend = {}
 var contextUpdater = null
 var highlightUpdater = null
 
-// setState('stopped')
-
-// TODO: regulators!!!
-
 const motorsIndex = {
   hl: 0,
   hr: 1,
@@ -52,18 +48,8 @@ function clamp(value, minPower = -100, maxPower = 100) {
   return Math.min(Math.max(value, minPower), maxPower)
 }
 
-// var contextOld = Object.assign({}, context)
-var contextTimestamp = new Date()
-
 
 function sendContext () {
-  // TODO: postMessage with current state //
-  // if ((contextOld !== context) || (Math.abs(new Date() - contextTimestamp) > 500)) {
-  // // if ((contextOld !== context)) {
-  //   self.postMessage({ type: 'context', context: context })
-  //   contextOld = Object.assign({}, context)
-  //   contextTimestamp = new Date()
-  // }
   self.postMessage({ type: 'context', context: context })
 }
 
@@ -266,12 +252,10 @@ const mur = {
   },
 
   print: function(name, value) {
-    // TODO: send only on highlight timer
     if (typeof(value) === 'number') {
       value = Math.round(value * 1e8) / 1e8;
     }
     msgToSend[name] = value;
-    // console.error(name + " : " + value);
   },
 
   angle_norm: function(angle) {
@@ -297,50 +281,6 @@ function makeScript (index, code) {
   code = code.replace(funcRegex, 'async $&')
 
   return {script: code, isFunction: false};
-
-  console.warn('generated code: ' + index)
-  console.log(code)
-
-  let script = '';
-  let isFunction = false;
-
-  // const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
-  const funcUser = /^ *(function) (.*) {\n *await mur.h\(/gm;
-  // const varsDecl = /^\/\* MUR: User variables begin \*\//gm;
-
-  if (funcUser.test(code)) {
-    isFunction = true;
-
-    // make user-defined function async
-    code = code.replace(funcRegex, 'async $&')
-
-    // clear blocks highlight on any return from function
-    code = code.replace(/^ *return/gm, 'await mur.h(_threadId, null); return')
-
-    // clear blocks highlight on end of function
-    const lastBracket = code.lastIndexOf("}\n");
-    code = code.slice(0, lastBracket - 1) + "\nawait mur.h(_threadId, null);\n" + code.slice(lastBracket)
-
-    // code = "/* USER_PROCEDURE_BEGIN */\n\n" + code + "\n\n/* USER_PROCEDURE_END */"
-    // console.error("USER_PROCEDURE")
-
-    // script = `${strReplaceAll(code, '_scriptId', index)}\n`
-  }
-  else {
-    script = `
-(async () => {
-  ${code}
-})();
-`
-// await mur.thread_end(${index});
-  }
-
-  for (const variable in mur.vars) {
-    console.warn("replacing " + variable);
-    script = strReplaceAll(script, variable, `mur.vars["${variable}"]`);
-  }
-
-  return {script: script, isFunction: isFunction};
 }
 
 
@@ -352,9 +292,6 @@ self.onmessage = function (e) {
   if (e.data.type === 'run') {
     scripts = e.data.scripts
 
-    // e.data.userVariables.forEach(variable => {
-    //   mur.vars[variable] = undefined;
-    // });
 
     contextUpdater = setInterval(sendContext,100)
     setTimeout(() => highlightUpdater = setInterval(sendHighlight, 50), 25)
@@ -367,22 +304,11 @@ self.onmessage = function (e) {
     setState('running')
 
     script = ''
-    script = makeScript(0, scripts[0]).script // TODO //
+    script = makeScript(0, scripts[0]).script
 
     for (const i in e.data.threads) {
       mur.threadsStates[e.data.threads[i]] = true;
     }
-
-    // for (var i in scripts) {
-    //   mur.threadsStates[i] = true;
-    //   const currentScript = makeScript(i, scripts[i]);
-    //   if (currentScript.isFunction) {
-    //     mur.threadsStates[i] = false;
-    //     script = currentScript.script + script; // prepend
-    //   } else {
-    //     script += currentScript.script;
-    //   }
-    // }
 
     script = `
 (async () => {
