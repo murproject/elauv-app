@@ -26,6 +26,7 @@ export default {
     </header>
 
     <section id="main-panel-wrapper">
+      <div id="feedback-wrapper" class=""></div>
       <div id="loading-wrapper" class="loading-wrapper"></div>
     </section>
 
@@ -126,6 +127,27 @@ export default {
 
     mur.onStatusUpdated = (status) => {
       this.panels.telemetry.update()
+
+      const fw = document.querySelector("#feedback-wrapper");
+
+      if (status == 'open') {
+        fw.classList.add("background-soft-green")
+        fw.classList.add("background-pulse")
+
+        setTimeout(() => {
+          fw.classList.remove("background-soft-green")
+          fw.classList.remove("background-pulse")
+        }, 2500);
+      }
+      // } else if (status == 'closed') {
+      //   fw.classList.add("background-soft-yellow")
+      //   fw.classList.add("background-pulse")
+
+      //   setTimeout(() => {
+      //     fw.classList.remove("background-soft-yellow")
+      //     fw.classList.remove("background-pulse")
+      //   }, 2500);
+      // }
     }
   },
 

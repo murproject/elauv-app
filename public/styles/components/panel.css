@@ -189,3 +189,53 @@
   height: 150px;
   margin: 0 30%;
 }
+
+/* background pulse feedback */
+
+
+@keyframes background-pulse {
+  0% {
+    opacity: 0%;
+  }
+
+  50% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 0%;
+  }
+}
+
+#feedback-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  background: transparent;
+  opacity: 0;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+.background-pulse {
+  animation: 1s ease 0s 1 background-pulse;
+}
+
+.background-soft-green {
+  background: linear-gradient(
+    to right,
+    hsla( 90, 70%, 80%),
+    hsla( 90, 70%, 90%),
+    hsla( 90, 70%, 80%)
+  ) !important;
+}
+
+.background-soft-yellow {
+  background: linear-gradient(
+    to right,
+    hsla( 50, 70%, 80%),
+    hsla( 50, 70%, 90%),
+    hsla( 50, 70%, 80%)
+  ) !important;
+}
