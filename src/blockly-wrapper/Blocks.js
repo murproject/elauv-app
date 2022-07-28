@@ -253,7 +253,6 @@ end
         const mode = block.getFieldValue('MODE')
         // return [`mur.get_timestamp(${mode === 'MODE_MSEC'})`, Blockly.JavaScript.ORDER_NONE]
         return makeInlineFunc(gen, `mur.get_timestamp(${mode === 'MODE_MSEC'})`)
-        // return makeFunc(gen, 'mur.get_imu_tap()')
       }
     })
 
@@ -594,19 +593,6 @@ await mur.thread_end(_threadId);
       }
     })
 
-    // register_proto('mur_get_imu_tap', (gen) => {
-    //   return (block) => {
-    //     return ['mur.get_imu_tap()', Blockly.JavaScript.ORDER_NONE]
-    //     // return makeFunc(gen, 'mur.get_imu_tap()')
-    //   }
-    // })
-
-    register_proto('mur_get_imu_tap', (gen) => {
-      return (block) => {
-        return makeInlineFunc(gen, 'mur.get_imu_tap()')
-      }
-    })
-
     /* stop all axes */
 
     Blockly.Blocks.mur_stop_motors = {
@@ -725,8 +711,8 @@ await mur.thread_end(_threadId);
       init: function () {
         this.appendDummyInput()
           .appendField(new FieldGridDropdown([
-            item_image('cursor-default-click',  'IMU_TAP_ONE',      'один стук'),
-            // item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
+            item_image('cursor-default-click',  'IMU_TAP_ONE',     'один стук'),
+            item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
           ], undefined, {columns: 2, DEFAULT_VALUE: 'IMU_TAP_ONE'}), "MODE")
 
         this.setOutput(true, 'Boolean')
@@ -739,9 +725,8 @@ await mur.thread_end(_threadId);
 
     register_proto('mur_get_imu_tap', (gen) => {
       return (block) => {
-        // TODO: implement double tap
-        return ['mur.get_imu_tap()', Blockly.JavaScript.ORDER_NONE]
-        // return makeFunc(gen, 'mur.get_imu_tap()')
+        let Mode = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE' ? 1 : 0;
+        return makeInlineFunc(gen, `mur.get_imu_tap(${Mode})`)
       }
     })
 
@@ -787,8 +772,8 @@ await mur.thread_end(_threadId);
       init: function () {
         this.appendDummyInput()
           .appendField(new FieldGridDropdown([
-            item_image('cursor-default-click',  'IMU_TAP_ONE',      'один стук'),
-            // item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
+            item_image('cursor-default-click',  'IMU_TAP_ONE',     'один стук'),
+            item_image('cursor-click-2x',       'IMU_TAP_DOUBLE',  'два стука')
           ], undefined, {columns: 2, DEFAULT_VALUE: 'IMU_TAP_ONE'}), "MODE")
           .appendField(icon('timer-sand', 'ждать'))
 
@@ -807,13 +792,10 @@ await mur.thread_end(_threadId);
         // TODO: should implement a proper way to wait for event!
 
         // TODO: implement double tap
-        if (gen === Blockly.JavaScript) {
-          return makeFunc(gen, 'while (!mur.get_imu_tap()) {await mur.delay(50);}')
-        }
 
-        if (gen === BlocklyLua) {
-          return makeFunc(gen, 'while (not mur.get_imu_tap()) do mur.delay(50) end')
-        }
+        let Mode = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE' ? 1 : 0;
+
+        return makeFunc(gen, `while (!mur.get_imu_tap(${Mode})) {await mur.delay(50);}`)
       }
     })
 

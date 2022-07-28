@@ -208,8 +208,8 @@ const mur = {
     return 0.0
   },
 
-  get_imu_tap: function () {
-    return telemetry.feedback.imuTap
+  get_imu_tap: function (mode) {
+    return mode == 1 ? telemetry.feedback.imuDoubleTap : telemetry.feedback.imuTap;
   },
 
   get_color_status: function (mode) {
