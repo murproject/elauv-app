@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.robocenter.gamemurlite" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.robocenter.elementaryauv" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ElementaryAUV</name>
     <description>Companion app for ElementaryAUV underwater vehicle</description>
     <author email="support@murproject.com" href="https://murproject.com">
