@@ -20,7 +20,6 @@
     "cordova-plugin-chooser": "^1.3.2",
     "cordova-plugin-cutout": "^1.0.11",
     "cordova-plugin-dialog-plus": "^1.0.0",
-    "cordova-plugin-filechooser": "github:ihadeed/cordova-filechooser",
     "cordova-plugin-filepath": "^1.6.0",
     "cordova-plugin-save-dialog": "^1.0.0",
     "cordova-plugin-simple-file-chooser": "^3.0.2",
@@ -41,12 +40,11 @@
       "cordova-plugin-cutout": {},
       "cordova-plugin-file": {},
       "cordova-plugin-save-dialog": {},
-      "cordova-plugin-filechooser": {},
       "cordova-plugin-simple-file-chooser": {},
       "cordova-plugin-filepath": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-chooser": {},
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
+      "cordova-plugin-chooser": {}
     }
   }
 }
