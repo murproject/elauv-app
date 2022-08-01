@@ -151,8 +151,12 @@ end
       return makeFunc(gen, `mur.delay(${delay})`, true)
     }
 
+    function iconPath(name) {
+      return `/mdi/${name}.svg`;
+    }
+
     function icon (name, alt = '') {
-      return new Blockly.FieldImage(`/mdi/${name}.svg`, 32, 32, alt)
+      return new Blockly.FieldImage(iconPath(name), 32, 32, alt)
     }
 
     function item_image (name, value, alt = '') {
@@ -308,10 +312,10 @@ await mur.thread_end(_threadId);
           return;
         }
 
-        if ("childBlocks_" in this && this.childBlocks_.length > 0) {
+        if ("childBlocks_" in this && this.getChildren().length > 0) {
           const fieldName = this.inputList[0].fieldRow[1];
 
-          this.childBlocks_.forEach(item => {
+          this.getChildren().forEach(item => {
             if (item.id !== changeEvent.blockId) {
               return;
             }
@@ -868,7 +872,7 @@ await mur.thread_end(_threadId);
       init: function () {
         this.appendValueInput('Index')
           .setCheck('Number')
-          .appendField(icon('white-balance-iridescent', 'светодиод'))
+          .appendField(icon('lightbulb-on', 'светодиод'))
 
         this.appendValueInput('Colour')
           .setCheck('Colour')
@@ -879,8 +883,72 @@ await mur.thread_end(_threadId);
         this.setInputsInline(true)
         this.setColour(colours.colour)
         this.setTooltip('Задать цвет на светодиод')
+        Blockly.Extensions.apply('auto_led_color', this)
+      },
+
+      getIconField: function() {
+        return this.inputList[0].fieldRow[0];
+      },
+
+      isColorFieldLight: function() {
+        return this.getChildren()[1].inputList[0].fieldRow[0].getValue() != '#000000';
+      },
+
+      setIconLight: function(isLight = undefined) {
+        if (isLight === undefined) {
+          isLight = this.isColorFieldLight();
+        }
+        this.getIconField().setValue(isLight ? iconPath('lightbulb-on') : iconPath('lightbulb-outline'))
       }
     }
+
+    Blockly.Extensions.register('auto_led_color', function () {
+      this.setOnChange(function (changeEvent) {
+        // if (changeEvent.type === "move") {
+        //   return;
+        // }
+
+        console.log(this)
+        console.log(changeEvent)
+        console.log("\n\n")
+
+        try {
+          this.setIconLight();
+        } catch (err) {
+          console.warn(err);
+          console.warn(this)
+        }
+      });
+    });
+
+    Blockly.Blocks['mur_colour_picker'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldColour(
+                null, this.validate
+            ), 'COLOUR');
+        this.setColour(colours.colour);
+        this.setOutput(true, 'Colour')
+      },
+
+      validate: function(colourHex) {
+        const isLight = colourHex != '#000000';
+
+        try {
+          const parent = this.getSourceBlock().getParent();
+          if (parent) {
+            parent.setIconLight();
+          }
+        } catch (err) {}
+      }
+    };
+
+    register_proto('colour_match', (gen) => {
+      return (block) => {
+        const colour = calcVal(gen, block, 'COLOUR')
+        return makeInlineFunc(gen, `${colour}`)
+      }
+    })
 
     register_proto('mur_set_led', (gen) => {
       return (block) => {
@@ -894,7 +962,7 @@ await mur.thread_end(_threadId);
     Blockly.Blocks.mur_set_leds_all = {
       init: function () {
         this.appendDummyInput('Index')
-          .appendField(icon('white-balance-iridescent', 'светодиод'))
+          .appendField(icon('lightbulb-group', 'светодиод'))
 
         this.appendValueInput('Colour')
           .setCheck('Colour')
@@ -905,6 +973,22 @@ await mur.thread_end(_threadId);
         this.setInputsInline(true)
         this.setColour(colours.colour)
         this.setTooltip('Задать цвет на светодиод')
+        Blockly.Extensions.apply('auto_led_color', this)
+      },
+
+      getIconField: function() {
+        return this.inputList[0].fieldRow[0];
+      },
+
+      isColorFieldLight: function() {
+        return this.getChildren()[0].inputList[0].fieldRow[0].getValue() != '#000000';
+      },
+
+      setIconLight: function(isLight = undefined) {
+        if (isLight === undefined) {
+          isLight = this.isColorFieldLight();
+        }
+        this.getIconField().setValue(isLight ? iconPath('lightbulb-group') : iconPath('lightbulb-group-outline'))
       }
     }
 
@@ -915,8 +999,7 @@ await mur.thread_end(_threadId);
         return makeFunc(gen, `
 for (let i = 0; i < 4; i++) {
   await mur.set_led(i, ${colour});
-}
-        `)
+}`)
       }
     })
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   id="mdi-lightbulb-group"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   sodipodi:docname="lightbulb-group.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="24.542498"
+     inkscape:cx="11.001325"
+     inkscape:cy="9.9419384"
+     inkscape:window-width="1920"
+     inkscape:window-height="1019"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="mdi-lightbulb-group"
+     inkscape:snap-global="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-page="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true" />
+  <path
+     d="m 15,16.5 v 2 a 1,1 0 0 1 -1,1 h -4 a 1,1 0 0 1 -1,-1 v -2 a 5,5 0 1 1 6,0 m -1,4 h -4 v 1 a 1,1 0 0 0 1,1 h 2 a 1,1 0 0 0 1,-1 m -7,0 v -1 H 5 v 1 a 1,1 0 0 0 1,1 H 7.17 A 2.93,2.93 0 0 1 7,21.5 m -2,-9 A 6.79,6.79 0 0 1 5.68,9.5 4,4 0 0 0 4,16.95 v 1.55 a 1,1 0 0 0 1,1 H 7 V 17.38 A 6.92,6.92 0 0 1 5,12.5 m 12,8 v 1 a 2.93,2.93 0 0 1 -0.17,1 H 18 a 1,1 0 0 0 1,-1 v -1 m -0.68,-11 a 6.79,6.79 0 0 1 0.68,3 6.92,6.92 0 0 1 -2,4.88 v 2.12 h 2 a 1,1 0 0 0 1,-1 V 16.95 A 4,4 0 0 0 18.32,9.5 Z"
+     id="path2"
+     style="fill:#ffffff" />
+  <path
+     style="fill:#ffffff"
+     d="m 13,1.5 v 3 H 11 V 1.5000001 h 2"
+     id="path968" />
+  <path
+     style="fill:#ffffff"
+     d="M 2.7007289,5.1517415 5.2988049,6.6517414 4.298805,8.3837922 1.7007289,6.8837924 l 1,-1.7320509"
+     id="path968-6" />
+  <path
+     style="fill:#ffffff"
+     d="m 7.5,2 1.5,2.598076 -1.73205,1 L 5.7679494,3 7.5,2"
+     id="path968-6-2" />
+  <path
+     style="fill:#ffffff"
+     d="m 18.23205,3 -1.5,2.5980764 -1.73205,-1 L 16.5,2 18.23205,3"
+     id="path968-7" />
+  <path
+     style="fill:#ffffff"
+     d="m 22.298855,6.8837921 -2.598077,1.5 -0.999999,-1.7320504 2.598077,-1.5 0.999999,1.7320504"
+     id="path968-7-9" />
+</svg>
