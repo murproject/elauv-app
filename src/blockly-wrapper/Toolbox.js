@@ -160,17 +160,17 @@ const CategoryColour = makeCategory(
       type: 'mur_set_led',
       inputs: {
         Index: shadowNum(0),
-        Colour:  { shadow: { type: 'colour_picker', fields: { COLOUR: '#ffff00' } } }
+        Colour:  { shadow: { type: 'mur_colour_picker', fields: { COLOUR: '#ffff00' } } }
       }
     },
     {
       kind: 'block',
       type: 'mur_set_leds_all',
       inputs: {
-        Colour:  { shadow: { type: 'colour_picker', fields: { COLOUR: '#ffff00' } } }
+        Colour:  { shadow: { type: 'mur_colour_picker', fields: { COLOUR: '#ffff00' } } }
       }
     },
-    { kind: 'block', type: 'colour_picker', fields: { COLOUR: '#ffff00' } },
+    { kind: 'block', type: 'mur_colour_picker', fields: { COLOUR: '#ffff00' } },
     { kind: 'block', type: 'colour_random' },
     { kind: 'block', type: 'colour_rgb',
       inputs: {
