@@ -904,14 +904,6 @@ await mur.thread_end(_threadId);
 
     Blockly.Extensions.register('auto_led_color', function () {
       this.setOnChange(function (changeEvent) {
-        // if (changeEvent.type === "move") {
-        //   return;
-        // }
-
-        console.log(this)
-        console.log(changeEvent)
-        console.log("\n\n")
-
         try {
           this.setIconLight();
         } catch (err) {
