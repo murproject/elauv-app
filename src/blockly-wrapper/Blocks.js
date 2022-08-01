@@ -943,7 +943,7 @@ await mur.thread_end(_threadId);
       }
     };
 
-    register_proto('colour_match', (gen) => {
+    register_proto('mur_colour_picker', (gen) => {
       return (block) => {
         const colour = calcVal(gen, block, 'COLOUR')
         return makeInlineFunc(gen, `${colour}`)
