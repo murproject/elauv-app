@@ -12,12 +12,32 @@ export default class Devices extends Panel {
     this.html = /*html*/`
       <div class="container">
         <div class="row">
-          <div id="devices-welcome" class="opacity-75">
-            Для начала работы:<br><br>
+          <div id="devices-welcome" class="opacity-75 margin-auto">
+            <div class="text-center">
+              <h1>Для начала работы:</h1>
+            </div>
 
-            1. Включите аппарат<br>
-            2. Дождитесь завершения инициализации<br>
-            3. Отсканируйте код<br>
+            <p>
+              ${Icon('table-furniture')}
+              Поставьте аппарат на<br>
+              ровную поверхность.
+            </p>
+
+            <p>
+              ${Icon('power')}
+              Включите ElementaryAUV.
+            </p>
+
+            <p>
+              ${Icon('timer-sand')}
+              Подождите 5 секунд.
+            </p>
+
+            <p>
+              ${Icon('qrcode-scan')}
+              Отсканируйте код.<br>
+            </p>
+
           </div>
         </div>
 

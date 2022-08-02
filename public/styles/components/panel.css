@@ -185,6 +185,20 @@
   margin: 0 30%;
 }
 
+#devices-welcome {
+  /* padding-top: 1em; */
+  /* font-size: 16px; */
+}
+
+#devices-welcome .icon {
+  margin-top: -0.25em;
+  margin-left: -2em;
+}
+
+#devices-welcome p {
+  margin-left: 2.5em;
+}
+
 /* background pulse feedback */
 
 

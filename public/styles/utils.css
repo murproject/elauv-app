@@ -95,6 +95,10 @@
   justify-content: center;
 }
 
+.margin-auto {
+  margin: auto;
+}
+
 .margin-bottom-zero {
   margin-bottom: 0 !important;
 }

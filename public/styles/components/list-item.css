@@ -37,12 +37,6 @@
   align-items: stretch;
 }
 
-#devices-welcome {
-  text-align: left;
-  padding: 2em;
-  font-size: 16px;
-}
-
 .dateRelative {
   padding: 0 0.5em;
   text-align: right;
