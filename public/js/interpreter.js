@@ -17,6 +17,13 @@ const motorsIndex = {
   vb: 3,
 };
 
+const ledIndex = {
+  0: 3,
+  1: 0,
+  2: 1,
+  3: 2,
+}
+
 var context = {
   axes_speed: [0, 0, 0, 0],
   regulators: 0b00000000,
@@ -26,7 +33,6 @@ var context = {
   target_yaw: 0,
   leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 }
-
 
 function checkBit (value, mask) {
   return ((value & mask) === mask)
@@ -170,8 +176,8 @@ const mur = {
   },
 
   set_led: async function (index, colour) {
-    // TODO: check index
     if (typeof(index) === 'number' && index >= 0 && index <= 3) {
+      index = ledIndex[index];
       const rawColour = Number("0x" + colour.substring(1))
       context.leds[index * 3 + 0] = (rawColour >> (8 * 2)) & 0xFF
       context.leds[index * 3 + 1] = (rawColour >> (8 * 1)) & 0xFF
