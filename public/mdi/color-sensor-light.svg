@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="color-sensor-light.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="16"
+     inkscape:cx="14.6875"
+     inkscape:cy="20.1875"
+     inkscape:window-width="1920"
+     inkscape:window-height="1019"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-page="true" />
+  <path
+     style="fill:#ffffff;stroke-width:1.29412"
+     d="m 17.823529,10.058824 h -2.588235 c 0,1.294117 -0.504706,2.652941 -1.514118,3.662352 -1.009411,1.009412 -2.368235,1.514118 -3.662352,1.514118 v 2.588235 a 7.7504706,7.7504706 0 0 0 7.764705,-7.764705"
+     id="path1026" />
+  <path
+     style="fill:#ffffff;stroke-width:1.29412"
+     d="m 23,10.058824 h -2.588235 c 0,2.652941 -1.009412,5.305882 -3.028236,7.324705 a 10.294706,10.294706 0 0 1 -7.324705,3.028236 V 23 c 3.312941,0 6.625882,-1.294118 9.149411,-3.791765 C 21.731765,16.710588 23,13.371765 23,10.058824"
+     id="path1024" />
+  <path
+     style="fill:#ffffff;stroke-width:1.29412"
+     d="m 7.4705882,1 c 3.5717648,0 6.4705878,2.8988235 6.4705878,6.4705882 0,3.5717648 -2.898823,6.4705878 -6.4705878,6.4705878 C 3.8988235,13.941176 1,11.042353 1,7.4705882 1,3.8988235 3.8988235,1 7.4705882,1"
+     id="path2" />
+</svg>

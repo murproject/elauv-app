@@ -160,7 +160,7 @@ end
     }
 
     function item_image (name, value, alt = '') {
-      return [{ src: `/mdi/${name}.svg`, width: 32, height: 32, alt: alt }, value]
+      return [{ src: iconPath(name), width: 32, height: 32, alt: alt }, value]
     }
 
     // Blockly.JavaScript.procedures_defreturn = function (block) {
@@ -529,8 +529,8 @@ await mur.thread_end(_threadId);
 
         this.appendDummyInput()
           .appendField(new FieldGridDropdown([
-            item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
-            item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
+            item_image('color-light', 'SENSOR_COLOR_WHITE', 'светлое'),
+            item_image('moon', 'SENSOR_COLOR_BLACK', 'тёмное')
           ], undefined, {columns: 2, DEFAULT_VALUE: 'SENSOR_COLOR_WHITE'}), "MODE")
           .appendField(icon('timer-sand', 'ждать'))
 
@@ -566,8 +566,8 @@ await mur.thread_end(_threadId);
       init: function () {
         this.appendDummyInput()
         .appendField(new FieldGridDropdown([
-          item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
-          item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
+          item_image('color-light', 'SENSOR_COLOR_WHITE', 'светлое'),
+          item_image('moon', 'SENSOR_COLOR_BLACK', 'тёмное')
         ], undefined, {columns: 2, DEFAULT_VALUE: 'SENSOR_COLOR_WHITE'}), "MODE")
 
         this.setOutput(true, 'Boolean')
@@ -1208,6 +1208,8 @@ for (let i = 0; i < 4; i++) {
       const tuple = Blockly.JavaScript['procedures_callreturn'](block);
       return tuple[0] + ';\n';
     };
+
+
 
 
     Blockly.Blocks['math_number_property'] = {
