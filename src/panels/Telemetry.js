@@ -2,6 +2,7 @@ import Panel from './Panel'
 import mur from '/src/vehicle/apiGameMur.js'
 import Icon from '/src/components/Icon'
 import Button from '../components/Button'
+import Utils from '/src/utils/Utils'
 
 export default class Telemetry extends Panel {
 
@@ -31,6 +32,21 @@ export default class Telemetry extends Panel {
     this.makeFeedbackIcons()
 
     this.resetStats();
+
+    /* TODO: only for testing during development! */
+
+    this.rsocStats = JSON.parse(Utils.notNull(localStorage.rsocStats, "[]"));
+
+    this.rsocStatscollector = setInterval(() => {
+      if ((Date.now() - mur.lastUpdatedDate) < 1000) {
+        const currentStats = [mur.lastUpdatedDate, mur.telemetry.battRsoc];
+        this.rsocStats.push(currentStats);
+        console.log(currentStats);
+        localStorage.rsocStats = JSON.stringify(this.rsocStats);
+      }
+    }, 25 * 1000);
+
+    /* TODO TODO TODO */
 
     // this.setInterval(this.updateFeedbacks, 1000);
   }
