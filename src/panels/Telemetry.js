@@ -33,13 +33,20 @@ export default class Telemetry extends Panel {
 
     this.resetStats();
 
+    this.feedbacksStatesOld = {}
+
     /* TODO: only for testing during development! */
 
     this.rsocStats = JSON.parse(Utils.notNull(localStorage.rsocStats, "[]"));
 
     this.rsocStatscollector = setInterval(() => {
       if ((Date.now() - mur.lastUpdatedDate) < 1000) {
-        const currentStats = [mur.lastUpdatedDate, mur.telemetry.battRsoc];
+        const currentStats = [
+          mur.lastUpdatedDate,
+          mur.telemetry.battRsoc,
+          mur.telemetry.battVolts,
+          mur.telemetry.battAmps,
+        ];
         this.rsocStats.push(currentStats);
         console.log(currentStats);
         localStorage.rsocStats = JSON.stringify(this.rsocStats);
@@ -61,9 +68,10 @@ export default class Telemetry extends Panel {
     this.feedbackIcons = {};
 
     const feedbacks = [
-      {name: 'solenoid',  color: 'light',   pulse: true,  icon: '../magnet-off'},
-      {name: 'motors',    color: 'light',   pulse: true,  icon: '../fan-off'},
-      {name: 'tap',       color: 'light',  pulse: true,  icon: '../cursor-default-click'},
+      {name: 'solenoid',  color: 'light',   pulseOnce: false,  icon: '../magnet-off'},
+      {name: 'motors',    color: 'light',   pulseOnce: false,  icon: '../fan-off'},
+      {name: 'tap',       color: 'light',   pulseOnce: true,  icon: '../cursor-default-click'},
+      {name: 'tap2x',     color: 'light',   pulseOnce: true,  icon: '../cursor-click-2x'},
     ];
 
     feedbacks.forEach(feedback => {
@@ -73,10 +81,12 @@ export default class Telemetry extends Panel {
         type: 'panel-feedback',
         action: undefined,
         icon: feedback.icon,
+        iconClasses: `big ${feedback.pulseOnce ? 'pulse-once' : 'pulse'}`,
+        iconColor: feedback.color,
         enabled: false,
       });
 
-      feedbackIcon.setIcon(feedback.icon, feedback.color, `big ${feedback.pulse ? 'pulse' : ''}`);
+      // feedbackIcon.setIcon(feedback.icon, feedback.color, `big ${feedback.pulse ? 'pulse' : ''}`);
       feedbackIcon.inject(this.feedbackBox);
       this.feedbackIcons[feedback.name] = feedbackIcon;
     });
@@ -164,15 +174,34 @@ export default class Telemetry extends Panel {
     // }
 
     if ('feedback' in mur.telemetry) {
-      // mur.telemetry.feedback.motors.setActive(mur.telemetry.feedback.motorsDisabled);
-      // mur.telemetry.feedback.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
+      // this.feedbackIcons.motors.setActive(mur.telemetry.battRsoc < 1); // TODO! //
+      this.feedbackIcons.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
 
-      if (mur.telemetry.feedback.imuTap) {
+      // this.feedbackIcons.solenoid.setActive(true);
+
+      if (mur.telemetry.feedback.imuDoubleTap) {
+        this.feedbackIcons.tap2x.setActive(true);
+        this.feedbackIcons.tap.setActive(false);
+        if (!this.feedbacksStatesOld.tapDouble) {
+          console.log("vibrate");
+          navigator.vibrate(150);
+        }
+      } else if (mur.telemetry.feedback.imuTap) {
+        this.feedbackIcons.tap2x.setActive(false);
         this.feedbackIcons.tap.setActive(true);
-        setTimeout(() => this.feedbackIcons.tap.setActive(false), 500);
-        navigator.vibrate(125);
+        if (!this.feedbacksStatesOld.tap) {
+          console.log("vibrate");
+          navigator.vibrate(150);
+        }
+      } else {
+        this.feedbackIcons.tap2x.setActive(false);
+        this.feedbackIcons.tap.setActive(false);
       }
+
+      this.feedbacksStatesOld.tap = mur.telemetry.feedback.imuTap;
+      this.feedbacksStatesOld.tapDouble = mur.telemetry.feedback.imuDoubleTap;
     }
+
   }
 
   update(telemetryText) {
