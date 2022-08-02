@@ -918,7 +918,7 @@ await mur.thread_end(_threadId);
         this.appendDummyInput()
             .appendField(new Blockly.FieldColour(
                 null, this.validate
-            ), 'COLOUR');
+            ), 'Colour');
         this.setColour(colours.colour);
         this.setOutput(true, 'Colour')
       },
@@ -937,8 +937,8 @@ await mur.thread_end(_threadId);
 
     register_proto('mur_colour_picker', (gen) => {
       return (block) => {
-        const colour = calcVal(gen, block, 'COLOUR')
-        return makeInlineFunc(gen, `${colour}`)
+        const colour = block.getFieldValue('Colour')
+        return makeInlineFunc(gen, `"${colour}"`)
       }
     })
 
@@ -1184,6 +1184,39 @@ for (let i = 0; i < 4; i++) {
         return makeInlineFunc(gen, `mur.angle_norm(${value})`)
       }
     })
+
+    const leds_dropdown = [
+      ['3', '3'],
+      ['0', '0'],
+      ['2', '2'],
+      ['1', '1'],
+    ]
+
+
+    Blockly.Blocks.mur_led_selector = {
+      init: function () {
+        this.appendDummyInput()
+          .appendField(new FieldGridDropdown(
+            leds_dropdown, undefined, {columns: 2, DEFAULT_VALUE: '0'}), "Index"
+          )
+
+        this.setPreviousStatement(false)
+        this.setNextStatement(false)
+        this.setOutput(true, "Number"),
+        this.setInputsInline(true)
+        this.setColour(colours.colour)
+      }
+    }
+
+  register_proto('mur_led_selector', (gen) => {
+    return (block) => {
+      const index = block.getFieldValue('Index')
+      return makeInlineFunc(gen, `Number(${index})`)
+    }
+  })
+
+
+
 
     /* Procedures: should await for execution! */
 
