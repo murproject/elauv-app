@@ -32,6 +32,12 @@
   height: 2.5em;
 }
 
+.icon.giant {
+  width: 5em;
+  height: 5em;
+  margin: 1em;
+}
+
 .icon.dark {
   background-color: var(--color-dark) !important;
 }
