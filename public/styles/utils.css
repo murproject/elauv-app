@@ -96,7 +96,7 @@
 }
 
 .margin-auto {
-  margin: auto;
+  margin: auto !important;
 }
 
 .margin-bottom-zero {

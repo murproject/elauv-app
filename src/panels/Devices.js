@@ -7,7 +7,7 @@ import DeviceListItem from '../components/DeviceItem';
 export default class Devices extends Panel {
 
   begin() {
-    this.name = "Доступные устройства";
+    this.name = "Устройства";
 
     this.html = /*html*/`
       <div class="container">
@@ -19,8 +19,8 @@ export default class Devices extends Panel {
 
             <p>
               ${Icon('table-furniture')}
-              Поставьте аппарат на<br>
-              ровную поверхность.
+              Поставьте аппарат<br>
+              на ровную поверхность.
             </p>
 
             <p>
@@ -45,11 +45,9 @@ export default class Devices extends Panel {
           <div id="connDevicesList" class="width-fill row"></div>
         </div>
 
+        <div class="row margin-bottom-zero" id="scan-button-wrapper"></div>
+
         <div class="vertical-filler"></div>
-
-        <div class="row margin-bottom-zero" id="scan-button-wrapper">
-
-        </div>
 
         <div id="buttonsRow" class="row"></div>
       </div>
