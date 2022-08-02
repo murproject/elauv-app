@@ -133,11 +133,6 @@
   font-size: 1rem !important;
 }
 
-.panel-button .icon {
-  background-color: hsl(200, 100%, 10%) !important;
-  opacity: 80%
-}
-
 .panel-button.active .icon {
   background-color: black;
   opacity: 80%;

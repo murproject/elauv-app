@@ -73,3 +73,13 @@
 .icon.light {
   background-color: var(--color-light) !important;
 }
+
+.icon.blue-dark {
+  background-color: var(--color-blue-dark) !important;
+}
+
+.icon.scan-helper {
+  position: absolute !important;
+  /* margin: 0 !important; */
+  /* margin-top: -0.75em !important; */
+}

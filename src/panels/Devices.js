@@ -27,7 +27,8 @@ export default class Devices extends Panel {
 
         <div class="vertical-filler"></div>
 
-        <div class="row" id="scan-button-wrapper">
+        <div class="row margin-bottom-zero" id="scan-button-wrapper">
+
         </div>
 
         <div id="buttonsRow" class="row"></div>
@@ -49,9 +50,11 @@ export default class Devices extends Panel {
       name: 'scan-code',
       text: 'Сканировать код',
       action: () => this.scanCode(),
-      icon: 'qrcode-scan',
+      icon: 'qrcode',
       iconClasses: 'giant opacity-75',
-      classes: 'button-vertical',
+      classes: ['button-vertical', 'extra-padding'],
+      scanHelper: true,
+      scanHelperBounce: true,
     }).inject(this.q("#scan-button-wrapper"));
 
     new Button({

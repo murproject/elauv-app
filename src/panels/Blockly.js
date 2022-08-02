@@ -73,7 +73,7 @@ export default class BlocklyPanel extends Panel {
 
 
   init() {
-    this.setIcon('puzzle');
+    this.setIcon('puzzle', 'blue-dark');
     this.noTitle = true;
     this.container.classList.add('background-white');
     this.container.classList.add('round-top');
@@ -198,6 +198,7 @@ export default class BlocklyPanel extends Panel {
           type: 'panel-button',
           action: () => this[action.func.name](),
           icon: action.icon,
+          iconColor: 'blue-dark',
           iconClasses: 'big',
           enabled: true,
           timeout: 25
@@ -319,7 +320,7 @@ export default class BlocklyPanel extends Panel {
                             autosaved && !autosavedLongAgo ? 'puzzle-check' : 'puzzle';
 
       if (this.currentPuzzleIcon !== newPuzzleIcon || forced) {
-        this.setIcon(newPuzzleIcon);
+        this.setIcon(newPuzzleIcon, 'blue-dark');
         console.log("set puzzle icon: " + newPuzzleIcon);
       }
 
@@ -353,7 +354,7 @@ export default class BlocklyPanel extends Panel {
     this.collapse(false);
     document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
     // this.setIcon('puzzle');
-    this.actionButtons.run.setIcon('play', 'dark', 'big');
+    this.actionButtons.run.setIcon('play', 'blue-dark', 'big');
     this.scriptStatus = 'stopped'
 
     App.panels.console.clear();
@@ -485,7 +486,7 @@ export default class BlocklyPanel extends Panel {
     console.log(this.code)
 
     // result = regexpBlockId.exec(this.code)
-    // console.log(result)
+    // console.log(result)/
     // while ((result = regexpBlockId.exec(this.code)) !== null) {
     //   console.log(result)
     //   this.codeBlockIds.push(result['1'])
@@ -498,8 +499,8 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_js() {
-    this.setIcon('cog', 'anim-spin');
-    this.actionButtons.run.setIcon('stop', 'dark', 'big');
+    this.setIcon('cog', 'blue-dark anim-spin');
+    this.actionButtons.run.setIcon('stop', 'blue-dark', 'big');
 
     this.scriptStatus = 'running'
 

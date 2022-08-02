@@ -34,6 +34,10 @@
   border-radius: var(--radius);
 }
 
+.push-button.extra-padding {
+  padding: 1.5em;
+}
+
 .icon.giant + .caption {
   font-size: 1.25em !important;
   margin-bottom: 0.25em;
@@ -52,7 +56,6 @@
   font-size: 14px;
   line-height: 1;
 }
-
 
 .button-vertical {
   flex-direction: column;
@@ -117,6 +120,7 @@
 
 .panel-button .icon {
   top: -0.1em;
+  opacity: 80%
 }
 
 .buttons-collapsed .push-button{
@@ -126,4 +130,16 @@
 
 .buttons-collapsed {
   justify-content: center !important;
+}
+
+.push-button.has-scan-helper {
+  display: block;
+}
+
+.push-button.has-scan-helper .caption {
+  display: block;
+}
+
+.push-button.has-scan-helper .icon.giant.scan-helper{
+  margin-left: -6em;
 }

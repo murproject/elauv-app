@@ -26,7 +26,9 @@ export default class Button extends Element {
       timeout: 0,
       classes: undefined,
       iconColor: 'dark',
-      iconClasses: 'mini'
+      iconClasses: 'mini',
+      scanHelper: false,
+      scanHelperBounce: false,
     };
   }
 
@@ -53,10 +55,22 @@ export default class Button extends Element {
 
   render() {
     this.setClass(this.attrs.type);
+    this.setClass('has-scan-helper', this.attrs.scanHelper);
     this.applyClasses(this.attrs.classes);
+
+    if (this.attrs.scanHelper) {
+      this.scanHelperIcon = Icon(
+        'scan-helper',
+        this.attrs.iconClasses + ' scan-helper' + (this.attrs.scanHelperBounce ? ' bounce-soft' : ''),
+        this.attrs.iconColor
+      );
+    } else {
+      this.scanHelperIcon = '';
+    }
 
     return /*html*/`
       ${this.icon}
+      ${this.scanHelperIcon}
       <span class="caption">${this.attrs.text}</span>
     `;
   }

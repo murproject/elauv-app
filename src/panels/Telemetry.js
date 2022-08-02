@@ -150,7 +150,7 @@ export default class Telemetry extends Panel {
                         rsoc < 40 ? 'low'     :
                         rsoc < 70 ? 'medium'  : 'high';
 
-    const batteryColor = mur.conn.state != 'open' || rsoc < 0 ? 'dark' :
+    const batteryColor = mur.conn.state != 'open' || rsoc < 0 ? 'blue-dark' :
                          rsoc < 10 ? 'red'    :
                          rsoc < 40 ? 'orange' :
                          rsoc < 70 ? 'yellow' : 'green';
