@@ -11,13 +11,23 @@ export default class Devices extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-        <div class="list-wrapper soft-edges-vertical">
-          <div id="devices-welcome" class="opacity-50">
-              Устройств ещё нет!<br><br>
-              Включите ElementaryAUV<br>
-              и отсканируйте код.
+        <div class="row">
+          <div id="devices-welcome" class="opacity-75">
+            Для начала работы:<br><br>
+
+            1. Включите аппарат<br>
+            2. Дождитесь завершения инициализации<br>
+            3. Отсканируйте код<br>
           </div>
-          <div id="connDevicesList" class="width-fill"></div>
+        </div>
+
+        <div class="list-wrapper soft-edges-vertical">
+          <div id="connDevicesList" class="width-fill row"></div>
+        </div>
+
+        <div class="vertical-filler"></div>
+
+        <div class="row" id="scan-button-wrapper">
         </div>
 
         <div id="buttonsRow" class="row"></div>
@@ -35,13 +45,14 @@ export default class Devices extends Panel {
     this.welcomeEl = this.q("#devices-welcome");
     this.buttonsWrapper = this.q('#buttonsRow');
 
-    // new Button({
-    //   name: 'scan-code',
-    //   text: 'Сканировать код',
-    //   action: () => this.scanCode(),
-    //   icon: 'qrcode-scan',
-    //   // classes: 'button-vertical',
-    // }).inject(this.buttonsWrapper);
+    new Button({
+      name: 'scan-code',
+      text: 'Сканировать код',
+      action: () => this.scanCode(),
+      icon: 'qrcode-scan',
+      iconClasses: 'giant opacity-75',
+      classes: 'button-vertical',
+    }).inject(this.q("#scan-button-wrapper"));
 
     new Button({
       name: 'scan-bluetooth',
@@ -96,7 +107,7 @@ export default class Devices extends Panel {
     this.devicesListEl.innerText = "";
 
     if (devices.length > 0) {
-      this.welcomeEl.classList.add('hidden');
+      // this.welcomeEl.classList.add('hidden');
     }
 
     devices.forEach(device => {
