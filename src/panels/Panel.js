@@ -31,6 +31,7 @@ export default class Panel {
       name: this.name,
       text: '',
       type: 'panel-button',
+      iconClasses: 'big',
       action: () => {
         setTimeout(
           () => App.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main'),

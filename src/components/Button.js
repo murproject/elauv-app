@@ -25,8 +25,8 @@ export default class Button extends Element {
       enabled: true,
       timeout: 0,
       classes: undefined,
-      iconcolor: 'dark',
-      iconclasses: ''
+      iconColor: 'dark',
+      iconClasses: 'mini'
     };
   }
 
@@ -41,7 +41,7 @@ export default class Button extends Element {
   setIcon(name, color = 'dark', modifier = 'mini') {
     this.attrs.icon = name;
     this.attrs.iconColor = color;
-    this.attrs.iconClasses = modifier;
+    this.attrs.iconclasses = modifier;
 
     this.icon = this.attrs.icon ? Icon(this.attrs.icon, this.attrs.iconClasses, this.attrs.iconColor) : '';
     this.update();
