@@ -4,6 +4,12 @@ import Icon from '/src/components/Icon'
 import Button from '../components/Button'
 import Utils from '/src/utils/Utils'
 
+const rsocLevels = {
+  low: 10,
+  medium: 40,
+  high: 70,
+};
+
 export default class Telemetry extends Panel {
 
   begin() {
@@ -145,15 +151,17 @@ export default class Telemetry extends Panel {
   updateBattery() {
     const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : -1;
 
-    const batteryText = mur.conn.state != 'open' || rsoc < 0 ? 'unknown' :
-                        rsoc < 10 ? 'outline' :
-                        rsoc < 40 ? 'low'     :
-                        rsoc < 70 ? 'medium'  : 'high';
+    const batteryText = mur.conn.state != 'open'  ? 'unknown' :
+                        rsoc < rsocLevels.low     ? 'outline' :
+                        rsoc < rsocLevels.medium  ? 'low'     :
+                        rsoc < rsocLevels.high    ? 'medium'  :
+                        rsoc >= rsocLevels.high   ? 'high'    : 'unknown';
 
-    const batteryColor = mur.conn.state != 'open' || rsoc < 0 ? 'blue-dark' :
-                         rsoc < 10 ? 'red'    :
-                         rsoc < 40 ? 'orange' :
-                         rsoc < 70 ? 'yellow' : 'green';
+    const batteryColor = mur.conn.state != 'open' ? 'blue-dark' :
+                         rsoc < rsocLevels.low    ? 'red'     :
+                         rsoc < rsocLevels.medium ? 'orange'  :
+                         rsoc < rsocLevels.high   ? 'yellow'  :
+                         rsoc >= rsocLevels.high  ? 'green'   : 'blue-dark';
 
     const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : '';
 

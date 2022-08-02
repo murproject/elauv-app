@@ -9,13 +9,13 @@ body {
   --color-green-bright:   hsl( 90, 70%, 35%);
   --color-blue-dark:      hsl(200, 100%, 10%);
 
-  --color-red:    hsl(  0, 70%, 25%);
-  --color-orange: hsl( 30, 70%, 25%);
-  --color-yellow: hsl( 50, 70%, 25%);
-  --color-green:  hsl( 90, 70%, 25%);
-  --color-cyan:   hsl(170, 70%, 25%);
-  --color-blue:   hsl(200, 70%, 25%);
-  --color-purple: hsl(290, 70%, 25%);
+  --color-red:    hsl(  0, 70%, 20%);
+  --color-orange: hsl( 30, 70%, 20%);
+  --color-yellow: hsl( 50, 70%, 20%);
+  --color-green:  hsl( 90, 70%, 20%);
+  --color-cyan:   hsl(170, 70%, 20%);
+  --color-blue:   hsl(200, 70%, 20%);
+  --color-purple: hsl(290, 70%, 20%);
 
   --radius: 5px;
   --radius-round: 999px;
