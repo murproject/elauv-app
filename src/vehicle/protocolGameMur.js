@@ -252,7 +252,8 @@ export default {
       battAmps:     data[11]  * 0.01,
       battRsoc:     data[12]  * 0.01,
       battTemp:     data[13]  * 0.01,
-      memFree:      data[14]
+      memFree:      data[14],
+      motorsPower:  data[15],
     }
 
     // debug(telemetry)
