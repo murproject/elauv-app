@@ -275,6 +275,10 @@ export default {
     this.sendMessage(Protocol.packControlGetAllSettings());
   },
 
+  controlMotorsSettings: function (data) {
+    this.sendMessage(Protocol.packControlMotorsSettings(data))
+  },
+
   controlBatterySettingsUpdate: function (data) {
     data.action = Protocol.battActions.UpdateSettings;
     this.sendMessage(Protocol.packControlBatterySettings(data))

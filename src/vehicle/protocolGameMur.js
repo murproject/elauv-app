@@ -427,6 +427,8 @@ document.app.mur.controlBatterySettingsUpdate({
       data.motorsMultipliers,
       data.motorsOffsetPositive,
       data.motorsOffsetNegative,
+      data.yawPidI,
+      data.yawPidD,
     ]
 
     var packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload)
