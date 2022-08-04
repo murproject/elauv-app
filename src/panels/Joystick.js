@@ -144,6 +144,10 @@ export default class Joystick extends Panel {
         var speed_forward = mur.context.axes_speed[1];
         var speed_vertical = mur.context.axes_speed[1];
 
+        if (Boolean(mur.context.axes_regulators & (1 << 0))) {
+          speed_yaw = 0;
+        }
+
         if (!Boolean(mur.context.direct_mode & (1 << 0))) {
           context.auto_axes.hl = true;
           context.motors.hl = (+ speed_yaw + speed_forward);
