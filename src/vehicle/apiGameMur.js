@@ -31,6 +31,8 @@ export default {
   reconnectTimer: null,
   context: {},
 
+  protocol: Protocol,
+
   oldImuTapState: false,
 
   telemetryUpdated: (t, f) => {},
@@ -115,6 +117,12 @@ export default {
 
       case Protocol.packetTypes.ReplyAllSettings:
         console.log(message);
+        break;
+
+      case Protocol.packetTypes.ReplyDiagnosticInfo:
+        console.log("Diagnostic info:\n" + message.text);
+        console.log(`Software rev: ${message.softwareRevMajor}.${message.softwareRevMinor}`);
+        console.log(`Hardware rev: ${message.hardwareRev}`);
         break;
 
       default:
@@ -267,12 +275,29 @@ export default {
     this.sendMessage(Protocol.packControlGetAllSettings());
   },
 
+  controlBatterySettingsUpdate: function (data) {
+    data.action = Protocol.battActions.UpdateSettings;
+    this.sendMessage(Protocol.packControlBatterySettings(data))
+  },
+
+  controlBatterySettingsReset: function () {
+    this.sendMessage(Protocol.packControlBatterySettings({
+      action: Protocol.battActions.Reset,
+      designCapacity: 0,
+      ccGain: 0,
+      terminateVoltage: 0,
+      taperCurrent: 0,
+      socMin: 0,
+      socMax: 0,
+    }))
+  },
+
   controlImuSettingsUpdate: function (data) {
     data.action = Protocol.imuActions.UpdateSettings
     this.sendMessage(Protocol.packControlImuSettings(data))
   },
 
-  controlImuSettingsRecalibrate: function (data) {
+  controlImuSettingsRecalibrate: function () {
     this.sendMessage(Protocol.packControlImuSettings({
       action: Protocol.imuActions.Recalibrate,
       tapTimeout: 0,
@@ -280,7 +305,7 @@ export default {
     }))
   },
 
-  controlImuSettingsResetYaw: function (data) {
+  controlImuSettingsResetYaw: function () {
     this.sendMessage(Protocol.packControlImuSettings({
       action: Protocol.imuActions.ResetZero,
       tapTimeout: 0,

@@ -83,6 +83,11 @@ export default {
     ResetZero: 2,
   },
 
+  battActions: {
+    UpdateSettings: 0,
+    Reset: 1,
+  },
+
   regulators: {
     yaw: false,
     pitch: false,
@@ -234,20 +239,20 @@ export default {
     var telemetry = {
       type: packet.type,
       lastProtoVer: this.prettyHex([data[0]]),
-      hardwareRev: this.prettyHex([data[1]]), // TODO: should do formatting outisde
-      macAddress: this.prettyHex(data[2], true),
-      timestamp: data[3],
-      feedback: this.feedback.unpack(data[4]), // TODO: should do formatting outisde
-      depth: data[5] * 0.01,
-      depthTemp: data[6] * 0.01,
-      imuYaw: data[7] * 0.01,
-      imuPitch: data[8] * 0.01,
-      imuRoll: data[9] * 0.01,
-      battVolts: data[10] * 0.01,
-      battAmps: data[11] * 0.01,
-      battRsoc: data[12] * 0.01,
-      battTemp: data[13] * 0.01,
-      memFree: data[14]
+      hardwareRev:  this.prettyHex([data[1]]), // TODO: should do formatting outisde
+      macAddress:   this.prettyHex(data[2], true),
+      timestamp:    data[3],
+      feedback:     this.feedback.unpack(data[4]), // TODO: should do formatting outisde
+      depth:        data[5]   * 0.01,
+      depthTemp:    data[6]   * 0.01,
+      imuYaw:       data[7]   * 0.01,
+      imuPitch:     data[8]   * 0.01,
+      imuRoll:      data[9]   * 0.01,
+      battVolts:    data[10]  * 0.01,
+      battAmps:     data[11]  * 0.01,
+      battRsoc:     data[12]  * 0.01,
+      battTemp:     data[13]  * 0.01,
+      memFree:      data[14]
     }
 
     // debug(telemetry)
@@ -258,7 +263,10 @@ export default {
     var data = packet.payload
     var info = {
       type: packet.type,
-      text: data[0]
+      text: data[0],
+      softwareRevMajor: data[1],
+      softwareRevMinor: data[2],
+      hardwareRev: data[3],
     }
     // writeLog(info)
     return info
@@ -279,15 +287,18 @@ export default {
 
     var settings = {
       type: packet.type,
-      startupsCount: data[0],
-      motorsPorts: data[1],
-      motorsMultipliers: data[2],
-      actuatorsPorts: data[3],
-      fuelGaugeBattCapacity: data[4],
-      fuelGaugeTerminateVolts: data[5],
-      fuelGaugeTaperCurrent: data[6],
-      imuTapTimeout: data[7],
-      imuTapThreshold: data[8] * 0.01,
+      startupsCount:            data[0],
+      motorsPorts:              data[1],
+      motorsMultipliers:        data[2],
+      motorsOffsetPositive:     data[3] * 0.01,
+      motorsOffsetNegative:     data[4] * 0.01,
+      fuelGaugeBattCapacity:    data[5],
+      fuelGaugeTerminateVolts:  data[6],
+      fuelGaugeTaperCurrent:    data[7],
+      fuelGaugeSocMin:          data[8],
+      fuelGaugeSocMax:          data[9],
+      imuTapTimeout:            data[10],
+      imuTapThreshold:          data[11] * 0.01,
     }
 
     return settings
@@ -385,11 +396,25 @@ export default {
 
   packControlBatterySettings: function (data) {
     var payload = [
+      data.action,
       data.designCapacity,
-      data.ccGain,
       data.terminateVoltage,
       data.taperCurrent,
+      data.socMin,
+      data.socMax,
     ]
+
+    /*
+
+document.app.mur.controlBatterySettingsUpdate({
+      designCapacity: 3000,
+      socMin: 0,
+      socMax: 100,
+      taperCurrent: 60,
+      terminateVoltage: 2700,
+})
+
+    */
 
     var packet = this.makePacket(curProtoVer, packetId.ControlBatterySettings, payload)
     return packet
@@ -399,6 +424,8 @@ export default {
     var payload = [
       data.motorsPorts,
       data.motorsMultipliers,
+      data.motorsOffsetPositive,
+      data.motorsOffsetNegative,
     ]
 
     var packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload)
