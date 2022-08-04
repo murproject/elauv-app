@@ -105,10 +105,6 @@ const mur = {
       context.axes_speed[i] = 0;
     }
 
-    for (let i = 0; i < 2; i++) {
-      context.actuators[i] = 0
-    }
-
     for (let i = 0; i < 4; i++) {
       await this.set_power(i, 0);
     }
