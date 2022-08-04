@@ -164,7 +164,16 @@ const mur = {
     // TODO: check index and constrain power
     power = clamp(power);
     context.motor_powers[index] = Math.round(power)
-    setDirectMode(index, true)
+
+    if (index == 0 || index == 1) {
+      setDirectMode(0, true);
+      setDirectMode(1, true);
+    }
+
+    if (index == 2 || index == 3) {
+      setDirectMode(2, true);
+      setDirectMode(3, true);
+    }
 
     if (index == 0 || index == 1) {
       context.regulators = 0;
