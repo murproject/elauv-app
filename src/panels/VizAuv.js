@@ -57,6 +57,10 @@ const garnet = '#CC2255';
 const purple = '#663366';
 const cyan = '#3399BB';
 const green = '#22AA22';
+
+const greenLight = '#55AA55';
+const greenDark = '#88CC88';
+// const greenDarker = '#005500';
 // const cyan = 'rgba(68, 170, 204, 1.0);'
 
 let dragged = false;
@@ -124,7 +128,7 @@ function makeVizauv (parent) {
     // color: purple,
   });
 
-  gizmo = makeGizmo(origin);
+//   gizmo = makeGizmo(origin);
 
   vehicle = makeVehicle(origin, zero_xyz);
 //   th_hl = makeThruster(vehicle.origin, { x: -35, y: 0, z: -35}, {y:  Zdog.TAU/8});
@@ -471,9 +475,13 @@ function makeThruster(parent, pos = zero_xyz, rot = zero_xyz) {
     th.arrow = makeArrow(th);
     th.sprinkle = makeSprinkle(th.origin);
 
-    th.update = function(power) {
+    th.update = function(power, isAuto = false) {
+        th.cylinder.color = isAuto ? greenDark : black;
+        // th.cylinder.backface = greenDark;
+        th.propeller.color = isAuto ? greenDark + 'AA' : black + 'A',
+
         th.propeller.rotate.z += power * 0.005;
-        th.arrow.upd(power);
+        th.arrow.upd(power, isAuto);
         th.sprinkle.upd(power);
     };
 
@@ -552,8 +560,8 @@ function makeArrow(parent, pos = zero_xyz, rot = zero_xyz, color = cyan) {
         // console.log(arrow.parent);
 
         // arrow.trig.rotate.y = -arrow.parent.propeller.rotate.z / 2;
-
         this.color = arrow.color;
+
         this.updatePath();
     };
 
@@ -581,7 +589,7 @@ function makeArrow(parent, pos = zero_xyz, rot = zero_xyz, color = cyan) {
         this.color = arrow.color;
     }
 
-    arrow.upd = function(power) {
+    arrow.upd = function(power, isAuto = false) {
         power *= 0.75;
         this.y = 7 * sign(power);
 
@@ -594,6 +602,9 @@ function makeArrow(parent, pos = zero_xyz, rot = zero_xyz, color = cyan) {
         // this.opacity = min(abs(power) * 0.03, 1.0);
         // this.opacity = max(this.opacity - (0.75 - abs(power) * 0.01), 0.0);
         this.opacity = Math.pow(abs(power * 0.3), 2);
+
+        this.colorBase = isAuto ? greenLight : cyan;
+
         this.color = this.colorBase + decToHex(arrow.opacity);
 
         arrow.line.upd(power);
@@ -829,10 +840,10 @@ function animate() {
 
         // console.log(context);
 
-        th_hl.update(contextSmoothed.motors.hl + 0);
-        th_hr.update(contextSmoothed.motors.hr + 0);
-        th_vf.update(contextSmoothed.motors.vf + 0);
-        th_vb.update(contextSmoothed.motors.vb + 0);
+        th_hl.update(contextSmoothed.motors.hl + 0, context.auto_axes.hl);
+        th_hr.update(contextSmoothed.motors.hr + 0, context.auto_axes.hr);
+        th_vf.update(contextSmoothed.motors.vf + 0, context.auto_axes.vf);
+        th_vb.update(contextSmoothed.motors.vb + 0, context.auto_axes.vb);
 
         if ('leds' in context) {
             // console.log(vehicle.leds);

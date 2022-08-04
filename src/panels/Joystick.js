@@ -113,6 +113,13 @@ export default class Joystick extends Panel {
           vb: 0,
         },
 
+        auto_axes: {
+          hl: false,
+          hr: false,
+          vf: false,
+          vb: false,
+        },
+
         rot: {
           yaw: 0,
           pitch: 0,
@@ -133,7 +140,35 @@ export default class Joystick extends Panel {
         context.motors.vf = mur.context.direct_power[2];
         context.motors.vb = mur.context.direct_power[3];
 
-        // console.log(context.motors);
+        var speed_yaw = mur.context.axes_speed[0];
+        var speed_forward = mur.context.axes_speed[1];
+        var speed_vertical = mur.context.axes_speed[1];
+
+        if (!Boolean(mur.context.direct_mode & (1 << 0))) {
+          context.auto_axes.hl = true;
+          context.motors.hl = (+ speed_yaw + speed_forward);
+        }
+
+        if (!Boolean(mur.context.direct_mode & (1 << 1))) {
+          context.auto_axes.hr = true;
+          context.motors.hr = (- speed_yaw + speed_forward);
+        }
+
+        if (!Boolean(mur.context.direct_mode & (1 << 2))) {
+          context.auto_axes.vf = true;
+          context.motors.vf = (+ speed_vertical);
+        }
+
+        if (!Boolean(mur.context.direct_mode & (1 << 3))) {
+          context.auto_axes.vb = true;
+          context.motors.vb = (+ speed_vertical);
+        }
+
+        if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
+          console.log(mur.telemetry.motorsPower);
+          context.motors.hl = mur.telemetry.motorsPower[0];
+          context.motors.hr = mur.telemetry.motorsPower[1];
+        }
 
         if (App.panels.blockly.scriptStatus === 'running') {
           context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
