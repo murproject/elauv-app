@@ -300,6 +300,8 @@ export default {
       fuelGaugeSocMax:          data[9],
       imuTapTimeout:            data[10],
       imuTapThreshold:          data[11] * 0.01,
+      yawPidI:                  data[12] * 0.01,
+      yawPidD:                  data[13] * 0.01,
     }
 
     return settings
