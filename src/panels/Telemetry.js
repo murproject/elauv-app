@@ -45,6 +45,9 @@ export default class Telemetry extends Panel {
 
     this.rsocStats = JSON.parse(Utils.notNull(localStorage.rsocStats, "[]"));
 
+    this.solenoidWasTurnedOn = 0;
+    this.solenoidWasRelaxing = 0;
+
     this.rsocStatscollector = setInterval(() => {
       if ((Date.now() - mur.lastUpdatedDate) < 1000) {
         const currentStats = [
@@ -52,12 +55,18 @@ export default class Telemetry extends Panel {
           mur.telemetry.battRsoc,
           mur.telemetry.battVolts,
           mur.telemetry.battAmps,
+          mur.telemetry.battTemp.toFixed(2),
+          this.solenoidWasTurnedOn,
+          this.solenoidWasRelaxing,
         ];
         this.rsocStats.push(currentStats);
         console.log(currentStats);
         localStorage.rsocStats = JSON.stringify(this.rsocStats);
+
+        this.solenoidWasTurnedOn = 0;
+        this.solenoidWasRelaxing = 0;
       }
-    }, 25 * 1000);
+    }, 5 * 1000);
 
     /* TODO TODO TODO */
 
@@ -148,8 +157,12 @@ export default class Telemetry extends Panel {
     this.textElement.innerHTML = telemetryText;
   }
 
-  updateBattery() {
-    const rsoc = ('telemetry' in mur) ? mur.telemetry.battRsoc : -1;
+  updateBattery(forced = undefined) {
+    const rsoc = forced !== undefined ? forced : ('telemetry' in mur) ? mur.telemetry.battRsoc : -1;
+
+    if (forced) {
+      mur.conn.state = 'open';
+    }
 
     const batteryText = mur.conn.state != 'open'  ? 'unknown' :
                         rsoc < rsocLevels.low     ? 'outline' :
@@ -213,6 +226,14 @@ export default class Telemetry extends Panel {
   }
 
   update(telemetryText) {
+    if ('actuator_power' in mur.context) {
+      this.solenoidWasTurnedOn |= mur.context.actuator_power[0] > 0;
+    }
+
+    if ('feedback' in mur.telemetry) {
+      this.solenoidWasRelaxing |= mur.telemetry.feedback.solenoidRelaxing;
+    }
+
     this.updateStats(telemetryText);
     this.updateBattery();
     this.updateFeedbacks();
