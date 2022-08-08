@@ -52,9 +52,9 @@ export default class Telemetry extends Panel {
       if ((Date.now() - mur.lastUpdatedDate) < 1000) {
         const currentStats = [
           mur.lastUpdatedDate,
-          mur.telemetry.battRsoc,
-          mur.telemetry.battVolts,
-          mur.telemetry.battAmps,
+          mur.telemetry.battRsoc.toFixed(2),
+          mur.telemetry.battVolts.toFixed(2),
+          mur.telemetry.battAmps.toFixed(2),
           mur.telemetry.battTemp.toFixed(2),
           this.solenoidWasTurnedOn,
           this.solenoidWasRelaxing,
