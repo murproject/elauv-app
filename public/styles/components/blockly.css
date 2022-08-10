@@ -13,7 +13,7 @@
 }
 
 /* Blocks MDI icons */
-#blocklyDiv g image[*|href^="/mdi"] {
+#blocklyDiv g image[*|href^="mdi"] {
   height: 34px;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .blocklyMenuItemContent {
-  font-family: 'Nunito' !important;
+  font-family: var(--font-ui) !important;
 }
 
 .blocklyMenuItemSelected {
@@ -79,7 +79,7 @@
 }
 
 .blocklyMenuItemSelected .blocklyMenuItemCheckbox {
-  background: url('/mdi/check-bold.svg') !important;
+  background: url('mdi/check-bold.svg') !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
   width: 16px;
@@ -199,7 +199,7 @@
 
 .blocklyTreeLabel {
   font-size: 18px !important;
-  font-family: 'Nunito' !important;
+  font-family: var(--font-ui) !important;
   font-weight: 600 !important;
   letter-spacing: -0.05em !important;
   cursor: pointer;

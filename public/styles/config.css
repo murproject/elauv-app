@@ -1,5 +1,8 @@
 body {
-  font-family: "Nunito", "Roboto", "Noto Sans", "Open Sans", "Segoe UI", sans-serif;
+
+  --font-ui: "Nunito", "Roboto", "Noto Sans", "Open Sans", "Segoe UI", sans-serif;
+
+  font-family: var(--font-ui);
 
   --color-dark:   hsl(0, 0%, 20%);
   --color-light:  hsl(0, 0%, 80%);

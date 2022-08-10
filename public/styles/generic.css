@@ -149,7 +149,7 @@ input[type="number"] {
 }
 
 .text-input  {
-  font-family: "Nunito";
+  font-family: var(--font-ui);
   font-weight: 600;
   font-size: 16px;
   padding: 0.5em;

@@ -192,7 +192,7 @@ export default {
       link.rel = 'preload';
       link.type = 'image/svg+xml';
       link.as = 'image';
-      link.href = '/mdi/' + item + '.svg';
+      link.href = 'mdi/' + item + '.svg';
       document.head.appendChild(link);
     });
   }

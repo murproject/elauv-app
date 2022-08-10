@@ -4,8 +4,8 @@
     font-style: normal;
     font-weight: 200;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-200.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-200.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-200.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-200.woff') format('woff');
   }
 
   /* nunito-300 - latin-ext_latin_cyrillic */
@@ -14,8 +14,8 @@
     font-style: normal;
     font-weight: 300;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-300.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-300.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-300.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-300.woff') format('woff');
   }
 
   /* nunito-regular - latin-ext_latin_cyrillic */
@@ -24,8 +24,8 @@
     font-style: normal;
     font-weight: 400;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-regular.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-regular.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-regular.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-regular.woff') format('woff');
   }
 
   /* nunito-500 - latin-ext_latin_cyrillic */
@@ -34,8 +34,8 @@
     font-style: normal;
     font-weight: 500;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-500.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-500.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-500.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-500.woff') format('woff');
   }
 
   /* nunito-600 - latin-ext_latin_cyrillic */
@@ -44,8 +44,8 @@
     font-style: normal;
     font-weight: 600;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-600.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-600.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-600.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-600.woff') format('woff');
   }
 
   /* nunito-700 - latin-ext_latin_cyrillic */
@@ -54,8 +54,8 @@
     font-style: normal;
     font-weight: 700;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-700.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-700.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-700.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-700.woff') format('woff');
   }
 
   /* nunito-800 - latin-ext_latin_cyrillic */
@@ -64,6 +64,6 @@
     font-style: normal;
     font-weight: 800;
     src: local(''),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-800.woff2') format('woff2'),
-         url('/fonts/nunito-v24-latin-ext_latin_cyrillic-800.woff') format('woff');
+         url('nunito-v24-latin-ext_latin_cyrillic-800.woff2') format('woff2'),
+         url('nunito-v24-latin-ext_latin_cyrillic-800.woff') format('woff');
   }

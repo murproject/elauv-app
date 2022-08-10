@@ -41,7 +41,7 @@ const blocklyConfig = {
     wheel: true
   },
   scrollbars: true,
-  media: '/blockly-media/',
+  media: 'blockly-media/',
   trashcan: true,
   renderer: 'custom_renderer',
   horizontalLayout: true,
@@ -596,7 +596,7 @@ export default class BlocklyPanel extends Panel {
     function makeCursorHtml(id) {
       return `
       <g id="execution-cursor-${id}" style="display: block;" opacity="0%">
-        <image xlink:href="/mdi/arrow-cursor-execution.svg" width="42" height="42"/>
+        <image xlink:href="mdi/arrow-cursor-execution.svg" width="42" height="42"/>
       </g>`
     }
 
@@ -879,7 +879,7 @@ export default class BlocklyPanel extends Panel {
       // }
       // console.warn("thread end");
       // console.warn(data.id)
-      this.executionCursors[data.id].children[0].setAttribute('xlink:href', '/mdi/arrow-cursor-execution-off.svg')
+      this.executionCursors[data.id].children[0].setAttribute('xlink:href', 'mdi/arrow-cursor-execution-off.svg')
     }
 
     if (data.type === 'print') {

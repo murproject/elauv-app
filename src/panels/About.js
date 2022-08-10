@@ -29,7 +29,7 @@ export default class About extends Panel {
         </h1>
 
 
-        <img src="/media/splash-anim.gif" class="about-splash"/>
+        <img src="media/splash-anim.gif" class="about-splash"/>
 
         <p class="text-center">
           ООО "Центр робототехники"<br>
