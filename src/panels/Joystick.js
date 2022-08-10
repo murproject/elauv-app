@@ -344,6 +344,8 @@ export default class Joystick extends Panel {
 
       let solenoidPower = this.solenoidTriggered ? 100 : 0;
 
+      // TODO: use axes_speed instead of "manual" calculating
+
       const data = {
         direct_power: [
           powers.motors[0],
@@ -360,7 +362,7 @@ export default class Joystick extends Panel {
         ],
         axes_regulators: regs.pack(), // TODO
         target_yaw: 0,
-        actuator_power: [solenoidPower, solenoidPower],
+        actuator_power: [solenoidPower, 0],
         leds: [0,0,0,0,0,0,0,0,0,0,0,0],
       };
 
