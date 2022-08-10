@@ -150,9 +150,6 @@ export default class BlocklyPanel extends Panel {
       savedRedoStack: [],
     }
 
-    console.log("Backpack!!");
-    console.log(Backpack);
-
     this.reinject(false);
 
     this.onWorkspaceChange();
@@ -230,7 +227,7 @@ export default class BlocklyPanel extends Panel {
 
       if (event.type === 'backpack_open') {
         if (this.backpack.isOpen() && this.backpack.getCount() === 0) {
-          console.log(this.backpack.flyout_);
+          // console.log(this.backpack.flyout_);
           this.backpackEmptyNotify.classList.remove("hidden")
         } else {
           this.backpackEmptyNotify.classList.add("hidden")
@@ -246,7 +243,7 @@ export default class BlocklyPanel extends Panel {
         this.lastEditTime = Date.now();
       }
 
-      console.log("Change event: " + event.type);
+      // console.log("Change event: " + event.type);
     }
 
     const delta = (Date.now() - this.lastEditTime);
@@ -321,7 +318,7 @@ export default class BlocklyPanel extends Panel {
 
       if (this.currentPuzzleIcon !== newPuzzleIcon || forced) {
         this.setIcon(newPuzzleIcon, 'blue-dark');
-        console.log("set puzzle icon: " + newPuzzleIcon);
+        // console.log("set puzzle icon: " + newPuzzleIcon);
       }
 
       this.currentPuzzleIcon = newPuzzleIcon;
@@ -392,7 +389,7 @@ export default class BlocklyPanel extends Panel {
     const timeFromLastEdit = (Date.now() - this.lastEditTime);
 
     if ((!ProjectsStorage.projects.current.autosaved && timeFromLastEdit > 3000) || forced) {
-      console.log(`Autosaving: ${ProjectsStorage.projects.current.autosaved}, ${timeFromLastEdit}`);
+      // console.log(`Autosaving: ${ProjectsStorage.projects.current.autosaved}, ${timeFromLastEdit}`);
       const savedBlocks = Blockly.serialization.workspaces.save(this.workspace);
       ProjectsStorage.projects.current.data = JSON.stringify(savedBlocks);
       ProjectsStorage.autoSave();
@@ -425,8 +422,8 @@ export default class BlocklyPanel extends Panel {
     this.stateOfUndo.savedRedoStack = [];
     this.reinject(false);
 
-    console.log("load:")
-    console.log(blocksToLoad)
+    // console.log("load:")
+    // console.log(blocksToLoad)
 
     if (typeof(blocksToLoad) === 'undefined') {
       blocksToLoad = localStorage.savedBlocks;
@@ -451,7 +448,8 @@ export default class BlocklyPanel extends Panel {
   }
 
   example() {
-    console.log(this);
+    // TODO: delete this method
+    // console.log(this);
     Blockly.serialization.workspaces.load(example_code, this.workspace)
   }
 
@@ -483,7 +481,7 @@ export default class BlocklyPanel extends Panel {
       return `h('${this.codeBlockIds.length - 1}')`
     })
 
-    console.log(this.code)
+    // console.log(this.code)
 
     // result = regexpBlockId.exec(this.code)
     // console.log(result)/
@@ -492,7 +490,7 @@ export default class BlocklyPanel extends Panel {
     //   this.codeBlockIds.push(result['1'])
     // }
 
-    console.log(this.codeBlockIds)
+    // console.log(this.codeBlockIds)
     mur.controlScriptRun({ script: this.code })
 
     // TODO: disable editing while executing
@@ -534,9 +532,9 @@ export default class BlocklyPanel extends Panel {
 
     ////////
 
-    console.warn("workspaceToCode(workspace)")
+    // console.warn("workspaceToCode(workspace)")
     this.code = this.generate_code(this.workspace)
-    console.log(this.code)
+    // console.log(this.code)
     // TODO: this.code is unused!
 
     // let userVariables = []
@@ -586,12 +584,12 @@ export default class BlocklyPanel extends Panel {
       Blockly.serialization.workspaces.load(json, headless)
       allCode.push(this.generate_code(headless))
       // blocks.length = 0
-      console.warn("gen from block");
-      console.log(block);
-      console.log(`${block.type} - ${block.id}`);
+      // console.warn("gen from block");
+      // console.log(block);
+      // console.log(`${block.type} - ${block.id}`);
     });
 
-    console.log(this.allRootBlocks);
+    // console.log(this.allRootBlocks);
 
     this.executionCursors = {};
 
@@ -850,7 +848,7 @@ export default class BlocklyPanel extends Panel {
         leds: ctx.leds,
       }
 
-      console.log(JSON.stringify(paramsContext, null, ' '));
+      // console.log(JSON.stringify(paramsContext, null, ' '));
 
       // TODO: fill context correctly in inpertreter and don't fill it here
 
