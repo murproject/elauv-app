@@ -1,6 +1,7 @@
 import App from "/src/App.js";
 import Panel from './Panel'
 import Button from '../components/Button';
+import CheckBox from "../components/CheckBox";
 
 export default class Settings extends Panel {
 
@@ -11,11 +12,12 @@ export default class Settings extends Panel {
     this.html = /*html*/`
       <div class="container">
         <h1>Настройки приложения</h1>
+        <div id="app-settings-buttons" class="row"></div>
 
         <h1>Настройки аппарата</h1>
 
-        <div id="settings-action-buttons" class="row"> </div>
-        <div id="vehicle-action-buttons" class="row"> </div>
+        <div id="settings-action-buttons" class="row"></div>
+        <div id="vehicle-action-buttons" class="row"></div>
       </div>
     `
   }
@@ -28,11 +30,27 @@ export default class Settings extends Panel {
   makeButtons() {
     this.settingsButtons = this.q('#settings-action-buttons');
     this.vehicleButtons = this.q('#vehicle-action-buttons');
+    this.appSettingsButtons = this.q('#app-settings-buttons');
 
     // TODO: use global dialog to confirm
 
+    /* app settings */
+
+    new CheckBox({
+      text: 'Расширенная математика',
+      icon: 'square-root',
+      action: (state) => { },
+    }).inject(this.appSettingsButtons);
+
+    // new CheckBox({
+    //   text: 'Расширенная математика',
+    //   icon: 'square-root',
+    //   action: (state) => { },
+    // }).inject(this.appSettingsButtons);
+
+    /* Vehicle settings */
+
     new Button({
-      name: 'load-settings',
       text: 'Получить настройки',
       action: () => {},
       icon: 'format-list-bulleted-square',
@@ -40,7 +58,6 @@ export default class Settings extends Panel {
     }).inject(this.settingsButtons);
 
     new Button({
-      name: 'save-settings',
       text: 'Записать настройки',
       action: () => {},
       icon: 'content-save',
@@ -48,7 +65,6 @@ export default class Settings extends Panel {
     }).inject(this.settingsButtons);
 
     new Button({
-      name: 'wipe-settings',
       text: 'Очистить настройки',
       action: () => {},
       icon: 'trash-can',
@@ -56,7 +72,6 @@ export default class Settings extends Panel {
     }).inject(this.settingsButtons);
 
     new Button({
-      name: 'diagnostic-log',
       text: 'Нагрузка процессора',
       action: () => {},
       icon: 'clipboard-list-outline',
@@ -64,7 +79,6 @@ export default class Settings extends Panel {
     }).inject(this.vehicleButtons);
 
     new Button({
-      name: 'reboot-vehicle',
       text: 'Перезагрузить аппарат',
       action: () => {},
       icon: 'power',
@@ -72,7 +86,6 @@ export default class Settings extends Panel {
     }).inject(this.vehicleButtons);
 
     new Button({
-      name: 'recalibrate-imu',
       text: 'Калибровка нав.датчика',
       action: () => {},
       icon: 'rotate-orbit',
