@@ -13,7 +13,7 @@ export default class Settings extends Panel {
     this.html = /*html*/`
       <div class="container">
         <h1>Настройки приложения</h1>
-        <div id="app-settings-buttons" class="row"></div>
+        <div id="app-settings-buttons" class="fit-center"></div>
 
         <h1>Настройки аппарата</h1>
 
@@ -39,16 +39,32 @@ export default class Settings extends Panel {
 
     const checkboxes = [
       {
-        text: 'Расширенная математика',
+        text: 'Вибрация при ударах',
+        icon: 'vibrate',
+        setting: 'vibrateOnTap',
+      },
+      {
+        text: 'Включить 3D-визуализацию',
+        icon: 'rotate-3d',
+        setting: 'disableVizAuv',
+      },
+      {
+        text: 'Расширенные блоки математики',
         icon: 'square-root',
         setting: 'extendedMath',
-      }
+      },
+      {
+        text: 'Расширенная телеметрия',
+        icon: 'format-list-bulleted-square',
+        setting: 'extendedTelemetry',
+      },
     ];
 
     checkboxes.forEach(checkbox => {
       new CheckBox({
         text: checkbox.text,
         icon: checkbox.icon,
+        checked: SettingsStorage.get(checkbox.setting),
         action: (state) => {
           SettingsStorage.set(checkbox.setting, state);
         },

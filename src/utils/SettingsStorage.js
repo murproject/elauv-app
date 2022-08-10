@@ -6,7 +6,8 @@ export default {
     /* General */
     extendedMath: false,  // TODO: unimplemented
     vibrateOnTap: true,   // TODO: unimplemented
-    disableVizAuv: false, // TODO: unimplemented
+    enableVizAuv: true,   // TODO: unimplemented
+    extendedTelemetry: false,
 
     /* Special */
     interpreterContextInterval: 100,    // TODO: unimplemented
@@ -17,6 +18,10 @@ export default {
     this.settings[name] = value;
     this.save();
     this.onSettingsChanged();
+  },
+
+  get(name) {
+    return this.settings[name];
   },
 
   save() {

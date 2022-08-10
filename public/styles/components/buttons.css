@@ -94,7 +94,6 @@
   align-items: center;
 }
 
-
 .panel-button.active {
   background: rgba(255,255,255,0.75);
 }
@@ -122,6 +121,15 @@
 .panel-button .icon {
   top: -0.1em;
   opacity: 80%
+}
+
+.check-box {
+  display: block;
+  margin: 0em 0.25em;
+}
+
+.check-box:not(:last-child):not(:first-child) {
+  margin: 1em 0.25em;
 }
 
 .check-box .icon {
