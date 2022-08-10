@@ -70,6 +70,15 @@ export default class Settings extends Panel {
       }).inject(this.appSettingsButtons);
     });
 
+    new Button({
+      text: 'Перезапустить приложение',
+      action: () => {
+        location.reload();
+      },
+      icon: 'replay',
+      // classes: 'button-vertical'
+    }).inject(this.appSettingsButtons);
+
     /* Vehicle settings */
 
     new Button({
