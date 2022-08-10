@@ -55,6 +55,7 @@
 .push-button .caption {
   font-size: 14px;
   line-height: 1;
+  margin-top: 0.1em;
 }
 
 .button-vertical {

@@ -1,5 +1,6 @@
-import Panel from './Panel'
-import Icon from '/src/components/Icon'
+import App from "/src/App.js";
+import Panel from './Panel';
+import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 
 export default class About extends Panel {
@@ -71,13 +72,13 @@ export default class About extends Panel {
     //   // classes: 'button-vertical'
     // }).inject(this.headButtonsEl);
 
-    // new Button({
-    //   name: 'settings',
-    //   text: 'Настройки',
-    //   action: () => {},
-    //   icon: 'format-list-bulleted-square',
-    //   iconClasses: 'small',
-    //   // classes: 'button-vertical'
-    // }).inject(this.headButtonsEl);
+    new Button({
+      name: 'settings',
+      text: 'Настройки',
+      action: () => App.panelSelect(App.panels.settings),
+      icon: 'wrench',
+      iconClasses: 'small',
+      // classes: 'button-vertical'
+    }).inject(this.headButtonsEl);
   }
 }

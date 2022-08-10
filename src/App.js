@@ -7,6 +7,8 @@ import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';
 import ConsolePanel from './panels/Console.js'
+import SettingsPanel from './panels/Settings.js'
+
 
 export default {
   // TODO: integrate loading wrapper into PANEL, not main!
@@ -85,6 +87,8 @@ export default {
     this.panels = {
       /* Main panels */
       about: new AboutPanel(),
+      settings: new SettingsPanel(),
+
       devices: new DevicesPanel(),
       telemetry: new TelemetryPanel(),
       joystick: new JoystickPanel(),
@@ -96,7 +100,7 @@ export default {
       // vizauv: new VizAuvPanel(),
     };
 
-    this.panelSelect(this.panels.joystick);
+    this.panelSelect(this.panels.settings);
   },
 
   setTitle: function (title) {

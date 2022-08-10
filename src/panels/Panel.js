@@ -7,6 +7,7 @@ export default class Panel {
   constructor() {
     this.name = this.constructor.name;
     this.html = ``;
+    this.addTab = true;
     this.isBottomPanel = false;
     this.noTitle = false;
 
@@ -40,7 +41,7 @@ export default class Panel {
       }
     });
 
-    if (this.wrapperButtons) {
+    if (this.wrapperButtons && this.addTab) {
       this.panelButton.inject(this.wrapperButtons);
     }
 
