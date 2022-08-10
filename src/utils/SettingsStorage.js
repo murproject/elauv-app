@@ -13,6 +13,12 @@ export default {
     interpreterHighlightInterval: 100,  // TODO: unimplemented
   },
 
+  set(name, value) {
+    this.settings[name] = value;
+    this.save();
+    this.onSettingsChanged();
+  },
+
   save() {
     localStorage.settings = JSON.stringify(this.settings);
   },
@@ -27,4 +33,8 @@ export default {
 
     this.save();
   },
+
+  onSettingsChanged() {
+    // TODO //
+  }
 }

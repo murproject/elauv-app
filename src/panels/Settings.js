@@ -2,6 +2,7 @@ import App from "/src/App.js";
 import Panel from './Panel'
 import Button from '../components/Button';
 import CheckBox from "../components/CheckBox";
+import SettingsStorage from "/src/utils/SettingsStorage";
 
 export default class Settings extends Panel {
 
@@ -36,17 +37,23 @@ export default class Settings extends Panel {
 
     /* app settings */
 
-    new CheckBox({
-      text: 'Расширенная математика',
-      icon: 'square-root',
-      action: (state) => { },
-    }).inject(this.appSettingsButtons);
+    const checkboxes = [
+      {
+        text: 'Расширенная математика',
+        icon: 'square-root',
+        setting: 'extendedMath',
+      }
+    ];
 
-    // new CheckBox({
-    //   text: 'Расширенная математика',
-    //   icon: 'square-root',
-    //   action: (state) => { },
-    // }).inject(this.appSettingsButtons);
+    checkboxes.forEach(checkbox => {
+      new CheckBox({
+        text: checkbox.text,
+        icon: checkbox.icon,
+        action: (state) => {
+          SettingsStorage.set(checkbox.setting, state);
+        },
+      }).inject(this.appSettingsButtons);
+    });
 
     /* Vehicle settings */
 
