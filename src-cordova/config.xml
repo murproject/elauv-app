@@ -35,6 +35,10 @@
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,root,downloads" />
 
+    <platform name="electron">
+        <preference name="ElectronSettingsFilePath" value="../src/electron.json" />
+    </platform>
+
     <platform name="android">
         <config-file parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
             <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />

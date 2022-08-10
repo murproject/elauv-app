@@ -152,7 +152,7 @@ end
     }
 
     function iconPath(name) {
-      return `/mdi/${name}.svg`;
+      return `mdi/${name}.svg`;
     }
 
     function icon (name, alt = '') {

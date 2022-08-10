@@ -46,7 +46,7 @@ export default class About extends Panel {
 
   init() {
     this.panelButton.setAttribute('type', 'logo');
-    this.panelButton.setText(`<img src="/media/icon-small.png" />`);
+    this.panelButton.setText(`<img src="media/icon-small.png" />`);
 
     this.makeButtons();
   }
