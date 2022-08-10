@@ -8,7 +8,7 @@ import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';
 import ConsolePanel from './panels/Console.js'
 import SettingsPanel from './panels/Settings.js'
-
+import SettingsStorage from './utils/SettingsStorage.js';
 
 export default {
   // TODO: integrate loading wrapper into PANEL, not main!
@@ -108,6 +108,8 @@ export default {
   },
 
   init: function () {
+    SettingsStorage.load();
+
     this.preloadIcons();
 
     this.container.innerHTML = this.html;
