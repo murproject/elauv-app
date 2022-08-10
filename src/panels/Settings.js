@@ -12,11 +12,10 @@ export default class Settings extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-        <h1>Настройки приложения</h1>
-        <div id="app-settings-buttons" class="fit-center"></div>
+        <h1 class="text-center">Настройки приложения</h1>
+        <div id="app-settings-buttons" class="fit-center margin-bottom"></div>
 
-        <h1>Настройки аппарата</h1>
-
+        <h1 class="text-center">Настройки аппарата</h1>
         <div id="settings-action-buttons" class="row"></div>
         <div id="vehicle-action-buttons" class="row"></div>
       </div>
