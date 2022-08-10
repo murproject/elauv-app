@@ -66,7 +66,7 @@ export default class Telemetry extends Panel {
         this.solenoidWasTurnedOn = 0;
         this.solenoidWasRelaxing = 0;
       }
-    }, 5 * 1000);
+    }, 30 * 1000);
 
     /* TODO TODO TODO */
 
