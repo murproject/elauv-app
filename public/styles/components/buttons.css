@@ -124,6 +124,11 @@
   opacity: 80%
 }
 
+.check-box .icon {
+  top: -0.1em !important;
+  transition: 0.5s;
+}
+
 .buttons-collapsed .push-button{
   width: fit-content !important;
   flex-grow: 0 !important;

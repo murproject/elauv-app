@@ -30,12 +30,13 @@ export default class Element extends HTMLElement {
   }
 
   setAction(action, actionTimeout = undefined) {
-    this.action = action;
+    this.attrs.action = action;
+
     if (actionTimeout !== null && actionTimeout !== undefined) {
       this.actionTimeout = actionTimeout;
     }
 
-    this.onclick = () => setTimeout(this.action, this.actionTimeout);
+    this.onclick = () => setTimeout(this.attrs.action, this.actionTimeout);
   }
 
   applyClasses(classes = undefined) {
