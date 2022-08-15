@@ -58,6 +58,10 @@
   background-color: var(--color-yellow) !important;
 }
 
+.icon.yellow-bright {
+  background-color: var(--color-yellow-bright) !important;
+}
+
 .icon.green {
   background-color: var(--color-green) !important;
 }

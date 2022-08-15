@@ -18,6 +18,7 @@ export default class Telemetry extends Panel {
     this.html = /*html*/`
       <div class="container">
         <div id="telemetryText" class="monospace soft-edges-vertical">Waiting for connection…</div>
+        <div class="vertical-filler"></div>
         <div class="push-button" id="resetStats">Reset stats</div>
       </div>
     `
@@ -84,7 +85,7 @@ export default class Telemetry extends Panel {
 
     const feedbacks = [
       {name: 'solenoid',  color: 'light',   pulseOnce: false,  icon: '../magnet-off'},
-      {name: 'motors',    color: 'light',   pulseOnce: false,  icon: '../fan-off'},
+      {name: 'motors',    color: 'light', pulseOnce: false,  icon: '../fan-off'},
       {name: 'tap',       color: 'light',   pulseOnce: true,  icon: '../cursor-default-click'},
       {name: 'tap2x',     color: 'light',   pulseOnce: true,  icon: '../cursor-click-2x'},
     ];
@@ -195,7 +196,8 @@ export default class Telemetry extends Panel {
     // }
 
     if ('feedback' in mur.telemetry) {
-      // this.feedbackIcons.motors.setActive(mur.telemetry.battRsoc < 1); // TODO! //
+      this.feedbackIcons.motors.setActive(mur.telemetry.feedback.pilotingBlocked); // TODO! //
+      // this.feedbackIcons.motors.attrs.iconColor = mur.telemetry.feedback.pilotingBlocked && mur.telemetry.feedback.pilotingMode ? 'red' : 'light';
       this.feedbackIcons.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
 
       // this.feedbackIcons.solenoid.setActive(true);

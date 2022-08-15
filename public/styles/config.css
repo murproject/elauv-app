@@ -10,6 +10,7 @@ body {
 
   --color-mur:            hsl(200, 100%, 15%);
   --color-green-bright:   hsl( 90, 70%, 35%);
+  --color-yellow-bright:  hsl( 50, 50%, 70%);
   --color-blue-dark:      hsl(200, 100%, 10%);
 
   --color-red:    hsl(  0, 70%, 20%);
