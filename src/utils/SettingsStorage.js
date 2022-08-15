@@ -7,7 +7,7 @@ export default {
     extendedMath: false,  // TODO: unimplemented
     vibrateOnTap: true,   // TODO: unimplemented
     enableVizAuv: true,   // TODO: unimplemented
-    extendedTelemetry: false,
+    extendedTelemetry: false, // TODO: unimplemented
 
     /* Special */
     interpreterContextInterval: 100,    // TODO: unimplemented

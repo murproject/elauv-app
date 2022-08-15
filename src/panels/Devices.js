@@ -45,7 +45,7 @@ export default class Devices extends Panel {
           <div id="connDevicesList" class="width-fill row"></div>
         </div>
 
-        <div class="row margin-bottom-zero" id="scan-button-wrapper"></div>
+        <div class="row" id="scan-button-wrapper"></div>
 
         <div class="vertical-filler"></div>
 
@@ -137,7 +137,7 @@ export default class Devices extends Panel {
 
       this.devicesListEl.appendChild(new DeviceListItem(device, () => {
         mur.connect(device.address);
-        mur.conn.scanPaired();
+        // mur.conn.scanPaired();
       }));
     });
 

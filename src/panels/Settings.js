@@ -3,6 +3,7 @@ import Panel from './Panel'
 import Button from '../components/Button';
 import CheckBox from "../components/CheckBox";
 import SettingsStorage from "/src/utils/SettingsStorage";
+import GlobalDialog from '/src/components/GlobalDialog.js';
 
 export default class Settings extends Panel {
 
@@ -72,55 +73,80 @@ export default class Settings extends Panel {
 
     new Button({
       text: 'Перезапустить приложение',
-      action: () => {
-        location.reload();
-      },
+      action: () => this.confirm(() => location.reload(), "Перезапустить приложение"),
       icon: 'replay',
-      // classes: 'button-vertical'
     }).inject(this.appSettingsButtons);
 
     /* Vehicle settings */
 
-    new Button({
-      text: 'Получить настройки',
-      action: () => {},
-      icon: 'format-list-bulleted-square',
-      classes: 'button-vertical'
-    }).inject(this.settingsButtons);
+    const buttons = [
+      {
+        text: 'Получить настройки',
+        action: () => {}, // TODO //
+        icon: 'format-list-bulleted-square',
+        parent: this.settingsButtons,
+      },
+      {
+        text: 'Записать настройки',
+        action: () => {}, // TODO //
+        icon: 'content-save',
+        parent: this.settingsButtons,
+      },
+      {
+        text: 'Очистить настройки',
+        action: () => {}, // TODO //
+        icon: 'trash-can',
+        parent: this.settingsButtons,
+      },
+      {
+        text: 'Нагрузка процессора',
+        action: () => {}, // TODO //
+        icon: 'clipboard-list-outline',
+        parent: this.vehicleButtons,
+      },
+      {
+        text: 'Перезагрузить аппарат',
+        action: () => {}, // TODO //
+        icon: 'power',
+        parent: this.vehicleButtons,
+      },
+      {
+        text: 'Калибровка нав.датчика',
+        action: () => {}, // TODO //
+        icon: 'rotate-orbit',
+        parent: this.vehicleButtons,
+      }
+    ];
 
-    new Button({
-      text: 'Записать настройки',
-      action: () => {},
-      icon: 'content-save',
-      classes: 'button-vertical'
-    }).inject(this.settingsButtons);
-
-    new Button({
-      text: 'Очистить настройки',
-      action: () => {},
-      icon: 'trash-can',
-      classes: 'button-vertical'
-    }).inject(this.settingsButtons);
-
-    new Button({
-      text: 'Нагрузка процессора',
-      action: () => {},
-      icon: 'clipboard-list-outline',
-      classes: 'button-vertical'
-    }).inject(this.vehicleButtons);
-
-    new Button({
-      text: 'Перезагрузить аппарат',
-      action: () => {},
-      icon: 'power',
-      classes: 'button-vertical'
-    }).inject(this.vehicleButtons);
-
-    new Button({
-      text: 'Калибровка нав.датчика',
-      action: () => {},
-      icon: 'rotate-orbit',
-      classes: 'button-vertical'
-    }).inject(this.vehicleButtons);
+    buttons.forEach(button => {
+      new Button({
+        text: button.text,
+        action: () => this.confirm(button.action, button.text),
+        icon: button.icon,
+        classes: 'button-vertical'
+      }).inject(button.parent);
+    });
   }
+
+  confirm(action, text) {
+    App.showGlobalDialog(
+      new GlobalDialog({
+        title: 'Выполнить действие?',
+        text: text,
+        classes: 'text-center',
+        buttons: [
+          new Button({
+            text: 'Да',
+            icon: 'check',
+          }, () => { App.closeGlobalDialog(); action() }),
+          new Button({
+            text: 'Назад',
+            icon: 'keyboard-return',
+          }, () => App.closeGlobalDialog()),
+        ]
+      })
+    );
+  }
+
+
 }

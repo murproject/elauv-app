@@ -85,7 +85,7 @@ export default class Telemetry extends Panel {
 
     const feedbacks = [
       {name: 'solenoid',  color: 'light',   pulseOnce: false,  icon: '../magnet-off'},
-      {name: 'motors',    color: 'light', pulseOnce: false,  icon: '../fan-off'},
+      {name: 'motors',    color: 'light',   pulseOnce: false,  icon: '../fan-off'},
       {name: 'tap',       color: 'light',   pulseOnce: true,  icon: '../cursor-default-click'},
       {name: 'tap2x',     color: 'light',   pulseOnce: true,  icon: '../cursor-click-2x'},
     ];

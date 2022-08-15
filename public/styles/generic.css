@@ -126,7 +126,11 @@ input[type="number"] {
 .row {
   display: flex;
   align-items: stretch;
-  margin: 0.5em 0;
+  margin: 0.25em 0;
+}
+
+.row:last-child {
+  margin-bottom: 0.5em;
 }
 
 .row > .push-button {
