@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import CheckBox from "../components/CheckBox";
 import SettingsStorage from "/src/utils/SettingsStorage";
 import GlobalDialog from '/src/components/GlobalDialog.js';
+import mur from '/src/vehicle/apiGameMur.js'
 
 export default class Settings extends Panel {
 
@@ -99,14 +100,14 @@ export default class Settings extends Panel {
         parent: this.settingsButtons,
       },
       {
-        text: 'Нагрузка процессора',
+        text: 'Статистика процессов',
         action: () => {}, // TODO //
         icon: 'clipboard-list-outline',
         parent: this.vehicleButtons,
       },
       {
         text: 'Перезагрузить аппарат',
-        action: () => {}, // TODO //
+        action: () => mur.controlReboot(),
         icon: 'power',
         parent: this.vehicleButtons,
       },
