@@ -70,6 +70,7 @@ var feedbackMask = {
   solenoidRelaxing: 1 << 4,
   pilotingMode:     1 << 5,
   yawStabilized:    1 << 6,
+  pilotingBlocked:  1 << 7,
 }
 
 export default {
@@ -123,6 +124,7 @@ export default {
     solenoidRelaxing: false,
     pilotingMode: false,
     yawStabilized: false,
+    pilotingBlocked: false,
 
     unpack: function (data) {
       this.imuTap = checkBit(data, feedbackMask.imuTap);
@@ -132,6 +134,7 @@ export default {
       this.solenoidRelaxing = checkBit(data, feedbackMask.solenoidRelaxing);
       this.pilotingMode = checkBit(data, feedbackMask.pilotingMode);
       this.yawStabilized = checkBit(data, feedbackMask.yawStabilized);
+      this.pilotingBlocked = checkBit(data, feedbackMask.pilotingBlocked);
 
       return this
     },
@@ -146,6 +149,7 @@ export default {
       data = setBit(data, this.feedbackMask.solenoidRelaxing, this.solenoidRelaxing);
       data = setBit(data, this.feedbackMask.pilotingMode, this.pilotingMode);
       data = setBit(data, this.feedbackMask.yawStabilized, this.yawStabilized);
+      data = setBit(data, this.feedbackMask.pilotingBlocked, this.pilotingBlocked);
 
       return data
     }
