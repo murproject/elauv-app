@@ -3,6 +3,7 @@ import mur from '/src/vehicle/apiGameMur.js'
 import Icon from '/src/components/Icon'
 import Button from '../components/Button'
 import Utils from '/src/utils/Utils'
+import SettingsStorage from "/src/utils/SettingsStorage";
 
 const rsocLevels = {
   low: 10,
@@ -202,17 +203,19 @@ export default class Telemetry extends Panel {
 
       // this.feedbackIcons.solenoid.setActive(true);
 
+      const vibrateEnabled = SettingsStorage.get('vibrateOnTap');
+
       if (mur.telemetry.feedback.imuDoubleTap) {
         this.feedbackIcons.tap2x.setActive(true);
         this.feedbackIcons.tap.setActive(false);
-        if (!this.feedbacksStatesOld.tapDouble) {
+        if (!this.feedbacksStatesOld.tapDouble && vibrateEnabled) {
           console.log("vibrate");
           navigator.vibrate(150);
         }
       } else if (mur.telemetry.feedback.imuTap) {
         this.feedbackIcons.tap2x.setActive(false);
         this.feedbackIcons.tap.setActive(true);
-        if (!this.feedbacksStatesOld.tap) {
+        if (!this.feedbacksStatesOld.tap && vibrateEnabled) {
           console.log("vibrate");
           navigator.vibrate(150);
         }

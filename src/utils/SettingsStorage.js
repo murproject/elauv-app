@@ -5,8 +5,8 @@ export default {
   settings: {
     /* General */
     extendedMath: false,  // TODO: unimplemented
-    vibrateOnTap: true,   // TODO: unimplemented
-    enableVizAuv: true,   // TODO: unimplemented
+    vibrateOnTap: true,
+    enableVizAuv: true,
     extendedTelemetry: false, // TODO: unimplemented
 
     /* Special */
