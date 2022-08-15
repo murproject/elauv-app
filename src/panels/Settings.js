@@ -46,7 +46,7 @@ export default class Settings extends Panel {
       {
         text: 'Включить 3D-визуализацию',
         icon: 'rotate-3d',
-        setting: 'disableVizAuv',
+        setting: 'enableVizAuv',
       },
       {
         text: 'Расширенные блоки математики',

@@ -5,6 +5,7 @@ import mur from '../vehicle/apiGameMur.js'
 import protocol from '../vehicle/protocolGameMur'
 
 import VizAuv from '/src/panels/VizAuv.js';
+import SettingsStorage from '/src/utils/SettingsStorage';
 import App from '../App';
 
 function clamp (value, min, max) {
@@ -102,101 +103,104 @@ export default class Joystick extends Panel {
       this.solenoidTriggered = false;
     };
 
-    this.vizauv = VizAuv.makeVizauv(this);
+    if (SettingsStorage.get('enableVizAuv')) {
+      this.vizauv = VizAuv.makeVizauv(this);
 
-    setInterval(() => {
-      let context = {
-        motors: {
-          hl: 0,
-          hr: 0,
-          vf: 0,
-          vb: 0,
-        },
+      // TODO: move to separate function
+      setInterval(() => {
+        let context = {
+          motors: {
+            hl: 0,
+            hr: 0,
+            vf: 0,
+            vb: 0,
+          },
 
-        auto_axes: {
-          hl: false,
-          hr: false,
-          vf: false,
-          vb: false,
-        },
+          auto_axes: {
+            hl: false,
+            hr: false,
+            vf: false,
+            vb: false,
+          },
 
-        rot: {
-          yaw: 0,
-          pitch: 0,
-          roll: 0,
-        },
+          rot: {
+            yaw: 0,
+            pitch: 0,
+            roll: 0,
+          },
 
-        leds: [
-          [0, 0, 0],
-          [0, 0, 0],
-          [0, 0, 0],
-          [0, 0, 0],
-        ]
-      };
+          leds: [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+          ]
+        };
 
-      if ('direct_power' in mur.context) {
-        context.motors.hl = mur.context.direct_power[0];
-        context.motors.hr = mur.context.direct_power[1];
-        context.motors.vf = mur.context.direct_power[2];
-        context.motors.vb = mur.context.direct_power[3];
+        if ('direct_power' in mur.context) {
+          context.motors.hl = mur.context.direct_power[0];
+          context.motors.hr = mur.context.direct_power[1];
+          context.motors.vf = mur.context.direct_power[2];
+          context.motors.vb = mur.context.direct_power[3];
 
-        var speed_yaw = mur.context.axes_speed[0];
-        var speed_forward = mur.context.axes_speed[1];
-        var speed_vertical = mur.context.axes_speed[1];
+          var speed_yaw = mur.context.axes_speed[0];
+          var speed_forward = mur.context.axes_speed[1];
+          var speed_vertical = mur.context.axes_speed[1];
 
-        if (Boolean(mur.context.axes_regulators & (1 << 0))) {
-          speed_yaw = 0;
+          if (Boolean(mur.context.axes_regulators & (1 << 0))) {
+            speed_yaw = 0;
+          }
+
+          if (!Boolean(mur.context.direct_mode & (1 << 0))) {
+            context.auto_axes.hl = true;
+            context.motors.hl = (+ speed_yaw + speed_forward);
+          }
+
+          if (!Boolean(mur.context.direct_mode & (1 << 1))) {
+            context.auto_axes.hr = true;
+            context.motors.hr = (- speed_yaw + speed_forward);
+          }
+
+          if (!Boolean(mur.context.direct_mode & (1 << 2))) {
+            context.auto_axes.vf = true;
+            context.motors.vf = (+ speed_vertical);
+          }
+
+          if (!Boolean(mur.context.direct_mode & (1 << 3))) {
+            context.auto_axes.vb = true;
+            context.motors.vb = (+ speed_vertical);
+          }
+
+          if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
+            console.log(mur.telemetry.motorsPower);
+            context.motors.hl = mur.telemetry.motorsPower[0];
+            context.motors.hr = mur.telemetry.motorsPower[1];
+          }
+
+          if (App.panels.blockly.scriptStatus === 'running') {
+            context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
+            context.leds[1] = [mur.context.leds[1 * 3 + 0], mur.context.leds[1 * 3 + 1], mur.context.leds[1 * 3 + 0 + 2]];
+            context.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
+            context.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
+          } else {
+            context.leds[0] = [0, context.motors.vf > 0 ? 0 : context.motors.vf * 2.55, context.motors.vf < 0 ? 0 : context.motors.vf * 2.55];
+            context.leds[1] = [0, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55];
+            context.leds[2] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
+            context.leds[3] = [0, context.motors.vb > 0 ? 0 : context.motors.vb * 2.55, context.motors.vb < 0 ? 0 : context.motors.vb * 2.55];
+          }
+
+          // console.log(context.leds[0]);
         }
 
-        if (!Boolean(mur.context.direct_mode & (1 << 0))) {
-          context.auto_axes.hl = true;
-          context.motors.hl = (+ speed_yaw + speed_forward);
+        if ('imuYaw' in mur.telemetry) {
+          context.rot.yaw = mur.telemetry.imuYaw;
+          context.rot.pitch = mur.telemetry.imuPitch;
+          context.rot.roll = mur.telemetry.imuRoll;
         }
 
-        if (!Boolean(mur.context.direct_mode & (1 << 1))) {
-          context.auto_axes.hr = true;
-          context.motors.hr = (- speed_yaw + speed_forward);
-        }
-
-        if (!Boolean(mur.context.direct_mode & (1 << 2))) {
-          context.auto_axes.vf = true;
-          context.motors.vf = (+ speed_vertical);
-        }
-
-        if (!Boolean(mur.context.direct_mode & (1 << 3))) {
-          context.auto_axes.vb = true;
-          context.motors.vb = (+ speed_vertical);
-        }
-
-        if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
-          console.log(mur.telemetry.motorsPower);
-          context.motors.hl = mur.telemetry.motorsPower[0];
-          context.motors.hr = mur.telemetry.motorsPower[1];
-        }
-
-        if (App.panels.blockly.scriptStatus === 'running') {
-          context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
-          context.leds[1] = [mur.context.leds[1 * 3 + 0], mur.context.leds[1 * 3 + 1], mur.context.leds[1 * 3 + 0 + 2]];
-          context.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
-          context.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
-        } else {
-          context.leds[0] = [0, context.motors.vf > 0 ? 0 : context.motors.vf * 2.55, context.motors.vf < 0 ? 0 : context.motors.vf * 2.55];
-          context.leds[1] = [0, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55];
-          context.leds[2] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
-          context.leds[3] = [0, context.motors.vb > 0 ? 0 : context.motors.vb * 2.55, context.motors.vb < 0 ? 0 : context.motors.vb * 2.55];
-        }
-
-        // console.log(context.leds[0]);
-      }
-
-      if ('imuYaw' in mur.telemetry) {
-        context.rot.yaw = mur.telemetry.imuYaw;
-        context.rot.pitch = mur.telemetry.imuPitch;
-        context.rot.roll = mur.telemetry.imuRoll;
-      }
-
-      this.vizauv.updContext(context);
-    }, 100);
+        this.vizauv.updContext(context);
+      }, 100);
+    }
   }
 
 
