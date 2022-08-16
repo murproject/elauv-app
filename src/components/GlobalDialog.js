@@ -22,6 +22,7 @@ export default class GlobalDialog extends Element {
   }
 
   beforeRender() {
+    // TODO: ?
     // if (this.attrs.closable) {
     //   this.closeButton = document.createElement('div');
     //   this.appendChild(this.closeButton);

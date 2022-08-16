@@ -197,7 +197,7 @@ export default class Telemetry extends Panel {
     // }
 
     if ('feedback' in mur.telemetry) {
-      this.feedbackIcons.motors.setActive(mur.telemetry.feedback.pilotingBlocked); // TODO! //
+      this.feedbackIcons.motors.setActive(mur.telemetry.feedback.pilotingBlocked);
       // this.feedbackIcons.motors.attrs.iconColor = mur.telemetry.feedback.pilotingBlocked && mur.telemetry.feedback.pilotingMode ? 'red' : 'light';
       this.feedbackIcons.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
 

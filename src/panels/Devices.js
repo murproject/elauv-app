@@ -3,6 +3,8 @@ import mur from '/src/vehicle/apiGameMur.js'
 import Icon from '/src/components/Icon'
 import Button from '../components/Button';
 import DeviceListItem from '../components/DeviceItem';
+import GlobalDialog from '/src/components/GlobalDialog.js';
+import App from '/src/App';
 
 export default class Devices extends Panel {
 
@@ -60,6 +62,8 @@ export default class Devices extends Panel {
     // this.statusEl = this.q("#connStatus");
     // this.statusEl.innerText = "Connection type: " + mur.conn.type;
 
+    mur.onDiscard = () => this.onClientDiscard();
+
     this.devicesListEl = this.q("#connDevicesList");
     this.welcomeEl = this.q("#devices-welcome");
     this.buttonsWrapper = this.q('#buttonsRow');
@@ -101,6 +105,24 @@ export default class Devices extends Panel {
     // setTimeout(() => this.scanDevices(), 200  )
   }
 
+  onClientDiscard() {
+    // TODO: check if this dialog is already opened!
+    App.showGlobalDialog(
+      new GlobalDialog({
+        closable: true,
+        title: "Соединение отклонено",
+        text: `Аппарат отклонил текущее соединение.<br>
+               Возможно, что подключился кто-то другой.`,
+        classes: 'text-center',
+        buttons: [
+          new Button({
+            text: 'Закрыть',
+            icon: 'keyboard-return',
+          }, () => App.closeGlobalDialog()),
+        ]
+      })
+    );
+  }
 
   scanDevices() {
     if (mur.conn.type !== 'bluetooth') {
@@ -137,6 +159,7 @@ export default class Devices extends Panel {
 
       this.devicesListEl.appendChild(new DeviceListItem(device, () => {
         mur.connect(device.address);
+        mur.pingCounter = 0;
         // mur.conn.scanPaired();
       }));
     });
@@ -147,7 +170,6 @@ export default class Devices extends Panel {
     emptyEl.classList.add("opacity-0");
     this.devicesListEl.appendChild(emptyEl);
   }
-
 
   onUpdateConnection() {}
 
