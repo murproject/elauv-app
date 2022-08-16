@@ -27,6 +27,7 @@ export default {
   remote: false,
   lastUpdated: '',
   lastUpdatedDate: null,
+  pingCounter: 0,
   reconnecting: false,
   reconnectTimer: null,
   context: {},
@@ -37,8 +38,11 @@ export default {
 
   telemetryUpdated: (t, f) => {},
   onStatusUpdated: (status) => {},
+  onDiscard: () => {},
 
   create: function () {
+    this.protocol.fillParsers();
+
     this.conn.start()
 
     this.conn.onClose = (event) => {
@@ -54,6 +58,11 @@ export default {
       this.updateStatus()
       // EventBus.$emit('notify', { text: 'Установлено подключение' })
     }
+
+    // setTimeout(() => {
+    //   this.reconnecting = false
+    //   this.updateStatus()
+    // }, 250)
 
     const mur = this
 
@@ -109,10 +118,16 @@ export default {
         this.telemetryUpdated(this.telemetry, this.formattedTelemetry)
         break
 
-      case Protocol.packetTypes.ReplyPong:
-        this.timePong = new Date();
-        this.timePingDelta = this.timePong - this.timePing;
-        // EventBus.$emit('log-received', message)
+      case Protocol.packetTypes.ReplyPing:
+        if (message.counter == -1) {
+          console.warn("This client was discarded by vehicle!");
+          this.disconnect();
+          this.onDiscard();
+        }
+
+        this.timePing = new Date();
+        this.timePingDelta = this.timePing - this.timePing;
+        // EventBus.$emit('log-received', message) // TODO: delete all EventBus references
         break
 
       case Protocol.packetTypes.ReplyAllSettings:
@@ -266,8 +281,9 @@ export default {
 
   controlPing: function () {
     if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlPing({ }))
+      this.conn.sendMessage(Protocol.packControlPing({ counter: this.pingCounter }))
       this.timePing = new Date();
+      this.pingCounter++;
     }
   },
 
