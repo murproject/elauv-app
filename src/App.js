@@ -129,7 +129,7 @@ export default {
 
     this.timerKeepAlive = setInterval(() => {
       mur.controlPing(); // TODO: use separate keepalive packet?
-    }, 1500);
+    }, 1000);
 
     mur.onStatusUpdated = (status) => {
       this.panels.telemetry.update()

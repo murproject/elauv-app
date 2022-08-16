@@ -23,7 +23,7 @@ const packetId = {
   ReplyTelemetry          : 0xA1,
 
   /* Service reply */
-  ReplyPong               : 0xB1,
+  ReplyPing               : 0xB1,
   ReplyDiagnosticInfo     : 0xB2,
 
   /* Settings reply */
@@ -77,6 +77,7 @@ export default {
   name: 'Protocol',
   protocol: this,
   packetTypes: packetId,
+  parsers: {},
 
   imuActions: {
     UpdateSettings: 0,
@@ -203,20 +204,8 @@ export default {
 
     var result = {}
 
-    if (packet.type === packetId.ReplyTelemetry) {
-      result = this.parseTelemetry(packet)
-    }
-
-    if (packet.type === packetId.ReplyDiagnosticInfo) {
-      result = this.parseDiagnosticInfo(packet)
-    }
-
-    if (packet.type === packetId.ReplyPong) {
-      result = this.parsePong(packet)
-    }
-
-    if (packet.type === packetId.ReplyAllSettings) {
-      result = this.parseAllSettings(packet)
+    if (packet.type in this.parsers) {
+      result = this.parsers[packet.type](packet);
     }
 
     return result
@@ -235,6 +224,13 @@ export default {
     }
 
     return hexString
+  },
+
+  fillParsers: function() {
+    this.parsers[packetId.ReplyTelemetry]       = p => this.parseTelemetry(p);
+    this.parsers[packetId.ReplyDiagnosticInfo]  = p => this.parseDiagnosticInfo(p);
+    this.parsers[packetId.ReplyPing]            = p => this.parsePing(p);
+    this.parsers[packetId.ReplyAllSettings]     = p => this.parseAllSettings(p);
   },
 
   parseTelemetry: function (packet) {
@@ -277,7 +273,7 @@ export default {
     return info
   },
 
-  parsePong: function (packet) {
+  parsePing: function (packet) {
     var data = packet.payload
     var info = {
       type: packet.type,
@@ -388,7 +384,9 @@ export default {
   },
 
   packControlPing: function (data) {
-    var payload = []
+    var payload = [
+      data.counter
+    ]
 
     var packet = this.makePacket(curProtoVer, packetId.ControlPing, payload)
     return packet
