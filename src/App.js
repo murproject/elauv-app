@@ -47,6 +47,7 @@ export default {
   panels: {},
   currentPanelMain: null,
   currentPanelBottom: null,
+  globalDialogActive: false,
   mur: mur,
   isCordova: false,
 
@@ -159,11 +160,17 @@ export default {
 
   showGlobalDialog(dialog) {
     // TODO: dont'query each time
-    document.querySelector('#global-wrapper').classList.add('active');
-    setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 80);
+    if (!this.globalDialogActive) {
+      this.globalDialogActive = true;
+      document.querySelector('#global-wrapper').classList.add('active');
+      setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 80);
+    } else {
+      console.warn("GlobalDialog is already active!");
+    }
   },
 
   closeGlobalDialog() {
+    this.globalDialogActive = false;
     document.querySelector('#global-wrapper').classList.remove('active');
     document.querySelector('#global-wrapper-content').innerText = '';
   },
