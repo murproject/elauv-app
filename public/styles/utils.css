@@ -99,12 +99,20 @@
   margin: auto !important;
 }
 
+.margin-top-zero {
+  margin-top: 0 !important;
+}
+
 .margin-bottom-zero {
   margin-bottom: 0 !important;
 }
 
 .margin-bottom {
   margin-bottom: 1.5em !important;
+}
+
+.margin-zero {
+  margin: 0 !important;
 }
 
 .fit-center {

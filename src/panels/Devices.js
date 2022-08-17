@@ -106,13 +106,15 @@ export default class Devices extends Panel {
   }
 
   onClientDiscard() {
-    // TODO: check if this dialog is already opened!
     App.showGlobalDialog(
       new GlobalDialog({
         closable: true,
         title: "Соединение отклонено",
-        text: `Аппарат отклонил текущее соединение.<br>
-               Возможно, что подключился кто-то другой.`,
+        text: /*html*/`
+          ${Icon('cancel', 'giant text-center margin-top-zero')}<br>
+          Аппарат отклонил текущее соединение.<br>
+          Возможно, что подключился кто-то другой.
+        `,
         classes: 'text-center',
         buttons: [
           new Button({
