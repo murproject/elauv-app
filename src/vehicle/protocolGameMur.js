@@ -264,12 +264,13 @@ export default {
     var data = packet.payload
     var info = {
       type: packet.type,
-      text: data[0],
-      softwareRevMajor: data[1],
-      softwareRevMinor: data[2],
-      hardwareRev: data[3],
+      softwareRevMajor: data[0],
+      softwareRevMinor: data[1],
+      hardwareRev: data[2],
+      imuStarted: Boolean(data[3]),
+      voltmeterStarted: Boolean(data[4]),
+      text: data[5],
     }
-    // writeLog(info)
     return info
   },
 
