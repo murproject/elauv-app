@@ -185,10 +185,10 @@ export default {
   },
 
   disconnect: function() {
+    this.controlPing(-1)
     this.deviceAddress = null
     localStorage.lastDeviceAddress = null
     this.conn.disconnect()
-    // conn.macAddress = null
   },
 
   updateStatus: function () {
@@ -279,9 +279,11 @@ export default {
     this.sendMessage(Protocol.packControlDiagnosticInfo({ }))
   },
 
-  controlPing: function () {
+  controlPing: function (counter = undefined) {
     if (this.status === 'open') {
-      this.conn.sendMessage(Protocol.packControlPing({ counter: this.pingCounter }))
+      this.conn.sendMessage(Protocol.packControlPing({
+        counter: counter == undefined ? this.pingCounter : counter
+      }))
       this.timePing = new Date();
       this.pingCounter++;
     }
