@@ -6,6 +6,7 @@ import protocol from '../vehicle/protocolGameMur'
 
 import VizAuv from '/src/panels/VizAuv.js';
 import SettingsStorage from '/src/utils/SettingsStorage';
+import Button from '/src/components/Button.js'
 import App from '../App';
 
 function clamp (value, min, max) {
@@ -14,7 +15,6 @@ function clamp (value, min, max) {
 
 const axesFormulaDefault = `max_power = 100
 threshold = 10
-solenoid_time = 3000000
 
 x = limit(x)
 y = limit(y)
@@ -40,11 +40,6 @@ export default class Joystick extends Panel {
     this.html = /*html*/`
       <div class="container">
         <div class="row">
-          <div class="push-button" id="buttonSolenoidOn">Включить<br>магнит</div>
-          <div class="push-button" id="buttonSolenoidOff">Выключить<br>магнит</div>
-        </div>
-
-        <div class="row">
           <textarea id="axesFormula" spellcheck="false" class="hidden"
                     rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
           </textarea>
@@ -64,6 +59,7 @@ export default class Joystick extends Panel {
 
         <div class="vertical-filler"></div>
 
+        <div id='solenoid-button-row' class="row buttons-collapsed"></div>
       </div>
     `
   }
@@ -86,22 +82,18 @@ export default class Joystick extends Panel {
     this.initNipples();
     this.updateTimer = this.setInterval(this.update, 100);
     this.solenoidTriggered = false;
-    this.solenoidTime = 1000;
 
-    this.solenoidButton = this.q("#buttonSolenoidOn");
-    this.solenoidButton.onclick = () => {
-      this.solenoidButton.classList.add('disabled');
-      this.solenoidTriggered = true;
-      setTimeout(() => this.solenoidTriggered = false, this.solenoidTime);
-      // TODO: bug, need to clear timer on solenoidOff!!
-      // setTimeout(() => this.solenoidButton.classList.remove('disabled'), this.solenoidTime + 10000);
-    };
+    this.solenoidButton = new Button({
+      name: 'solenoidButton',
+      text: 'lol',
+      classes: 'button-vertical',
+      action: () => this.triggerSolenoid(),
+      enabled: true,
+    })
 
-    this.solenoidOffButton = this.q("#buttonSolenoidOff");
-    this.solenoidOffButton.onclick = () => {
-      this.solenoidButton.classList.remove('disabled');
-      this.solenoidTriggered = false;
-    };
+    this.solenoidButton.inject(this.q('#solenoid-button-row'));
+
+    this.setInterval(this.updateSolenoidButton, 500);
 
     if (SettingsStorage.get('enableVizAuv')) {
       this.vizauv = VizAuv.makeVizauv(this);
@@ -260,8 +252,6 @@ export default class Joystick extends Panel {
     var forward = this.axes.forward;
     var depth = this.axes.vertical;
 
-    var solenoid_time = 0;
-
     /* short aliases for axes */
     var x = yaw;
     var y = forward;
@@ -322,8 +312,6 @@ export default class Joystick extends Panel {
   C:${pretty.c}
   D:${pretty.d}`;
 
-    this.solenoidTime = solenoid_time;
-
     return {
       axes: {x: x, y: y, z: z},
       motors: [a, b, c, d],
@@ -372,6 +360,29 @@ export default class Joystick extends Panel {
 
       mur.controlContext(data);
     }
+  }
+
+  triggerSolenoid() {
+    this.solenoidTriggered = !this.solenoidTriggered;
+    this.updateSolenoidButton();
+  }
+
+  updateSolenoidButton() {
+    const relaxing = 'feedback' in mur.telemetry && mur.telemetry.feedback.solenoidRelaxing;
+
+    if (!this.solenoidTriggered) {
+      this.solenoidButton.setEnabled(!relaxing);
+    } else if (!this.solenoidTriggered) {
+      this.solenoidButton.setEnabled(true);
+    }
+
+    this.solenoidButton.attrs.text =
+      relaxing ? 'Магнит<br>остывает…' :
+      this.solenoidTriggered ? 'Выключить<br>магнит' : 'Включить<br>магнит';
+    this.solenoidButton.setIcon(
+      this.solenoidTriggered || relaxing ? 'magnet-off' : 'magnet-on',
+      this.solenoidTriggered ? 'orange' : 'cyan'
+    );
   }
 
 }
