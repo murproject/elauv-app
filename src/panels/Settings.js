@@ -83,7 +83,7 @@ export default class Settings extends Panel {
     const buttons = [
       {
         text: 'Получить настройки',
-        action: () => {}, // TODO //
+        action: () => mur.controlGetAllSettings(), // TODO: callback!
         icon: 'format-list-bulleted-square',
         parent: this.settingsButtons,
       },
@@ -95,7 +95,7 @@ export default class Settings extends Panel {
       },
       {
         text: 'Очистить настройки',
-        action: () => {}, // TODO //
+        action: () => mur.controlErase(),
         icon: 'trash-can',
         parent: this.settingsButtons,
       },
@@ -113,7 +113,7 @@ export default class Settings extends Panel {
       },
       {
         text: 'Калибровка нав.датчика',
-        action: () => {}, // TODO //
+        action: () => mur.controlImuSettingsRecalibrate(),
         icon: 'rotate-orbit',
         parent: this.vehicleButtons,
       }
