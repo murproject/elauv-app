@@ -4,9 +4,9 @@ import Utils from "./Utils.js";
 export default {
   settings: {
     /* General */
-    extendedMath: false,  // TODO: unimplemented
     vibrateOnTap: true,
     enableVizAuv: true,
+    extendedMath: false,  // TODO: unimplemented
     extendedTelemetry: false, // TODO: unimplemented
 
     /* Special */

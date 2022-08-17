@@ -100,8 +100,8 @@ export default class Settings extends Panel {
         parent: this.settingsButtons,
       },
       {
-        text: 'Статистика процессов',
-        action: () => {}, // TODO //
+        text: 'Системная информация',
+        action: () => mur.controlDiagnosticInfo(),
         icon: 'clipboard-list-outline',
         parent: this.vehicleButtons,
       },
