@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import nipplejs from 'nipplejs';
 
 import Panel from './Panel';
@@ -56,8 +57,6 @@ export default class Joystick extends Panel {
           <div class="nipple-wrapper" id="nipple1"></div>
         </div>
 
-        <div class="vertical-filler"></div>
-
         <div id='solenoid-button-row' class="row buttons-collapsed"></div>
       </div>
     `;
@@ -78,9 +77,7 @@ export default class Joystick extends Panel {
     this.formulaInput = this.q('#axesFormula');
     this.formulaInput.value = axesFormulaDefault;
 
-    this.initNipples();
     this.updateTimer = this.setInterval(this.update, 100);
-    this.solenoidTriggered = false;
 
     this.solenoidButton = new Button({
       name: 'solenoidButton',
@@ -90,9 +87,13 @@ export default class Joystick extends Panel {
       enabled: true,
     });
 
+    this.solenoidButton.style.minWidth = '5em';
+    this.solenoidTriggered = false;
     this.solenoidButton.inject(this.q('#solenoid-button-row'));
-
     this.setInterval(this.updateSolenoidButton, 500);
+    this.updateSolenoidButton();
+
+    this.initNipples();
 
     if (SettingsStorage.get('enableVizAuv')) {
       this.vizauv = VizAuv.makeVizauv(this);
@@ -247,21 +248,21 @@ export default class Joystick extends Panel {
   computePowers() {
     let max_power = 0;
 
-    const yaw = this.axes.yaw;
-    const forward = this.axes.forward;
-    const depth = this.axes.vertical;
+    let yaw = this.axes.yaw;
+    let forward = this.axes.forward;
+    let depth = this.axes.vertical;
 
     /* short aliases for axes */
-    const x = yaw;
-    const y = forward;
-    const z = depth;
+    let x = yaw;
+    let y = forward;
+    let z = depth;
 
     let a = 0;
     let b = 0;
     let c = 0;
     let d = 0;
 
-    const threshold = 0;
+    let threshold = 0;
 
     function limit(val) {
       return Math.abs(val) >= threshold ? val : 0.0;
@@ -378,6 +379,7 @@ export default class Joystick extends Panel {
     this.solenoidButton.attrs.text =
       relaxing ? 'Магнит<br>остывает…' :
       this.solenoidTriggered ? 'Выключить<br>магнит' : 'Включить<br>магнит';
+
     this.solenoidButton.setIcon(
       this.solenoidTriggered || relaxing ? 'magnet-off' : 'magnet-on',
       this.solenoidTriggered ? 'orange' : 'cyan',
