@@ -33,6 +33,35 @@ d = + z
 
 const nippleConfig = {};
 
+let contextVizAuv = {
+  motors: {
+    hl: 0,
+    hr: 0,
+    vf: 0,
+    vb: 0,
+  },
+
+  auto_axes: {
+    hl: false,
+    hr: false,
+    vf: false,
+    vb: false,
+  },
+
+  rot: {
+    yaw: 0,
+    pitch: 0,
+    roll: 0,
+  },
+
+  leds: [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+};
+
 export default class Joystick extends Panel {
   begin() {
     this.name = 'Телеуправление';
@@ -119,40 +148,11 @@ export default class Joystick extends Panel {
   }
 
   updateVizAuvContext() {
-    const context = {
-      motors: {
-        hl: 0,
-        hr: 0,
-        vf: 0,
-        vb: 0,
-      },
-
-      auto_axes: {
-        hl: false,
-        hr: false,
-        vf: false,
-        vb: false,
-      },
-
-      rot: {
-        yaw: 0,
-        pitch: 0,
-        roll: 0,
-      },
-
-      leds: [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-      ],
-    };
-
     if ('direct_power' in mur.context) {
-      context.motors.hl = mur.context.direct_power[0];
-      context.motors.hr = mur.context.direct_power[1];
-      context.motors.vf = mur.context.direct_power[2];
-      context.motors.vb = mur.context.direct_power[3];
+      contextVizAuv.motors.hl = mur.context.direct_power[0];
+      contextVizAuv.motors.hr = mur.context.direct_power[1];
+      contextVizAuv.motors.vf = mur.context.direct_power[2];
+      contextVizAuv.motors.vb = mur.context.direct_power[3];
 
       let speed_yaw = mur.context.axes_speed[0];
       const speed_forward = mur.context.axes_speed[1];
@@ -163,50 +163,50 @@ export default class Joystick extends Panel {
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 0))) {
-        context.auto_axes.hl = true;
-        context.motors.hl = (+ speed_yaw + speed_forward);
+        contextVizAuv.auto_axes.hl = true;
+        contextVizAuv.motors.hl = (+ speed_yaw + speed_forward);
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 1))) {
-        context.auto_axes.hr = true;
-        context.motors.hr = (- speed_yaw + speed_forward);
+        contextVizAuv.auto_axes.hr = true;
+        contextVizAuv.motors.hr = (- speed_yaw + speed_forward);
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 2))) {
-        context.auto_axes.vf = true;
-        context.motors.vf = (+ speed_vertical);
+        contextVizAuv.auto_axes.vf = true;
+        contextVizAuv.motors.vf = (+ speed_vertical);
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 3))) {
-        context.auto_axes.vb = true;
-        context.motors.vb = (+ speed_vertical);
+        contextVizAuv.auto_axes.vb = true;
+        contextVizAuv.motors.vb = (+ speed_vertical);
       }
 
       if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
-        context.motors.hl = mur.telemetry.motorsPower[0];
-        context.motors.hr = mur.telemetry.motorsPower[1];
+        contextVizAuv.motors.hl = mur.telemetry.motorsPower[0];
+        contextVizAuv.motors.hr = mur.telemetry.motorsPower[1];
       }
 
       if (App.panels.blockly.scriptStatus === 'running') {
-        context.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
-        context.leds[1] = [mur.context.leds[1 * 3 + 0], mur.context.leds[1 * 3 + 1], mur.context.leds[1 * 3 + 0 + 2]];
-        context.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
-        context.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
+        contextVizAuv.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
+        contextVizAuv.leds[1] = [mur.context.leds[1 * 3 + 0], mur.context.leds[1 * 3 + 1], mur.context.leds[1 * 3 + 0 + 2]];
+        contextVizAuv.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
+        contextVizAuv.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
       } else {
-        context.leds[0] = [0, context.motors.vf > 0 ? 0 : context.motors.vf * 2.55, context.motors.vf < 0 ? 0 : context.motors.vf * 2.55];
-        context.leds[1] = [0, context.motors.hr > 0 ? 0 : context.motors.hr * 2.55, context.motors.hr < 0 ? 0 : context.motors.hr * 2.55];
-        context.leds[2] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
-        context.leds[3] = [0, context.motors.vb > 0 ? 0 : context.motors.vb * 2.55, context.motors.vb < 0 ? 0 : context.motors.vb * 2.55];
+        contextVizAuv.leds[0] = [0, contextVizAuv.motors.vf > 0 ? 0 : contextVizAuv.motors.vf * 2.55, contextVizAuv.motors.vf < 0 ? 0 : contextVizAuv.motors.vf * 2.55];
+        contextVizAuv.leds[1] = [0, contextVizAuv.motors.hr > 0 ? 0 : contextVizAuv.motors.hr * 2.55, contextVizAuv.motors.hr < 0 ? 0 : contextVizAuv.motors.hr * 2.55];
+        contextVizAuv.leds[2] = [0, contextVizAuv.motors.hl > 0 ? 0 : contextVizAuv.motors.hl * 2.55, contextVizAuv.motors.hl < 0 ? 0 : contextVizAuv.motors.hl * 2.55];
+        contextVizAuv.leds[3] = [0, contextVizAuv.motors.vb > 0 ? 0 : contextVizAuv.motors.vb * 2.55, contextVizAuv.motors.vb < 0 ? 0 : contextVizAuv.motors.vb * 2.55];
       }
     }
 
     if ('imuYaw' in mur.telemetry) {
-      context.rot.yaw = mur.telemetry.imuYaw;
-      context.rot.pitch = mur.telemetry.imuPitch;
-      context.rot.roll = mur.telemetry.imuRoll;
+      contextVizAuv.rot.yaw = mur.telemetry.imuYaw;
+      contextVizAuv.rot.pitch = mur.telemetry.imuPitch;
+      contextVizAuv.rot.roll = mur.telemetry.imuRoll;
     }
 
-    this.vizauv.updContext(context);
+    this.vizauv.updContext(contextVizAuv);
   }
 
 
@@ -308,10 +308,10 @@ export default class Joystick extends Panel {
     d = clamp(d, -max_power, max_power);
 
     const pretty = {
-      a: String(a).padStart(4),
-      b: String(b).padStart(4),
-      c: String(c).padStart(4),
-      d: String(d).padStart(4),
+      a: String(contextVizAuv.motors.hl).padStart(4),
+      b: String(contextVizAuv.motors.hr).padStart(4),
+      c: String(contextVizAuv.motors.vf).padStart(4),
+      d: String(contextVizAuv.motors.vb).padStart(4),
     };
 
     // this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
