@@ -152,6 +152,11 @@ input[type="number"] {
   margin-right: 0 !important;
 }
 
+.row.disabled {
+  opacity: 25%;
+  pointer-events: none;
+}
+
 .text-input  {
   font-family: var(--font-ui);
   font-weight: 600;

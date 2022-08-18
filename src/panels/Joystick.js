@@ -52,7 +52,7 @@ export default class Joystick extends Panel {
 
         <div class="vertical-filler"></div>
 
-        <div class="row justify-content-center joystick-outer-margin">
+        <div id="nipples-container" class="row justify-content-center joystick-outer-margin">
           <div class="nipple-wrapper" id="nipple0"></div>
           <div class="nipple-wrapper" id="nipple1"></div>
         </div>
@@ -81,7 +81,8 @@ export default class Joystick extends Panel {
 
     this.solenoidButton = new Button({
       name: 'solenoidButton',
-      text: 'lol',
+      text: 'Включить<br>магнит',
+      icon: 'magnet',
       classes: 'button-vertical',
       action: () => this.triggerSolenoid(),
       enabled: true,
@@ -105,6 +106,16 @@ export default class Joystick extends Panel {
         }
       }, 100);
     }
+  }
+
+  onActiveChanged(active) {
+    const blockControls = 'blockly' in App.panels ?
+      App.panels.blockly.scriptStatus == 'running' : false;
+
+    this.q('#nipples-container').classList.toggle('disabled', blockControls);
+    this.q('#nipples-container').classList.toggle('opacity-0', blockControls);
+    this.q('#solenoid-button-row').classList.toggle('disabled', blockControls);
+    this.q('#solenoid-button-row').classList.toggle('opacity-0', blockControls);
   }
 
   updateVizAuvContext() {
@@ -172,7 +183,6 @@ export default class Joystick extends Panel {
       }
 
       if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
-        console.log(mur.telemetry.motorsPower);
         context.motors.hl = mur.telemetry.motorsPower[0];
         context.motors.hr = mur.telemetry.motorsPower[1];
       }
@@ -188,11 +198,6 @@ export default class Joystick extends Panel {
         context.leds[2] = [0, context.motors.hl > 0 ? 0 : context.motors.hl * 2.55, context.motors.hl < 0 ? 0 : context.motors.hl * 2.55];
         context.leds[3] = [0, context.motors.vb > 0 ? 0 : context.motors.vb * 2.55, context.motors.vb < 0 ? 0 : context.motors.vb * 2.55];
       }
-
-      console.log(mur.context);
-      console.log(context);
-
-      // console.log(context.leds[0]);
     }
 
     if ('imuYaw' in mur.telemetry) {
@@ -312,6 +317,7 @@ export default class Joystick extends Panel {
     // this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
     // this.formulaStatusText.innerText = ""
     this.formulaStatusText.innerText =
+    // TODO: don't wok with speed axes!!!
       `
   Тяга на
 движителях:
