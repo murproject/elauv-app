@@ -165,21 +165,29 @@ export default class Joystick extends Panel {
       if (!Boolean(mur.context.direct_mode & (1 << 0))) {
         contextVizAuv.auto_axes.hl = true;
         contextVizAuv.motors.hl = (+ speed_yaw + speed_forward);
+      } else {
+        contextVizAuv.auto_axes.hl = false;
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 1))) {
         contextVizAuv.auto_axes.hr = true;
         contextVizAuv.motors.hr = (- speed_yaw + speed_forward);
+      } else {
+        contextVizAuv.auto_axes.hr = false;
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 2))) {
         contextVizAuv.auto_axes.vf = true;
         contextVizAuv.motors.vf = (+ speed_vertical);
+      } else {
+        contextVizAuv.auto_axes.vf = false;
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 3))) {
         contextVizAuv.auto_axes.vb = true;
         contextVizAuv.motors.vb = (+ speed_vertical);
+      } else {
+        contextVizAuv.auto_axes.vb = false;
       }
 
       if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
