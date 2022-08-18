@@ -1,5 +1,5 @@
 import Panel from './Panel';
-import mur from '/src/vehicle/apiGameMur.js';
+import mur from '/src/vehicle/api.js';
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 import Utils from '/src/utils/Utils';

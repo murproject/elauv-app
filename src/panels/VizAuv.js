@@ -1,6 +1,6 @@
 import Panel from './Panel';
 import Zdog from 'zdog';
-import mur from '/src/vehicle/apiGameMur.js';
+import mur from '/src/vehicle/api.js';
 
 export default class VizAuv extends Panel {
   begin() {

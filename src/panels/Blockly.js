@@ -16,7 +16,7 @@ import * as Backpack from '../blockly-wrapper/workspace-backpack/src';
 import MurToolbox from '../blockly-wrapper/Toolbox';
 import '../blockly-wrapper/BlocklyStyle';
 
-import mur from '../vehicle/apiGameMur';
+import mur from '../vehicle/api';
 import ProjectsStorage from '/src/utils/ProjectsStorage';
 
 

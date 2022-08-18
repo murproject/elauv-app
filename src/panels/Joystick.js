@@ -1,8 +1,8 @@
 import nipplejs from 'nipplejs';
 
 import Panel from './Panel';
-import mur from '../vehicle/apiGameMur.js';
-import protocol from '../vehicle/protocolGameMur';
+import mur from '../vehicle/api.js';
+import protocol from '../vehicle/protocol';
 
 import VizAuv from '/src/panels/VizAuv.js';
 import SettingsStorage from '/src/utils/SettingsStorage';

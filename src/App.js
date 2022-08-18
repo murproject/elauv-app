@@ -1,4 +1,4 @@
-import mur from './vehicle/apiGameMur.js';
+import mur from './vehicle/api.js';
 
 import AboutPanel from './panels/About.js';
 import DevicesPanel from './panels/Devices.js';

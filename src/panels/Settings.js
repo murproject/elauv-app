@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import CheckBox from '../components/CheckBox';
 import SettingsStorage from '/src/utils/SettingsStorage';
 import GlobalDialog from '/src/components/GlobalDialog.js';
-import mur from '/src/vehicle/apiGameMur.js';
+import mur from '/src/vehicle/api.js';
 
 export default class Settings extends Panel {
   begin() {

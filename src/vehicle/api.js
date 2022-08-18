@@ -1,4 +1,4 @@
-import Protocol from './protocolGameMur';
+import Protocol from './protocol';
 
 let transport = null;
 
