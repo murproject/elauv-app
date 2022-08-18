@@ -1,6 +1,6 @@
-import Element from './Element.js'
-import Icon from '/src/components/Icon'
-import Utils from "/src/utils/Utils";
+import Element from './Element.js';
+import Icon from '/src/components/Icon';
+import Utils from '/src/utils/Utils';
 
 export default class GlobalDialog extends Element {
   static get defaultClasses() {
@@ -8,7 +8,7 @@ export default class GlobalDialog extends Element {
   }
 
   static get tag() {
-    return 'global-dialog'
+    return 'global-dialog';
   }
 
   static get defaultAttrs() {
@@ -48,21 +48,20 @@ export default class GlobalDialog extends Element {
       ` : ''}
 
       <div class="vertical-filler"></div>
-    `
+    `;
   }
 
   afterRender() {
-    this.buttonsRow = document.createElement("div");
-    this.buttonsRow.classList.add("row");
-    this.attrs.buttons.forEach(button => button.inject(this.buttonsRow));
+    this.buttonsRow = document.createElement('div');
+    this.buttonsRow.classList.add('row');
+    this.attrs.buttons.forEach((button) => button.inject(this.buttonsRow));
     this.appendChild(this.buttonsRow);
 
     if (this.attrs.textInput) {
-      this.textInputEl = this.querySelector("#text-input");
-      this.textInputEl.onchange = event => this.attrs.textInput(this.textInputEl.value);
+      this.textInputEl = this.querySelector('#text-input');
+      this.textInputEl.onchange = (event) => this.attrs.textInput(this.textInputEl.value);
     }
   }
-
 }
 
 GlobalDialog.register();

@@ -1,15 +1,14 @@
-import App from "/src/App.js";
-import Panel from './Panel'
+import App from '/src/App.js';
+import Panel from './Panel';
 import Button from '../components/Button';
-import CheckBox from "../components/CheckBox";
-import SettingsStorage from "/src/utils/SettingsStorage";
+import CheckBox from '../components/CheckBox';
+import SettingsStorage from '/src/utils/SettingsStorage';
 import GlobalDialog from '/src/components/GlobalDialog.js';
-import mur from '/src/vehicle/apiGameMur.js'
+import mur from '/src/vehicle/apiGameMur.js';
 
 export default class Settings extends Panel {
-
   begin() {
-    this.name = "Настройки";
+    this.name = 'Настройки';
     this.addTab = false;
 
     this.html = /*html*/`
@@ -21,7 +20,7 @@ export default class Settings extends Panel {
         <div id="settings-action-buttons" class="row"></div>
         <div id="vehicle-action-buttons" class="row"></div>
       </div>
-    `
+    `;
   }
 
   init() {
@@ -61,7 +60,7 @@ export default class Settings extends Panel {
       },
     ];
 
-    checkboxes.forEach(checkbox => {
+    checkboxes.forEach((checkbox) => {
       new CheckBox({
         text: checkbox.text,
         icon: checkbox.icon,
@@ -74,7 +73,7 @@ export default class Settings extends Panel {
 
     new Button({
       text: 'Перезапустить приложение',
-      action: () => this.confirm(() => location.reload(), "Перезапустить приложение"),
+      action: () => this.confirm(() => location.reload(), 'Перезапустить приложение'),
       icon: 'replay',
     }).inject(this.appSettingsButtons);
 
@@ -116,38 +115,38 @@ export default class Settings extends Panel {
         action: () => mur.controlImuSettingsRecalibrate(),
         icon: 'rotate-orbit',
         parent: this.vehicleButtons,
-      }
+      },
     ];
 
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       new Button({
         text: button.text,
         action: () => this.confirm(button.action, button.text),
         icon: button.icon,
-        classes: 'button-vertical'
+        classes: 'button-vertical',
       }).inject(button.parent);
     });
   }
 
   confirm(action, text) {
     App.showGlobalDialog(
-      new GlobalDialog({
-        title: 'Выполнить действие?',
-        text: text,
-        classes: 'text-center',
-        buttons: [
-          new Button({
-            text: 'Да',
-            icon: 'check',
-          }, () => { App.closeGlobalDialog(); action() }),
-          new Button({
-            text: 'Назад',
-            icon: 'keyboard-return',
-          }, () => App.closeGlobalDialog()),
-        ]
-      })
+        new GlobalDialog({
+          title: 'Выполнить действие?',
+          text: text,
+          classes: 'text-center',
+          buttons: [
+            new Button({
+              text: 'Да',
+              icon: 'check',
+            }, () => {
+              App.closeGlobalDialog(); action();
+            }),
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
-
-
 }

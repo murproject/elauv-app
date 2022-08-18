@@ -1,10 +1,10 @@
-import Button from "/src/components/Button";
-import Element from '/src/components/Element.js'
+import Button from '/src/components/Button';
+import Element from '/src/components/Element.js';
 import Icon from '/src/components/Icon';
 
 export default class CheckBox extends Button {
   static get tag() {
-    return 'check-box'
+    return 'check-box';
   }
 
   init() {
@@ -63,7 +63,7 @@ export default class CheckBox extends Button {
   }
 
   updateCheckIcon() {
-    this.check = Icon(this.attrs.checked ? 'checkbox-outline' : 'checkbox-blank-outline', this.attrs.iconClasses, this.attrs.iconColor)
+    this.check = Icon(this.attrs.checked ? 'checkbox-outline' : 'checkbox-blank-outline', this.attrs.iconClasses, this.attrs.iconColor);
   }
 
   render() {

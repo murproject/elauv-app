@@ -1,16 +1,16 @@
-import nipplejs from 'nipplejs'
+import nipplejs from 'nipplejs';
 
-import Panel from './Panel'
-import mur from '../vehicle/apiGameMur.js'
-import protocol from '../vehicle/protocolGameMur'
+import Panel from './Panel';
+import mur from '../vehicle/apiGameMur.js';
+import protocol from '../vehicle/protocolGameMur';
 
 import VizAuv from '/src/panels/VizAuv.js';
 import SettingsStorage from '/src/utils/SettingsStorage';
-import Button from '/src/components/Button.js'
+import Button from '/src/components/Button.js';
 import App from '../App';
 
-function clamp (value, min, max) {
-  return Math.min(Math.max(min, Math.round(value)), max)
+function clamp(value, min, max) {
+  return Math.min(Math.max(min, Math.round(value)), max);
 }
 
 const axesFormulaDefault = `max_power = 100
@@ -33,9 +33,8 @@ d = + z
 const nippleConfig = {};
 
 export default class Joystick extends Panel {
-
   begin() {
-    this.name = "Телеуправление";
+    this.name = 'Телеуправление';
 
     this.html = /*html*/`
       <div class="container">
@@ -61,7 +60,7 @@ export default class Joystick extends Panel {
 
         <div id='solenoid-button-row' class="row buttons-collapsed"></div>
       </div>
-    `
+    `;
   }
 
 
@@ -75,8 +74,8 @@ export default class Joystick extends Panel {
       vertical: 0,
     };
 
-    this.formulaStatusText = this.q("#formulaStatus");
-    this.formulaInput = this.q("#axesFormula");
+    this.formulaStatusText = this.q('#formulaStatus');
+    this.formulaInput = this.q('#axesFormula');
     this.formulaInput.value = axesFormulaDefault;
 
     this.initNipples();
@@ -89,7 +88,7 @@ export default class Joystick extends Panel {
       classes: 'button-vertical',
       action: () => this.triggerSolenoid(),
       enabled: true,
-    })
+    });
 
     this.solenoidButton.inject(this.q('#solenoid-button-row'));
 
@@ -100,7 +99,7 @@ export default class Joystick extends Panel {
 
       // TODO: move to separate function
       setInterval(() => {
-        let context = {
+        const context = {
           motors: {
             hl: 0,
             hr: 0,
@@ -126,7 +125,7 @@ export default class Joystick extends Panel {
             [0, 0, 0],
             [0, 0, 0],
             [0, 0, 0],
-          ]
+          ],
         };
 
         if ('direct_power' in mur.context) {
@@ -135,9 +134,9 @@ export default class Joystick extends Panel {
           context.motors.vf = mur.context.direct_power[2];
           context.motors.vb = mur.context.direct_power[3];
 
-          var speed_yaw = mur.context.axes_speed[0];
-          var speed_forward = mur.context.axes_speed[1];
-          var speed_vertical = mur.context.axes_speed[1];
+          let speed_yaw = mur.context.axes_speed[0];
+          const speed_forward = mur.context.axes_speed[1];
+          const speed_vertical = mur.context.axes_speed[1];
 
           if (Boolean(mur.context.axes_regulators & (1 << 0))) {
             speed_yaw = 0;
@@ -203,72 +202,72 @@ export default class Joystick extends Panel {
 
   initNipples() {
     this.nipple0 = nipplejs.create({
-        zone: this.q('#nipple0'),
-        mode: 'static',
-        position: {left: '50%', top: '50%'},
-        color: '#006688',
-        restOpacity: 1.0,
-        size: 150,
+      zone: this.q('#nipple0'),
+      mode: 'static',
+      position: {left: '50%', top: '50%'},
+      color: '#006688',
+      restOpacity: 1.0,
+      size: 150,
 
     });
 
     this.nipple1 = nipplejs.create({
-        zone: this.q('#nipple1'),
-        mode: 'static',
-        position: {left: '50%', top: '50%'},
-        color: '#006688',
-        lockY: true,
-        restOpacity: 1.0,
-        size: 150,
+      zone: this.q('#nipple1'),
+      mode: 'static',
+      position: {left: '50%', top: '50%'},
+      color: '#006688',
+      lockY: true,
+      restOpacity: 1.0,
+      size: 150,
 
     });
 
-    this.nipple0.on("move", (evt, data) => {
-        this.axes.yaw = this.normalizeAxis(data.vector.x);
-        this.axes.forward = this.normalizeAxis(data.vector.y);
-    })
+    this.nipple0.on('move', (evt, data) => {
+      this.axes.yaw = this.normalizeAxis(data.vector.x);
+      this.axes.forward = this.normalizeAxis(data.vector.y);
+    });
 
-    this.nipple1.on("move", (evt, data) => {
-        this.axes.side = this.normalizeAxis(data.vector.x);
-        this.axes.vertical = this.normalizeAxis(data.vector.y);
-    })
+    this.nipple1.on('move', (evt, data) => {
+      this.axes.side = this.normalizeAxis(data.vector.x);
+      this.axes.vertical = this.normalizeAxis(data.vector.y);
+    });
 
-    this.nipple0.on("end", (evt) => {
-        this.axes.yaw = 0;
-        this.axes.forward = 0;
-    })
+    this.nipple0.on('end', (evt) => {
+      this.axes.yaw = 0;
+      this.axes.forward = 0;
+    });
 
-    this.nipple1.on("end", (evt) => {
-        this.axes.side = 0;
-        this.axes.vertical = 0;
-    })
+    this.nipple1.on('end', (evt) => {
+      this.axes.side = 0;
+      this.axes.vertical = 0;
+    });
   }
 
 
   computePowers() {
-    var max_power = 0;
+    let max_power = 0;
 
-    var yaw = this.axes.yaw;
-    var forward = this.axes.forward;
-    var depth = this.axes.vertical;
+    const yaw = this.axes.yaw;
+    const forward = this.axes.forward;
+    const depth = this.axes.vertical;
 
     /* short aliases for axes */
-    var x = yaw;
-    var y = forward;
-    var z = depth;
+    const x = yaw;
+    const y = forward;
+    const z = depth;
 
-    var a = 0;
-    var b = 0;
-    var c = 0;
-    var d = 0;
+    let a = 0;
+    let b = 0;
+    let c = 0;
+    let d = 0;
 
-    var threshold = 0;
+    const threshold = 0;
 
     function limit(val) {
       return Math.abs(val) >= threshold ? val : 0.0;
     }
 
-    var axisFormulaOk = false;
+    let axisFormulaOk = false;
 
     try {
       eval(this.formulaInput.value);
@@ -315,7 +314,7 @@ export default class Joystick extends Panel {
     return {
       axes: {x: x, y: y, z: z},
       motors: [a, b, c, d],
-    }
+    };
   }
 
 
@@ -327,14 +326,14 @@ export default class Joystick extends Panel {
         return;
       }
 
-      var regs = protocol.regulators;
+      const regs = protocol.regulators;
       regs.yaw = false; // TODO
       regs.pitch = false;
       regs.roll = false;
       regs.depth = false; // TODO
       regs.isJoystick = true;
 
-      let solenoidPower = this.solenoidTriggered ? 100 : 0;
+      const solenoidPower = this.solenoidTriggered ? 100 : 0;
 
       // TODO: use axes_speed instead of "manual" calculating
 
@@ -343,7 +342,7 @@ export default class Joystick extends Panel {
           powers.motors[0],
           powers.motors[1],
           powers.motors[2],
-          powers.motors[3]
+          powers.motors[3],
         ],
         direct_mode: true ? 0b00001111 : 0x00, // TODO
         axes_speed: [
@@ -355,7 +354,7 @@ export default class Joystick extends Panel {
         axes_regulators: regs.pack(), // TODO
         target_yaw: 0,
         actuator_power: [solenoidPower, 0],
-        leds: [0,0,0,0,0,0,0,0,0,0,0,0],
+        leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       };
 
       mur.controlContext(data);
@@ -381,8 +380,7 @@ export default class Joystick extends Panel {
       this.solenoidTriggered ? 'Выключить<br>магнит' : 'Включить<br>магнит';
     this.solenoidButton.setIcon(
       this.solenoidTriggered || relaxing ? 'magnet-off' : 'magnet-on',
-      this.solenoidTriggered ? 'orange' : 'cyan'
+      this.solenoidTriggered ? 'orange' : 'cyan',
     );
   }
-
 }

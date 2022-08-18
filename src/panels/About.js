@@ -1,10 +1,9 @@
-import App from "/src/App.js";
+import App from '/src/App.js';
 import Panel from './Panel';
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 
 export default class About extends Panel {
-
   begin() {
     this.name = 'О программе';
 
@@ -41,7 +40,7 @@ export default class About extends Panel {
 
         <div id="about-buttons" class="row buttons-collapsed"></div>
       </article>
-    `
+    `;
   }
 
   init() {
@@ -52,7 +51,7 @@ export default class About extends Panel {
   }
 
   makeButtons() {
-    this.headButtonsEl = this.q('#about-buttons')
+    this.headButtonsEl = this.q('#about-buttons');
 
     // new Button({
     //   name: 'licenses',

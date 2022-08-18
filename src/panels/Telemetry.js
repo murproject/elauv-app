@@ -1,9 +1,9 @@
-import Panel from './Panel'
-import mur from '/src/vehicle/apiGameMur.js'
-import Icon from '/src/components/Icon'
-import Button from '../components/Button'
-import Utils from '/src/utils/Utils'
-import SettingsStorage from "/src/utils/SettingsStorage";
+import Panel from './Panel';
+import mur from '/src/vehicle/apiGameMur.js';
+import Icon from '/src/components/Icon';
+import Button from '../components/Button';
+import Utils from '/src/utils/Utils';
+import SettingsStorage from '/src/utils/SettingsStorage';
 
 const rsocLevels = {
   low: 10,
@@ -12,9 +12,8 @@ const rsocLevels = {
 };
 
 export default class Telemetry extends Panel {
-
   begin() {
-    this.name = "Телеметрия";
+    this.name = 'Телеметрия';
 
     this.html = /*html*/`
       <div class="container">
@@ -22,7 +21,7 @@ export default class Telemetry extends Panel {
         <div class="vertical-filler"></div>
         <div class="push-button" id="resetStats">Reset stats</div>
       </div>
-    `
+    `;
   }
 
 
@@ -30,22 +29,22 @@ export default class Telemetry extends Panel {
     this.battIconName = 'battery-unknown';
     this.oldBattIconName = this.battIconName;
     this.setIcon(this.battIconName);
-    this.textElement = this.q("#telemetryText");
+    this.textElement = this.q('#telemetryText');
 
     this.stats = {};
 
-    this.resetStatsButton = this.q("#resetStats");
+    this.resetStatsButton = this.q('#resetStats');
     this.resetStatsButton.onclick = () => this.resetStats();
 
-    this.makeFeedbackIcons()
+    this.makeFeedbackIcons();
 
     this.resetStats();
 
-    this.feedbacksStatesOld = {}
+    this.feedbacksStatesOld = {};
 
     /* TODO: only for testing during development! */
 
-    this.rsocStats = JSON.parse(Utils.notNull(localStorage.rsocStats, "[]"));
+    this.rsocStats = JSON.parse(Utils.notNull(localStorage.rsocStats, '[]'));
 
     this.solenoidWasTurnedOn = 0;
     this.solenoidWasRelaxing = 0;
@@ -85,13 +84,13 @@ export default class Telemetry extends Panel {
     this.feedbackIcons = {};
 
     const feedbacks = [
-      {name: 'solenoid',  color: 'light',   pulseOnce: false,  icon: '../magnet-off'},
-      {name: 'motors',    color: 'light',   pulseOnce: false,  icon: '../fan-off'},
-      {name: 'tap',       color: 'light',   pulseOnce: true,  icon: '../cursor-default-click'},
-      {name: 'tap2x',     color: 'light',   pulseOnce: true,  icon: '../cursor-click-2x'},
+      {name: 'solenoid', color: 'light', pulseOnce: false, icon: '../magnet-off'},
+      {name: 'motors', color: 'light', pulseOnce: false, icon: '../fan-off'},
+      {name: 'tap', color: 'light', pulseOnce: true, icon: '../cursor-default-click'},
+      {name: 'tap2x', color: 'light', pulseOnce: true, icon: '../cursor-click-2x'},
     ];
 
-    feedbacks.forEach(feedback => {
+    feedbacks.forEach((feedback) => {
       const feedbackIcon = new Button({
         name: feedback.name,
         text: '',
@@ -154,7 +153,7 @@ export default class Telemetry extends Panel {
     }
 
     telemetryText += '\n\ncontext = ';
-    telemetryText += JSON.stringify(mur.context, null, '  ')
+    telemetryText += JSON.stringify(mur.context, null, '  ');
 
     this.textElement.innerHTML = telemetryText;
   }
@@ -166,17 +165,17 @@ export default class Telemetry extends Panel {
       mur.conn.state = 'open';
     }
 
-    const batteryText = mur.conn.state != 'open'  ? 'unknown' :
-                        rsoc < rsocLevels.low     ? 'outline' :
-                        rsoc < rsocLevels.medium  ? 'low'     :
-                        rsoc < rsocLevels.high    ? 'medium'  :
-                        rsoc >= rsocLevels.high   ? 'high'    : 'unknown';
+    const batteryText = mur.conn.state != 'open' ? 'unknown' :
+                        rsoc < rsocLevels.low ? 'outline' :
+                        rsoc < rsocLevels.medium ? 'low' :
+                        rsoc < rsocLevels.high ? 'medium' :
+                        rsoc >= rsocLevels.high ? 'high' : 'unknown';
 
     const batteryColor = mur.conn.state != 'open' ? 'blue-dark' :
-                         rsoc < rsocLevels.low    ? 'red'     :
-                         rsoc < rsocLevels.medium ? 'orange'  :
-                         rsoc < rsocLevels.high   ? 'yellow'  :
-                         rsoc >= rsocLevels.high  ? 'green'   : 'blue-dark';
+                         rsoc < rsocLevels.low ? 'red' :
+                         rsoc < rsocLevels.medium ? 'orange' :
+                         rsoc < rsocLevels.high ? 'yellow' :
+                         rsoc >= rsocLevels.high ? 'green' : 'blue-dark';
 
     const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : '';
 
@@ -209,14 +208,14 @@ export default class Telemetry extends Panel {
         this.feedbackIcons.tap2x.setActive(true);
         this.feedbackIcons.tap.setActive(false);
         if (!this.feedbacksStatesOld.tapDouble && vibrateEnabled) {
-          console.log("vibrate");
+          console.log('vibrate');
           navigator.vibrate(150);
         }
       } else if (mur.telemetry.feedback.imuTap) {
         this.feedbackIcons.tap2x.setActive(false);
         this.feedbackIcons.tap.setActive(true);
         if (!this.feedbacksStatesOld.tap && vibrateEnabled) {
-          console.log("vibrate");
+          console.log('vibrate');
           navigator.vibrate(150);
         }
       } else {
@@ -227,7 +226,6 @@ export default class Telemetry extends Panel {
       this.feedbacksStatesOld.tap = mur.telemetry.feedback.imuTap;
       this.feedbacksStatesOld.tapDouble = mur.telemetry.feedback.imuDoubleTap;
     }
-
   }
 
   update(telemetryText) {
@@ -243,11 +241,6 @@ export default class Telemetry extends Panel {
     this.updateBattery();
     this.updateFeedbacks();
   }
-
 }
-
-
-
-
 
 

@@ -1,4 +1,4 @@
-import { encode, decode } from '@msgpack/msgpack'
+import {encode, decode} from '@msgpack/msgpack';
 
 const curProtoVer = 0; // current protocol version
 
@@ -28,39 +28,39 @@ const packetId = {
 
   /* Settings reply */
   ReplyAllSettings        : 0xC1,
+};
+
+function checkBit(value, mask) {
+  return ((value & mask) === mask);
 }
 
-function checkBit (value, mask) {
-  return ((value & mask) === mask)
-}
-
-function setBit (value, mask, state) {
+function setBit(value, mask, state) {
   if (state === true) {
-    value |= mask
+    value |= mask;
   } else {
-    value &= ~mask
+    value &= ~mask;
   }
 
-  return value
+  return value;
 }
 
 function clamp(value, maxPower = 100) {
-  return Math.min(Math.max(value, -maxPower), maxPower)
+  return Math.min(Math.max(value, -maxPower), maxPower);
 }
 
-function packFloat (value, precision = 0.01) {
-  return Math.round(value * (1.0 / precision))
+function packFloat(value, precision = 0.01) {
+  return Math.round(value * (1.0 / precision));
 }
 
-var regulatorsMask = {
+const regulatorsMask = {
   yaw:        1 << 0,
   pitch:      1 << 1,
   roll:       1 << 2,
   depth:      1 << 3,
   isJoystick: 1 << 4,
-}
+};
 
-var feedbackMask = {
+const feedbackMask = {
   // imuTap: 1 << 0,
   // colorStatus: 1 << 1
   imuTap:           1 << 0,
@@ -71,7 +71,7 @@ var feedbackMask = {
   pilotingMode:     1 << 5,
   yawStabilized:    1 << 6,
   pilotingBlocked:  1 << 7,
-}
+};
 
 export default {
   name: 'Protocol',
@@ -97,24 +97,24 @@ export default {
     depth: false,
     isJoystick: false,
 
-    unpack: function (data) {
-      this.yaw = checkBit(data, regulatorsMask.yaw)
-      this.pitch = checkBit(data, regulatorsMask.pitch)
-      this.roll = checkBit(data, regulatorsMask.roll)
-      this.depth = checkBit(data, regulatorsMask.depth)
-      this.isJoystick = checkBit(data, regulatorsMask.isJoystick)
-      return this
+    unpack: function(data) {
+      this.yaw = checkBit(data, regulatorsMask.yaw);
+      this.pitch = checkBit(data, regulatorsMask.pitch);
+      this.roll = checkBit(data, regulatorsMask.roll);
+      this.depth = checkBit(data, regulatorsMask.depth);
+      this.isJoystick = checkBit(data, regulatorsMask.isJoystick);
+      return this;
     },
 
-    pack: function () {
-      var data = 0
-      data = setBit(data, regulatorsMask.depth, this.depth)
-      data = setBit(data, regulatorsMask.yaw, this.yaw)
-      data = setBit(data, regulatorsMask.pitch, this.pitch)
-      data = setBit(data, regulatorsMask.roll, this.roll)
-      data = setBit(data, regulatorsMask.isJoystick, this.isJoystick)
-      return data
-    }
+    pack: function() {
+      let data = 0;
+      data = setBit(data, regulatorsMask.depth, this.depth);
+      data = setBit(data, regulatorsMask.yaw, this.yaw);
+      data = setBit(data, regulatorsMask.pitch, this.pitch);
+      data = setBit(data, regulatorsMask.roll, this.roll);
+      data = setBit(data, regulatorsMask.isJoystick, this.isJoystick);
+      return data;
+    },
   },
 
   feedback: {
@@ -127,7 +127,7 @@ export default {
     yawStabilized: false,
     pilotingBlocked: false,
 
-    unpack: function (data) {
+    unpack: function(data) {
       this.imuTap = checkBit(data, feedbackMask.imuTap);
       this.imuDoubleTap = checkBit(data, feedbackMask.imuDoubleTap);
       this.imuCalibrating = checkBit(data, feedbackMask.imuCalibrating);
@@ -137,11 +137,11 @@ export default {
       this.yawStabilized = checkBit(data, feedbackMask.yawStabilized);
       this.pilotingBlocked = checkBit(data, feedbackMask.pilotingBlocked);
 
-      return this
+      return this;
     },
 
-    pack: function () {
-      var data = 0
+    pack: function() {
+      let data = 0;
 
       data = setBit(data, this.feedbackMask.imuTap, this.imuTap);
       data = setBit(data, this.feedbackMask.imuDoubleTap, this.imuDoubleTap);
@@ -152,14 +152,14 @@ export default {
       data = setBit(data, this.feedbackMask.yawStabilized, this.yawStabilized);
       data = setBit(data, this.feedbackMask.pilotingBlocked, this.pilotingBlocked);
 
-      return data
-    }
+      return data;
+    },
   },
 
   splitBufferToPackets: function(buffer) {
     // TODO: split buffer to packets, respecting 2-bytes size header
     let chunk = buffer;
-    let packets = [];
+    const packets = [];
 
     for (let i = 0; i < 20; i++) { // no more than 20 packets per buffer
       const packetSize = (chunk[1] << 8) + chunk[0];
@@ -188,81 +188,81 @@ export default {
     return packets;
   },
 
-  parsePacket: function (raw) {
-    var data = decode(raw)
+  parsePacket: function(raw) {
+    const data = decode(raw);
 
     if (!Array.isArray(data) || data.length < 4) {
       // debug("incorrect packet")
     }
 
-    var packet = {
+    const packet = {
       header: data[0],
       protoVer: data[1],
       type: data[2],
-      payload: data[3]
-    }
+      payload: data[3],
+    };
 
-    var result = {}
+    let result = {};
 
     if (packet.type in this.parsers) {
       result = this.parsers[packet.type](packet);
     }
 
-    return result
+    return result;
   },
 
-  prettyHex: function (raw, dots = false) {
+  prettyHex: function(raw, dots = false) {
     if (!(raw instanceof Uint8Array)) {
-      raw = new Uint8Array(raw)
+      raw = new Uint8Array(raw);
     }
 
-    var hexString = Buffer.from(raw).toString('hex').toUpperCase()
+    let hexString = Buffer.from(raw).toString('hex').toUpperCase();
 
     if (dots) {
-      hexString = hexString.replace(/(.{2})/g, '$1:')
-      hexString = hexString.substring(0, hexString.length - 1)
+      hexString = hexString.replace(/(.{2})/g, '$1:');
+      hexString = hexString.substring(0, hexString.length - 1);
     }
 
-    return hexString
+    return hexString;
   },
 
   fillParsers: function() {
-    this.parsers[packetId.ReplyTelemetry]       = p => this.parseTelemetry(p);
-    this.parsers[packetId.ReplyDiagnosticInfo]  = p => this.parseDiagnosticInfo(p);
-    this.parsers[packetId.ReplyPing]            = p => this.parsePing(p);
-    this.parsers[packetId.ReplyAllSettings]     = p => this.parseAllSettings(p);
+    this.parsers[packetId.ReplyTelemetry] = (p) => this.parseTelemetry(p);
+    this.parsers[packetId.ReplyDiagnosticInfo] = (p) => this.parseDiagnosticInfo(p);
+    this.parsers[packetId.ReplyPing] = (p) => this.parsePing(p);
+    this.parsers[packetId.ReplyAllSettings] = (p) => this.parseAllSettings(p);
   },
 
-  parseTelemetry: function (packet) {
-    var data = packet.payload
+  parseTelemetry: function(packet) {
+    const data = packet.payload;
 
-    var telemetry = {
+    const telemetry = {
       type: packet.type,
       lastProtoVer: this.prettyHex([data[0]]),
       hardwareRev:  this.prettyHex([data[1]]), // TODO: should do formatting outisde
       macAddress:   this.prettyHex(data[2], true),
       timestamp:    data[3],
       feedback:     this.feedback.unpack(data[4]), // TODO: should do formatting outisde
-      depth:        data[5]   * 0.01,
-      depthTemp:    data[6]   * 0.01,
-      imuYaw:       data[7]   * 0.01,
-      imuPitch:     data[8]   * 0.01,
-      imuRoll:      data[9]   * 0.01,
-      battVolts:    data[10]  * 0.01,
-      battAmps:     data[11]  * 0.01,
-      battRsoc:     data[12]  * 0.01,
-      battTemp:     data[13]  * 0.01,
+      depth:        data[5] * 0.01,
+      depthTemp:    data[6] * 0.01,
+      imuYaw:       data[7] * 0.01,
+      imuPitch:     data[8] * 0.01,
+      imuRoll:      data[9] * 0.01,
+      battVolts:    data[10] * 0.01,
+      battAmps:     data[11] * 0.01,
+      battRsoc:     data[12] * 0.01,
+      battTemp:     data[13] * 0.01,
       memFree:      data[14],
       motorsPower:  data[15],
-    }
+    };
 
     // debug(telemetry)
-    return telemetry
+    return telemetry;
   },
 
-  parseDiagnosticInfo: function (packet) {
-    var data = packet.payload
-    var info = {
+  parseDiagnosticInfo: function(packet) {
+    const data = packet.payload;
+    const info = {
       type: packet.type,
       softwareRevMajor: data[0],
       softwareRevMinor: data[1],
@@ -270,24 +270,24 @@ export default {
       imuStarted: Boolean(data[3]),
       voltmeterStarted: Boolean(data[4]),
       text: data[5],
-    }
-    return info
+    };
+    return info;
   },
 
-  parsePing: function (packet) {
-    var data = packet.payload
-    var info = {
+  parsePing: function(packet) {
+    const data = packet.payload;
+    const info = {
       type: packet.type,
-      counter: data[0]
-    }
+      counter: data[0],
+    };
 
-    return info
+    return info;
   },
 
-  parseAllSettings: function (packet) {
-    var data = packet.payload
+  parseAllSettings: function(packet) {
+    const data = packet.payload;
 
-    var settings = {
+    const settings = {
       type: packet.type,
       startupsCount:            data[0],
       motorsPorts:              data[1],
@@ -303,33 +303,33 @@ export default {
       imuTapThreshold:          data[11] * 0.01,
       yawPidI:                  data[12] * 0.01,
       yawPidD:                  data[13] * 0.01,
-    }
+    };
 
-    return settings
+    return settings;
   },
 
-  makePacket: function (protoVer, type, payload) {
-    var packet = [
+  makePacket: function(protoVer, type, payload) {
+    const packet = [
       'MUR',
       protoVer,
       type,
-      payload
-    ]
+      payload,
+    ];
 
     // TODO: fill first bytes with packet size
 
-    const encoded = encode(packet)
-    const len = encoded.length
-    const buffer = new Uint8Array(2 + len)
-    buffer.set([len & 0xFF, len >> 8], 0)
-    buffer.set(encoded,2)
+    const encoded = encode(packet);
+    const len = encoded.length;
+    const buffer = new Uint8Array(2 + len);
+    buffer.set([len & 0xFF, len >> 8], 0);
+    buffer.set(encoded, 2);
     // console.log("sending packet:")
     // console.log(buffer)
 
-    return buffer
+    return buffer;
   },
 
-  packControlContext: function (data) {
+  packControlContext: function(data) {
     for (const i in data.direct_power) {
       data.direct_power[i] = clamp(data.direct_power[i]);
     }
@@ -342,7 +342,7 @@ export default {
       data.actuator_power[i] = clamp(data.actuator_power[i]);
     }
 
-    var payload = [
+    const payload = [
       data.direct_power,
       data.direct_mode,
       data.axes_speed,
@@ -350,65 +350,65 @@ export default {
       data.target_yaw !== null ? packFloat(data.target_yaw) : packFloat(0),
       data.actuator_power,
       data.leds,
-    ]
+    ];
 
     // debug("control payload:")
     // debug(payload)
     // console.log(payload);
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlContext, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlContext, payload);
+    return packet;
   },
 
-  packControlReboot: function (data) {
-    var payload = [
-      data.delay
-    ]
+  packControlReboot: function(data) {
+    const payload = [
+      data.delay,
+    ];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlReboot, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlReboot, payload);
+    return packet;
   },
 
-  packControlDiagnosticInfo: function (data) {
-    var payload = []
+  packControlDiagnosticInfo: function(data) {
+    const payload = [];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlDiagnosticInfo, payload)
+    const packet = this.makePacket(curProtoVer, packetId.ControlDiagnosticInfo, payload);
     console.log(packet);
-    return packet
+    return packet;
   },
 
-  packControlErase: function (data) {
-    var payload = []
+  packControlErase: function(data) {
+    const payload = [];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlErase, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlErase, payload);
+    return packet;
   },
 
-  packControlPing: function (data) {
-    var payload = [
-      data.counter
-    ]
+  packControlPing: function(data) {
+    const payload = [
+      data.counter,
+    ];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlPing, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlPing, payload);
+    return packet;
   },
 
-  packControlGetAllSettings: function (data) {
-    var payload = []
+  packControlGetAllSettings: function(data) {
+    const payload = [];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlGetAllSettings, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlGetAllSettings, payload);
+    return packet;
   },
 
-  packControlBatterySettings: function (data) {
-    var payload = [
+  packControlBatterySettings: function(data) {
+    const payload = [
       data.action,
       data.designCapacity,
       data.terminateVoltage,
       data.taperCurrent,
       data.socMin,
       data.socMax,
-    ]
+    ];
 
     /*
 
@@ -422,33 +422,33 @@ document.app.mur.controlBatterySettingsUpdate({
 
     */
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlBatterySettings, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlBatterySettings, payload);
+    return packet;
   },
 
-  packControlMotorsSettings: function (data) {
-    var payload = [
+  packControlMotorsSettings: function(data) {
+    const payload = [
       data.motorsPorts,
       data.motorsMultipliers,
       data.motorsOffsetPositive,
       data.motorsOffsetNegative,
       data.yawPidI,
       data.yawPidD,
-    ]
+    ];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload)
-    return packet
+    const packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload);
+    return packet;
   },
 
-  packControlImuSettings: function (data) {
-    var payload = [
+  packControlImuSettings: function(data) {
+    const payload = [
       data.action,
       data.tapTimeout,
       data.tapTreshold / 0.01,
-    ]
+    ];
 
-    var packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload)
-    return packet
-  }
+    const packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload);
+    return packet;
+  },
 
-}
+};

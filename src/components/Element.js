@@ -1,4 +1,4 @@
-import Utils from "/src/utils/Utils";
+import Utils from '/src/utils/Utils';
 
 export default class Element extends HTMLElement {
   constructor(attrs = undefined, action = undefined, actionTimeout = undefined) {
@@ -41,12 +41,12 @@ export default class Element extends HTMLElement {
 
   applyClasses(classes = undefined) {
     // console.log("classes = " + this.constructor.defaultClasses);
-    this.constructor.defaultClasses.forEach(item => {
+    this.constructor.defaultClasses.forEach((item) => {
       this.classList.add(item);
     });
 
     if (typeof(classes) === 'object') {
-      classes.forEach(item => {
+      classes.forEach((item) => {
         this.classList.add(item);
       });
     } else if (typeof(classes) === 'string') {
@@ -55,7 +55,7 @@ export default class Element extends HTMLElement {
   }
 
   update() {
-    this.innerHTML = "";
+    this.innerHTML = '';
     this.beforeRender();
     this.hasRendered = true;
     this.innerHTML += this.render();
@@ -63,7 +63,7 @@ export default class Element extends HTMLElement {
   }
 
   render() {
-    console.warn("Trying to render dummy element!");
+    console.warn('Trying to render dummy element!');
     return `<!-- dummy element -->`;
   }
 
@@ -106,7 +106,7 @@ export default class Element extends HTMLElement {
   }
 
   static get tag() {
-    console.error("Trying to get tag of dummy element!");
+    console.error('Trying to get tag of dummy element!');
     return 'dummy-element';
   }
 

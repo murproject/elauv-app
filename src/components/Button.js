@@ -1,5 +1,5 @@
-import Element from './Element.js'
-import Icon from '/src/components/Icon'
+import Element from './Element.js';
+import Icon from '/src/components/Icon';
 
 export default class Button extends Element {
   static get defaultClasses() {
@@ -7,7 +7,7 @@ export default class Button extends Element {
   }
 
   static get tag() {
-    return 'push-button'
+    return 'push-button';
   }
 
   init() {
@@ -60,9 +60,9 @@ export default class Button extends Element {
 
     if (this.attrs.scanHelper) {
       this.scanHelperIcon = Icon(
-        'scan-helper',
-        this.attrs.iconClasses + ' scan-helper' + (this.attrs.scanHelperBounce ? ' bounce-soft' : ''),
-        this.attrs.iconColor
+          'scan-helper',
+          this.attrs.iconClasses + ' scan-helper' + (this.attrs.scanHelperBounce ? ' bounce-soft' : ''),
+          this.attrs.iconColor,
       );
     } else {
       this.scanHelperIcon = '';

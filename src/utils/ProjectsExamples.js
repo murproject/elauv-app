@@ -23,4 +23,4 @@ export default [
     data: {},
     version: 0,
   },
-]
+];

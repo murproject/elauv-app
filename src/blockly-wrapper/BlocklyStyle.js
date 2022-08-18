@@ -1,32 +1,32 @@
-import Blockly from 'blockly'
+import Blockly from 'blockly';
 
-var CustomRenderer = function (name) {
-  CustomRenderer.superClass_.constructor.call(this, name)
-}
+const CustomRenderer = function(name) {
+  CustomRenderer.superClass_.constructor.call(this, name);
+};
 
-Blockly.utils.object.inherits(CustomRenderer, Blockly.thrasos.Renderer)
+Blockly.utils.object.inherits(CustomRenderer, Blockly.thrasos.Renderer);
 
-Blockly.blockRendering.register('custom_renderer', CustomRenderer)
+Blockly.blockRendering.register('custom_renderer', CustomRenderer);
 
-Blockly.ToolboxCategory.prototype.addColourBorder_ = function (colour) {
+Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
   if (colour) {
     const border = Blockly.ToolboxCategory.borderWidth + 'px solid ' + (colour || '#ddd');
-    this.rowDiv_.style.color = Blockly.utils.colour.blend((colour || '#ddd'), "#000", 0.75);
+    this.rowDiv_.style.color = Blockly.utils.colour.blend((colour || '#ddd'), '#000', 0.75);
     if (this.workspace_.RTL) {
       this.rowDiv_.style.borderRight = border;
     } else {
       this.rowDiv_.style.borderLeft = border;
     }
   }
-}
+};
 
-var CustomConstantsProvider = function () {
+const CustomConstantsProvider = function() {
   // Set up all of the constants from the base provider.
-  CustomConstantsProvider.superClass_.constructor.call(this)
+  CustomConstantsProvider.superClass_.constructor.call(this);
 
-  this.NOTCH_WIDTH = 15
-  this.NOTCH_HEIGHT = 5
-  this.NOTCH_OFFSET_LEFT = 18.8
+  this.NOTCH_WIDTH = 15;
+  this.NOTCH_HEIGHT = 5;
+  this.NOTCH_OFFSET_LEFT = 18.8;
   // this.NOTCH_OFFSET_LEFT = 10
 
   this.STATEMENT_INPUT_NOTCH_OFFSET = 19;
@@ -38,113 +38,113 @@ var CustomConstantsProvider = function () {
   // this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = 200
   // this.STATEMENT_INPUT_NOTCH_OFFSET
 
-  this.CORNER_RADIUS = 5
+  this.CORNER_RADIUS = 5;
   // this.FIELD_BORDER_RECT_RADIUS = 0
-  this.TAB_WIDTH = 5
-  this.TAB_HEIGHT = 14
+  this.TAB_WIDTH = 5;
+  this.TAB_HEIGHT = 14;
 
   // this.EMPTY_INLINE_INPUT_PADDING = 200
-  this.EXTERNAL_VALUE_INPUT_PADDING = 0
+  this.EXTERNAL_VALUE_INPUT_PADDING = 0;
 
-  this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT * 1.5
-  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = this.DUMMY_INPUT_MIN_HEIGHT
-  this.EMPTY_INLINE_INPUT_HEIGHT = this.TAB_HEIGHT * 1.75
+  this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT * 1.5;
+  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = this.DUMMY_INPUT_MIN_HEIGHT;
+  this.EMPTY_INLINE_INPUT_HEIGHT = this.TAB_HEIGHT * 1.75;
 
-  this.TAB_OFFSET_FROM_TOP = 5
-  this.BETWEEN_STATEMENT_PADDING_Y = 5
+  this.TAB_OFFSET_FROM_TOP = 5;
+  this.BETWEEN_STATEMENT_PADDING_Y = 5;
 
   // this.TAB_VERTICAL_OVERLAP = 800
 
-  this.TRIG_PREV_NEXT = this.makeTriangularPreviousConn()
-  this.TRIG_INPUT_OUTPUT = this.makeTriangularInputConn()
-  this.RECT_INPUT_OUTPUT = this.makeRectInputConn()
+  this.TRIG_PREV_NEXT = this.makeTriangularPreviousConn();
+  this.TRIG_INPUT_OUTPUT = this.makeTriangularInputConn();
+  this.RECT_INPUT_OUTPUT = this.makeRectInputConn();
 
-  this.FIELD_COLOUR_DEFAULT_WIDTH = 22
-  this.FIELD_COLOUR_DEFAULT_HEIGHT = 22
+  this.FIELD_COLOUR_DEFAULT_WIDTH = 22;
+  this.FIELD_COLOUR_DEFAULT_HEIGHT = 22;
 
-  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = 16
-  this.FIELD_BORDER_RECT_HEIGHT = 16
-  this.FIELD_DROPDOWN_COLOURED_DIV = true
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = 16;
+  this.FIELD_BORDER_RECT_HEIGHT = 16;
+  this.FIELD_DROPDOWN_COLOURED_DIV = true;
 
   // this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   this.FIELD_TEXT_FONTWEIGHT = 'bold';
   this.FIELD_TEXT_FONTFAMILY = 'Nunito';
 
-  this.generateSecondaryColour_ = function (inputColour) {
+  this.generateSecondaryColour_ = function(inputColour) {
     return Blockly.utils.colour.blend('#fff', inputColour, 0.3) || inputColour;
-  }
+  };
 
   this.generateTertiaryColour_ = function(inputColour) {
     return Blockly.utils.colour.blend('#fff', inputColour, 0.2) || inputColour;
-  }
-}
+  };
+};
 
 Blockly.utils.object.inherits(CustomConstantsProvider,
-  Blockly.blockRendering.ConstantProvider)
+    Blockly.blockRendering.ConstantProvider);
 
-CustomRenderer.prototype.makeConstants_ = function () {
-  return new CustomConstantsProvider()
-}
+CustomRenderer.prototype.makeConstants_ = function() {
+  return new CustomConstantsProvider();
+};
 
-CustomConstantsProvider.prototype.makeTriangularInputConn = function (e) {
-  var width = this.TAB_WIDTH
-  var height = this.TAB_HEIGHT
+CustomConstantsProvider.prototype.makeTriangularInputConn = function(e) {
+  const width = this.TAB_WIDTH;
+  const height = this.TAB_HEIGHT;
 
   function makeMainPath(up) {
     return Blockly.utils.svgPaths.line(
-      [
-        Blockly.utils.svgPaths.point(-width, up * (height / 2)),
-        Blockly.utils.svgPaths.point(width, up * (height / 2))
+        [
+          Blockly.utils.svgPaths.point(-width, up * (height / 2)),
+          Blockly.utils.svgPaths.point(width, up * (height / 2)),
 
-        // Blockly.utils.svgPaths.point(-width / 2, 0),
-        // Blockly.utils.svgPaths.point(-width, -1 * up * (height / 2)),
-        // Blockly.utils.svgPaths.point(width, -1 * up * (height / 2)),
-        // Blockly.utils.svgPaths.point(width / 2, 0)
+          // Blockly.utils.svgPaths.point(-width / 2, 0),
+          // Blockly.utils.svgPaths.point(-width, -1 * up * (height / 2)),
+          // Blockly.utils.svgPaths.point(width, -1 * up * (height / 2)),
+          // Blockly.utils.svgPaths.point(width / 2, 0)
 
         // Blockly.utils.svgPaths.point(-width, -1 * up * (height / 2)),
         // Blockly.utils.svgPaths.point(width, -1 * up * (height / 2))
-      ])
+        ]);
   }
 
-  var pathUp = makeMainPath(-1)
-  var pathDown = makeMainPath(1)
+  const pathUp = makeMainPath(-1);
+  const pathDown = makeMainPath(1);
 
   return {
     width: width,
     height: height,
     pathDown: pathDown,
-    pathUp: pathUp
-  }
-}
+    pathUp: pathUp,
+  };
+};
 
-CustomConstantsProvider.prototype.makeRectInputConn = function (e) {
-  var width = this.TAB_WIDTH
-  var height = this.TAB_HEIGHT
+CustomConstantsProvider.prototype.makeRectInputConn = function(e) {
+  const width = this.TAB_WIDTH;
+  const height = this.TAB_HEIGHT;
 
   function makeMainPath(up) {
     return Blockly.utils.svgPaths.line(
-      [
-        Blockly.utils.svgPaths.point(-width, up * (0)),
-        Blockly.utils.svgPaths.point(0, up * (height)),
-        Blockly.utils.svgPaths.point(width, up * (0))
-      ])
+        [
+          Blockly.utils.svgPaths.point(-width, up * (0)),
+          Blockly.utils.svgPaths.point(0, up * (height)),
+          Blockly.utils.svgPaths.point(width, up * (0)),
+        ]);
   }
 
-  var pathUp = makeMainPath(-1)
-  var pathDown = makeMainPath(1)
+  const pathUp = makeMainPath(-1);
+  const pathDown = makeMainPath(1);
 
   return {
     width: width,
     height: height,
     pathDown: pathDown,
-    pathUp: pathUp
-  }
-}
+    pathUp: pathUp,
+  };
+};
 
-CustomConstantsProvider.prototype.makeTriangularPreviousConn = function () {
-  var width = this.NOTCH_WIDTH
-  var height = this.NOTCH_HEIGHT
+CustomConstantsProvider.prototype.makeTriangularPreviousConn = function() {
+  const width = this.NOTCH_WIDTH;
+  const height = this.NOTCH_HEIGHT;
 
   /**
    * Since previous and next connections share the same shape
@@ -152,27 +152,27 @@ CustomConstantsProvider.prototype.makeTriangularPreviousConn = function () {
    */
   function makeMainPath(dir) {
     return Blockly.utils.svgPaths.line(
-      [
+        [
         // Blockly.utils.svgPaths.point(0, height),
         // Blockly.utils.svgPaths.point(dir * width, 0),
         // Blockly.utils.svgPaths.point(0, -height)
-        Blockly.utils.svgPaths.point(dir * width / 2, height),
-        // Blockly.utils.svgPaths.point(dir * width, 0),
-        Blockly.utils.svgPaths.point(dir * width / 2, -height)
-      ])
+          Blockly.utils.svgPaths.point(dir * width / 2, height),
+          // Blockly.utils.svgPaths.point(dir * width, 0),
+          Blockly.utils.svgPaths.point(dir * width / 2, -height),
+        ]);
   }
-  var pathLeft = makeMainPath(1)
-  var pathRight = makeMainPath(-1)
+  const pathLeft = makeMainPath(1);
+  const pathRight = makeMainPath(-1);
 
   return {
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
-  }
-}
+    pathRight: pathRight,
+  };
+};
 
-CustomConstantsProvider.prototype.shapeFor = function (connection) {
+CustomConstantsProvider.prototype.shapeFor = function(connection) {
   // var checks = connection.getCheck();
 
   let checks = connection.getCheck();
@@ -189,9 +189,9 @@ CustomConstantsProvider.prototype.shapeFor = function (connection) {
       // console.log(connection.getSourceBlock().getOutputShape())
 
       if (checks && checks.includes('Boolean')) {
-        return this.RECT_INPUT_OUTPUT
+        return this.RECT_INPUT_OUTPUT;
       }
-      return this.TRIG_INPUT_OUTPUT
+      return this.TRIG_INPUT_OUTPUT;
 
       // TODO: make outputShape, like in zelos renderer
       // outputShape = connection.getSourceBlock().getOutputShape();
@@ -220,10 +220,10 @@ CustomConstantsProvider.prototype.shapeFor = function (connection) {
 
     case Blockly.PREVIOUS_STATEMENT:
     case Blockly.NEXT_STATEMENT:
-      return this.TRIG_PREV_NEXT
+      return this.TRIG_PREV_NEXT;
     default:
-      throw Error('Unknown connection type')
+      throw Error('Unknown connection type');
   }
-}
+};
 
 // TODO: replace prompt dialogs - https://developers.google.com/blockly/reference/js/Blockly.dialog?hl=en

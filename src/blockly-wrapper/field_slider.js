@@ -128,7 +128,7 @@ export class FieldSlider extends Blockly.FieldNumber {
     this.sliderInput_ = sliderInput;
 
     this.boundEvents_.push(Blockly.browserEvents.conditionalBind(
-      sliderInput, 'input', this, this.onSliderChange_));
+        sliderInput, 'input', this, this.onSliderChange_));
 
     return wrapper;
   }
@@ -169,29 +169,28 @@ export class FieldSlider extends Blockly.FieldNumber {
    * @protected
    * @override
    */
-    widgetCreate_() {
-      const aria = Blockly.utils.aria;
-      const htmlInput = super.widgetCreate_();
+  widgetCreate_() {
+    const aria = Blockly.utils.aria;
+    const htmlInput = super.widgetCreate_();
 
-      // Set the accessibility state
-      if (this.min_ > -Infinity) {
-        aria.setState(htmlInput, aria.State.VALUEMIN, this.min_);
-      }
-      if (this.max_ < Infinity) {
-        aria.setState(htmlInput, aria.State.VALUEMAX, this.max_);
-      }
-
-      htmlInput.setAttribute("type", "number");
-      htmlInput.setAttribute("pattern", "\d*");
-      htmlInput.focus();
-      htmlInput.select();
-
-      // htmlInput.selectionStart = htmlInput.selectionEnd = htmlInput.value.length;
-
-      // type="text" pattern="\d*"
-      return htmlInput;
+    // Set the accessibility state
+    if (this.min_ > -Infinity) {
+      aria.setState(htmlInput, aria.State.VALUEMIN, this.min_);
+    }
+    if (this.max_ < Infinity) {
+      aria.setState(htmlInput, aria.State.VALUEMAX, this.max_);
     }
 
+    htmlInput.setAttribute('type', 'number');
+    htmlInput.setAttribute('pattern', '\d*');
+    htmlInput.focus();
+    htmlInput.select();
+
+    // htmlInput.selectionStart = htmlInput.selectionEnd = htmlInput.value.length;
+
+    // type="text" pattern="\d*"
+    return htmlInput;
+  }
 }
 
 Blockly.fieldRegistry.register('field_slider', FieldSlider);

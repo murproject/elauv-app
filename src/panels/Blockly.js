@@ -1,23 +1,23 @@
-import App from "/src/App.js";
+import App from '/src/App.js';
 
-import Panel from './Panel'
+import Panel from './Panel';
 import Button from '/src/components/Button';
 
-import * as Blockly from 'blockly/core'
-import * as Ru from 'blockly/msg/ru'
+import * as Blockly from 'blockly/core';
+import * as Ru from 'blockly/msg/ru';
 
 import 'blockly/blocks';
 import 'blockly/javascript';
-import BlocklyLua from 'blockly/lua'
+import BlocklyLua from 'blockly/lua';
 
 // import Backpack from '@blockly/workspace-backpack';
 import * as Backpack from '../blockly-wrapper/workspace-backpack/src';
 
-import MurToolbox from '../blockly-wrapper/Toolbox'
-import '../blockly-wrapper/BlocklyStyle'
+import MurToolbox from '../blockly-wrapper/Toolbox';
+import '../blockly-wrapper/BlocklyStyle';
 
-import mur from '../vehicle/apiGameMur'
-import ProjectsStorage from "/src/utils/ProjectsStorage";
+import mur from '../vehicle/apiGameMur';
+import ProjectsStorage from '/src/utils/ProjectsStorage';
 
 
 const blocklyConfig = {
@@ -25,7 +25,7 @@ const blocklyConfig = {
     spacing: 26,
     length: 2,
     colour: '#ccc',
-    snap: true
+    snap: true,
   },
   zoom: {
     controls: true,
@@ -38,7 +38,7 @@ const blocklyConfig = {
   },
   move: {
     drag: true,
-    wheel: true
+    wheel: true,
   },
   scrollbars: true,
   media: 'blockly-media/',
@@ -47,23 +47,21 @@ const blocklyConfig = {
   horizontalLayout: true,
   collapse: false, // вкл/выкл пункт контекстного меню свернуть/развернуть блоки
   toolbox: MurToolbox,
-}
+};
 
 export default class BlocklyPanel extends Panel {
-
   onActiveChanged() {
     if (this.toolButtons) {
       if (this.active) {
-        this.toolButtons.classList.remove("hidden");
+        this.toolButtons.classList.remove('hidden');
 
         if (this.scriptStatus == 'running') {
-          document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
+          document.querySelector('#flying-panel-wrapper').classList.remove('hidden'); // TODO //
         } else {
-          document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
+          document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
         }
-
       } else {
-        this.toolButtons.classList.add("hidden");
+        this.toolButtons.classList.add('hidden');
         if (this.workspace) {
           Blockly.hideChaff();
         }
@@ -78,10 +76,10 @@ export default class BlocklyPanel extends Panel {
     this.container.classList.add('background-white');
     this.container.classList.add('round-top');
 
-    this.toolButtons = document.createElement("div");
-    this.toolButtons.classList.add("buttons-group");
-    this.toolButtons.id = "buttons-blockly";
-    document.querySelector("#head").appendChild(this.toolButtons);
+    this.toolButtons = document.createElement('div');
+    this.toolButtons.classList.add('buttons-group');
+    this.toolButtons.id = 'buttons-blockly';
+    document.querySelector('#head').appendChild(this.toolButtons);
 
     this.onActiveChanged();
     this.makeActionButtons();
@@ -92,17 +90,16 @@ export default class BlocklyPanel extends Panel {
     this.scriptWorker = null;
 
 
-
     // TODO: move locale overrides?
-    Ru["CLEAN_UP"] = "Упорядочить блоки";
-    Ru["PROCEDURE_VARIABLE"] = "аргументом";
-    Ru["MATH_RANDOM_INT_TITLE"] = "случайное число от %1 до %2";
+    Ru['CLEAN_UP'] = 'Упорядочить блоки';
+    Ru['PROCEDURE_VARIABLE'] = 'аргументом';
+    Ru['MATH_RANDOM_INT_TITLE'] = 'случайное число от %1 до %2';
 
-    Ru["CONTROLS_REPEAT_INPUT_DO"] = "";
-    Ru["CONTROLS_FOREACH_INPUT_DO"] = "";
-    Ru["CONTROLS_FOR_INPUT_DO"] = "";
-    Ru["CONTROLS_IF_MSG_THEN"] = "";
-    Ru["CONTROLS_WHILEUNTIL_INPUT_DO"] = "";
+    Ru['CONTROLS_REPEAT_INPUT_DO'] = '';
+    Ru['CONTROLS_FOREACH_INPUT_DO'] = '';
+    Ru['CONTROLS_FOR_INPUT_DO'] = '';
+    Ru['CONTROLS_IF_MSG_THEN'] = '';
+    Ru['CONTROLS_WHILEUNTIL_INPUT_DO'] = '';
 
     // Ru["CONTROLS_IF_MSG_IF"] = "?";
     // Ru["CONTROLS_IF_MSG_THEN"] = "✓";
@@ -115,7 +112,7 @@ export default class BlocklyPanel extends Panel {
     // Ru["COLOUR_RGB_RED"] = "R";
     // Ru["COLOUR_RGB_GREEN"] = "G";
     // Ru["COLOUR_RGB_BLUE"] = "B";
-    Ru["MATH_SUBTRACTION_SYMBOL"] = "−";
+    Ru['MATH_SUBTRACTION_SYMBOL'] = '−';
 
     Ru['COPY_ALL_TO_BACKPACK'] = 'Копировать все блоки в рюкзак';
     Ru['COPY_TO_BACKPACK'] = 'Копировать в рюказ';
@@ -123,7 +120,7 @@ export default class BlocklyPanel extends Panel {
     Ru['PASTE_ALL_FROM_BACKPACK'] = 'Вставить всё из рюкзака';
     Ru['REMOVE_FROM_BACKPACK'] = 'Удалить из рюкзака';
 
-    Blockly.setLocale(Ru)
+    Blockly.setLocale(Ru);
 
     Blockly.JavaScript.addReservedWords('mur');
 
@@ -139,8 +136,8 @@ export default class BlocklyPanel extends Panel {
     // this.loadingDiv.classList.add("loading-wrapper");
     // this.container.appendChild(this.loadingDiv);
 
-    this.blocklyDiv = document.createElement("div");
-    this.blocklyDiv.id = "blocklyDiv";
+    this.blocklyDiv = document.createElement('div');
+    this.blocklyDiv.id = 'blocklyDiv';
     this.container.appendChild(this.blocklyDiv);
 
     this.stateOfUndo = {
@@ -148,7 +145,7 @@ export default class BlocklyPanel extends Panel {
       redo: undefined,
       savedUndoStack: [],
       savedRedoStack: [],
-    }
+    };
 
     this.reinject(false);
 
@@ -175,17 +172,17 @@ export default class BlocklyPanel extends Panel {
     this.actionButtons = {};
 
     const actions = [
-      { spacer: true },
-      { func: this.undo,      name: 'undo',     icon: 'undo',},
-      { func: this.redo,      name: 'redo',     icon: 'redo',},
-      { spacer: true },
-      { func: this.run,       name: 'run',      icon: 'play'},
+      {spacer: true},
+      {func: this.undo, name: 'undo', icon: 'undo'},
+      {func: this.redo, name: 'redo', icon: 'redo'},
+      {spacer: true},
+      {func: this.run, name: 'run', icon: 'play'},
       // { func: this.example,   name: 'example',  icon: 'star',},
       // { func: this.load,      name: 'load',     icon: 'file-upload',},
-      { func: this.save,      name: 'save',     icon: 'content-save',},
+      {func: this.save, name: 'save', icon: 'content-save'},
     ];
 
-    actions.forEach(action => {
+    actions.forEach((action) => {
       let actionButton = null;
 
       if (!('spacer' in action && action.spacer == true)) {
@@ -198,13 +195,13 @@ export default class BlocklyPanel extends Panel {
           iconColor: 'blue-dark',
           iconClasses: 'big',
           enabled: true,
-          timeout: 25
+          timeout: 25,
         });
       } else {
         actionButton = new Button({
           name: 'spacer',
           text: '',
-          type: 'panel-spacer'
+          type: 'panel-spacer',
         });
       }
 
@@ -228,9 +225,9 @@ export default class BlocklyPanel extends Panel {
       if (event.type === 'backpack_open') {
         if (this.backpack.isOpen() && this.backpack.getCount() === 0) {
           // console.log(this.backpack.flyout_);
-          this.backpackEmptyNotify.classList.remove("hidden")
+          this.backpackEmptyNotify.classList.remove('hidden');
         } else {
-          this.backpackEmptyNotify.classList.add("hidden")
+          this.backpackEmptyNotify.classList.add('hidden');
         }
       }
 
@@ -248,7 +245,7 @@ export default class BlocklyPanel extends Panel {
 
     const delta = (Date.now() - this.lastEditTime);
 
-    if (this.scriptStatus !== "running" && (delta > 500)) {
+    if (this.scriptStatus !== 'running' && (delta > 500)) {
       ProjectsStorage.projects.current.autosaved = false;
       this.lastEditTime = Date.now();
     }
@@ -261,8 +258,8 @@ export default class BlocklyPanel extends Panel {
     if (force === true) {
       this.stateOfUndo.undo = false;
       this.stateOfUndo.redo = false;
-      this.actionButtons.undo.setEnabled(false)
-      this.actionButtons.redo.setEnabled(false)
+      this.actionButtons.undo.setEnabled(false);
+      this.actionButtons.redo.setEnabled(false);
       return;
     }
 
@@ -288,12 +285,12 @@ export default class BlocklyPanel extends Panel {
 
     if (this.stateOfUndo.undo !== newStateUndo) {
       this.stateOfUndo.undo = newStateUndo;
-      this.actionButtons.undo.setEnabled(newStateUndo)
+      this.actionButtons.undo.setEnabled(newStateUndo);
     }
 
     if (this.stateOfUndo.redo !== newStateRedo) {
       this.stateOfUndo.redo = newStateRedo;
-      this.actionButtons.redo.setEnabled(newStateRedo)
+      this.actionButtons.redo.setEnabled(newStateRedo);
     }
   }
 
@@ -310,7 +307,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   updatePuzzleIcon(forced = false) {
-    if (this.scriptStatus !== "running") {
+    if (this.scriptStatus !== 'running') {
       const autosavedLongAgo = (Date.now() - ProjectsStorage.projects.autosaved.date) > 2000;
       const autosaved = ProjectsStorage.projects.current.autosaved;
       const newPuzzleIcon = this.wasTouched && !autosaved ? 'puzzle-edit' :
@@ -326,14 +323,14 @@ export default class BlocklyPanel extends Panel {
   }
 
   generate_code(workspace) {
-    Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_threadId, %1);\n'
-    var code = Blockly.JavaScript.workspaceToCode(workspace)
+    Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_threadId, %1);\n';
+    const code = Blockly.JavaScript.workspaceToCode(workspace);
 
-    return code
+    return code;
   }
 
   run() {
-    console.log("status = " + this.scriptStatus);
+    console.log('status = ' + this.scriptStatus);
     if (this.scriptStatus == 'running') {
       this.setLoading(true, 0);
       setTimeout(() => this.stop(), 100);
@@ -344,22 +341,22 @@ export default class BlocklyPanel extends Panel {
     }
 
     // TODO: better interaction with console
-    document.querySelector('#flying-panel-wrapper').classList.remove("hidden"); // TODO //
+    document.querySelector('#flying-panel-wrapper').classList.remove('hidden'); // TODO //
   }
 
   stop() {
     this.collapse(false);
-    document.querySelector('#flying-panel-wrapper').classList.add("hidden"); // TODO //
+    document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
     // this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'blue-dark', 'big');
-    this.scriptStatus = 'stopped'
+    this.scriptStatus = 'stopped';
 
     App.panels.console.clear();
     // this.userData = {};
     // this.variablesDiv.innerText = '';
 
     if (this.scriptWorker) {
-      this.scriptWorker.terminate()
+      this.scriptWorker.terminate();
     }
 
     // TODO: make function to return empty context! (in mur)
@@ -379,7 +376,7 @@ export default class BlocklyPanel extends Panel {
       }
     }, 100);
 
-    this.workspace.highlightBlock(null)
+    this.workspace.highlightBlock(null);
     this.reinject(false);
     this.updatePuzzleIcon(true);
     this.setLoading(false, 100);
@@ -434,7 +431,7 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (blocksToLoad) {
-      Blockly.serialization.workspaces.load(blocksToLoad, this.workspace)
+      Blockly.serialization.workspaces.load(blocksToLoad, this.workspace);
     }
 
     // this.workspace.trashcan.emptyContents();
@@ -450,7 +447,7 @@ export default class BlocklyPanel extends Panel {
   example() {
     // TODO: delete this method
     // console.log(this);
-    Blockly.serialization.workspaces.load(example_code, this.workspace)
+    Blockly.serialization.workspaces.load(example_code, this.workspace);
   }
 
   resetContext(ledsPower = 0) {
@@ -469,17 +466,17 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_lua() {
-    BlocklyLua.STATEMENT_PREFIX = 'h(%1)\n'
-    this.code = BlocklyLua.workspaceToCode(this.workspace)
+    BlocklyLua.STATEMENT_PREFIX = 'h(%1)\n';
+    this.code = BlocklyLua.workspaceToCode(this.workspace);
 
-    this.codeBlockIds = []
-    const regexpBlockId = new RegExp(/^ *h\('(.*)'\)$/, 'gm')
+    this.codeBlockIds = [];
+    const regexpBlockId = new RegExp(/^ *h\('(.*)'\)$/, 'gm');
     // var result
 
     this.code = this.code.replace(regexpBlockId, ($0, $1) => {
-      this.codeBlockIds.push($1)
-      return `h('${this.codeBlockIds.length - 1}')`
-    })
+      this.codeBlockIds.push($1);
+      return `h('${this.codeBlockIds.length - 1}')`;
+    });
 
     // console.log(this.code)
 
@@ -491,7 +488,7 @@ export default class BlocklyPanel extends Panel {
     // }
 
     // console.log(this.codeBlockIds)
-    mur.controlScriptRun({ script: this.code })
+    mur.controlScriptRun({script: this.code});
 
     // TODO: disable editing while executing
   }
@@ -500,7 +497,7 @@ export default class BlocklyPanel extends Panel {
     this.setIcon('cog', 'blue-dark anim-spin');
     this.actionButtons.run.setIcon('stop', 'blue-dark', 'big');
 
-    this.scriptStatus = 'running'
+    this.scriptStatus = 'running';
 
     ////////
 
@@ -533,7 +530,7 @@ export default class BlocklyPanel extends Panel {
     ////////
 
     // console.warn("workspaceToCode(workspace)")
-    this.code = this.generate_code(this.workspace)
+    this.code = this.generate_code(this.workspace);
     // console.log(this.code)
     // TODO: this.code is unused!
 
@@ -548,27 +545,27 @@ export default class BlocklyPanel extends Panel {
     // checkUndoRedo(true);
 
     if (this.scriptWorker != null) {
-      this.scriptWorker.terminate()
+      this.scriptWorker.terminate();
     }
 
-    this.scriptWorker = new Worker('/js/interpreter.js', { type: 'module' })
+    this.scriptWorker = new Worker('/js/interpreter.js', {type: 'module'});
     this.scriptWorker.onmessage = (e) => this.workerMsgHandler(e);
 
-    var json = Blockly.serialization.workspaces.save(this.workspace)
+    const json = Blockly.serialization.workspaces.save(this.workspace);
 
     // Store top blocks separately, and remove them from the JSON.
     if (!json.blocks) {
       // TODO: emit stop?
-      return
+      return;
     }
 
-    var blocks = json.blocks.blocks
-    var topBlocks = blocks.slice() // Create shallow copy.
-    blocks.length = 0
+    const blocks = json.blocks.blocks;
+    const topBlocks = blocks.slice(); // Create shallow copy.
+    blocks.length = 0;
 
     // Load each block into the workspace individually and generate code.
-    var allCode = []
-    this.allRootBlocks = []
+    const allCode = [];
+    this.allRootBlocks = [];
     // let variablesDeclaration = '/* MUR: User variables begin */\n\n'
     // userVariables.forEach(item => {
     //   variablesDeclaration += `var ${Blockly.Names.prototype.safeName_(item)};\n`;
@@ -576,13 +573,13 @@ export default class BlocklyPanel extends Panel {
     // variablesDeclaration += '\n/* End of user variables */\n\n';
     // allCode.push(variablesDeclaration);
 
-    var headless = new Blockly.Workspace()
+    const headless = new Blockly.Workspace();
 
-    topBlocks.forEach(block => {
+    topBlocks.forEach((block) => {
       // blocks.push(block)
-      this.allRootBlocks.push(block)
-      Blockly.serialization.workspaces.load(json, headless)
-      allCode.push(this.generate_code(headless))
+      this.allRootBlocks.push(block);
+      Blockly.serialization.workspaces.load(json, headless);
+      allCode.push(this.generate_code(headless));
       // blocks.length = 0
       // console.warn("gen from block");
       // console.log(block);
@@ -597,18 +594,18 @@ export default class BlocklyPanel extends Panel {
       return `
       <g id="execution-cursor-${id}" style="display: block;" opacity="0%">
         <image xlink:href="mdi/arrow-cursor-execution.svg" width="42" height="42"/>
-      </g>`
+      </g>`;
     }
 
     for (const blockNum in this.allRootBlocks) {
     // this.allRootBlocks.forEach(block => {
-      const key = this.allRootBlocks[blockNum].id
+      const key = this.allRootBlocks[blockNum].id;
       if (!(key in this.executionCursors)) {
-        document.querySelector(".blocklyBlockCanvas").innerHTML += makeCursorHtml(blockNum);
+        document.querySelector('.blocklyBlockCanvas').innerHTML += makeCursorHtml(blockNum);
       }
     }
 
-    document.querySelector(".blocklyBlockCanvas").innerHTML += makeCursorHtml('glob');
+    document.querySelector('.blocklyBlockCanvas').innerHTML += makeCursorHtml('glob');
 
     for (const blockNum in this.allRootBlocks) { // need to query elements again after altering .blocklyBlockCanvas!
       const block = this.allRootBlocks[blockNum];
@@ -617,13 +614,13 @@ export default class BlocklyPanel extends Panel {
       // TODO: fill executionCursors AFTER??
     }
 
-    this.executionCursors["-1"] = document.querySelector(`#execution-cursor-glob`);
+    this.executionCursors['-1'] = document.querySelector(`#execution-cursor-glob`);
 
     // console.warn("EXECUTION CURSORS:");
     // console.log(this.executionCursors);
 
-    let threadsDict = {};
-    let threadsList = [];
+    const threadsDict = {};
+    const threadsList = [];
 
     for (const blockNum in this.allRootBlocks) {
       const block = this.allRootBlocks[blockNum];
@@ -640,8 +637,8 @@ export default class BlocklyPanel extends Panel {
 
     this.scriptWorker.postMessage({ // TODO: copypasta
       type: 'telemetry',
-      telemetry: JSON.parse(JSON.stringify(mur.telemetry))
-    })
+      telemetry: JSON.parse(JSON.stringify(mur.telemetry)),
+    });
 
     this.setLoading(false, 100);
 
@@ -652,7 +649,7 @@ export default class BlocklyPanel extends Panel {
         scripts: [this.code], // TODO //
         threads: threadsList,
         // userVariables: userVariables,
-      })
+      });
     }, 500);
 
     // this.loadingDiv.classList.remove('active');
@@ -662,8 +659,8 @@ export default class BlocklyPanel extends Panel {
     if (this.scriptStatus === 'running') {
       this.scriptWorker.postMessage({
         type: 'telemetry',
-        telemetry: JSON.parse(JSON.stringify(telemetry)) // TODO: should do it in better way
-      })
+        telemetry: JSON.parse(JSON.stringify(telemetry)), // TODO: should do it in better way
+      });
     }
   }
 
@@ -693,14 +690,14 @@ export default class BlocklyPanel extends Panel {
       - hide toolbox with css
   */
 
-  reinject (readonly = false) {
+  reinject(readonly = false) {
     this.lastEditTime = Date.now();
 
     this.executionCursors = {};
 
     if (this.workspace) {
-      this.workspaceBlocks = Blockly.serialization.workspaces.save(this.workspace)
-      this.workspace.dispose()
+      this.workspaceBlocks = Blockly.serialization.workspaces.save(this.workspace);
+      this.workspace.dispose();
     }
 
     if (readonly) {
@@ -713,7 +710,7 @@ export default class BlocklyPanel extends Panel {
     blocklyConfig.zoom.controls = !readonly;
     blocklyConfig.zoom.wheel = !readonly;
     blocklyConfig.zoom.pinch = !readonly;
-    blocklyConfig.grid.colour = readonly ? "#fff" : "#ccc";
+    blocklyConfig.grid.colour = readonly ? '#fff' : '#ccc';
 
     blocklyConfig.move.drag = !readonly;
     blocklyConfig.move.wheel = !readonly;
@@ -723,15 +720,15 @@ export default class BlocklyPanel extends Panel {
     Blockly.svgResize(this.workspace);
 
     if (this.workspaceBlocks) {
-      Blockly.serialization.workspaces.load(this.workspaceBlocks, this.workspace)
+      Blockly.serialization.workspaces.load(this.workspaceBlocks, this.workspace);
     }
 
-    this.autoZoom()
+    this.autoZoom();
 
     if (readonly) {
-      document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.add('hidden'));
     } else {
-      document.querySelectorAll(".blocklyMainWorkspaceScrollbar").forEach(el => el.classList.remove("hidden"));
+      document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.remove('hidden'));
     }
 
     if (!readonly) {
@@ -750,7 +747,9 @@ export default class BlocklyPanel extends Panel {
       this.stateOfUndo.savedRedoStack = [];
     }
 
-    this.workspace.addChangeListener(event => { this.onWorkspaceChange(event) });
+    this.workspace.addChangeListener((event) => {
+      this.onWorkspaceChange(event);
+    });
     // this.checkUndoRedo(false);
 
     if (!readonly) {
@@ -760,7 +759,7 @@ export default class BlocklyPanel extends Panel {
 
       this.backpack.onDropOriginal = this.backpack.onDrop;
       this.backpack.onDrop = (block) => { // TODO: move to separate function
-        this.backpack.onDropOriginal(block)
+        this.backpack.onDropOriginal(block);
 
         setTimeout(() => {
           const undoStack = this.workspace.getUndoStack();
@@ -768,41 +767,40 @@ export default class BlocklyPanel extends Panel {
             this.workspace.undo();
           } else {
             const blockSize = block.getHeightWidth();
-            block.moveBy(-blockSize.width,0)
+            block.moveBy(-blockSize.width, 0);
           }
         }, 150);
 
-        const backpackEl = document.getElementsByClassName("blocklyBackpack")[0];
-        setTimeout(() => backpackEl.classList.add("bounce-once"), 200);
-        setTimeout(() => backpackEl.classList.remove("bounce-once"), 1000);
-      }
+        const backpackEl = document.getElementsByClassName('blocklyBackpack')[0];
+        setTimeout(() => backpackEl.classList.add('bounce-once'), 200);
+        setTimeout(() => backpackEl.classList.remove('bounce-once'), 1000);
+      };
 
-      this.backpackEmptyNotify = document.createElement("div");
-      this.backpackEmptyNotify.classList.add("backpack-empty-notify");
-      this.backpackEmptyNotify.classList.add("hidden")
-      this.backpackEmptyNotify.innerHTML = "Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>использовать их в других проектах!";
+      this.backpackEmptyNotify = document.createElement('div');
+      this.backpackEmptyNotify.classList.add('backpack-empty-notify');
+      this.backpackEmptyNotify.classList.add('hidden');
+      this.backpackEmptyNotify.innerHTML = 'Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>использовать их в других проектах!';
 
       this.backpack.initFlyoutOriginal = this.backpack.initFlyout_;
       this.backpack.initFlyout_ = () => {
         this.backpack.initFlyoutOriginal();
         this.backpack.flyout_.svgGroup_.parentElement.appendChild(this.backpackEmptyNotify);
-      }
+      };
 
       this.backpack.init();
       this.backpack.setContents(ProjectsStorage.projects.backpack);
-
     }
   }
 
   workerMsgHandler(e) {
-    const data = Object.assign({}, e.data)
+    const data = Object.assign({}, e.data);
 
     if (!('type' in data)) {
-      return
+      return;
     }
 
     if (data.type === 'mur.h') {
-      const blocks = data.blocks
+      const blocks = data.blocks;
 
       for (const key in blocks) {
         if (key !== 'null') {
@@ -821,22 +819,21 @@ export default class BlocklyPanel extends Panel {
             const x = blockXY.x - 14;
             const y = blockXY.y - 10;
 
-            this.executionCursors[key].setAttribute("transform", `translate(${x},${y})`);
-            this.executionCursors[key].setAttribute("opacity", `${blockTime}%`);
+            this.executionCursors[key].setAttribute('transform', `translate(${x},${y})`);
+            this.executionCursors[key].setAttribute('opacity', `${blockTime}%`);
 
             // console.log(`Setting cursor "${key}" with block "${blockId}", html-id: ${this.executionCursors[key].id}`);
           } else {
-            this.executionCursors[key].setAttribute("opacity", `0%`);
+            this.executionCursors[key].setAttribute('opacity', `0%`);
             // console.log(`Setting cursor "${key}" as EMPTY`);
           }
         }
-
       }
       return;
     }
 
     if (data.type === 'context') {
-      const ctx = data.context
+      const ctx = data.context;
 
       const paramsContext = {
         direct_power: ctx.motor_powers,
@@ -846,14 +843,14 @@ export default class BlocklyPanel extends Panel {
         target_yaw: ctx.target_yaw, // TODO
         actuator_power: ctx.actuators,
         leds: ctx.leds,
-      }
+      };
 
       // console.log(JSON.stringify(paramsContext, null, ' '));
 
       // TODO: fill context correctly in inpertreter and don't fill it here
 
-      mur.context = paramsContext // TODO: move context to global scope?
-      mur.controlContext(paramsContext)
+      mur.context = paramsContext; // TODO: move context to global scope?
+      mur.controlContext(paramsContext);
 
       // App.panels.telemetry.updateStats("");
     }
@@ -862,7 +859,7 @@ export default class BlocklyPanel extends Panel {
       // this.scriptStatus = data.state;
       // TODO: inform user on script stop?
       if (data.state === 'done') {
-        console.log('script done')
+        console.log('script done');
 
         if (this.scriptWorker) {
           this.scriptWorker.terminate();
@@ -879,7 +876,7 @@ export default class BlocklyPanel extends Panel {
       // }
       // console.warn("thread end");
       // console.warn(data.id)
-      this.executionCursors[data.id].children[0].setAttribute('xlink:href', 'mdi/arrow-cursor-execution-off.svg')
+      this.executionCursors[data.id].children[0].setAttribute('xlink:href', 'mdi/arrow-cursor-execution-off.svg');
     }
 
     if (data.type === 'print') {
@@ -890,5 +887,4 @@ export default class BlocklyPanel extends Panel {
 
     // e = null
   }
-
 }

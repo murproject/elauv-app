@@ -1,9 +1,8 @@
-import App from "/src/App.js";
+import App from '/src/App.js';
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 
 export default class Panel {
-
   constructor() {
     this.name = this.constructor.name;
     this.html = ``;
@@ -19,12 +18,12 @@ export default class Panel {
   begin() {}
 
   inject() {
-    const wrapperPrefix = this.isBottomPanel ? "bottom" : "main"
+    const wrapperPrefix = this.isBottomPanel ? 'bottom' : 'main';
     this.wrapperPanel = document.querySelector(`#${wrapperPrefix}-panel-wrapper`);
     this.wrapperButtons = document.querySelector(`#buttons-${wrapperPrefix}`);
 
-    this.container = document.createElement("div");
-    this.container.classList.add("panel");
+    this.container = document.createElement('div');
+    this.container.classList.add('panel');
     this.container.innerHTML = this.html;
     this.wrapperPanel.appendChild(this.container);
 
@@ -35,10 +34,10 @@ export default class Panel {
       iconClasses: 'big',
       action: () => {
         setTimeout(
-          () => App.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main'),
-          50
+            () => App.panelSelect(this, this.isBottomPanel ? 'bottom' : 'main'),
+            50,
         );
-      }
+      },
     });
 
     if (this.wrapperButtons && this.addTab) {
@@ -69,7 +68,9 @@ export default class Panel {
   onActiveChanged(isActive) {}
 
   setInterval(func, timeout) {
-    return window.setInterval(() => { this[func.name]() }, timeout);
+    return window.setInterval(() => {
+      this[func.name]();
+    }, timeout);
   }
 
   setIcon(name, color = 'blue-dark', modifier='') {
@@ -90,5 +91,4 @@ export default class Panel {
       this.container.classList.remove('active');
     }
   }
-
 }

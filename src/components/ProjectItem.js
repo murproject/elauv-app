@@ -1,6 +1,6 @@
-import Element from './Element.js'
-import Icon from '/src/components/Icon'
-import Utils from "/src/utils/Utils";
+import Element from './Element.js';
+import Icon from '/src/components/Icon';
+import Utils from '/src/utils/Utils';
 
 const icons = {
   project:        Icon('puzzle', 'opacity-50'),
@@ -18,7 +18,7 @@ export default class ProjectListItem extends Element {
   }
 
   static get tag() {
-    return 'project-list-item'
+    return 'project-list-item';
   }
 
   init() {
@@ -65,7 +65,6 @@ export default class ProjectListItem extends Element {
       <br><br>
     `;
   }
-
 }
 
 ProjectListItem.register();

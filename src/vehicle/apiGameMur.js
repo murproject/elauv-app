@@ -1,14 +1,14 @@
-import Protocol from './protocolGameMur'
+import Protocol from './protocolGameMur';
 
-let transport = null
+let transport = null;
 
 if (typeof cordova !== 'undefined') {
-  transport = require('./transportBluetooth').default
+  transport = require('./transportBluetooth').default;
 } else {
-  transport = require('./transportWebsocket').default
+  transport = require('./transportWebsocket').default;
 }
 
-const zeroPad = (num, places) => String(num).padStart(places, '0')
+const zeroPad = (num, places) => String(num).padStart(places, '0');
 
 
 export default {
@@ -20,7 +20,7 @@ export default {
   page: 'api',
   url: null,
   conn: transport,
-  telemetry: { timestamp: 0 },
+  telemetry: {timestamp: 0},
   formattedTelemetry: {},
   precision: 2,
   status: 'connecting',
@@ -40,64 +40,64 @@ export default {
   onStatusUpdated: (status) => {},
   onDiscard: () => {},
 
-  create: function () {
+  create: function() {
     this.protocol.fillParsers();
 
-    this.conn.start()
+    this.conn.start();
 
     this.conn.onClose = (event) => {
-      this.telemetry = { timestamp: 0 }
-      setTimeout(() => this.connect(), 1000)
-    }
+      this.telemetry = {timestamp: 0};
+      setTimeout(() => this.connect(), 1000);
+    };
 
     this.conn.onScan = (event) => {
-      this.updateStatus()
-    }
+      this.updateStatus();
+    };
 
     this.conn.onOpen = (event) => {
-      this.updateStatus()
+      this.updateStatus();
       // EventBus.$emit('notify', { text: 'Установлено подключение' })
-    }
+    };
 
     // setTimeout(() => {
     //   this.reconnecting = false
     //   this.updateStatus()
     // }, 250)
 
-    const mur = this
+    const mur = this;
 
     // this.connect();
 
     this.conn.onMessage = (event) => {
       event.data.arrayBuffer().then((buf) => {
-        const raw = new Uint8Array(buf)
-        const packets = Protocol.splitBufferToPackets(raw)
-        packets.forEach(packet => mur.handlePacket(packet));
-      })
-    }
+        const raw = new Uint8Array(buf);
+        const packets = Protocol.splitBufferToPackets(raw);
+        packets.forEach((packet) => mur.handlePacket(packet));
+      });
+    };
 
     this.reconnectTimer = setInterval(() => {
-      const date = new Date()
+      const date = new Date();
       if (this.conn.state == 'scanning') {
         return;
       }
 
       if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 3000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
-        console.warn('Connection lost')
+        console.warn('Connection lost');
         console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
         // console.warn(`status: ${this.status}, timestamp delta: ${date - this.lastUpdatedDate}`);
-        this.connect()
+        this.connect();
       } else if (this.status === 'open') {
         // EventBus.$emit('status-updated')
       }
-    }, 2500)
+    }, 2500);
   },
 
 
-  handlePacket: function (raw) {
-    const message = Protocol.parsePacket(raw)
-    const date = new Date()
-    this.lastUpdatedDate = date
+  handlePacket: function(raw) {
+    const message = Protocol.parsePacket(raw);
+    const date = new Date();
+    this.lastUpdatedDate = date;
 
     switch (message.type) {
       case Protocol.packetTypes.ReplyTelemetry:
@@ -105,22 +105,22 @@ export default {
         // console.log(this.oldImuTapState);
 
         if (message.timestamp < this.telemetry.timestamp) {
-          console.warn('inconsistent timestamps: old is ' + this.telemetry.timestamp + ', and new is ' + message.timestamp)
+          console.warn('inconsistent timestamps: old is ' + this.telemetry.timestamp + ', and new is ' + message.timestamp);
         }
-        this.telemetry = message
-        this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3)
+        this.telemetry = message;
+        this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3);
 
         // this.telemetry.feedback.imuTap = this.oldImuTapState; // TODO: delete!
 
         // EventBus.$emit('telemetry-received')
-        this.updateTelemetry()
+        this.updateTelemetry();
         // console.log(mur.formattedTelemetry)
-        this.telemetryUpdated(this.telemetry, this.formattedTelemetry)
-        break
+        this.telemetryUpdated(this.telemetry, this.formattedTelemetry);
+        break;
 
       case Protocol.packetTypes.ReplyPing:
         if (message.counter == -1) {
-          console.warn("This client was discarded by vehicle!");
+          console.warn('This client was discarded by vehicle!');
           this.disconnect();
           this.onDiscard();
         }
@@ -128,7 +128,7 @@ export default {
         this.timePing = new Date();
         this.timePingDelta = this.timePing - this.timePing;
         // EventBus.$emit('log-received', message) // TODO: delete all EventBus references
-        break
+        break;
 
       case Protocol.packetTypes.ReplyAllSettings:
         console.log(message);
@@ -139,34 +139,34 @@ export default {
         console.log(`Hardware rev:  ${message.hardwareRev}`);
         console.log(`Imu start:     ${message.imuStarted}`);
         console.log(`Gauge start:   ${message.voltmeterStarted}`);
-        console.log("Diagnostic info:\n" + message.text);
+        console.log('Diagnostic info:\n' + message.text);
         break;
 
       default:
-        console.warn("unknown packet type")
+        console.warn('unknown packet type');
         console.log(JSON.stringify(message, null, ' '));
         break;
     }
   },
 
-  connect: function (address) {
+  connect: function(address) {
     if (this.reconnecting) {
-      return
+      return;
     }
 
     if (!address) {
-      address = localStorage.lastDeviceAddress
+      address = localStorage.lastDeviceAddress;
     } else {
-      this.deviceAddress = address
-      localStorage.lastDeviceAddress = address
+      this.deviceAddress = address;
+      localStorage.lastDeviceAddress = address;
     }
 
     // console.warn('WebSocket: connecting…')
-    console.info('Connecting to', address)
-    this.reconnecting = true
+    console.info('Connecting to', address);
+    this.reconnecting = true;
 
     if (transport.type === 'websocket') {
-      address = 'ws://' + this.ip + ':' + this.port + '/' + this.page // TODO: костыль
+      address = 'ws://' + this.ip + ':' + this.port + '/' + this.page; // TODO: костыль
     }
 
     // EventBus.$emit('notify', { text: 'Подключение…' })
@@ -174,137 +174,136 @@ export default {
     //   this.conn.ws.close()
     // }
     // this.conn.connect(this.url)
-    this.conn.connect(address)
+    this.conn.connect(address);
 
-    this.updateStatus()
+    this.updateStatus();
 
     setTimeout(() => {
-      this.reconnecting = false
-      this.updateStatus()
-    }, 250)
+      this.reconnecting = false;
+      this.updateStatus();
+    }, 250);
 
     // this.reconnecting = false
   },
 
   disconnect: function() {
-    this.controlPing(-1)
-    this.deviceAddress = null
-    localStorage.lastDeviceAddress = null
-    this.conn.disconnect()
+    this.controlPing(-1);
+    this.deviceAddress = null;
+    localStorage.lastDeviceAddress = null;
+    this.conn.disconnect();
   },
 
-  updateStatus: function () {
-    this.status = this.conn.checkStatus()
-    this.conn.onDeviceDiscovered(this.conn.devices.all)
-    this.onStatusUpdated(this.status)
+  updateStatus: function() {
+    this.status = this.conn.checkStatus();
+    this.conn.onDeviceDiscovered(this.conn.devices.all);
+    this.onStatusUpdated(this.status);
     // EventBus.$emit('status-updated', { status: this.status })
     // console.log(this.status)
   },
 
-  updateTelemetry: function (data) {
+  updateTelemetry: function(data) {
     if (this.telemetry.running !== undefined) {
-      this.formattedTelemetry.running = this.telemetry.running
+      this.formattedTelemetry.running = this.telemetry.running;
     }
 
     if (this.telemetry.remote !== undefined) {
-      this.formattedTelemetry.remote = this.telemetry.remote
-      this.remote = this.telemetry.remote
+      this.formattedTelemetry.remote = this.telemetry.remote;
+      this.remote = this.telemetry.remote;
     }
 
     for (const item in this.telemetry) {
-      this.formattedTelemetry[item] = this.getFormattedTelemetry(item)
+      this.formattedTelemetry[item] = this.getFormattedTelemetry(item);
     }
   },
 
-  getFormattedTelemetry: function (name) {
-    let value = this.telemetry[name]
+  getFormattedTelemetry: function(name) {
+    let value = this.telemetry[name];
 
     if (typeof value === 'number') {
-      value = parseFloat(value)
+      value = parseFloat(value);
 
       if (name === 'timestamp') {
-        value *= 0.001
+        value *= 0.001;
       }
 
-      value = isNaN(value) ? (0).toFixed(this.precision) : value.toFixed(this.precision)
+      value = isNaN(value) ? (0).toFixed(this.precision) : value.toFixed(this.precision);
     }
 
     if (typeof value === 'object') {
-
       // if (name === 'feedback') {
       //   return JSON.stringify(value, null, ' ');
       // }
 
-      let result = ''
+      let result = '';
       for (const key in value) {
         if (typeof value[key] !== 'function') {
-          const v = value[key] === true  ? '1' :
+          const v = value[key] === true ? '1' :
                     value[key] === false ? '0' :
                     value[key];
 
-          result += "\<br>     " + key + ': ' + v + '; '
+          result += '\<br>     ' + key + ': ' + v + '; ';
         }
         // if (value[key] === true) {
         // result.push(key)
         // }
       }
-      return result
+      return result;
     }
 
-    return value
+    return value;
   },
 
-  sendMessage: function (data) {
+  sendMessage: function(data) {
     if (this.status === 'open') {
-      this.conn.sendMessage(data)
+      this.conn.sendMessage(data);
     }
   },
 
-  controlContext: function (data) {
-    this.sendMessage(Protocol.packControlContext(data))
-    this.context = data
+  controlContext: function(data) {
+    this.sendMessage(Protocol.packControlContext(data));
+    this.context = data;
   },
 
-  controlActuator: function (data) {
-    this.sendMessage(Protocol.packControlActuator(data))
+  controlActuator: function(data) {
+    this.sendMessage(Protocol.packControlActuator(data));
   },
 
-  controlReboot: function () {
-    this.sendMessage(Protocol.packControlReboot({ delay: 500 }))
+  controlReboot: function() {
+    this.sendMessage(Protocol.packControlReboot({delay: 500}));
   },
 
-  controlErase: function () {
-    this.sendMessage(Protocol.packControlErase({ }))
+  controlErase: function() {
+    this.sendMessage(Protocol.packControlErase({ }));
   },
 
-  controlDiagnosticInfo: function () {
-    this.sendMessage(Protocol.packControlDiagnosticInfo({ }))
+  controlDiagnosticInfo: function() {
+    this.sendMessage(Protocol.packControlDiagnosticInfo({ }));
   },
 
-  controlPing: function (counter = undefined) {
+  controlPing: function(counter = undefined) {
     if (this.status === 'open') {
       this.conn.sendMessage(Protocol.packControlPing({
-        counter: counter == undefined ? this.pingCounter : counter
-      }))
+        counter: counter == undefined ? this.pingCounter : counter,
+      }));
       this.timePing = new Date();
       this.pingCounter++;
     }
   },
 
-  controlGetAllSettings: function () {
+  controlGetAllSettings: function() {
     this.sendMessage(Protocol.packControlGetAllSettings());
   },
 
-  controlMotorsSettings: function (data) {
-    this.sendMessage(Protocol.packControlMotorsSettings(data))
+  controlMotorsSettings: function(data) {
+    this.sendMessage(Protocol.packControlMotorsSettings(data));
   },
 
-  controlBatterySettingsUpdate: function (data) {
+  controlBatterySettingsUpdate: function(data) {
     data.action = Protocol.battActions.UpdateSettings;
-    this.sendMessage(Protocol.packControlBatterySettings(data))
+    this.sendMessage(Protocol.packControlBatterySettings(data));
   },
 
-  controlBatterySettingsReset: function () {
+  controlBatterySettingsReset: function() {
     this.sendMessage(Protocol.packControlBatterySettings({
       action: Protocol.battActions.Reset,
       designCapacity: 0,
@@ -313,27 +312,27 @@ export default {
       taperCurrent: 0,
       socMin: 0,
       socMax: 0,
-    }))
+    }));
   },
 
-  controlImuSettingsUpdate: function (data) {
-    data.action = Protocol.imuActions.UpdateSettings
-    this.sendMessage(Protocol.packControlImuSettings(data))
+  controlImuSettingsUpdate: function(data) {
+    data.action = Protocol.imuActions.UpdateSettings;
+    this.sendMessage(Protocol.packControlImuSettings(data));
   },
 
-  controlImuSettingsRecalibrate: function () {
+  controlImuSettingsRecalibrate: function() {
     this.sendMessage(Protocol.packControlImuSettings({
       action: Protocol.imuActions.Recalibrate,
       tapTimeout: 0,
-      tapTreshold: 0
-    }))
+      tapTreshold: 0,
+    }));
   },
 
-  controlImuSettingsResetYaw: function () {
+  controlImuSettingsResetYaw: function() {
     this.sendMessage(Protocol.packControlImuSettings({
       action: Protocol.imuActions.ResetZero,
       tapTimeout: 0,
-      tapTreshold: 0
-    }))
-  }
-}
+      tapTreshold: 0,
+    }));
+  },
+};

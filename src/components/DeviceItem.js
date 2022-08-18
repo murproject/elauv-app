@@ -1,6 +1,6 @@
-import Element from './Element.js'
-import Icon from '/src/components/Icon'
-import Utils from "/src/utils/Utils";
+import Element from './Element.js';
+import Icon from '/src/components/Icon';
+import Utils from '/src/utils/Utils';
 
 const icons = {
   online: Icon('antenna', 'green-bright'),
@@ -15,7 +15,7 @@ export default class DeviceListItem extends Element {
   }
 
   static get tag() {
-    return 'device-list-item'
+    return 'device-list-item';
   }
 
   init() {
@@ -39,7 +39,7 @@ export default class DeviceListItem extends Element {
 
     this.iconOnline =
       !this.attrs.isCompatible ? '' :
-       this.attrs.isOnline ? icons.online : icons.offline
+       this.attrs.isOnline ? icons.online : icons.offline;
 
     this.iconStatus =
       !(this.attrs.isPaired || this.attrs.isActive) ? '' :
@@ -69,9 +69,8 @@ export default class DeviceListItem extends Element {
       <span class="device-tag">
         ${this.iconStatus}
       </span>
-    `
+    `;
   }
-
 }
 
 DeviceListItem.register();

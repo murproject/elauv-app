@@ -1,13 +1,13 @@
-import mur from './vehicle/apiGameMur.js'
+import mur from './vehicle/apiGameMur.js';
 
-import AboutPanel from './panels/About.js'
+import AboutPanel from './panels/About.js';
 import DevicesPanel from './panels/Devices.js';
 import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';
-import ConsolePanel from './panels/Console.js'
-import SettingsPanel from './panels/Settings.js'
+import ConsolePanel from './panels/Console.js';
+import SettingsPanel from './panels/Settings.js';
 import SettingsStorage from './utils/SettingsStorage.js';
 
 export default {
@@ -43,7 +43,7 @@ export default {
     </div>
   `,
 
-  container: document.querySelector("#app"),
+  container: document.querySelector('#app'),
   panels: {},
   currentPanelMain: null,
   currentPanelBottom: null,
@@ -51,7 +51,7 @@ export default {
   mur: mur,
   isCordova: false,
 
-  panelSelect: function (target, mode = 'main') {
+  panelSelect: function(target, mode = 'main') {
     const currentPanel = mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';
 
     if (this[currentPanel]) {
@@ -62,16 +62,16 @@ export default {
       if (this[currentPanel] === target) {
         // TODO: don't query on each call, to it better
         this[currentPanel] = null;
-        document.querySelector('#flying-panel-wrapper').classList.add("bottom-collapsed");
+        document.querySelector('#flying-panel-wrapper').classList.add('bottom-collapsed');
         return;
       } else {
-        document.querySelector('#flying-panel-wrapper').classList.remove("bottom-collapsed");
+        document.querySelector('#flying-panel-wrapper').classList.remove('bottom-collapsed');
       }
     } else {
       if (target === this.panels.blockly) {
-        document.querySelector('#flying-panel-wrapper').classList.remove("hidden");
+        document.querySelector('#flying-panel-wrapper').classList.remove('hidden');
       } else {
-        document.querySelector('#flying-panel-wrapper').classList.add("hidden");
+        document.querySelector('#flying-panel-wrapper').classList.add('hidden');
       }
     }
 
@@ -80,7 +80,7 @@ export default {
   },
 
 
-  createPanels: function () {
+  createPanels: function() {
     if (this.panels.length > 0) {
       return;
     }
@@ -104,11 +104,11 @@ export default {
     this.panelSelect(this.panels.settings);
   },
 
-  setTitle: function (title) {
+  setTitle: function(title) {
     this.titleBar.innerText = title;
   },
 
-  init: function () {
+  init: function() {
     SettingsStorage.load();
 
     this.preloadIcons();
@@ -133,17 +133,17 @@ export default {
     }, 1000);
 
     mur.onStatusUpdated = (status) => {
-      this.panels.telemetry.update()
+      this.panels.telemetry.update();
 
-      const fw = document.querySelector("#feedback-wrapper");
+      const fw = document.querySelector('#feedback-wrapper');
 
       if (status == 'open') {
-        fw.classList.add("background-soft-green")
-        fw.classList.add("background-pulse")
+        fw.classList.add('background-soft-green');
+        fw.classList.add('background-pulse');
 
         setTimeout(() => {
-          fw.classList.remove("background-soft-green")
-          fw.classList.remove("background-pulse")
+          fw.classList.remove('background-soft-green');
+          fw.classList.remove('background-pulse');
         }, 2500);
       }
       // } else if (status == 'closed') {
@@ -155,7 +155,7 @@ export default {
       //     fw.classList.remove("background-pulse")
       //   }, 2500);
       // }
-    }
+    };
   },
 
   showGlobalDialog(dialog) {
@@ -165,7 +165,7 @@ export default {
       document.querySelector('#global-wrapper').classList.add('active');
       setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 80);
     } else {
-      console.warn("GlobalDialog is already active!");
+      console.warn('GlobalDialog is already active!');
     }
   },
 
@@ -178,7 +178,7 @@ export default {
   setLoading(isLoading, timeout) {
     setTimeout(() => {
       if (isLoading) {
-        this.loadingWrapper.classList.add('active')
+        this.loadingWrapper.classList.add('active');
       } else {
         this.loadingWrapper.classList.remove('active');
       }
@@ -191,16 +191,16 @@ export default {
       'ui/content-save',
       'ui/checkbox-marked-outline',
       'ui/stop',
-      'ui/play'
-    ]
+      'ui/play',
+    ];
 
-    preloadList.forEach(item => {
-      var link = document.createElement('link');
+    preloadList.forEach((item) => {
+      const link = document.createElement('link');
       link.rel = 'preload';
       link.type = 'image/svg+xml';
       link.as = 'image';
       link.href = 'mdi/' + item + '.svg';
       document.head.appendChild(link);
     });
-  }
-}
+  },
+};

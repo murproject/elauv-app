@@ -3,7 +3,7 @@
 import Blockly from 'blockly/core';
 import 'blockly/javascript';
 
-document.b = Blockly
+document.b = Blockly;
 
 /* https://github.com/google/blockly/pull/6211 */
 Blockly.blockRendering.InputRow.prototype.measure = function() {
@@ -25,7 +25,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
       if (Types.isStatementInput(elem) && elem instanceof StatementInput) {
         connectedBlockWidths += elem.connectedBlockWidth;
       } else if (
-          Types.isExternalInput(elem) && elem instanceof ExternalValueInput &&
+        Types.isExternalInput(elem) && elem instanceof ExternalValueInput &&
           elem.connectedBlockWidth !== 0) {
         connectedBlockWidths +=
             (elem.connectedBlockWidth - elem.connectionWidth);
@@ -38,7 +38,6 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   this.connectedBlockWidths = connectedBlockWidths;
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
-
 
 
 // Blockly.JavaScript.init = function(workspace) {
@@ -89,7 +88,6 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
 
 //   return code;
 // }
-
 
 
 // Blockly.JavaScript['variables_get'] = function(block) {

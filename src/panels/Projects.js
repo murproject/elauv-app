@@ -1,17 +1,16 @@
-import App from "/src/App.js";
-import Panel from './Panel'
-import Icon from '/src/components/Icon'
+import App from '/src/App.js';
+import Panel from './Panel';
+import Icon from '/src/components/Icon';
 import Button from '../components/Button';
-import ProjectListItem from '/src/components/ProjectItem.js'
+import ProjectListItem from '/src/components/ProjectItem.js';
 import Utils from '/src/utils/Utils';
 
 import GlobalDialog from '/src/components/GlobalDialog.js';
-import ProjectsStorage from '/src/utils/ProjectsStorage.js'
+import ProjectsStorage from '/src/utils/ProjectsStorage.js';
 
 export default class Projects extends Panel {
-
   begin() {
-    this.name = "Проекты";
+    this.name = 'Проекты';
 
     this.html = /*html*/`
       <div class="container">
@@ -21,7 +20,7 @@ export default class Projects extends Panel {
 
         <div id="projects-head-buttons" class="row"></div>
       </div>
-    `
+    `;
 
     // document.p = ProjectItem;
   }
@@ -51,7 +50,7 @@ export default class Projects extends Panel {
   }
 
   makeButtons() {
-    this.headButtonsEl = this.q('#projects-head-buttons')
+    this.headButtonsEl = this.q('#projects-head-buttons');
 
     const buttons = [
       {
@@ -85,8 +84,8 @@ export default class Projects extends Panel {
       },
     ];
 
-    buttons.forEach(config => {
-      new Button(config).inject(this.headButtonsEl)
+    buttons.forEach((config) => {
+      new Button(config).inject(this.headButtonsEl);
     });
   }
 
@@ -122,7 +121,7 @@ export default class Projects extends Panel {
 
     this.addItem({
       name: 'Примеры',
-      type: 'folderExamples'
+      type: 'folderExamples',
     }, () => this.displayExamples());
 
     this.addItem({
@@ -148,7 +147,9 @@ export default class Projects extends Panel {
 
       item = ProjectsStorage.projects.saved[item.id];
       item.type = item.id === ProjectsStorage.projects.current.id ? 'projectActive' : 'project';
-      this.addItem(item, () => {this.openProjectDialog(item)});
+      this.addItem(item, () => {
+        this.openProjectDialog(item);
+      });
     });
   }
 
@@ -161,10 +162,10 @@ export default class Projects extends Panel {
     this.addItem({
       type: 'return',
       name: 'Назад',
-      description: 'Вернуться в список проектов'
+      description: 'Вернуться в список проектов',
     }, () => this.displayProjects());
 
-    ProjectsStorage.projects.examples.forEach(item => {
+    ProjectsStorage.projects.examples.forEach((item) => {
       item.type = 'example';
       this.addItem(item, () => this.openExampleDialog(item));
     });
@@ -179,22 +180,22 @@ export default class Projects extends Panel {
 
   openExampleDialog(item) {
     App.showGlobalDialog(
-      new GlobalDialog({
-        closable: true,
-        title: item.name.length > 0 ? item.name : '(без названия)',
-        text: item.description,
-        classes: 'text-center',
-        buttons: [
-          new Button({
-            text: 'Открыть',
-            icon: 'puzzle',
-          }, () => this.openProject(item)), // TODO //
-          new Button({
-            text: 'Назад',
-            icon: 'keyboard-return',
-          }, () => App.closeGlobalDialog()),
-        ]
-      })
+        new GlobalDialog({
+          closable: true,
+          title: item.name.length > 0 ? item.name : '(без названия)',
+          text: item.description,
+          classes: 'text-center',
+          buttons: [
+            new Button({
+              text: 'Открыть',
+              icon: 'puzzle',
+            }, () => this.openProject(item)), // TODO //
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
 
@@ -202,58 +203,58 @@ export default class Projects extends Panel {
     // const item = ProjectsStorage.saved[index];
 
     App.showGlobalDialog(
-      new GlobalDialog({
-        closable: true,
-        title: item.name.length > 0 ? item.name : '(без названия)',
-        text: /*html*/`
+        new GlobalDialog({
+          closable: true,
+          title: item.name.length > 0 ? item.name : '(без названия)',
+          text: /*html*/`
           Дата изменения: ${Utils.dateStringAbsolute(item.date)}
         `,
-        classes: 'text-center',
-        buttons: [
-          new Button({
-            text: 'Открыть',
-            icon: 'puzzle',
-            classes: 'button-vertical',
-          }, () => this.openProject(item)),
-          new Button({
-            text: 'В файл',
-            icon: 'export',
-            classes: 'button-vertical',
-          }, () => ProjectsStorage.exportProject(item)),
-          new Button({
-            text: 'Удалить',
-            icon: 'trash-can',
-            iconColor: 'red',
-            classes: 'button-vertical',
-          }, () => this.openConfirmDeleteDialog(item)),
-          new Button({
-            text: 'Назад',
-            icon: 'keyboard-return',
-            classes: 'button-vertical',
-          }, () => App.closeGlobalDialog()),
-        ]
-      })
+          classes: 'text-center',
+          buttons: [
+            new Button({
+              text: 'Открыть',
+              icon: 'puzzle',
+              classes: 'button-vertical',
+            }, () => this.openProject(item)),
+            new Button({
+              text: 'В файл',
+              icon: 'export',
+              classes: 'button-vertical',
+            }, () => ProjectsStorage.exportProject(item)),
+            new Button({
+              text: 'Удалить',
+              icon: 'trash-can',
+              iconColor: 'red',
+              classes: 'button-vertical',
+            }, () => this.openConfirmDeleteDialog(item)),
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+              classes: 'button-vertical',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
 
   openWipeAllDialog() {
     App.showGlobalDialog(
-      new GlobalDialog({
-        title: 'Удалить все проекты?',
-        text: 'Все пользовательские проекты<br>будут безвозвратно удалены.',
-        classes: 'text-center',
-        buttons: [
-          new Button({
-            text: 'Удалить всё',
-            icon: 'trash-can',
-            iconColor: 'red',
-          }, () => this.deleteAllProjects()), // TODO //
-          new Button({
-            text: 'Назад',
-            icon: 'keyboard-return',
-          }, () => App.closeGlobalDialog()),
-        ]
-      })
+        new GlobalDialog({
+          title: 'Удалить все проекты?',
+          text: 'Все пользовательские проекты<br>будут безвозвратно удалены.',
+          classes: 'text-center',
+          buttons: [
+            new Button({
+              text: 'Удалить всё',
+              icon: 'trash-can',
+              iconColor: 'red',
+            }, () => this.deleteAllProjects()), // TODO //
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
 
@@ -265,7 +266,7 @@ export default class Projects extends Panel {
   deleteProject(item) {
     App.closeGlobalDialog();
     if ('type' in item && item.type === 'autosave') {
-      ProjectsStorage.deleteProject("autosave");
+      ProjectsStorage.deleteProject('autosave');
     } else {
       ProjectsStorage.deleteProject(item.id);
     }
@@ -283,21 +284,23 @@ export default class Projects extends Panel {
     }
 
     App.showGlobalDialog(
-      new GlobalDialog({
-        title: 'Редактируемый проект<br>будет закрыт!',
-        text: 'Несохранённые изменения<br>будут безвозвратно удалены.',
-        classes: 'text-center',
-        buttons: [
-          new Button({
-            text: 'Открыть',
-            icon: 'puzzle',
-          }, () => { App.closeGlobalDialog(); action() }), // TODO //
-          new Button({
-            text: 'Назад',
-            icon: 'keyboard-return',
-          }, () => App.closeGlobalDialog()),
-        ]
-      })
+        new GlobalDialog({
+          title: 'Редактируемый проект<br>будет закрыт!',
+          text: 'Несохранённые изменения<br>будут безвозвратно удалены.',
+          classes: 'text-center',
+          buttons: [
+            new Button({
+              text: 'Открыть',
+              icon: 'puzzle',
+            }, () => {
+              App.closeGlobalDialog(); action();
+            }), // TODO //
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
 
@@ -309,23 +312,22 @@ export default class Projects extends Panel {
     const name = isAutosave ? `авто-сохранённый проект<br>«${projectName}»` : `проект<br>«${projectName}»`;
 
     App.showGlobalDialog(
-      new GlobalDialog({
-        title: 'Действительно удалить проект?',
-        text: `Будет удалён ${name}`,
-        classes: 'text-center',
-        buttons: [
-          new Button({
-            text: 'Удалить',
-            icon: 'trash-can',
-            iconColor: 'red',
-          }, () => this.deleteProject(item) ), // TODO //
-          new Button({
-            text: 'Назад',
-            icon: 'keyboard-return',
-          }, () => App.closeGlobalDialog()),
-        ]
-      })
+        new GlobalDialog({
+          title: 'Действительно удалить проект?',
+          text: `Будет удалён ${name}`,
+          classes: 'text-center',
+          buttons: [
+            new Button({
+              text: 'Удалить',
+              icon: 'trash-can',
+              iconColor: 'red',
+            }, () => this.deleteProject(item) ), // TODO //
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
-
 }
