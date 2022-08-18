@@ -1,8 +1,8 @@
 {
-  "name": "org.robocenter.gamemurlite",
-  "displayName": "GameMUR LiteApp",
-  "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "name": "org.robocenter.elementaryauv",
+  "displayName": "ElementaryAUV App",
+  "version": "1.0",
+  "description": "Companion app for ElementaryAUV underwater vehicle.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,7 @@
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "Apache Cordova Team",
-  "license": "Apache-2.0",
+  "author": "https://murproject.com",
   "devDependencies": {
     "@ionic-native/file-chooser": "^5.36.0",
     "cordova-android": "^10.1.2",
