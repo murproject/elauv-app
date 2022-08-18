@@ -20,7 +20,8 @@
     "@vue/cli-service": "~4.5.15",
     "eslint": "^6.7.2",
     "eslint-config-google": "^0.14.0",
-    "vue-cli-plugin-cordova": "~2.4.1"
+    "vue-cli-plugin-cordova": "~2.4.1",
+    "webpack-auto-inject-version": "^1.2.2"
   },
   "eslintConfig": {
     "root": true,
