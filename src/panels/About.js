@@ -2,6 +2,8 @@ import App from '/src/App.js';
 import Panel from './Panel';
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
+import AppVersion from '/src/utils/AppVersion';
+import Utils from '/src/utils/Utils';
 
 export default class About extends Panel {
   begin() {
@@ -23,7 +25,7 @@ export default class About extends Panel {
         <h1>
           ElementaryAUV App<br>
           <span class="opacity-50 text-small">
-            Версия 0.00 / 2022-00-00
+            Версия ${AppVersion.version} / ${AppVersion.buildDate}
           </span>
         </h1>
 
