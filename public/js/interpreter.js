@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-var state = null
-var script = null
-var scripts = []
-var telemetry = {}
-var highlightedBlocks = {}
-var msgToSend = {}
+let state = null;
+let script = null;
+let scripts = [];
+let telemetry = {};
+const highlightedBlocks = {};
+const msgToSend = {};
 
-var contextUpdater = null
-var highlightUpdater = null
+let contextUpdater = null;
+let highlightUpdater = null;
 
 const motorsIndex = {
   hl: 0,
@@ -22,9 +22,9 @@ const ledIndex = {
   1: 0,
   2: 1,
   3: 2,
-}
+};
 
-var context = {
+const context = {
   axes_speed: [0, 0, 0, 0],
   regulators: 0b00000000,
   motor_powers: [0, 0, 0, 0],
@@ -32,34 +32,34 @@ var context = {
   actuators: [0, 0],
   target_yaw: 0,
   leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+};
+
+function checkBit(value, mask) {
+  return ((value & mask) === mask);
 }
 
-function checkBit (value, mask) {
-  return ((value & mask) === mask)
-}
 
-
-function setBit (value, mask, state) {
+function setBit(value, mask, state) {
   if (state === true || state == 1) {
-    value |= mask
+    value |= mask;
   } else {
-    value &= ~mask
+    value &= ~mask;
   }
 
-  return value
+  return value;
 }
 
 
 function clamp(value, minPower = -100, maxPower = 100) {
-  return Math.min(Math.max(value, minPower), maxPower)
+  return Math.min(Math.max(value, minPower), maxPower);
 }
 
 
-function sendContext () {
-  self.postMessage({ type: 'context', context: context })
+function sendContext() {
+  self.postMessage({type: 'context', context: context});
 }
 
-function sendHighlight (bold = false) {
+function sendHighlight(bold = false) {
   for (const key in highlightedBlocks) {
     if (highlightedBlocks[key][1] < 100) {
       highlightedBlocks[key][1] += 5;
@@ -70,15 +70,14 @@ function sendHighlight (bold = false) {
     }
   }
 
-  self.postMessage({ type: 'mur.h', blocks: highlightedBlocks })
+  self.postMessage({type: 'mur.h', blocks: highlightedBlocks});
 
   if (Object.keys(msgToSend).length > 0) {
-    self.postMessage({ type: 'print', msg: msgToSend })
+    self.postMessage({type: 'print', msg: msgToSend});
     for (const key in msgToSend) {
       delete msgToSend[key];
     }
   }
-
 }
 
 function setDirectMode(index, mode) {
@@ -93,11 +92,11 @@ const mur = {
   timeOfStart: new Date(),
   vars: {},
 
-  h: async function (threadId, blockId) {
-    highlightedBlocks[threadId] = [blockId, 5]
+  h: async function(threadId, blockId) {
+    highlightedBlocks[threadId] = [blockId, 5];
     // console.log(`mur.h( "${threadId}", "${blockId}" )`);
 
-    await mur.delay(3)
+    await mur.delay(3);
   },
 
   stop_all: async function() {
@@ -112,7 +111,7 @@ const mur = {
 
   // TODO: clamp here or in context handler?
 
-  set_axis: async function (index, speed) {
+  set_axis: async function(index, speed) {
     // TODO: check index and constrain power
     speed = clamp(speed);
     context.axes_speed[index] = Math.round(speed);
@@ -156,14 +155,14 @@ const mur = {
       if (telemetry.feedback.yawStabilized === true) {
         break;
       }
-      console.log("not stabilized, need to wait! " + Math.round(Date.now() - _wait_yaw_begin_timestamp));
+      console.log('not stabilized, need to wait! ' + Math.round(Date.now() - _wait_yaw_begin_timestamp));
     }
   },
 
-  set_power: async function (index, power) {
+  set_power: async function(index, power) {
     // TODO: check index and constrain power
     power = clamp(power);
-    context.motor_powers[index] = Math.round(power)
+    context.motor_powers[index] = Math.round(power);
 
     if (index == 0 || index == 1) {
       setDirectMode(0, true);
@@ -180,54 +179,54 @@ const mur = {
     }
   },
 
-  set_led: async function (index, colour) {
+  set_led: async function(index, colour) {
     if (typeof(index) === 'number' && index >= 0 && index <= 3) {
       index = ledIndex[index];
-      const rawColour = Number("0x" + colour.substring(1))
-      context.leds[index * 3 + 0] = (rawColour >> (8 * 2)) & 0xFF
-      context.leds[index * 3 + 1] = (rawColour >> (8 * 1)) & 0xFF
-      context.leds[index * 3 + 2] = (rawColour >> (8 * 0)) & 0xFF
+      const rawColour = Number('0x' + colour.substring(1));
+      context.leds[index * 3 + 0] = (rawColour >> (8 * 2)) & 0xFF;
+      context.leds[index * 3 + 1] = (rawColour >> (8 * 1)) & 0xFF;
+      context.leds[index * 3 + 2] = (rawColour >> (8 * 0)) & 0xFF;
     }
   },
 
-  actuator: async function (index, power) {
+  actuator: async function(index, power) {
     power = clamp(power);
-    context.actuators[index] = Math.round(power)
+    context.actuators[index] = Math.round(power);
   },
 
-  delay: function (sleepMs) {
+  delay: function(sleepMs) {
     // TODO: should not create dozens of timers by calling setTimeout() lots times per second,
     // TODO: create one timer with setInterval to control ticks? (but will block other async threads)
     if (sleepMs <= 0) {
       return;
     }
-    return new Promise(resolve => setTimeout(resolve, sleepMs))
+    return new Promise((resolve) => setTimeout(resolve, sleepMs));
   },
 
-  get_imu_axis: function (mode) {
+  get_imu_axis: function(mode) {
     switch (mode) {
       case 0:
       case 'IMU_AXIS_YAW':
-        return telemetry.imuYaw
+        return telemetry.imuYaw;
       case 1:
       case 'IMU_AXIS_PITCH':
-        return telemetry.imuPitch
+        return telemetry.imuPitch;
       case 2:
       case 'IMU_AXIS_ROLL':
-        return telemetry.imuRoll
+        return telemetry.imuRoll;
     }
-    return 0.0
+    return 0.0;
   },
 
-  get_imu_tap: function (mode) {
+  get_imu_tap: function(mode) {
     return mode == 1 ? telemetry.feedback.imuDoubleTap : telemetry.feedback.imuTap;
   },
 
-  get_color_status: function (mode) {
-    return !!(telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE'))
+  get_color_status: function(mode) {
+    return !!(telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE'));
   },
 
-  thread_end: async function (scriptId, end_script = false, wait_forever = true) {
+  thread_end: async function(scriptId, end_script = false, wait_forever = true) {
     // return /* TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO */
 
     // console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
@@ -242,7 +241,7 @@ const mur = {
     this.threadsStates[scriptId] = false;
 
     sendHighlight(true);
-    self.postMessage({ type: 'thread_end', id: scriptId })
+    self.postMessage({type: 'thread_end', id: scriptId});
 
     // console.log(this.threadsStates)
 
@@ -271,51 +270,51 @@ const mur = {
 
   angle_norm: function(angle) {
     return (Math.abs(((angle) + 180) % 360 ) - 180) * ((angle % 360) >= -180 ? 1.0 : - 1.0);
-  }
+  },
 
-}
+};
 
 
-function setState (newState) {
-  state = newState
-  self.postMessage({ type: 'state', state: state })
+function setState(newState) {
+  state = newState;
+  self.postMessage({type: 'state', state: state});
 }
 
 
 function strReplaceAll(str, match, replace) {
-  return str.replace(new RegExp(match, 'gm'), () => replace)
+  return str.replace(new RegExp(match, 'gm'), () => replace);
 }
 
 
-function makeScript (index, code) {
+function makeScript(index, code) {
   const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
-  code = code.replace(funcRegex, 'async $&')
+  code = code.replace(funcRegex, 'async $&');
 
   return {script: code, isFunction: false};
 }
 
 
-self.onmessage = function (e) {
+self.onmessage = function(e) {
   if (!('type' in e.data)) {
-    return
+    return;
   }
 
   if (e.data.type === 'run') {
-    scripts = e.data.scripts
+    scripts = e.data.scripts;
 
 
-    contextUpdater = setInterval(sendContext,100)
-    setTimeout(() => highlightUpdater = setInterval(sendHighlight, 50), 25)
+    contextUpdater = setInterval(sendContext, 100);
+    setTimeout(() => highlightUpdater = setInterval(sendHighlight, 50), 25);
 
     if (state === 'running') {
       return;
     }
 
-    console.warn("run interpreter");
-    setState('running')
+    console.warn('run interpreter');
+    setState('running');
 
-    script = ''
-    script = makeScript(0, scripts[0]).script
+    script = '';
+    script = makeScript(0, scripts[0]).script;
 
     for (const i in e.data.threads) {
       mur.threadsStates[e.data.threads[i]] = true;
@@ -327,18 +326,18 @@ const _threadId = -1;
 ${script}
 mur.h(-1, null);
 })();
-`
+`;
 
-    console.warn("Run script:")
-    console.log(script)
+    console.warn('Run script:');
+    console.log(script);
 
     try {
-      mur.delay(10)
-      eval(script)
-      mur.mainThreadState = false
-      console.log("main thread end");
+      mur.delay(10);
+      eval(script);
+      mur.mainThreadState = false;
+      console.log('main thread end');
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
 
     // setState('done') // TODO: prints 'done' even if script is not over (async functions)
@@ -346,8 +345,8 @@ mur.h(-1, null);
   }
 
   if (e.data.type === 'telemetry') {
-    telemetry = e.data.telemetry
+    telemetry = e.data.telemetry;
   }
-}
+};
 
 // TODO: wait forever (stop thread): await new Promise(() => {});
