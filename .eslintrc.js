@@ -1,5 +1,3 @@
-const isFixMode = process.argv.includes('--fix');
-
 const config = {
   env: {
     browser: true,
@@ -29,11 +27,6 @@ const config = {
     'key-spacing': 0,
     'spaced-comment': 0,
     'no-console': 0, // TODO: should enable later
-
-    ...(isFixMode && {
-      'key-spacing': 0,
-      'spaced-comment': 0,
-    }),
   },
 };
 
