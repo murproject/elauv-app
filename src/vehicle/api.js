@@ -40,6 +40,7 @@ export default {
   onStatusUpdated: (status) => {},
   onDiscard: () => {},
   onAllSettingsReceived: () => {},
+  onDiagnosticLogReceived: () => {},
 
   create: function() {
     this.protocol.fillParsers();
@@ -141,6 +142,7 @@ export default {
         console.log(`Imu start:     ${message.imuStarted}`);
         console.log(`Gauge start:   ${message.voltmeterStarted}`);
         console.log('Diagnostic info:\n' + message.text);
+        this.onDiagnosticLogReceived(message);
         break;
 
       default:

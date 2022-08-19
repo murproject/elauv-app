@@ -17,6 +17,7 @@ export default class Settings extends Panel {
         <div class="list-wrapper">
           <h1 class="text-center">Настройки аппарата</h1>
           <div id="settings-inputs-container" class="monospace-all"></div>
+          <pre id="diag-log-text" class="monospace fit-center"></pre>
           <div id="settings-action-buttons" class="row"></div>
           <div id="vehicle-action-buttons" class="row"></div>
 
@@ -162,31 +163,12 @@ export default class Settings extends Panel {
 
     const fields = Object.keys(settings);
 
-    // const fields = [
-    //   'startupsCount',
-    //   'motorsPorts',
-    //   'motorsMultipliers',
-    //   'motorsOffsetPositive',
-    //   'motorsOffsetNegative',
-    //   'fuelGaugeBattCapacity',
-    //   'fuelGaugeTerminateVolts',
-    //   'fuelGaugeTaperCurrent',
-    //   'fuelGaugeSocMin',
-    //   'fuelGaugeSocMax',
-    //   'imuTapTimeout',
-    //   'imuTapThreshold',
-    //   'yawPidI',
-    //   'yawPidD',
-    //   'yawPidStabMaxErr',
-    //   'yawPidStabWaitMs',
-    // ];
-
     fields.forEach((item) => {
       if (item === 'type') {
         return;
       }
+
       this.makeField(item, JSON.stringify(settings[item]));
-      // this.makeField(item, JSON.stringify(''));
     });
   }
 
@@ -251,5 +233,22 @@ export default class Settings extends Panel {
     ]);
 
     setTimeout(() => mur.controlGetAllSettings(), 1000);
+  }
+
+  onDiagnosticLogReceived(info) {
+    const text = `
+- - -  FreeRTOS stats  - - -
+${info.text}
+
+- - - Vehicle Revision - - -
+Software rev:  ${info.softwareRevMajor}.${info.softwareRevMinor}
+Hardware rev:  ${info.hardwareRev}
+
+- - -  Sensors status  - - -
+Imu started:   ${info.imuStarted}
+Gauge started: ${info.voltmeterStarted}
+
+`;
+    this.q('#diag-log-text').innerText = text;
   }
 }

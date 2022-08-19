@@ -160,6 +160,10 @@ export default {
     mur.onAllSettingsReceived = (settings) => {
       this.panels.settings.onSettingsReceived(settings);
     };
+
+    mur.onDiagnosticLogReceived = (info) => {
+      this.panels.settings.onDiagnosticLogReceived(info);
+    };
   },
 
   showGlobalDialog(dialog) {
