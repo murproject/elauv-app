@@ -419,13 +419,6 @@ export default class BlocklyPanel extends Panel {
     this.stateOfUndo.savedRedoStack = [];
     this.reinject(false);
 
-    // console.log("load:")
-    // console.log(blocksToLoad)
-
-    if (typeof(blocksToLoad) === 'undefined') {
-      blocksToLoad = localStorage.savedBlocks;
-    }
-
     if (typeof(blocksToLoad) === 'string') {
       blocksToLoad = JSON.parse(blocksToLoad);
     }
