@@ -9,11 +9,11 @@
 - VueCLI is optional (may be more convenient way to run tasks).
 - Set up Cordova. May require Android Studio / Android SDK.
 
-## Building - easy way
+## Building – easy way
 
     npm run cordova-build-android
 
-## Building - long way (more flexible)
+## Building – long way (more flexible)
 
 Two stages to build app:
 
@@ -45,7 +45,7 @@ You can build and deploy app to your device (requires enabled debugging on your 
 
     cordova run android
 
-### Signing build
+## Signing build
 
 You need to sign the final build.
 All builds should be signed with the same key.
@@ -53,4 +53,4 @@ All builds should be signed with the same key.
 Without correct sign, app update would be impossible.
 User will be forced to delete old version and install new one.
 
-**TODO**
+<!-- TODO -->
