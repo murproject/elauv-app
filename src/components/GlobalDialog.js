@@ -44,7 +44,7 @@ export default class GlobalDialog extends Element {
       ` : ''}
 
       ${this.attrs.textInput ? /*html*/`
-        <input id="text-input" maxlength="65" class="text-input" type="text" name="sometext" />
+        <input id="text-input" maxlength="65" class="text-input" type="text" />
       ` : ''}
 
       <div class="vertical-filler"></div>
@@ -57,7 +57,7 @@ export default class GlobalDialog extends Element {
     this.attrs.buttons.forEach((button) => button.inject(this.buttonsRow));
     this.appendChild(this.buttonsRow);
 
-    if (this.attrs.textInput) {
+    if (this.attrs.textInput) { // TODO: text input as component!
       this.textInputEl = this.querySelector('#text-input');
       this.textInputEl.onchange = (event) => this.attrs.textInput(this.textInputEl.value);
     }

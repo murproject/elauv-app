@@ -1,0 +1,31 @@
+text-input {
+  display: block;
+  width: auto;
+  /* width: 100%; */
+  /* text-align: right; */
+}
+
+text-input .input-caption {
+  display: inline-block;
+  min-width: 40%;
+  text-align: right;
+  padding-right: 0.25em;
+}
+
+.text-input  {
+  padding: 0.5em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+
+  border-radius: var(--radius);
+  border: 1px solid rgba(0,0,0,0.5);
+
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+text-input .text-input {
+  width: 40%;
+  margin: 0.25em;
+}

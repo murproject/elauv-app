@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import CheckBox from '../components/CheckBox';
 import SettingsStorage from '/src/utils/SettingsStorage';
 import GlobalDialog from '/src/components/GlobalDialog.js';
+import TextInput from '/src/components/TextInput';
 import mur from '/src/vehicle/api.js';
 
 export default class Settings extends Panel {
@@ -13,19 +14,24 @@ export default class Settings extends Panel {
 
     this.html = /*html*/`
       <div class="container">
-        <h1 class="text-center">Настройки приложения</h1>
-        <div id="app-settings-buttons" class="fit-center margin-bottom"></div>
+        <div class="list-wrapper">
+          <h1 class="text-center">Настройки аппарата</h1>
+          <div id="settings-inputs-container" class="monospace-all"></div>
+          <div id="settings-action-buttons" class="row"></div>
+          <div id="vehicle-action-buttons" class="row"></div>
 
-        <h1 class="text-center">Настройки аппарата</h1>
-        <div id="settings-action-buttons" class="row"></div>
-        <div id="vehicle-action-buttons" class="row"></div>
+          <h1 class="text-center">Настройки приложения</h1>
+          <div id="app-settings-buttons" class="fit-center margin-auto"></div>
+        </div>
       </div>
     `;
   }
 
   init() {
     this.setIcon('wrench');
+    this.fields = {};
     this.makeButtons();
+    // this.makeSettingsFields(); // TODO: delete?
   }
 
   makeButtons() {
@@ -82,13 +88,13 @@ export default class Settings extends Panel {
     const buttons = [
       {
         text: 'Получить настройки',
-        action: () => mur.controlGetAllSettings(), // TODO: callback!
+        action: () => mur.controlGetAllSettings(),
         icon: 'format-list-bulleted-square',
         parent: this.settingsButtons,
       },
       {
         text: 'Записать настройки',
-        action: () => {}, // TODO //
+        action: () => this.sendVehicleSettings(),
         icon: 'content-save',
         parent: this.settingsButtons,
       },
@@ -112,7 +118,7 @@ export default class Settings extends Panel {
       },
       {
         text: 'Калибровка нав.датчика',
-        action: () => mur.controlImuSettingsRecalibrate(),
+        action: () => mur.controlImuRecalibrate(),
         icon: 'rotate-orbit',
         parent: this.vehicleButtons,
       },
@@ -148,5 +154,102 @@ export default class Settings extends Panel {
           ],
         }),
     );
+  }
+
+  makeSettingsFields(settings) {
+    this.inputsContainer = this.q('#settings-inputs-container');
+    this.inputsContainer.innerText = '';
+
+    const fields = Object.keys(settings);
+
+    // const fields = [
+    //   'startupsCount',
+    //   'motorsPorts',
+    //   'motorsMultipliers',
+    //   'motorsOffsetPositive',
+    //   'motorsOffsetNegative',
+    //   'fuelGaugeBattCapacity',
+    //   'fuelGaugeTerminateVolts',
+    //   'fuelGaugeTaperCurrent',
+    //   'fuelGaugeSocMin',
+    //   'fuelGaugeSocMax',
+    //   'imuTapTimeout',
+    //   'imuTapThreshold',
+    //   'yawPidI',
+    //   'yawPidD',
+    //   'yawPidStabMaxErr',
+    //   'yawPidStabWaitMs',
+    // ];
+
+    fields.forEach((item) => {
+      if (item === 'type') {
+        return;
+      }
+      this.makeField(item, JSON.stringify(settings[item]));
+      // this.makeField(item, JSON.stringify(''));
+    });
+  }
+
+  makeField(key, value) {
+    const input = new TextInput({
+      title: key,
+      text: value,
+    });
+
+    input.inject(this.inputsContainer);
+    this.fields[key] = input;
+  }
+
+  onSettingsReceived(settings) {
+    this.makeSettingsFields(settings);
+    console.log(settings);
+  }
+
+  getSetting(key) {
+    return JSON.parse(this.fields[key].getText());
+  }
+
+  sendSettingsPacket(type, fields) {
+    const payload = {};
+
+    fields.forEach((key) => {
+      payload[key] = this.getSetting(key);
+    });
+
+    console.log(payload);
+
+    mur[type](payload);
+  }
+
+  sendVehicleSettings() {
+    if (Object.keys(this.fields).length == 0) {
+      return;
+    }
+
+    this.sendSettingsPacket('controlMotorsSettings', [
+      'motorsPorts',
+      'motorsMultipliers',
+      'motorsOffsetPositive',
+      'motorsOffsetNegative',
+      'yawPidI',
+      'yawPidD',
+      'yawPidStabMaxErr',
+      'yawPidStabWaitMs',
+    ]);
+
+    this.sendSettingsPacket('controlBatterySettingsUpdate', [
+      'fuelGaugeBattCapacity',
+      'fuelGaugeTerminateVolts',
+      'fuelGaugeTaperCurrent',
+      'fuelGaugeSocMin',
+      'fuelGaugeSocMax',
+    ]);
+
+    this.sendSettingsPacket('controlImuSettingsUpdate', [
+      'imuTapTimeout',
+      'imuTapThreshold',
+    ]);
+
+    setTimeout(() => mur.controlGetAllSettings(), 1000);
   }
 }

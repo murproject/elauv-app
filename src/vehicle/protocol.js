@@ -405,24 +405,12 @@ export default {
   packControlBatterySettings: function(data) {
     const payload = [
       data.action,
-      data.designCapacity,
-      data.terminateVoltage,
-      data.taperCurrent,
-      data.socMin,
-      data.socMax,
+      data.fuelGaugeBattCapacity,
+      data.fuelGaugeTerminateVolts,
+      data.fuelGaugeTaperCurrent,
+      data.fuelGaugeSocMin,
+      data.fuelGaugeSocMax,
     ];
-
-    /*
-
-document.app.mur.controlBatterySettingsUpdate({
-      designCapacity: 3000,
-      socMin: 0,
-      socMax: 100,
-      taperCurrent: 60,
-      terminateVoltage: 2700,
-})
-
-    */
 
     const packet = this.makePacket(curProtoVer, packetId.ControlBatterySettings, payload);
     return packet;
@@ -441,14 +429,15 @@ document.app.mur.controlBatterySettingsUpdate({
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload);
+    console.log(payload);
     return packet;
   },
 
   packControlImuSettings: function(data) {
     const payload = [
       data.action,
-      data.tapTimeout,
-      packFloat(data.tapTreshold),
+      data.imuTapTimeout,
+      packFloat(data.imuTapThreshold),
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload);

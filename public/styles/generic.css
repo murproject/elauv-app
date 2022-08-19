@@ -133,6 +133,10 @@ input[type="number"] {
   margin-bottom: 0.5em;
 }
 
+.list-wrapper .row {
+  margin: 0.5em 0;
+}
+
 .row > .push-button {
   flex-grow: 1;
   margin: 0;
@@ -155,17 +159,6 @@ input[type="number"] {
 .row.disabled {
   opacity: 25%;
   pointer-events: none;
-}
-
-.text-input  {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 16px;
-  padding: 0.5em;
-  border-radius: var(--radius);
-  border: 1px solid rgba(0,0,0,0.5);
-  margin-top: 1em;
-  margin-bottom: 0.5em;
 }
 
 .zdog-canvas {

@@ -39,6 +39,7 @@ export default {
   telemetryUpdated: (t, f) => {},
   onStatusUpdated: (status) => {},
   onDiscard: () => {},
+  onAllSettingsReceived: () => {},
 
   create: function() {
     this.protocol.fillParsers();
@@ -131,7 +132,7 @@ export default {
         break;
 
       case Protocol.packetTypes.ReplyAllSettings:
-        console.log(message);
+        this.onAllSettingsReceived(message);
         break;
 
       case Protocol.packetTypes.ReplyDiagnosticInfo:
@@ -303,15 +304,14 @@ export default {
     this.sendMessage(Protocol.packControlBatterySettings(data));
   },
 
-  controlBatterySettingsReset: function() {
+  controlBatteryReset: function() {
     this.sendMessage(Protocol.packControlBatterySettings({
       action: Protocol.battActions.Reset,
-      designCapacity: 0,
-      ccGain: 0,
-      terminateVoltage: 0,
-      taperCurrent: 0,
-      socMin: 0,
-      socMax: 0,
+      fuelGaugeBattCapacity: 0,
+      fuelGaugeTerminateVolts: 0,
+      fuelGaugeTaperCurrent: 0,
+      fuelGaugeSocMin: 0,
+      fuelGaugeSocMax: 0,
     }));
   },
 
@@ -320,19 +320,19 @@ export default {
     this.sendMessage(Protocol.packControlImuSettings(data));
   },
 
-  controlImuSettingsRecalibrate: function() {
+  controlImuRecalibrate: function() {
     this.sendMessage(Protocol.packControlImuSettings({
       action: Protocol.imuActions.Recalibrate,
-      tapTimeout: 0,
-      tapTreshold: 0,
+      imuTapTimeout: 0,
+      imuTapThreshold: 0,
     }));
   },
 
-  controlImuSettingsResetYaw: function() {
+  controlImuResetYaw: function() {
     this.sendMessage(Protocol.packControlImuSettings({
       action: Protocol.imuActions.ResetZero,
-      tapTimeout: 0,
-      tapTreshold: 0,
+      imuTapTimeout: 0,
+      imuTapThreshold: 0,
     }));
   },
 };

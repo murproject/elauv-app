@@ -156,6 +156,10 @@ export default {
       //   }, 2500);
       // }
     };
+
+    mur.onAllSettingsReceived = (settings) => {
+      this.panels.settings.onSettingsReceived(settings);
+    };
   },
 
   showGlobalDialog(dialog) {

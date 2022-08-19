@@ -22,11 +22,7 @@ export default class Element extends HTMLElement {
   }
 
   setClass(name, isActive = true) {
-    if (isActive) {
-      this.classList.add(name);
-    } else {
-      this.classList.remove(name);
-    }
+    this.classList.toggle(name, isActive);
   }
 
   setAction(action, actionTimeout = undefined) {

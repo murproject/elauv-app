@@ -183,6 +183,7 @@ export class FieldSlider extends Blockly.FieldNumber {
 
     htmlInput.setAttribute('type', 'number');
     htmlInput.setAttribute('pattern', '\d*');
+    htmlInput.setAttribute('inputmode', 'numeric');
     htmlInput.focus();
     htmlInput.select();
 

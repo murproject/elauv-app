@@ -494,7 +494,7 @@ export default class BlocklyPanel extends Panel {
 
     ////////
 
-    mur.controlImuSettingsResetYaw();
+    mur.controlImuResetYaw();
 
     const contextLedsOn = {
       direct_power: [0, 0, 0, 0],
