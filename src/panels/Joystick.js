@@ -127,14 +127,15 @@ export default class Joystick extends Panel {
 
     if (SettingsStorage.get('enableVizAuv')) {
       this.vizauv = VizAuv.makeVizauv(this);
-      this.updateVizAuvContext();
-
-      setInterval(() => {
-        if (this.active) {
-          this.updateVizAuvContext();
-        }
-      }, 100);
     }
+
+    this.updateVizAuvContext();
+
+    setInterval(() => {
+      if (this.active) {
+        this.updateVizAuvContext();
+      }
+    }, 100);
   }
 
   onActiveChanged(active) {
@@ -214,7 +215,9 @@ export default class Joystick extends Panel {
       contextVizAuv.rot.roll = mur.telemetry.imuRoll;
     }
 
-    this.vizauv.updContext(contextVizAuv);
+    if (this.vizauv) {
+      this.vizauv.updContext(contextVizAuv);
+    }
   }
 
 
