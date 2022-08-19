@@ -303,6 +303,8 @@ export default {
       imuTapThreshold:          data[11] * 0.01,
       yawPidI:                  data[12] * 0.01,
       yawPidD:                  data[13] * 0.01,
+      yawPidStabMaxErr:         data[14] * 0.01,
+      yawPidStabWaitMs:         data[15],
     };
 
     return settings;
@@ -430,10 +432,12 @@ document.app.mur.controlBatterySettingsUpdate({
     const payload = [
       data.motorsPorts,
       data.motorsMultipliers,
-      data.motorsOffsetPositive,
-      data.motorsOffsetNegative,
-      data.yawPidI,
-      data.yawPidD,
+      packFloat(data.motorsOffsetPositive),
+      packFloat(data.motorsOffsetNegative),
+      packFloat(data.yawPidI),
+      packFloat(data.yawPidD),
+      packFloat(data.yawPidStabMaxErr),
+      data.yawPidStabWaitMs,
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload);
@@ -444,7 +448,7 @@ document.app.mur.controlBatterySettingsUpdate({
     const payload = [
       data.action,
       data.tapTimeout,
-      data.tapTreshold / 0.01,
+      packFloat(data.tapTreshold),
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload);
