@@ -6,6 +6,7 @@ import SettingsStorage from '/src/utils/SettingsStorage';
 import GlobalDialog from '/src/components/GlobalDialog.js';
 import TextInput from '/src/components/TextInput';
 import mur from '/src/vehicle/api.js';
+import protocol from '/src/vehicle/protocol';
 
 export default class Settings extends Panel {
   begin() {
@@ -237,14 +238,14 @@ export default class Settings extends Panel {
 
   onDiagnosticLogReceived(info) {
     const text = `
-- - -  FreeRTOS stats  - - -
+- - -  FreeRTOS Stats  - - -
 ${info.text}
-
 - - - Vehicle Revision - - -
 Software rev:  ${info.softwareRevMajor}.${info.softwareRevMinor}
-Hardware rev:  ${info.hardwareRev}
+Hardware rev:  0x${protocol.prettyHex([info.hardwareRev])}
+Build date:    ${info.buildDate} ${info.buildTime}
 
-- - -  Sensors status  - - -
+- - -  Sensors Status  - - -
 Imu started:   ${info.imuStarted}
 Gauge started: ${info.voltmeterStarted}
 

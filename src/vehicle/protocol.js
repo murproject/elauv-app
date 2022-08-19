@@ -267,9 +267,11 @@ export default {
       softwareRevMajor: data[0],
       softwareRevMinor: data[1],
       hardwareRev: data[2],
-      imuStarted: Boolean(data[3]),
-      voltmeterStarted: Boolean(data[4]),
-      text: data[5],
+      buildDate: data[3],
+      buildTime: data[4],
+      imuStarted: Boolean(data[5]),
+      voltmeterStarted: Boolean(data[6]),
+      text: data[7],
     };
     return info;
   },
