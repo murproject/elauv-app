@@ -2,13 +2,14 @@ import mur from './vehicle/api.js';
 
 import AboutPanel from './panels/About.js';
 import DevicesPanel from './panels/Devices.js';
-import TelemetryPanel from './panels/Telemetry.js';
+// import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';
 import ConsolePanel from './panels/Console.js';
 import SettingsPanel from './panels/Settings.js';
 import SettingsStorage from './utils/SettingsStorage.js';
+import TelemetryUtils from './utils/TelemetryUtils.js';
 
 export default {
   // TODO: integrate loading wrapper into PANEL, not main!
@@ -92,7 +93,7 @@ export default {
       settings: new SettingsPanel(),
 
       devices: new DevicesPanel(),
-      telemetry: new TelemetryPanel(),
+      // telemetry: new TelemetryPanel(),
       joystick: new JoystickPanel(),
       projects: new ProjectsPanel(),
       blockly: new BlocklyPanel(),
@@ -124,8 +125,9 @@ export default {
     mur.create();
 
     mur.telemetryUpdated = (t, f) => {
+      // TOOD: move to TelemetryUtils?
       const prettyTelemetry = JSON.stringify(f, null, '  ');
-      this.panels.telemetry.update(prettyTelemetry);
+      TelemetryUtils.update(prettyTelemetry);
       this.panels.blockly.updateTelemetry(t);
       this.panels.devices.updateTelemetry(t);
     };
@@ -135,8 +137,8 @@ export default {
     }, 1000);
 
     mur.onStatusUpdated = (status) => {
+      TelemetryUtils.update();
       this.panels.devices.onStatusUpdated(status);
-      this.panels.telemetry.update();
 
       if (this.oldStatus == status) {
         return;
@@ -174,6 +176,8 @@ export default {
     mur.onDiagnosticLogReceived = (info) => {
       this.panels.settings.onDiagnosticLogReceived(info);
     };
+
+    TelemetryUtils.makeFeedbackIcons();
   },
 
   showGlobalDialog(dialog) {

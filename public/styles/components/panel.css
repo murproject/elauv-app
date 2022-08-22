@@ -177,6 +177,10 @@
   max-height: 100%;
 }
 
+#telemetry-wrapper {
+  /* height: 100%; */
+}
+
 .nipple-wrapper {
   display: inline-block;
   position: relative;

@@ -7,6 +7,7 @@ import GlobalDialog from '/src/components/GlobalDialog.js';
 import App from '/src/App';
 import AppVersion from '/src/utils/AppVersion';
 import TelemetryUtils from '/src/utils/TelemetryUtils';
+import TelemetryTable from '/src/components/TelemetryTable';
 
 export default class Devices extends Panel {
   begin() {
@@ -74,6 +75,8 @@ export default class Devices extends Panel {
     this.devicesListEl = this.q('#connDevicesList');
     this.welcomeEl = this.q('#devices-welcome');
     this.buttonsWrapper = this.q('#buttonsRow');
+    this.telemetryTable = new TelemetryTable();
+    this.telemetryTable.inject(this.q('#telemetry-wrapper'));
 
     this.buttonScanCode = new Button({
       name: 'scan-code',
@@ -180,7 +183,9 @@ export default class Devices extends Panel {
   }
 
   onStatusUpdated(status) {
-    const connected = status === 'open';
+    const connected = mur.deviceAddress != null;
+    // const connected = true;
+
     this.devicesListEl.classList.toggle('hidden', connected);
     this.welcomeEl.classList.toggle('hidden', connected);
     this.buttonScanCode.classList.toggle('hidden', connected);
@@ -191,7 +196,11 @@ export default class Devices extends Panel {
   }
 
   updateTelemetry(t) {
-    this.q('#telemetry-wrapper').innerText = App.panels.telemetry.container.innerHtml;
+    // console.log(t);
+    // this.q('#telemetry-wrapper').innerText = JSON.stringify(t);
+    this.telemetryTable.attrs.telemetry = t;
+    this.telemetryTable.attrs.stats = TelemetryUtils.stats;
+    this.telemetryTable.update();
     this.updateIcon();
   }
 

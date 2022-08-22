@@ -3,10 +3,18 @@ import App from '/src/App';
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 import SettingsStorage from '/src/utils/SettingsStorage';
+import Utils from './Utils';
 
 export default {
   feedbackBox: undefined,
   feedbacksStatesOld: {},
+
+  stats: {},
+  solenoidWasTurnedOn: 0,
+  solenoidWasRelaxing: 0,
+
+  rsocStats: JSON.parse(Utils.notNull(localStorage.rsocStats, '[]')),
+  rsocStatscollector: setInterval(() => this.collectRsocStats(), 30 * 1000),
 
   rsocLevels: {
     low: 10,
@@ -14,15 +22,35 @@ export default {
     high: 70,
   },
 
-  makeBatteryIcon(forced = undefined) {
-    const rsoc = forced !== undefined ? forced : ('telemetry') ? mur.telemetry.battRsoc : -1;
+  collectRsocStats() {
+    if ((Date.now() - mur.lastUpdatedDate) < 1000) {
+      const currentStats = [
+        mur.lastUpdatedDate,
+        mur.telemetry.battRsoc.toFixed(2),
+        mur.telemetry.battVolts.toFixed(2),
+        mur.telemetry.battAmps.toFixed(2),
+        mur.telemetry.battTemp.toFixed(2),
+        this.solenoidWasTurnedOn,
+        this.solenoidWasRelaxing,
+      ];
+      this.rsocStats.push(currentStats);
+      console.log(currentStats);
+      localStorage.rsocStats = JSON.stringify(this.rsocStats);
 
-    if (!('telemetry' in mur) || !('battRsoc' in mur.telemetry) || !(mur.conn.state == 'open')) {
+      this.solenoidWasTurnedOn = 0;
+      this.solenoidWasRelaxing = 0;
+    }
+  },
+
+  makeBatteryIcon(forced = undefined) {
+    if (!('battRsoc' in mur.telemetry) || !(mur.conn.state == 'open')) {
       return {
         name: 'bluetooth',
         color: 'blue-dark',
       };
     }
+
+    const rsoc = forced !== undefined ? forced : mur.telemetry.battRsoc;
 
     const batteryIcon = rsoc < this.rsocLevels.low ? 'outline' :
                         rsoc < this.rsocLevels.medium ? 'low' :
@@ -41,6 +69,35 @@ export default {
       name: iconName,
       color: batteryColor,
     };
+  },
+
+  updateStats(telemetryText) {
+    if (this.active && telemetryText) {
+      this.stats.maxVolts = Math.max(this.stats.maxVolts, mur.telemetry.battVolts).toFixed(2);
+      this.stats.minVolts = Math.min(this.stats.minVolts, mur.telemetry.battVolts).toFixed(2);
+
+      this.stats.maxAmps = Math.max(this.stats.maxAmps, mur.telemetry.battAmps).toFixed(2);
+      this.stats.minAmps = Math.min(this.stats.minAmps, mur.telemetry.battAmps).toFixed(2);
+
+      this.stats.maxRsoc = Math.max(this.stats.maxRsoc, mur.telemetry.battRsoc).toFixed(2);
+      this.stats.minRsoc = Math.min(this.stats.minRsoc, mur.telemetry.battRsoc).toFixed(2);
+
+      this.stats.maxTemp = Math.max(this.stats.maxTemp, mur.telemetry.battTemp).toFixed(2);
+      this.stats.minTemp = Math.min(this.stats.minTemp, mur.telemetry.battTemp).toFixed(2);
+
+      this.stats.battState = mur.telemetry.battAmps > 0 ? 'charging' : 'discharging';
+
+      this.stats.lastTimestamp = mur.lastUpdatedDate.toLocaleString();
+      this.stats.ping = mur.timePingDelta;
+
+      telemetryText += '\n\n';
+      telemetryText += JSON.stringify(this.stats, null, '  ');
+    }
+
+    telemetryText += '\n\ncontext = ';
+    telemetryText += JSON.stringify(mur.context, null, '  ');
+
+    this.telemetryText = telemetryText;
   },
 
   makeFeedbackIcons() {
@@ -67,12 +124,9 @@ export default {
         enabled: false,
       });
 
-      // feedbackIcon.setIcon(feedback.icon, feedback.color, `big ${feedback.pulse ? 'pulse' : ''}`);
       feedbackIcon.inject(this.feedbackBox);
       this.feedbackIcons[feedback.name] = feedbackIcon;
     });
-
-    // document.querySelector("#head").appendChild(this.feedbackBox);
   },
 
   updateFeedbacks() {
@@ -109,6 +163,37 @@ export default {
       this.feedbackIcons.tap2x.setActive(false);
       this.feedbackIcons.tap.setActive(false);
     }
+  },
+
+  resetStats() {
+    this.stats = {
+      maxVolts: -Infinity,
+      minVolts:  Infinity,
+      maxAmps: -Infinity,
+      minAmps:  Infinity,
+      maxRsoc: -Infinity,
+      minRsoc:  Infinity,
+      maxTemp: -Infinity,
+      minTemp:  Infinity,
+      battState: null,
+      lastTimestamp: null,
+      ping: null,
+    };
+
+    this.update('');
+  },
+
+  update(telemetryText) {
+    if ('actuator_power' in mur.context) {
+      this.solenoidWasTurnedOn |= mur.context.actuator_power[0] > 0;
+    }
+
+    if ('feedback' in mur.telemetry) {
+      this.solenoidWasRelaxing |= mur.telemetry.feedback.solenoidRelaxing;
+    }
+
+    this.updateStats(telemetryText);
+    this.updateFeedbacks();
   },
 
 };
