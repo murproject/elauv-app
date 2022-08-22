@@ -135,6 +135,12 @@
   padding: 0.25em;
   font-weight: bold;
   margin-top: 0.5em;
+  border: 1px solid rgba(255, 127, 0, 0.5);
+}
+
+#head .tag-warning {
+  padding-top: 0.2em !important;
+  line-height: 1.0;
 }
 
 .pointer-events-none {
