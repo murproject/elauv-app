@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import DeviceListItem from '../components/DeviceItem';
 import GlobalDialog from '/src/components/GlobalDialog.js';
 import App from '/src/App';
+import AppVersion from '/src/utils/AppVersion';
 
 export default class Devices extends Panel {
   begin() {
@@ -155,14 +156,13 @@ export default class Devices extends Panel {
     }
 
     devices.forEach((device) => {
-      device.isOnline = (device.isOnline || (device.isActive && mur.conn.state == 'open'));
-      device.isConnected = device.isActive && mur.conn.state == 'open';
-
-      this.devicesListEl.appendChild(new DeviceListItem(device, () => {
+      const deviceItem = new DeviceListItem(device, () => {
         mur.connect(device.address);
         mur.pingCounter = 0;
-        // mur.conn.scanPaired();
-      }));
+      });
+
+      deviceItem.classList.toggle('pointer-events-none', !AppVersion.isDevBuild);
+      this.devicesListEl.appendChild(deviceItem);
     });
 
     const emptyEl = document.createElement('div');

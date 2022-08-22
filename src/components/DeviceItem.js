@@ -26,24 +26,13 @@ export default class DeviceListItem extends Element {
     return {
       name: '',
       address: '',
-      isActive: false,
       isOnline: false,
-      isConnected: false,
       isCompatible: false,
     };
   }
 
   render() {
     this.setClass('inactive', !this.attrs.isCompatible);
-    this.setClass('active', this.attrs.isConnected);
-
-    this.iconOnline =
-      !this.attrs.isCompatible ? '' :
-       this.attrs.isOnline ? icons.online : icons.offline;
-
-    this.iconStatus =
-      !(this.attrs.isPaired || this.attrs.isActive) ? '' :
-        this.attrs.isActive ? icons.active : icons.paired;
 
     const nameDivider = this.attrs.name.search('-');
 
@@ -54,10 +43,6 @@ export default class DeviceListItem extends Element {
       this.attrs.name.substring(nameDivider + 1) : '';
 
     return /*html*/`
-      <span class="device-tag">
-        ${this.iconOnline}
-      </span>
-
       <div class="device-title list-item-title">
         <div>${deviceName}</div>
         <div class="bold">${shortId}</div>
@@ -65,10 +50,6 @@ export default class DeviceListItem extends Element {
           [${this.attrs.address}]
         </div>
       </div>
-
-      <span class="device-tag">
-        ${this.iconStatus}
-      </span>
     `;
   }
 }

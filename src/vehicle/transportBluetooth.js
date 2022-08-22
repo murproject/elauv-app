@@ -11,12 +11,7 @@ export default {
   spp: '00001101-0000-1000-8000-00805F9B34FB',
   state: 'closed',
 
-  devices: {
-    active: null,
-    paired: [],
-    unpaired: [],
-    all: [],
-  },
+  devices: [],
 
   macAddress: null,
   // macAddress: 'D8:A0:1D:5C:FF:26', // TODO: don't hardcode
@@ -36,21 +31,17 @@ export default {
 
   start: function() {
     bluetoothClassicSerial.setDeviceDiscoveredListener((device) => {
-      if (!this.devices.unpaired.includes(device) ) { // && this.isDeviceCompatible(device)
-        this.devices.unpaired.push(device);
-      }
-      this.deviceDiscovered(device, false, true);
+      this.deviceDiscovered(device);
     });
   },
 
   isDeviceCompatible: function(device) {
-    return (device.name && device.name.startsWith('ElementaryAUV-'));
+    return ('name' in device && device.name.startsWith('ElementaryAUV-'));
     // return true // TODO //
   },
 
-  deviceDiscovered: function(device, isPaired, isOnline) {
-    const deviceActive = this.macAddress === device.address;
-    const newAllDevices = [];
+  deviceDiscovered: function(device) {
+    console.log(device);
     const compatible = this.isDeviceCompatible(device);
 
     const currentDevice = {
@@ -58,103 +49,41 @@ export default {
       address: device.address,
       name: device.name ? device.name : '',
       isCompatible: compatible,
-      isPaired: isPaired && compatible,
-      isOnline: isOnline,
-      isActive: deviceActive, // TODO: 'active' means selected, but not connected and working device
-      tag: `${compatible ? 0 : 1}-${isPaired ? 0 : 1}-${device.address}`,
+      tag: `${compatible ? 0 : 1}-${device.address}`,
     };
 
-    let replaced = false;
+    let deviceAlreadyFound = false;
 
-    console.log('all paired: ');
-    console.log(this.devices.paired);
-
-    this.devices.paired.forEach((comparedDevice) => {
-      if (currentDevice.address === comparedDevice.address) {
-        currentDevice.isPaired = true;
-        console.log('previously paired: ' + currentDevice);
-
-        // if (currentDevice.isPaired || currentDevice.isActive) {
-        //   newAllDevices.push(currentDevice)
-        // } else {
-        //   newAllDevices.push(comparedDevice)
-        // }
-        // newAllDevices.push(comparedDevice)
-        // replaced = true
-      } else {
-        // newAllDevices.push(comparedDevice)
+    this.devices.forEach((item) => {
+      if (item.address == currentDevice.address) {
+        deviceAlreadyFound = true;
       }
     });
 
-    this.devices.all.forEach((comparedDevice) => {
-      if (currentDevice.address === comparedDevice.address) {
-        if (comparedDevice.isOnline) {
-          currentDevice.isOnline = true;
-        }
-        // if (currentDevice.isPaired || currentDevice.isActive) {
-        newAllDevices.push(currentDevice);
-        replaced = true;
-      } else {
-        newAllDevices.push(comparedDevice);
-      }
-    });
-
-    if (!replaced) {
-      newAllDevices.push(currentDevice);
+    if (deviceAlreadyFound) {
+      return;
     }
 
-    if (deviceActive) {
-      this.devices.active = currentDevice;
-    }
-
-    this.devices.all = newAllDevices.sort((a, b) => a.tag.localeCompare(b.tag, 'en', {numeric: true}));
-
-    // this.devices.all = newAllDevices
-    // this.devices.all = newAllDevices
-
-    this.onDeviceDiscovered(this.devices.all);
-
-    console.log(this.devices.all);
+    this.devices.push(currentDevice);
+    this.devices = this.devices.sort((a, b) => a.tag.localeCompare(b.tag, 'en', {numeric: true}));
+    console.log(this.devices);
+    this.onDeviceDiscovered(this.devices);
   },
 
   scanUnpaired: function() {
     this.disconnect();
-    this.state = 'closed'; // TODO: 'scanning' status??
+    this.state = 'scanning'; // TODO: 'scanning' status??
     this.onScan();
 
-    this.devices.unpaired = [];
+    this.devices = [];
+
     bluetoothClassicSerial.discoverUnpaired(
         (results) => {
           console.log(results);
-          // for (const i in results) {
-          //   if (this.isDeviceCompatible(results[i])) {
-          //     this.devices.paired.push(results[i])
-          //   }
-          // }
-          // EventBus.$emit('bt-discovered-unpaired', { devices: results })
           this.state = 'closed';
         },
         (error) => {
           console.error(error);
-        // EventBus.$emit('notify', { text: 'discoverUnpaired failed: ' + error })
-        },
-    );
-  },
-
-  scanPaired: function() {
-    this.devices.paired = [];
-    bluetoothClassicSerial.list(
-        (results) => {
-          results.forEach((device) => {
-            if (this.isDeviceCompatible(device)) {
-              this.devices.paired.push(device);
-            }
-            this.deviceDiscovered(device, true, false);
-          });
-        // EventBus.$emit('bt-discovered-paired', { devices: results })
-        },
-        (error) => {
-        // EventBus.$emit('notify', { text: 'bt list failed: ' + error })
         },
     );
   },
@@ -168,8 +97,7 @@ export default {
       this.state = 'scanning';
     });
 
-    this.devices.all = [];
-    this.scanPaired();
+    this.devices = [];
     this.scanUnpaired();
   },
 
@@ -236,7 +164,6 @@ export default {
     }
 
     if (!this.macAddress || this.state === 'connecting') {
-      this.scanPaired();
       return;
     }
 
@@ -245,7 +172,6 @@ export default {
 
     bluetoothClassicSerial.isEnabled(
         () => {
-          this.scanPaired();
           bluetoothClassicSerial.connect(
               this.macAddress,
               [this.spp],
@@ -264,9 +190,6 @@ export default {
                     },
                   });
                 });
-                setTimeout(() => {
-                  this.scanPaired();
-                }, 100);
               },
               (error) => {
                 // EventBus.$emit('notify', { text: 'ОШИБКА! ' + error })

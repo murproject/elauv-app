@@ -198,7 +198,7 @@ export default {
 
   updateStatus: function() {
     this.status = this.conn.checkStatus();
-    this.conn.onDeviceDiscovered(this.conn.devices.all);
+    this.conn.onDeviceDiscovered(this.conn.devices);
     this.onStatusUpdated(this.status);
     // EventBus.$emit('status-updated', { status: this.status })
     // console.log(this.status)
