@@ -1,9 +1,8 @@
 import Panel from './Panel';
 import mur from '/src/vehicle/api.js';
-import Icon from '/src/components/Icon';
-import Button from '../components/Button';
 import Utils from '/src/utils/Utils';
 import SettingsStorage from '/src/utils/SettingsStorage';
+import TelemetryUtils from '/src/utils/TelemetryUtils';
 
 const rsocLevels = {
   low: 10,
@@ -36,7 +35,7 @@ export default class Telemetry extends Panel {
     this.resetStatsButton = this.q('#resetStats');
     this.resetStatsButton.onclick = () => this.resetStats();
 
-    this.makeFeedbackIcons();
+    TelemetryUtils.makeFeedbackIcons();
 
     this.resetStats();
 
@@ -72,42 +71,6 @@ export default class Telemetry extends Panel {
     /* TODO TODO TODO */
 
     // this.setInterval(this.updateFeedbacks, 1000);
-  }
-
-  makeFeedbackIcons() {
-    // this.feedbackBox = document.createElement("div");
-    // this.feedbackBox.classList.add("buttons-group");
-    // this.feedbackBox.id = "telemetry-feedback-box";
-
-    this.feedbackBox = document.querySelector('#telemetry-feedback-box');
-
-    this.feedbackIcons = {};
-
-    const feedbacks = [
-      {name: 'solenoid', color: 'light', pulseOnce: false, icon: '../magnet-off'},
-      {name: 'motors', color: 'light', pulseOnce: false, icon: '../fan-off'},
-      {name: 'tap', color: 'light', pulseOnce: true, icon: '../cursor-default-click'},
-      {name: 'tap2x', color: 'light', pulseOnce: true, icon: '../cursor-click-2x'},
-    ];
-
-    feedbacks.forEach((feedback) => {
-      const feedbackIcon = new Button({
-        name: feedback.name,
-        text: '',
-        type: 'panel-feedback',
-        action: undefined,
-        icon: feedback.icon,
-        iconClasses: `big ${feedback.pulseOnce ? 'pulse-once' : 'pulse'}`,
-        iconColor: feedback.color,
-        enabled: false,
-      });
-
-      // feedbackIcon.setIcon(feedback.icon, feedback.color, `big ${feedback.pulse ? 'pulse' : ''}`);
-      feedbackIcon.inject(this.feedbackBox);
-      this.feedbackIcons[feedback.name] = feedbackIcon;
-    });
-
-    // document.querySelector("#head").appendChild(this.feedbackBox);
   }
 
   resetStats() {
@@ -187,47 +150,6 @@ export default class Telemetry extends Panel {
     }
   }
 
-  updateFeedbacks() {
-    // mur.telemetry.feedback = {imuTap: true};
-    // this.feedbackIcons.solenoid.setActive(true);
-    // this.feedbackIcons.motors.setActive(true);
-    // if (!'tap' in this.feedbackIcons) {
-    //   return;
-    // }
-
-    if ('feedback' in mur.telemetry) {
-      this.feedbackIcons.motors.setActive(mur.telemetry.feedback.pilotingBlocked);
-      // this.feedbackIcons.motors.attrs.iconColor = mur.telemetry.feedback.pilotingBlocked && mur.telemetry.feedback.pilotingMode ? 'red' : 'light';
-      this.feedbackIcons.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
-
-      // this.feedbackIcons.solenoid.setActive(true);
-
-      const vibrateEnabled = SettingsStorage.get('vibrateOnTap');
-
-      if (mur.telemetry.feedback.imuDoubleTap) {
-        this.feedbackIcons.tap2x.setActive(true);
-        this.feedbackIcons.tap.setActive(false);
-        if (!this.feedbacksStatesOld.tapDouble && vibrateEnabled) {
-          console.log('vibrate');
-          navigator.vibrate(150);
-        }
-      } else if (mur.telemetry.feedback.imuTap) {
-        this.feedbackIcons.tap2x.setActive(false);
-        this.feedbackIcons.tap.setActive(true);
-        if (!this.feedbacksStatesOld.tap && vibrateEnabled) {
-          console.log('vibrate');
-          navigator.vibrate(150);
-        }
-      } else {
-        this.feedbackIcons.tap2x.setActive(false);
-        this.feedbackIcons.tap.setActive(false);
-      }
-
-      this.feedbacksStatesOld.tap = mur.telemetry.feedback.imuTap;
-      this.feedbacksStatesOld.tapDouble = mur.telemetry.feedback.imuDoubleTap;
-    }
-  }
-
   update(telemetryText) {
     if ('actuator_power' in mur.context) {
       this.solenoidWasTurnedOn |= mur.context.actuator_power[0] > 0;
@@ -239,7 +161,7 @@ export default class Telemetry extends Panel {
 
     this.updateStats(telemetryText);
     this.updateBattery();
-    this.updateFeedbacks();
+    TelemetryUtils.updateFeedbacks();
   }
 }
 
