@@ -3,6 +3,8 @@
 import bluetoothClassicSerial from 'cordova-plugin-bluetooth-classic-serial-port/www/bluetoothClassicSerial';
 import barcodeScanner from 'cordova-plugin-qr-barcode-scanner/www/barcodescanner';
 
+import api from './api';
+
 /* TODO: add statuses - scanning, network-unavailable */
 
 export default {
@@ -104,9 +106,7 @@ export default {
   // TODO: move from transportBluetooth
   scanCode: function() {
     barcodeScanner.scan(
-        (result) => {
-          this.processCodeInfo(result);
-        },
+        (result) => this.processCodeInfo(result),
         null,
         {
           showTorchButton: false,
@@ -143,9 +143,10 @@ export default {
 
       if (data.vehicleType.toLowerCase() === 'elauv') {
         // EventBus.$emit('notify', { text: 'code parsed: ' + data.macAddress })
-        this.disconnect();
-        this.macAddress = data.macAddress;
-        this.connect();
+        // this.disconnect();
+        api.disconnect();
+        api.connect(data.macAddress);
+        // this.macAddress = data.macAddress;
       }
     } catch (e) {
       // EventBus.$emit('notify', { text: 'Code parse error: ' + e })

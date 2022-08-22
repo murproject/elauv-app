@@ -49,6 +49,7 @@ export default {
 
     this.conn.onClose = (event) => {
       this.telemetry = {timestamp: 0};
+      this.pingCounter = 0;
       setTimeout(() => this.connect(), 1000);
     };
 
@@ -191,6 +192,7 @@ export default {
 
   disconnect: function() {
     this.controlPing(-1);
+    this.pingCounter = 0;
     this.deviceAddress = null;
     localStorage.lastDeviceAddress = null;
     this.conn.disconnect();
