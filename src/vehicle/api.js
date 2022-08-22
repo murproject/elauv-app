@@ -130,7 +130,8 @@ export default {
 
         this.timePing = new Date();
         this.timePingDelta = this.timePing - this.timePing;
-        // EventBus.$emit('log-received', message) // TODO: delete all EventBus references
+        this.pingSuccess = true;
+        this.updateStatus();
         break;
 
       case Protocol.packetTypes.ReplyAllSettings:
@@ -165,6 +166,8 @@ export default {
       localStorage.lastDeviceAddress = address;
     }
 
+    this.pingSuccess = false;
+
     // console.warn('WebSocket: connecting…')
     console.info('Connecting to', address);
     this.reconnecting = true;
@@ -193,6 +196,7 @@ export default {
   disconnect: function() {
     this.controlPing(-1);
     this.pingCounter = 0;
+    this.pingSuccess = false;
     this.deviceAddress = null;
     localStorage.lastDeviceAddress = null;
     this.conn.disconnect();
@@ -200,7 +204,12 @@ export default {
 
   updateStatus: function() {
     this.status = this.conn.checkStatus();
-    this.conn.onDeviceDiscovered(this.conn.devices);
+
+    if (this.status === 'open' && !this.pingSuccess) {
+      this.status = 'wait-ping';
+    }
+
+    // this.conn.onDeviceDiscovered(this.conn.devices);
     this.onStatusUpdated(this.status);
     // EventBus.$emit('status-updated', { status: this.status })
     // console.log(this.status)
@@ -286,7 +295,7 @@ export default {
   },
 
   controlPing: function(counter = undefined) {
-    if (this.status === 'open') {
+    if (this.status === 'open' || this.status === 'wait-ping') {
       this.conn.sendMessage(Protocol.packControlPing({
         counter: counter == undefined ? this.pingCounter : counter,
       }));

@@ -50,6 +50,7 @@ export default {
   globalDialogActive: false,
   mur: mur,
   isCordova: false,
+  oldStatus: undefined,
 
   panelSelect: function(target, mode = 'main') {
     const currentPanel = mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';
@@ -136,6 +137,12 @@ export default {
     mur.onStatusUpdated = (status) => {
       this.panels.devices.onStatusUpdated(status);
       this.panels.telemetry.update();
+
+      if (this.oldStatus == status) {
+        return;
+      }
+
+      this.oldStatus = status;
 
       const fw = document.querySelector('#feedback-wrapper');
 
