@@ -7,6 +7,7 @@ import GlobalDialog from '/src/components/GlobalDialog.js';
 import TextInput from '/src/components/TextInput';
 import mur from '/src/vehicle/api.js';
 import protocol from '/src/vehicle/protocol';
+import AppVersion from '/src/utils/AppVersion';
 
 export default class Settings extends Panel {
   begin() {
@@ -16,11 +17,13 @@ export default class Settings extends Panel {
     this.html = /*html*/`
       <div class="container">
         <div class="list-wrapper">
-          <h1 class="text-center">Настройки аппарата</h1>
-          <div id="settings-inputs-container" class="monospace-all"></div>
-          <pre id="diag-log-text" class="monospace fit-center"></pre>
-          <div id="settings-action-buttons" class="row"></div>
-          <div id="vehicle-action-buttons" class="row"></div>
+          <div id="vehicle-settings">
+            <h1 class="text-center">Настройки аппарата</h1>
+            <div id="settings-inputs-container" class="monospace-all"></div>
+            <pre id="diag-log-text" class="monospace fit-center"></pre>
+            <div id="settings-action-buttons" class="row"></div>
+            <div id="vehicle-action-buttons" class="row"></div>
+          </div>
 
           <h1 class="text-center">Настройки приложения</h1>
           <div id="app-settings-buttons" class="fit-center margin-auto"></div>
@@ -86,6 +89,11 @@ export default class Settings extends Panel {
     }).inject(this.appSettingsButtons);
 
     /* Vehicle settings */
+
+    if (!AppVersion.isDevBuild) {
+      this.q('#vehicle-settings').innerText = '';
+      return;
+    }
 
     const buttons = [
       {
