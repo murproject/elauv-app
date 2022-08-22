@@ -165,7 +165,7 @@ export default class Telemetry extends Panel {
       mur.conn.state = 'open';
     }
 
-    const batteryText = mur.conn.state != 'open' ? 'unknown' :
+    const batteryIcon = mur.conn.state != 'open' ? 'unknown' :
                         rsoc < rsocLevels.low ? 'outline' :
                         rsoc < rsocLevels.medium ? 'low' :
                         rsoc < rsocLevels.high ? 'medium' :
@@ -179,7 +179,7 @@ export default class Telemetry extends Panel {
 
     const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : '';
 
-    this.battIconName = `battery-${batteryCharge}${batteryText}`;
+    this.battIconName = `battery-${batteryCharge}${batteryIcon}`;
 
     if (this.oldBattIconName != this.battIconName) {
       this.setIcon(this.battIconName, batteryColor);

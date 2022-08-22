@@ -51,7 +51,9 @@ export default class Devices extends Panel {
 
         <div class="vertical-filler"></div>
 
-        <div id="buttonsRow" class="row"></div>
+        <div id="telemetry-wrapper"></div>
+
+        <div id="buttonsRow" class="row buttons-collapsed"></div>
       </div>
 
       <!-- <div class="row"><span id="connStatus"></span></div> -->
@@ -68,7 +70,7 @@ export default class Devices extends Panel {
     this.welcomeEl = this.q('#devices-welcome');
     this.buttonsWrapper = this.q('#buttonsRow');
 
-    new Button({
+    this.buttonScanCode = new Button({
       name: 'scan-code',
       text: 'Сканировать код',
       action: () => this.scanCode(),
@@ -77,23 +79,29 @@ export default class Devices extends Panel {
       classes: ['button-vertical', 'extra-padding'],
       scanHelper: true,
       scanHelperBounce: true,
-    }).inject(this.q('#scan-button-wrapper'));
+    });
 
-    new Button({
+    this.buttonScanCode.inject(this.q('#scan-button-wrapper'));
+
+    this.buttonScanDevices = new Button({
       name: 'scan-bluetooth',
       text: 'Поиск устройств',
       action: () => this.scanDevices(),
       icon: 'broadcast',
       // classes: 'button-vertical',
-    }).inject(this.buttonsWrapper);
+    });
 
-    new Button({
+    this.buttonScanDevices.inject(this.buttonsWrapper);
+
+    this.buttonDisconnect = new Button({
       name: 'disconnect',
       text: 'Отключить',
       action: () => this.disconnect(),
       icon: 'broadcast-off',
       // classes: 'button-vertical',
-    }).inject(this.buttonsWrapper);
+    });
+
+    this.buttonDisconnect.inject(this.buttonsWrapper);
 
     if (mur.conn.type === 'bluetooth') {
       mur.conn.onDeviceDiscovered = (devices) => this.onUpdateDevicesList(devices);
@@ -137,16 +145,13 @@ export default class Devices extends Panel {
     mur.conn.scanAll();
   }
 
-
   scanCode() {
     mur.conn.scanCode();
   }
 
-
   disconnect() {
     mur.disconnect();
   }
-
 
   onUpdateDevicesList(devices) {
     this.devicesListEl.innerText = '';
@@ -172,5 +177,16 @@ export default class Devices extends Panel {
     this.devicesListEl.appendChild(emptyEl);
   }
 
-  onUpdateConnection() {}
+  onStatusUpdated(status) {
+    const connected = status === 'open';
+    this.devicesListEl.classList.toggle('hidden', connected);
+    this.welcomeEl.classList.toggle('hidden', connected);
+    this.buttonScanCode.classList.toggle('hidden', connected);
+    this.buttonScanDevices.classList.toggle('hidden', connected);
+    this.buttonDisconnect.classList.toggle('hidden', !connected);
+  }
+
+  updateTelemetry(t) {
+    this.q('#telemetry-wrapper').innerText = App.panels.telemetry.container.innerHtml;
+  }
 }

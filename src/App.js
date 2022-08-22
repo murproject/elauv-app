@@ -126,6 +126,7 @@ export default {
       const prettyTelemetry = JSON.stringify(f, null, '  ');
       this.panels.telemetry.update(prettyTelemetry);
       this.panels.blockly.updateTelemetry(t);
+      this.panels.devices.updateTelemetry(t);
     };
 
     this.timerKeepAlive = setInterval(() => {
@@ -133,6 +134,7 @@ export default {
     }, 1000);
 
     mur.onStatusUpdated = (status) => {
+      this.panels.devices.onStatusUpdated(status);
       this.panels.telemetry.update();
 
       const fw = document.querySelector('#feedback-wrapper');
