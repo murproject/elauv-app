@@ -25,8 +25,10 @@ export default class Settings extends Panel {
             <div id="vehicle-action-buttons" class="row"></div>
           </div>
 
-          <h1 class="text-center">Настройки приложения</h1>
-          <div id="app-settings-buttons" class="fit-center margin-auto"></div>
+          <div id="app-settings">
+            <h1 class="text-center">Настройки приложения</h1>
+            <div id="app-settings-buttons" class="fit-center margin-auto"></div>
+          </div>
         </div>
       </div>
     `;

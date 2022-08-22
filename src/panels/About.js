@@ -26,7 +26,7 @@ export default class About extends Panel {
           ElementaryAUV App<br>
           <span class="opacity-50 text-small">
             Версия ${AppVersion.version} / ${AppVersion.buildDate}
-            </span>
+          </span>
 
             ${AppVersion.isDevBuild ? /*html*/`
             <div class="tag-warning">
@@ -54,7 +54,11 @@ export default class About extends Panel {
 
   init() {
     this.panelButton.setAttribute('type', 'logo');
-    this.panelButton.setText(`<img src="media/icon-small.png" />`);
+    const tag = !AppVersion.isDevBuild ? `` : /*html*/`
+      <div class="tag-warning margin-top-zero">DEV</div>
+    `;
+
+    this.panelButton.setText(`<img src="media/icon-small.png" />${tag}`);
 
     this.makeButtons();
   }

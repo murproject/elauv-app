@@ -24,6 +24,10 @@
   width: 100%;
 }
 
+.display-flex {
+  display: flex;
+}
+
 .vertical-filler {
   flex-grow: 1;
 }

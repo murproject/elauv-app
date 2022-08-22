@@ -101,7 +101,7 @@ export default {
       // vizauv: new VizAuvPanel(),
     };
 
-    this.panelSelect(this.panels.settings);
+    this.panelSelect(this.panels.devices);
   },
 
   setTitle: function(title) {

@@ -46,7 +46,7 @@ export default class Devices extends Panel {
           <div id="connDevicesList" class="width-fill row"></div>
         </div>
 
-        <div class="row" id="scan-button-wrapper"></div>
+        <div id="scan-button-wrapper" class="row buttons-collapsed"></div>
 
         <div class="vertical-filler"></div>
 
