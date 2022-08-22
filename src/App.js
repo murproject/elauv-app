@@ -142,6 +142,7 @@ export default {
         fw.classList.add('background-pulse');
 
         setTimeout(() => {
+          // TODO: should consider as connected (and blink green) only after first successful ping!
           fw.classList.remove('background-soft-green');
           fw.classList.remove('background-pulse');
         }, 2500);

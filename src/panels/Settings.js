@@ -243,7 +243,8 @@ ${info.text}
 - - - Vehicle Revision - - -
 Software rev:  ${info.softwareRevMajor}.${info.softwareRevMinor}
 Hardware rev:  0x${protocol.prettyHex([info.hardwareRev])}
-Build date:    ${info.buildDate} ${info.buildTime}
+Build date:    ${info.buildDate}
+Build time:    ${info.buildTime}
 
 - - -  Sensors Status  - - -
 Imu started:   ${info.imuStarted}
