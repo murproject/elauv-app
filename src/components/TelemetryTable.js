@@ -13,6 +13,7 @@ export default class TelemetryPanel extends Element {
 
   static get defaultAttrs() {
     return {
+      address: null,
       telemetry: null,
       stats: null,
     };
@@ -35,14 +36,19 @@ export default class TelemetryPanel extends Element {
     const t = this.attrs.telemetry;
     const s = this.attrs.stats;
 
-    console.log(t);
-    console.log(s);
+    // console.log(t);
+    // console.log(s);
 
     return /*html*/`
-      <div>
-        <table>
-          ${this.makeRow('Курс', t.imuYaw.toFixed(2))}
-          ${this.makeRow('Заряд', t.battRsoc.toFixed(0) + '%')}
+      <div class="monospace">
+        <table class="telemetry-table">
+          ${this.makeRow('Адрес', this.attrs.address)}
+
+          ${this.makeRow('Курс', t.imuYaw.toFixed(2) + '°')}
+          ${this.makeRow('Крен', t.imuRoll.toFixed(2) + '°')}
+          ${this.makeRow('Дифферент', t.imuPitch.toFixed(2) + '°')}
+
+          ${this.makeRow('Заряд батареи', t.battRsoc.toFixed(0) + '%')}
         </table>
 
         ${ JSON.stringify(t, null, ' ') }

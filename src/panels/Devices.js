@@ -198,6 +198,7 @@ export default class Devices extends Panel {
   updateTelemetry(t) {
     // console.log(t);
     // this.q('#telemetry-wrapper').innerText = JSON.stringify(t);
+    this.telemetryTable.attrs.address = mur.deviceAddress;
     this.telemetryTable.attrs.telemetry = t;
     this.telemetryTable.attrs.stats = TelemetryUtils.stats;
     this.telemetryTable.update();
