@@ -26,8 +26,15 @@ export default class About extends Panel {
           ElementaryAUV App<br>
           <span class="opacity-50 text-small">
             Версия ${AppVersion.version} / ${AppVersion.buildDate}
-          </span>
+            </span>
+
+            ${AppVersion.isDevBuild ? /*html*/`
+            <div class="tag-warning">
+              <span>DEV BUILD</span>
+            </div>
+            ` : ``}
         </h1>
+
 
 
         <img src="media/splash-anim.gif" class="about-splash"/>

@@ -124,3 +124,11 @@
   width: fit-content;
   margin: 0 auto;
 }
+
+.tag-warning {
+  background: var(--color-red);
+  color: white;
+  padding: 0.25em;
+  font-weight: bold;
+  margin-top: 0.5em;
+}
