@@ -6,6 +6,7 @@ import DeviceListItem from '../components/DeviceItem';
 import GlobalDialog from '/src/components/GlobalDialog.js';
 import App from '/src/App';
 import AppVersion from '/src/utils/AppVersion';
+import TelemetryUtils from '/src/utils/TelemetryUtils';
 
 export default class Devices extends Panel {
   begin() {
@@ -66,6 +67,10 @@ export default class Devices extends Panel {
 
     mur.onDiscard = () => this.onClientDiscard();
 
+    this.battIconName = 'bluetooth';
+    this.oldBattIconName = this.battIconName;
+    this.setIcon(this.battIconName);
+
     this.devicesListEl = this.q('#connDevicesList');
     this.welcomeEl = this.q('#devices-welcome');
     this.buttonsWrapper = this.q('#buttonsRow');
@@ -108,9 +113,6 @@ export default class Devices extends Panel {
     } else {
       // this.q("#connBluetoothPanel").classList.add("hidden");
     }
-
-    this.setIcon('bluetooth-connect'); // TODO //
-    // setTimeout(() => this.scanDevices(), 200  )
   }
 
   onClientDiscard() {
@@ -184,9 +186,17 @@ export default class Devices extends Panel {
     this.buttonScanCode.classList.toggle('hidden', connected);
     this.buttonScanDevices.classList.toggle('hidden', connected);
     this.buttonDisconnect.classList.toggle('hidden', !connected);
+    this.q('#telemetry-wrapper').classList.toggle('hidden', !connected);
+    this.updateIcon();
   }
 
   updateTelemetry(t) {
     this.q('#telemetry-wrapper').innerText = App.panels.telemetry.container.innerHtml;
+    this.updateIcon();
+  }
+
+  updateIcon() {
+    const icon = TelemetryUtils.makeBatteryIcon();
+    this.setIcon(icon.name, icon.color);
   }
 }

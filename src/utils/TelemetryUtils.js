@@ -2,9 +2,11 @@ import mur from '/src/vehicle/api';
 import App from '/src/App';
 import Icon from '/src/components/Icon';
 import Button from '../components/Button';
+import SettingsStorage from '/src/utils/SettingsStorage';
 
 export default {
   feedbackBox: undefined,
+  feedbacksStatesOld: {},
 
   rsocLevels: {
     low: 10,
@@ -12,25 +14,31 @@ export default {
     high: 70,
   },
 
-  makeBatteryIcon() {
-    const rsoc = forced !== undefined ? forced : ('telemetry' in mur) ? mur.telemetry.battRsoc : -1;
+  makeBatteryIcon(forced = undefined) {
+    const rsoc = forced !== undefined ? forced : ('telemetry') ? mur.telemetry.battRsoc : -1;
 
-    const batteryIcon = mur.conn.state != 'open' ? 'unknown' :
-      rsoc < rsocLevels.low ? 'outline' :
-      rsoc < rsocLevels.medium ? 'low' :
-      rsoc < rsocLevels.high ? 'medium' :
-      rsoc >= rsocLevels.high ? 'high' : 'unknown';
+    if (!('telemetry' in mur) || !('battRsoc' in mur.telemetry) || !(mur.conn.state == 'open')) {
+      return {
+        name: 'bluetooth',
+        color: 'blue-dark',
+      };
+    }
 
-    const batteryColor = mur.conn.state != 'open' ? 'blue-dark' :
-      rsoc < rsocLevels.low ? 'red' :
-      rsoc < rsocLevels.medium ? 'orange' :
-      rsoc < rsocLevels.high ? 'yellow' :
-      rsoc >= rsocLevels.high ? 'green' : 'blue-dark';
+    const batteryIcon = rsoc < this.rsocLevels.low ? 'outline' :
+                        rsoc < this.rsocLevels.medium ? 'low' :
+                        rsoc < this.rsocLevels.high ? 'medium' :
+                        rsoc >= this.rsocLevels.high ? 'high' : 'unknown';
 
-    const batteryCharge = mur.telemetry.battAmps > 0 ? 'charging-' : '';
+    const batteryColor = rsoc < this.rsocLevels.low ? 'red' :
+                         rsoc < this.rsocLevels.medium ? 'orange' :
+                         rsoc < this.rsocLevels.high ? 'yellow' :
+                         rsoc >= this.rsocLevels.high ? 'green' : 'blue-dark';
+
+    const batteryCharge = mur.conn.state === 'open' && mur.telemetry.battAmps > 0 ? 'charging-' : '';
+    const iconName = mur.conn.state === 'open' ? `battery-${batteryCharge}${batteryIcon}` : 'bluetooth';
 
     return {
-      iconName: `battery-${batteryCharge}${batteryIcon}`,
+      name: iconName,
       color: batteryColor,
     };
   },
@@ -68,19 +76,9 @@ export default {
   },
 
   updateFeedbacks() {
-    // mur.telemetry.feedback = {imuTap: true};
-    // this.feedbackIcons.solenoid.setActive(true);
-    // this.feedbackIcons.motors.setActive(true);
-    // if (!'tap' in this.feedbackIcons) {
-    //   return;
-    // }
-
     if ('feedback' in mur.telemetry) {
       this.feedbackIcons.motors.setActive(mur.telemetry.feedback.pilotingBlocked);
-      // this.feedbackIcons.motors.attrs.iconColor = mur.telemetry.feedback.pilotingBlocked && mur.telemetry.feedback.pilotingMode ? 'red' : 'light';
       this.feedbackIcons.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
-
-      // this.feedbackIcons.solenoid.setActive(true);
 
       const vibrateEnabled = SettingsStorage.get('vibrateOnTap');
 

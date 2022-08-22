@@ -132,7 +132,7 @@
 .tag-warning {
   background: var(--color-red);
   color: white;
-  padding: 0.25em;
+  padding: 0.25em 0;
   font-weight: bold;
   margin-top: 0.5em;
   border: 1px solid rgba(255, 127, 0, 0.5);

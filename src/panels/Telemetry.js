@@ -39,8 +39,6 @@ export default class Telemetry extends Panel {
 
     this.resetStats();
 
-    this.feedbacksStatesOld = {};
-
     /* TODO: only for testing during development! */
 
     this.rsocStats = JSON.parse(Utils.notNull(localStorage.rsocStats, '[]'));
@@ -67,10 +65,6 @@ export default class Telemetry extends Panel {
         this.solenoidWasRelaxing = 0;
       }
     }, 30 * 1000);
-
-    /* TODO TODO TODO */
-
-    // this.setInterval(this.updateFeedbacks, 1000);
   }
 
   resetStats() {
