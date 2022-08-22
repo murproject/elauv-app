@@ -15,7 +15,7 @@ export default {
   name: 'mur',
   mur: this,
   ip: '127.0.0.1',
-  deviceAddress: localStorage.lastDeviceAddress ? localStorage.lastDeviceAddress : null,
+  deviceAddress: null,
   port: '8802',
   page: 'api',
   url: null,
