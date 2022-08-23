@@ -159,15 +159,15 @@ export default {
       return;
     }
 
-    if (!address) {
-      address = localStorage.lastDeviceAddress;
-    } else {
-      this.deviceAddress = address;
-      localStorage.lastDeviceAddress = address;
-    }
+    // if (!address) {
+    //   address = localStorage.lastDeviceAddress;
+    // } else {
+    //   this.deviceAddress = address;
+    //   localStorage.lastDeviceAddress = address;
+    // }
+
 
     this.pingSuccess = false;
-
     // console.warn('WebSocket: connecting…')
     console.info('Connecting to', address);
     this.reconnecting = true;
@@ -181,7 +181,11 @@ export default {
     //   this.conn.ws.close()
     // }
     // this.conn.connect(this.url)
-    this.conn.connect(address);
+
+    if (address) {
+      this.deviceAddress = address;
+      this.conn.connect(address);
+    }
 
     this.updateStatus();
 
