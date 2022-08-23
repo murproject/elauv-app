@@ -4,6 +4,7 @@ import Icon from '/src/components/Icon';
 import Button from '../components/Button';
 import SettingsStorage from '/src/utils/SettingsStorage';
 import Utils from './Utils';
+import AppVersion from '/src/utils/AppVersion';
 
 export default {
   feedbackBox: undefined,
@@ -14,7 +15,7 @@ export default {
   solenoidWasRelaxing: 0,
 
   rsocStats: JSON.parse(Utils.notNull(localStorage.rsocStats, '[]')),
-  rsocStatscollector: setInterval(() => this.collectRsocStats(), 30 * 1000),
+  rsocStatscollector: AppVersion.isDevBuild ? setInterval(() => this.collectRsocStats(), 30 * 1000) : undefined,
 
   rsocLevels: {
     low: 10,
