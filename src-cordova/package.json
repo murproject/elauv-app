@@ -45,7 +45,8 @@
       "cordova-plugin-filepath": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-vibration": {},
-      "cordova-plugin-chooser": {}
+      "cordova-plugin-chooser": {},
+      "cordova-plugin-inappbrowser": {}
     }
   }
 }

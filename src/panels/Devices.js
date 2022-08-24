@@ -9,56 +9,63 @@ import AppVersion from '/src/utils/AppVersion';
 import TelemetryUtils from '/src/utils/TelemetryUtils';
 import TelemetryTable from '/src/components/TelemetryTable';
 
+const welcomeIntro = /*html*/`
+<div id="devices-welcome" class="opacity-75 margin-auto">
+
+  <div class="text-center">
+    <h1>Для начала работы:</h1>
+  </div>
+
+  <p>
+  ${Icon('table-furniture')}
+  Поставьте аппарат<br>
+  на ровную поверхность.
+  </p>
+
+  <p>
+  ${Icon('power')}
+  Включите ElementaryAUV.
+  </p>
+
+  <p>
+  ${Icon('timer-sand')}
+  Подождите 5 секунд.
+  </p>
+
+  <p>
+  ${Icon('qrcode-scan')}
+  Отсканируйте код.<br>
+  </p>
+
+</div>
+`;
+
 export default class Devices extends Panel {
   begin() {
     this.name = 'Устройства';
 
     this.html = /*html*/`
       <div class="container">
-        <div class="row">
-          <div id="devices-welcome" class="opacity-75 margin-auto">
-            <div class="text-center">
-              <h1>Для начала работы:</h1>
-            </div>
 
-            <p>
-              ${Icon('table-furniture')}
-              Поставьте аппарат<br>
-              на ровную поверхность.
-            </p>
-
-            <p>
-              ${Icon('power')}
-              Включите ElementaryAUV.
-            </p>
-
-            <p>
-              ${Icon('timer-sand')}
-              Подождите 5 секунд.
-            </p>
-
-            <p>
-              ${Icon('qrcode-scan')}
-              Отсканируйте код.<br>
-            </p>
-
+        <div id="device-connect" class="display-flex flex-column height-fill justify-content-center">
+          <div class="row">
+            ${welcomeIntro}
           </div>
+
+          <div id="connDevicesListWrapper" class="list-wrapper soft-edges-vertical height-fit-content margin-zero">
+            <div id="connDevicesList" class="width-fill row"></div>
+          </div>
+
+          <div id="scan-button-wrapper" class="display-flex flex-column align-items-center"></div>
         </div>
 
-        <div class="list-wrapper soft-edges-vertical">
-          <div id="connDevicesList" class="width-fill row"></div>
+        <div id="device-info" class="display-flex flex-column height-fill hidden">
+          <img class="vehicle-img" src="/media/vehicle.png"/>
+          <div id="telemetry-wrapper" class="list-wrapper"></div>
+          <div id="disconnect-button-wrapper" class="row buttons-collapsed"></div>
         </div>
 
-        <div id="scan-button-wrapper" class="row buttons-collapsed"></div>
-
-        <div class="vertical-filler"></div>
-
-        <div id="telemetry-wrapper"></div>
-
-        <div id="buttonsRow" class="row buttons-collapsed"></div>
       </div>
-
-      <!-- <div class="row"><span id="connStatus"></span></div> -->
     `;
   }
 
@@ -99,7 +106,7 @@ export default class Devices extends Panel {
       // classes: 'button-vertical',
     });
 
-    this.buttonScanDevices.inject(this.buttonsWrapper);
+    this.buttonScanDevices.inject(this.q('#scan-button-wrapper'));
 
     this.buttonDisconnect = new Button({
       name: 'disconnect',
@@ -109,7 +116,7 @@ export default class Devices extends Panel {
       // classes: 'button-vertical',
     });
 
-    this.buttonDisconnect.inject(this.buttonsWrapper);
+    this.buttonDisconnect.inject(this.q('#disconnect-button-wrapper'));
 
     if (mur.conn.type === 'bluetooth') {
       mur.conn.onDeviceDiscovered = (devices) => this.onUpdateDevicesList(devices);
@@ -186,23 +193,22 @@ export default class Devices extends Panel {
     const connected = mur.deviceAddress != null;
     // const connected = true;
 
-    this.devicesListEl.classList.toggle('hidden', connected);
-    this.welcomeEl.classList.toggle('hidden', connected);
-    this.buttonScanCode.classList.toggle('hidden', connected);
-    this.buttonScanDevices.classList.toggle('hidden', connected);
-    this.buttonDisconnect.classList.toggle('hidden', !connected);
-    this.q('#telemetry-wrapper').classList.toggle('hidden', !connected);
+    this.q('#device-connect').classList.toggle('hidden', connected);
+    this.q('#device-info').classList.toggle('hidden', !connected);
     this.updateIcon();
   }
 
   updateTelemetry(t) {
     // console.log(t);
     // this.q('#telemetry-wrapper').innerText = JSON.stringify(t);
-    this.telemetryTable.attrs.address = mur.deviceAddress;
-    this.telemetryTable.attrs.telemetry = t;
-    this.telemetryTable.attrs.stats = TelemetryUtils.stats;
-    this.telemetryTable.update();
     this.updateIcon();
+
+    if (this.active) {
+      this.telemetryTable.attrs.address = mur.deviceAddress;
+      this.telemetryTable.attrs.telemetry = t;
+      this.telemetryTable.attrs.stats = TelemetryUtils.stats;
+      this.telemetryTable.update();
+    }
   }
 
   updateIcon() {

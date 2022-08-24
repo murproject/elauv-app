@@ -13,15 +13,6 @@ export default class About extends Panel {
       <article class="">
         <div class="vertical-filler"></div>
 
-        <!-- <div id="about-center"> -->
-
-        <!--
-        <h1>
-          Приложение для работы с<br>
-          ElementaryAUV.
-        </h1>
-        -->
-
         <h1>
           ElementaryAUV App<br>
           <span class="opacity-50 text-small">
@@ -35,15 +26,11 @@ export default class About extends Panel {
             ` : ``}
         </h1>
 
-
-
         <img src="media/splash-anim.gif" class="about-splash"/>
 
         <p class="text-center">
-          ООО "Центр робототехники"<br>
-          г. Владивосток, 2022 г.
+          ${AppVersion.copyright}
         </p>
-        <!-- </div> -->
 
         <div class="vertical-filler"></div>
 
