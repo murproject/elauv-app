@@ -15,12 +15,21 @@ export default {
   solenoidWasRelaxing: 0,
 
   rsocStats: JSON.parse(Utils.notNull(localStorage.rsocStats, '[]')),
-  rsocStatscollector: AppVersion.isDevBuild ? setInterval(() => this.collectRsocStats(), 30 * 1000) : undefined,
+
+  rsocStatsCollector: undefined,
 
   rsocLevels: {
     low: 10,
     medium: 40,
     high: 70,
+  },
+
+  start() {
+    this.makeFeedbackIcons();
+
+    if (AppVersion.isDevBuild) {
+      this.rsocStatsCollector = setInterval(() => this.collectRsocStats(), 30 * 1000);
+    }
   },
 
   collectRsocStats() {

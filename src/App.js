@@ -177,7 +177,7 @@ export default {
       this.panels.settings.onDiagnosticLogReceived(info);
     };
 
-    TelemetryUtils.makeFeedbackIcons();
+    TelemetryUtils.start();
   },
 
   showGlobalDialog(dialog) {
