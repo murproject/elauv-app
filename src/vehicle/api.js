@@ -1,3 +1,4 @@
+import AppVersion from '../utils/AppVersion';
 import Protocol from './protocol';
 
 let transport = null;
@@ -94,6 +95,10 @@ export default {
         // EventBus.$emit('status-updated')
       }
     }, 2500);
+
+    if (AppVersion.isDevBuild) {
+      this.conn.scanAll();
+    }
   },
 
 
