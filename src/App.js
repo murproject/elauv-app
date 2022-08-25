@@ -199,11 +199,7 @@ export default {
 
   setLoading(isLoading, timeout) {
     setTimeout(() => {
-      if (isLoading) {
-        this.loadingWrapper.classList.add('active');
-      } else {
-        this.loadingWrapper.classList.remove('active');
-      }
+      this.loadingWrapper.classList.toggle('active', isLoading);
     }, timeout);
   },
 

@@ -81,8 +81,7 @@ export default class Devices extends Panel {
   }
 
   init() {
-    // this.statusEl = this.q("#connStatus");
-    // this.statusEl.innerText = "Connection type: " + mur.conn.type;
+    this.wasConnected = false;
 
     mur.onDiscard = () => this.onClientDiscard();
 
@@ -237,9 +236,17 @@ export default class Devices extends Panel {
     const connected = mur.deviceAddress != null;
     // const connected = true;
 
-    this.q('#device-connect').classList.toggle('hidden', connected);
-    this.q('#device-info').classList.toggle('hidden', !connected);
-    this.updateIcon();
+    if (this.wasConnected !== connected) {
+      App.setLoading(true);
+      setTimeout(() => {
+        App.setLoading(false);
+        this.q('#device-connect').classList.toggle('hidden', connected);
+        this.q('#device-info').classList.toggle('hidden', !connected);
+        this.updateIcon();
+      }, 1500);
+    }
+
+    this.wasConnected = connected;
   }
 
   updateTelemetry(t) {
