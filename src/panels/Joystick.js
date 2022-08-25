@@ -14,6 +14,11 @@ function clamp(value, min, max) {
   return Math.min(Math.max(min, Math.round(value)), max);
 }
 
+function calcRowOpacity(value) {
+  value = Math.abs(value);
+  return (value > 0 ? value + 50 : 30);
+}
+
 const axesFormulaDefault = `max_power = 100
 threshold = 10
 
@@ -72,7 +77,7 @@ export default class Joystick extends Panel {
           <textarea id="axesFormula" spellcheck="false" class="hidden"
                     rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
           </textarea>
-          <div style="margin:auto" id="formulaStatus"></div>
+          <div id="formulaStatus" class="margin-auto"></div>
         </div>
 
         <div class="vertical-filler"></div>
@@ -319,24 +324,37 @@ export default class Joystick extends Panel {
     d = clamp(d, -max_power, max_power);
 
     const pretty = {
-      a: String(contextVizAuv.motors.hl).padStart(4),
-      b: String(contextVizAuv.motors.hr).padStart(4),
-      c: String(contextVizAuv.motors.vf).padStart(4),
-      d: String(contextVizAuv.motors.vb).padStart(4),
+      a: String(contextVizAuv.motors.hl),
+      b: String(contextVizAuv.motors.hr),
+      c: String(contextVizAuv.motors.vf),
+      d: String(contextVizAuv.motors.vb),
     };
 
     // this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
     // this.formulaStatusText.innerText = ""
-    this.formulaStatusText.innerText =
-    // TODO: don't wok with speed axes!!!
-      `
-  Тяга на
-движителях:
+    this.q('#formulaStatus').innerHTML =/*html*/`
+      <h3 class="normal">Тяга на<br>движителях:</h3>
 
-  A:${pretty.a}
-  B:${pretty.b}
-  C:${pretty.c}
-  D:${pretty.d}`;
+      <table class="motor-power-table">
+        <tr style="opacity: ${calcRowOpacity(pretty.a)}%;">
+          <td>A:</td>
+          <td>${pretty.a}</td>
+        </tr>
+        <tr style="opacity: ${calcRowOpacity(pretty.b)}%;">
+          <td>B:</td>
+          <td>${pretty.b}</td>
+        </tr>
+        <tr style="opacity: ${calcRowOpacity(pretty.c)}%;">
+          <td>C:</td>
+          <td>${pretty.c}</td>
+        </tr>
+        <tr style="opacity: ${calcRowOpacity(pretty.d)}%;">
+          <td>D:</td>
+          <td>${pretty.d}</td>
+        </tr>
+      </table>
+    `;
+
 
     return {
       axes: {x: x, y: y, z: z},

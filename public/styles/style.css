@@ -50,13 +50,3 @@
     }
 }
 
-.joystick-outer-margin {
-    margin: 1.5em;
-}
-
-#formulaStatus {
-    white-space: pre;
-    font-family: monospace;
-    font-size: 26px;
-    height: 10em;
-}

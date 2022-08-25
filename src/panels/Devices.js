@@ -17,9 +17,9 @@ const welcomeIntro = /*html*/`
   </div>
 
   <p>
-  ${Icon('timer-sand')}
-  Поставьте аппарат<br>
+  <!-- TODO ${Icon('package-down')} -->
   ${Icon('table-furniture')}
+  Поставьте аппарат<br>
   на ровную поверхность.
   </p>
 

@@ -185,6 +185,31 @@
   margin: 0 30%;
 }
 
+.joystick-outer-margin {
+  margin: 1.5em;
+}
+
+#formulaStatus {
+  /* white-space: pre; */
+  /* font-family: monospace; */
+  text-align: center;
+  font-size: 26px;
+  height: 10em;
+}
+
+.motor-power-table td:first-child {
+  text-align: left;
+}
+
+.motor-power-table td:last-child {
+  text-align: right;
+}
+
+.motor-power-table {
+  width: 4em;
+  margin: auto;
+}
+
 #devices-welcome {
   /* padding-top: 1em; */
   /* font-size: 16px; */
@@ -248,4 +273,3 @@
     hsla( 50, 70%, 80%)
   ) !important;
 }
-
