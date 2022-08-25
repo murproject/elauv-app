@@ -11,6 +11,7 @@
 @import "components/list-item.css";
 @import "components/device-item.css";
 @import "components/global-dialog.css";
+@import "components/telemetry.css";
 
 @media (max-width: 450px) {
     .device-title div {

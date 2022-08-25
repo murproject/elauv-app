@@ -142,7 +142,8 @@
   flex-grow: 0 !important;
 }
 
-.buttons-collapsed {
+.buttons-collapsed,
+.buttons-collapsed .row {
   justify-content: center !important;
 }
 

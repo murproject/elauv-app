@@ -1,0 +1,80 @@
+.telemetry-table td {
+  font-size: 16px !important;
+  margin-bottom: 0.25em !important;
+  vertical-align: top;
+}
+
+.telemetry-table td:first-child {
+  text-align: left;
+}
+
+.telemetry-table td:last-child {
+  padding-left: 0.5em;
+  text-align: right;
+}
+
+.telemetry-table h1 {
+  font-size: 20px;
+  margin-bottom: 0.25em !important;
+  line-height: 1.25em;
+}
+
+.tag-address {
+  font-size: 16px;
+  opacity: 75%;
+}
+
+.vehicle-img {
+  height: 33%;
+  object-fit: contain;
+  margin: 10% 0;
+}
+
+a.tag-address {
+  text-decoration: none;
+  color: var(--color-mur);
+}
+
+.tag {
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius);
+  min-width: 7em;
+  padding: 0 0.5em;
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-dark);
+}
+
+.tag.num {
+  text-align: right !important;
+  padding-right: 2.5em;
+  min-width: 5em;
+}
+
+.tag-dark {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--color-dark);
+  color: var(--color-light);
+}
+
+.tag-white {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.tag-green {
+  background: var(--color-green-bright);
+}
+
+.tag-yellow {
+  background: var(--color-yellow-bright);
+}
+
+.tag-orange {
+  background: var(--color-orange-bright);
+}
+
+.tag-red {
+  background: var(--color-red-bright);
+}
