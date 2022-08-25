@@ -6,7 +6,7 @@ if (typeof cordova !== 'undefined') {
   document.addEventListener('deviceready', () => {
     window.cutout.has().then((hasCutout) => {
       if (hasCutout) {
-        document.querySelector('#app').classList.add('with-statusbar-spacer');
+        App.container.classList.add('with-statusbar-spacer');
         // TODO: make it better?
         document.addEventListener('resume', triggerStatusbar, false);
         triggerStatusbar();
@@ -19,7 +19,6 @@ if (typeof cordova !== 'undefined') {
     document.addEventListener('backbutton', function(e) {
       e.preventDefault();
     });
-
 
     main();
     setTimeout(() => {
