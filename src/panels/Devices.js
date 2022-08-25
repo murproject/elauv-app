@@ -149,7 +149,8 @@ export default class Devices extends Panel {
   scanDevices() {
     if (mur.conn.type !== 'bluetooth') {
       // TODO: remove //
-      const dev = `[{"type":"elauv","address":"D8:A0:1D:5C:FF:26","name":"ElementaryAUV-FF26","isCompatible":true,"isPaired":true,"isOnline":true,"isActive":true,"tag":"1-0-0-1-D8:A0:1D:5C:FF:26"},{"type":"elauv","address":"AC:0B:FB:74:1E:1E","name":"ElementaryAUV-1E1E","isCompatible":true,"isPaired":true,"isOnline":true,"isActive":false,"tag":"1-0-1-0-AC:0B:FB:74:1E:1E"},{"type":"elauv","address":"AC:0B:FB:74:1E:2A","name":"ElementaryAUV-1E2A","isCompatible":true,"isPaired":true,"isOnline":false,"isActive":false,"tag":"1-0-1-0-AC:0B:FB:74:1E:2A"},{"type":"unknown","address":"00:16:53:49:39:E5","name":"BRAT","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-00:16:53:49:39:E5"},{"type":"unknown","address":"44:9F:88:D4:73:B9","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-44:9F:88:D4:73:B9"},{"type":"unknown","address":"45:25:F9:9B:CC:CF","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-45:25:F9:9B:CC:CF"},{"type":"unknown","address":"49:77:40:32:22:1C","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-49:77:40:32:22:1C"},{"type":"unknown","address":"4A:60:26:F0:EE:23","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-4A:60:26:F0:EE:23"},{"type":"unknown","address":"4D:8C:A0:46:F4:9C","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-4D:8C:A0:46:F4:9C"},{"type":"unknown","address":"51:72:65:68:71:7C","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-51:72:65:68:71:7C"},{"type":"unknown","address":"59:BE:6C:2A:79:D6","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-59:BE:6C:2A:79:D6"},{"type":"unknown","address":"5F:82:19:EA:06:52","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-5F:82:19:EA:06:52"},{"type":"unknown","address":"5F:D3:0B:EA:06:FB","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-5F:D3:0B:EA:06:FB"},{"type":"unknown","address":"61:BA:01:DA:42:88","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-61:BA:01:DA:42:88"},{"type":"unknown","address":"62:43:B4:AE:B3:5D","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-62:43:B4:AE:B3:5D"},{"type":"unknown","address":"64:AA:FB:26:AB:BF","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-64:AA:FB:26:AB:BF"},{"type":"unknown","address":"6B:F7:52:C5:4A:CA","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-6B:F7:52:C5:4A:CA"},{"type":"unknown","address":"7C:BD:40:35:24:8E","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-7C:BD:40:35:24:8E"},{"type":"unknown","address":"90:E8:68:FA:C3:52","name":"LAPTOP-QO81TSJH","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-90:E8:68:FA:C3:52"},{"type":"unknown","address":"A4:17:31:DB:B0:B8","name":"OSIPOV-PC","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-A4:17:31:DB:B0:B8"},{"type":"unknown","address":"A6:20:46:B4:73:31","name":"BV4900Pro","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-A6:20:46:B4:73:31"},{"type":"unknown","address":"C0:E4:34:62:0F:D4","name":"network","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-C0:E4:34:62:0F:D4"},{"type":"unknown","address":"D9:3C:88:47:2A:32","name":"Mi Smart Band 4","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-D9:3C:88:47:2A:32"},{"type":"unknown","address":"E0:B6:55:2F:62:DF","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-E0:B6:55:2F:62:DF"}]`;
+      // const dev = `[{"type":"elauv","address":"D8:A0:1D:5C:FF:26","name":"ElementaryAUV-FF26","isCompatible":true,"isPaired":true,"isOnline":true,"isActive":true,"tag":"1-0-0-1-D8:A0:1D:5C:FF:26"},{"type":"elauv","address":"AC:0B:FB:74:1E:1E","name":"ElementaryAUV-1E1E","isCompatible":true,"isPaired":true,"isOnline":true,"isActive":false,"tag":"1-0-1-0-AC:0B:FB:74:1E:1E"},{"type":"elauv","address":"AC:0B:FB:74:1E:2A","name":"ElementaryAUV-1E2A","isCompatible":true,"isPaired":true,"isOnline":false,"isActive":false,"tag":"1-0-1-0-AC:0B:FB:74:1E:2A"},{"type":"unknown","address":"00:16:53:49:39:E5","name":"BRAT","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-00:16:53:49:39:E5"},{"type":"unknown","address":"44:9F:88:D4:73:B9","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-44:9F:88:D4:73:B9"},{"type":"unknown","address":"45:25:F9:9B:CC:CF","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-45:25:F9:9B:CC:CF"},{"type":"unknown","address":"49:77:40:32:22:1C","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-49:77:40:32:22:1C"},{"type":"unknown","address":"4A:60:26:F0:EE:23","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-4A:60:26:F0:EE:23"},{"type":"unknown","address":"4D:8C:A0:46:F4:9C","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-4D:8C:A0:46:F4:9C"},{"type":"unknown","address":"51:72:65:68:71:7C","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-51:72:65:68:71:7C"},{"type":"unknown","address":"59:BE:6C:2A:79:D6","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-59:BE:6C:2A:79:D6"},{"type":"unknown","address":"5F:82:19:EA:06:52","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-5F:82:19:EA:06:52"},{"type":"unknown","address":"5F:D3:0B:EA:06:FB","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-5F:D3:0B:EA:06:FB"},{"type":"unknown","address":"61:BA:01:DA:42:88","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-61:BA:01:DA:42:88"},{"type":"unknown","address":"62:43:B4:AE:B3:5D","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-62:43:B4:AE:B3:5D"},{"type":"unknown","address":"64:AA:FB:26:AB:BF","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-64:AA:FB:26:AB:BF"},{"type":"unknown","address":"6B:F7:52:C5:4A:CA","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-6B:F7:52:C5:4A:CA"},{"type":"unknown","address":"7C:BD:40:35:24:8E","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-7C:BD:40:35:24:8E"},{"type":"unknown","address":"90:E8:68:FA:C3:52","name":"LAPTOP-QO81TSJH","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-90:E8:68:FA:C3:52"},{"type":"unknown","address":"A4:17:31:DB:B0:B8","name":"OSIPOV-PC","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-A4:17:31:DB:B0:B8"},{"type":"unknown","address":"A6:20:46:B4:73:31","name":"BV4900Pro","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-A6:20:46:B4:73:31"},{"type":"unknown","address":"C0:E4:34:62:0F:D4","name":"network","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-C0:E4:34:62:0F:D4"},{"type":"unknown","address":"D9:3C:88:47:2A:32","name":"Mi Smart Band 4","isCompatible":false,"isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-D9:3C:88:47:2A:32"},{"type":"unknown","address":"E0:B6:55:2F:62:DF","name":"","isPaired":false,"isOnline":true,"isActive":false,"tag":"1-1-0-1-E0:B6:55:2F:62:DF"}]`;
+      const dev = `[{"type":"elauv","address":"D8:A0:1D:5C:FF:26","name":"ElementaryAUV-FF26","isCompatible":true,"isPaired":true,"isOnline":true,"isActive":true,"tag":"1-0-0-1-D8:A0:1D:5C:FF:26"},{"type":"elauv","address":"AC:0B:FB:74:1E:1E","name":"ElementaryAUV-1E1E","isCompatible":true,"isPaired":true,"isOnline":true,"isActive":false,"tag":"1-0-1-0-AC:0B:FB:74:1E:1E"}]`;
       this.onUpdateDevicesList(JSON.parse(dev));
     }
 
@@ -163,10 +164,15 @@ export default class Devices extends Panel {
 
   disconnect() {
     mur.disconnect();
+    this.onUpdateDevicesList([]);
   }
 
   onUpdateDevicesList(devices) {
     this.devicesListEl.innerText = '';
+
+    const devicesFound = devices.length > 0;
+    this.q('#connDevicesListWrapper').classList.toggle('height-fill', devicesFound);
+    this.q('#connDevicesListWrapper').classList.toggle('height-fit-content', !devicesFound);
 
     if (devices.length > 0) {
       // this.welcomeEl.classList.add('hidden');
@@ -174,11 +180,38 @@ export default class Devices extends Panel {
 
     devices.forEach((device) => {
       const deviceItem = new DeviceListItem(device, () => {
-        mur.connect(device.address);
-        mur.pingCounter = 0;
+        if (AppVersion.isDevBuild) {
+          mur.connect(device.address); // TODO: move pingCounter reset to mur.connect?
+          mur.pingCounter = 0;
+        } else {
+          App.showGlobalDialog(
+              new GlobalDialog({
+                closable: true,
+                title: 'Нужно сканировать код',
+                text: /*html*/`
+                  Для подключения к аппарату<br>
+                  необходимо отсканировать QR-код.
+                `,
+                classes: ['text-center'],
+                buttons: [
+                  new Button({
+                    text: 'Сканировать',
+                    icon: 'qrcode-scan',
+                  }, () => {
+                    App.closeGlobalDialog();
+                    this.scanCode();
+                  }),
+                  new Button({
+                    text: 'Назад',
+                    icon: 'keyboard-return',
+                  }, () => App.closeGlobalDialog()),
+                ],
+              }),
+          );
+        }
       });
 
-      deviceItem.classList.toggle('pointer-events-none', !AppVersion.isDevBuild);
+      // deviceItem.classList.toggle('pointer-events-none', !AppVersion.isDevBuild);
       this.devicesListEl.appendChild(deviceItem);
     });
 
