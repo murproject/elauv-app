@@ -31,19 +31,128 @@ function header(name) {
 `;
 }
 
-function tag(color, value, classes='') {
+function tag(color = 'white', value = undefined, postfix = '', classes='') {
+  if (value === undefined || value === null) {
+    return /*html*/`
+      <span class="tag tag-ghost">—</span>
+    `;
+  }
+
   return /*html*/`
-    <span class="tag tag-${color} ${classes}">${value}</span>
+    <span class="tag tag-${color} ${classes}">${value}${postfix}</span>
   `;
 }
 
-function tagNum(color, value) {
-  return tag(color, value, 'num');
+function tagNum(color = 'white', value = undefined, postfix = '') {
+  return tag(color, value, postfix, 'num');
+}
+
+function checkValue(value) {
+  return value;
+  // return value === undefined ? '—' : value;
+}
+
+function formatFixed(value, precision = 1) {
+  if (typeof(value) !== 'number') {
+    return value;
+  }
+
+  return value.toFixed(precision);
+}
+
+function formatUptime(timestamp) {
+  if (timestamp === undefined) {
+    return undefined;
+  }
+
+  function formatTime(value) {
+    return Math.floor(value).toFixed(0).padStart(2, '0');
+  };
+
+  const uptime = {
+    hours:    formatTime(timestamp / 1000 / 60 / 60),
+    minutes:  formatTime((timestamp / 1000 / 60) % 60),
+    seconds:  formatTime((timestamp / 1000) % 60),
+  };
+
+  return `${uptime.hours}:${uptime.minutes}:${uptime.seconds}`;
+}
+
+function formatValues(t) {
+  Object.keys(t).forEach((key) => t[key] = checkValue(t[key]));
+
+  let batteryColor = TelemetryUtils.makeBatteryIcon().color;
+  if (['green', 'yellow'].includes(batteryColor)) {
+    batteryColor = 'white';
+  }
+
+  return {
+    'type': undefined,
+    'lastProtoVer': tag('white', t.hardwareRev),
+    'hardwareRev': tag('white', t.lastProtoVer),
+    'macAddress': t.macAddress,
+    'timestamp': tag('white', formatUptime(t.timestamp)),
+
+    'feedback': {
+      'imuTap':
+        t.feedback.imuDoubleTap ? tag('orange', 'Двойной') :
+        t.feedback.imuTap ? tag('yellow', 'Одиночный') :
+        t.feedback.imuTap !== undefined ? tag('white', '—') : tag(),
+
+      'imuDoubleTap':
+        t.feedback.imuDoubleTap ? tag('orange', 'Двойной удар') : tag(),
+
+      'imuCalibrating':
+        t.feedback.imuCalibrating ? tag('yellow', 'Калибровка<br>нав. датчика') : '',
+
+      'colorStatus':
+        t.feedback.colorStatus === undefined ? tag() :
+        t.feedback.colorStatus ? tag('dark', 'Темно') : tag('white', 'Светло'),
+
+      'solenoidRelaxing':
+        t.feedback.solenoidRelaxing ? tag('yellow', 'Магнит<br>остывает') : '',
+
+      'pilotingMode':
+        t.feedback.pilotingMode ? tag('yellow', 'Управление<br>активно') : '',
+
+      'yawStabilized':
+        t.feedback.pilotingMode && t.feedback.yawStabilized ? tag('green', 'Курс<br>стабилен') : '',
+
+      'pilotingBlocked': undefined,
+    },
+
+    'depth': undefined,
+    'depthTemp': undefined,
+
+    'imuYaw':     tagNum('white', formatFixed(t.imuYaw), '°'),
+    'imuPitch':   tagNum('white', formatFixed(t.imuPitch), '°'),
+    'imuRoll':    tagNum('white', formatFixed(t.imuRoll), '°'),
+    'battVolts':  tagNum('white', formatFixed(t.battVolts, 2), ' В'),
+    'battAmps':   tagNum('white', formatFixed(t.battAmps, 2), ' А'),
+    'battRsoc':   tag(batteryColor, formatFixed(t.battRsoc, 0), '%'),
+    'battTemp':   tagNum('white', formatFixed(t.battTemp), ' °C'),
+
+    'battStatus':
+      t.battAmps === undefined ? tag() :
+      t.battAmps > 0 ? tag('yellow', 'Заряжается') :
+      t.battRsoc > 0 ? tag('white', 'Разряжается') : tag('red', 'Разряжен'),
+
+    'motorsStatus':
+      t.feedback.pilotingBlocked === undefined ? tag() :
+      t.feedback.pilotingBlocked ? tag('red', 'Отключены') : tag('white', 'Активны'),
+
+    'magnetStatus':
+      t.feedback.pilotingBlocked === undefined ? tag() :
+      t.feedback.pilotingBlocked ? tag('red', 'Отключен') :
+      t.feedback.solenoidRelaxing ? tag('yellow', 'Остывает') : tag('white', 'Активен'),
+
+    'memFree': undefined,
+  };
 }
 
 export default class TelemetryPanel extends Element {
   static get defaultClasses() {
-    return ['row', 'flex-equal', 'height-fill', 'margin-zero'];
+    return ['row', 'flex-equal', 'height-fill', 'margin-zero', 'flex-adaptive'];
   }
 
   static get tag() {
@@ -58,105 +167,72 @@ export default class TelemetryPanel extends Element {
     };
   }
 
-  formatUptime(timestamp) {
-    function formatTime(value) {
-      return Math.floor(value).toFixed(0).padStart(2, '0');
-    };
-
-    const uptime = {
-      hours:    formatTime(timestamp / 1000 / 60 / 60),
-      minutes:  formatTime((timestamp / 1000 / 60) % 60),
-      seconds:  formatTime((timestamp / 1000) % 60),
-    };
-
-    return `${uptime.hours}:${uptime.minutes}:${uptime.seconds}`;
-  }
-
   render() {
     const t = this.attrs.telemetry;
     const s = this.attrs.stats;
 
-    const extraTelemetry = SettingsStorage.get('extendedTelemetry');
-
-    const uptimeText = this.formatUptime(t.timestamp);
-
-    let batteryColor = TelemetryUtils.makeBatteryIcon().color;
-    if (['green', 'yellow'].includes(batteryColor)) {
-      batteryColor = 'white';
+    if (t === null) {
+      return '';
     }
 
-    // console.log(t);
+    t.macAddress = this.attrs.address ? this.attrs.address :
+                   t.macAddress ? t.macAddress : '...';
+
+    const tt = formatValues(t);
+
+    const extraTelemetry = SettingsStorage.get('extendedTelemetry');
+
+    const uptimeText = formatUptime(t.timestamp);
+
+    console.log(t);
     // console.log(s);
 
     return /*html*/`
-      <div class="display-flex flex-column flex-equal">
+      <div class="display-flex flex-column">
         <table class="telemetry-table margin-auto margin-top-zero">
           ${header( /*html*/`
             <span>ElementaryAUV</span><br>
-            <span class="normal tag-address">${this.attrs.address}</span>
+            <span class="normal tag-address">${tt.macAddress}</span>
           `)}
 
-          ${row('Время работы', tag('white', uptimeText))}
           ${row('Связь', tag('red', 'TODO!!!'))}
+          ${row('Время работы', tag('white', uptimeText))}
 
           ${header(extraTelemetry ? 'Доп. информация' : '')}
 
-          ${rowExtra('Версия платы', tag('white', t.hardwareRev))}
-          ${rowExtra('Версия протокола', tag('white', t.lastProtoVer))}
+          ${rowExtra('Плата', tt.hardwareRev)}
+          ${rowExtra('Протокол', tt.lastProtoVer)}
 
-          ${rowExtra('&nbsp;', t.feedback.pilotingMode ? tag('yellow', 'Пилотирование') : '')}
-          ${rowExtra('&nbsp;', t.feedback.imuCalibrating ? tag('yellow', 'Калибровка<br>нав. датчика') : '')}
-          ${rowExtra('&nbsp;', t.feedback.pilotingMode && t.feedback.yawStabilized ? tag('green', 'Курс<br>стабилен') : '')}
+          ${rowExtra('', tt.feedback.pilotingMode)}
+          ${rowExtra('', tt.feedback.imuCalibrating)}
+          ${rowExtra('', tt.feedback.yawStabilized)}
         </table>
-
-        <div class="text-center">
-          <h1 class="normal tag-address">
-            <!-- ${AppVersion.copyright} -->
-          </h1>
-
-          <div>
-            <img src="/media/logo.png" height="40" />
-          </div>
-
-          <a href="#" onclick="cordova.InAppBrowser.open(AppVersion.siteLink, '_system');" class="tag-address">
-            murproject.com/elauv
-          </a>
-        </div>
       </div>
 
       <div class="">
         <table class="telemetry-table margin-auto margin-top-zero">
           ${header('Датчики')}
 
-          ${row('Курс', tagNum('white', t.imuYaw.toFixed(1) + '°'))}
-          ${row('Крен', tagNum('white', t.imuRoll.toFixed(1) + '°'))}
-          ${row('Дифферент', tagNum('white', t.imuPitch.toFixed(1) + '°'))}
+          ${row('Курс', tt.imuYaw)}
+          ${row('Крен', tt.imuRoll)}
+          ${row('Дифферент', tt.imuPitch)}
 
-          ${row('Стук',
-            t.feedback.imuDoubleTap ? tag('orange', 'Двойной') :
-            t.feedback.imuTap ? tag('yellow', 'Одиночный') : tag('white', '—'))}
+          ${row('Стук', tt.feedback.imuTap)}
 
-          ${row('Лазер',
-            t.feedback.colorStatus ? tag('dark', 'Темно') : tag('white', 'Светло'))}
+          ${row('Лазер', tt.feedback.colorStatus)}
 
           ${header('Питание')}
 
-          ${row('Заряд', tag(batteryColor, t.battRsoc.toFixed(0) + '%'))}
+          ${row('Заряд', tt.battRsoc)}
+          ${row('Состояние', tt.battStatus)}
 
-          ${row('Состояние',
-            t.battAmps > 0 ? tag('yellow', 'Заряжается') :
-            t.battRsoc > 0 ? tag('white', 'Разряжается') : tag('red', 'Разряжен'))}
+          ${row('Моторы', tt.motorsStatus)}
 
-          ${row('Моторы',
-            t.feedback.pilotingBlocked ? tag('red', 'Отключены') : tag('white', 'Активны'))}
+          ${row('Магнит', tt.magnetStatus)}
 
-          ${row('Магнит',
-            t.feedback.pilotingBlocked ? tag('red', 'Отключен') :
-            t.feedback.solenoidRelaxing ? tag('yellow', 'Остывает') : tag('white', 'Активен'))}
-
-          ${rowExtra('Напряжение', tagNum('white', t.battVolts.toFixed(2) + ' В'))}
-          ${rowExtra('Ток', tagNum('white', t.battAmps.toFixed(2) + ' А'))}
-          ${rowExtra('Температура', tagNum('white', t.battTemp.toFixed(1) + ' °C'))}
+          ${rowExtra('Напряжение', tt.battVolts)}
+          ${rowExtra('Ток', tt.battAmps)}
+          ${rowExtra('Температура', tt.battTemp)}
         </table>
 
         <!-- <pre>${ JSON.stringify(t, null, ' ') }</pre> -->

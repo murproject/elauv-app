@@ -140,7 +140,7 @@ export default {
   },
 
   updateFeedbacks() {
-    if ('feedback' in mur.telemetry) {
+    if (mur.conn.status === 'open') {
       this.feedbackIcons.motors.setActive(mur.telemetry.feedback.pilotingBlocked);
       this.feedbackIcons.solenoid.setActive(mur.telemetry.feedback.solenoidRelaxing);
 

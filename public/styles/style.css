@@ -35,6 +35,10 @@
         padding: 0.25em 0.75em !important;
         min-width: 18em !important;
     }
+
+    .flex-adaptive {
+        flex-direction: column !important;
+    }
 }
 
 @media (max-width: 640px) {

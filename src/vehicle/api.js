@@ -35,7 +35,7 @@ export default {
 
   protocol: Protocol,
 
-  oldImuTapState: false,
+  oldImuTapState: false, // TODO: delete!
 
   telemetryUpdated: (t, f) => {},
   onStatusUpdated: (status) => {},
@@ -44,12 +44,15 @@ export default {
   onDiagnosticLogReceived: () => {},
 
   create: function() {
+    this.clearTelemetry();
+
     this.protocol.fillParsers();
 
     this.conn.start();
 
     this.conn.onClose = (event) => {
-      this.telemetry = {timestamp: 0};
+      // this.telemetry = {timestamp: 0};
+      this.clearTelemetry();
       this.pingCounter = 0;
       setTimeout(() => this.connect(), 1000);
     };
@@ -86,7 +89,7 @@ export default {
         return;
       }
 
-      if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 3000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
+      if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 5000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
         console.warn('Connection lost');
         console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
         // console.warn(`status: ${this.status}, timestamp delta: ${date - this.lastUpdatedDate}`);
@@ -97,10 +100,9 @@ export default {
     }, 2500);
 
     if (AppVersion.isDevBuild) {
-      this.conn.scanAll();
+      // this.conn.scanAll();
     }
   },
-
 
   handlePacket: function(raw) {
     const message = Protocol.parsePacket(raw);
@@ -109,7 +111,7 @@ export default {
 
     switch (message.type) {
       case Protocol.packetTypes.ReplyTelemetry:
-        this.oldImuTapState = !this.oldImuTapState; // TODO: delete!
+        // this.oldImuTapState = !this.oldImuTapState; // TODO: delete!
         // console.log(this.oldImuTapState);
 
         if (message.timestamp < this.telemetry.timestamp) {
@@ -118,12 +120,14 @@ export default {
         this.telemetry = message;
         this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3);
 
+        // console.log(this.telemetry);
+
         // this.telemetry.feedback.imuTap = this.oldImuTapState; // TODO: delete!
 
         // EventBus.$emit('telemetry-received')
         this.updateTelemetry();
         // console.log(mur.formattedTelemetry)
-        this.telemetryUpdated(this.telemetry, this.formattedTelemetry);
+
         break;
 
       case Protocol.packetTypes.ReplyPing:
@@ -171,6 +175,14 @@ export default {
     //   localStorage.lastDeviceAddress = address;
     // }
 
+    this.clearTelemetry();
+
+    if (address) {
+      this.deviceAddress = address;
+    } else if (this.deviceAddress) {
+      address = this.deviceAddress;
+    }
+
 
     this.pingSuccess = false;
     // console.warn('WebSocket: connecting…')
@@ -178,7 +190,7 @@ export default {
     this.reconnecting = true;
 
     if (transport.type === 'websocket') {
-      address = 'ws://' + this.ip + ':' + this.port + '/' + this.page; // TODO: костыль
+      // address = 'ws://' + this.ip + ':' + this.port + '/' + this.page; // TODO: костыль
     }
 
     // EventBus.$emit('notify', { text: 'Подключение…' })
@@ -207,7 +219,7 @@ export default {
     this.pingCounter = 0;
     this.pingSuccess = false;
     this.deviceAddress = null;
-    localStorage.lastDeviceAddress = null;
+    localStorage.lastDeviceAddress = null; // TODO: delete!
     this.conn.disconnect();
   },
 
@@ -237,6 +249,80 @@ export default {
     for (const item in this.telemetry) {
       this.formattedTelemetry[item] = this.getFormattedTelemetry(item);
     }
+
+    this.telemetryUpdated(this.telemetry, this.formattedTelemetry);
+  },
+
+  clearTelemetry: function() {
+    this.telemetry = {
+      'type': undefined,
+      'lastProtoVer': undefined,
+      'hardwareRev': undefined,
+      'macAddress': undefined,
+      'timestamp': undefined,
+      'feedback': {
+        'imuTap': undefined,
+        'imuDoubleTap': undefined,
+        'imuCalibrating': undefined,
+        'colorStatus': undefined,
+        'solenoidRelaxing': undefined,
+        'pilotingMode': undefined,
+        'yawStabilized': undefined,
+        'pilotingBlocked': undefined,
+      },
+      'depth': undefined,
+      'depthTemp': undefined,
+      'imuYaw': undefined,
+      'imuPitch': undefined,
+      'imuRoll': undefined,
+      'battVolts': undefined,
+      'battAmps': undefined,
+      'battRsoc': undefined,
+      'battTemp': undefined,
+      'memFree': undefined,
+      'motorsPower': [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+    };
+
+    // this.telemetry = {
+    //   'type': 161,
+    //   'lastProtoVer': '00',
+    //   'hardwareRev': '00',
+    //   'macAddress': '...',
+    //   'timestamp': 0,
+    //   'feedback': {
+    //     'imuTap': false,
+    //     'imuDoubleTap': false,
+    //     'imuCalibrating': false,
+    //     'colorStatus': false,
+    //     'solenoidRelaxing': false,
+    //     'pilotingMode': false,
+    //     'yawStabilized': false,
+    //     'pilotingBlocked': false,
+    //   },
+    //   'depth': 0,
+    //   'depthTemp': 0,
+    //   'imuYaw': 0.0,
+    //   'imuPitch': 0.0,
+    //   'imuRoll': 0,
+    //   'battVolts': 0.0,
+    //   'battAmps': 0.0,
+    //   'battRsoc': 0,
+    //   'battTemp': 0,
+    //   'memFree': 0,
+    //   'motorsPower': [
+    //     0,
+    //     0,
+    //     0,
+    //     0,
+    //   ],
+    // };
+
+    this.updateTelemetry(this.telemetry);
   },
 
   getFormattedTelemetry: function(name) {

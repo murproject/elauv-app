@@ -21,6 +21,7 @@ if (typeof cordova !== 'undefined') {
     });
 
     main();
+
     setTimeout(() => {
       window.IsekaiFakeSplash.hide();
       console.warn('ready!!');

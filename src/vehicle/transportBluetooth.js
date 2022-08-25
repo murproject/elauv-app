@@ -16,16 +16,6 @@ export default {
   devices: [],
 
   macAddress: null,
-  // macAddress: 'D8:A0:1D:5C:FF:26', // TODO: don't hardcode
-  // macAddress: '50:02:91:AC:B3:BA',
-  // macAddress: 'AC:0B:FB:74:1E:1E',
-  // macAddress: 'AC:0B:FB:74:1E:2A',
-  /* TODO:
-   * 1) show list of paired / discovered devices
-   * 2) open system bluetooth settings for manual pairing
-   * 3) qr code scan?
-   */
-  // TODO: save last successfully connected device
 
   checkStatus: function() {
     return this.state;

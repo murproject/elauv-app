@@ -1,16 +1,26 @@
 export default {
-  version: '[AIV]{version}[/AIV]',
-  buildDate: '[AIV]{date}[/AIV]',
+  get version() {
+    return '[AIV]{version}[/AIV]';
+  },
 
-  // isDevBuild: false,
-  isDevBuild: true,
+  get buildDate() {
+    return '[AIV]{date}[/AIV]';
+  },
 
-  copyright: `
-    ООО "Центр робототехники"<br>
-    г. Владивосток, 2022 г.
-  `,
+  get isDevBuild() {
+    return true;
+  },
 
-  siteLink: 'https://murproject.com/elauv',
+  get copyright() {
+    return /*html*/`
+      ООО "Центр робототехники"<br>
+      г. Владивосток, 2022 г.
+    `;
+  },
+
+  get siteLink() {
+    return 'https://murproject.com/elauv';
+  },
 
   openSite() {
     cordova.InAppBrowser.open(this.siteLink, '_system');

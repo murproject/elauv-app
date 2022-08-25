@@ -25,14 +25,9 @@
 }
 
 .vehicle-img {
-  height: 33%;
   object-fit: contain;
-  margin: 10% 0;
-}
-
-a.tag-address {
-  text-decoration: none;
-  color: var(--color-mur);
+  height: 33%;
+  margin: 5% 0;
 }
 
 .tag {
@@ -63,6 +58,12 @@ a.tag-address {
   background: rgba(255, 255, 255, 0.5);
 }
 
+.tag-ghost {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 50%;
+}
+
 .tag-green {
   background: var(--color-green-bright);
 }
@@ -77,4 +78,21 @@ a.tag-address {
 
 .tag-red {
   background: var(--color-red-bright);
+}
+
+.telemetry-logo a {
+  font-size: 12px;
+  text-decoration: none;
+  color: var(--color-mur);
+  line-height: 1;
+}
+
+.telemetry-logo span {
+
+}
+
+.telemetry-logo img {
+  width: 50px;
+  object-fit: contain;
+  margin: auto;
 }
