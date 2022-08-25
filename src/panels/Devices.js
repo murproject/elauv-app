@@ -17,8 +17,9 @@ const welcomeIntro = /*html*/`
   </div>
 
   <p>
-  ${Icon('table-furniture')}
+  ${Icon('timer-sand')}
   Поставьте аппарат<br>
+  ${Icon('table-furniture')}
   на ровную поверхность.
   </p>
 

@@ -54,12 +54,7 @@ export default class BlocklyPanel extends Panel {
     if (this.toolButtons) {
       if (this.active) {
         this.toolButtons.classList.remove('hidden');
-
-        if (this.scriptStatus == 'running') {
-          document.querySelector('#flying-panel-wrapper').classList.remove('hidden'); // TODO //
-        } else {
-          document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
-        }
+        document.querySelector('#flying-panel-wrapper').classList.toggle('hidden', this.scriptStatus !== 'running');
       } else {
         this.toolButtons.classList.add('hidden');
         if (this.workspace) {
@@ -161,11 +156,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   collapse(collapsed) {
-    if (collapsed) {
-      this.blocklyDiv.classList.add('blockly-collapsed');
-    } else {
-      this.blocklyDiv.classList.remove('blockly-collapsed');
-    }
+    this.blocklyDiv.classList.toggle('blockly-collapsed', collapsed);
   }
 
   makeActionButtons() {
@@ -223,12 +214,8 @@ export default class BlocklyPanel extends Panel {
       }
 
       if (event.type === 'backpack_open') {
-        if (this.backpack.isOpen() && this.backpack.getCount() === 0) {
-          // console.log(this.backpack.flyout_);
-          this.backpackEmptyNotify.classList.remove('hidden');
-        } else {
-          this.backpackEmptyNotify.classList.add('hidden');
-        }
+        const hideNotification = !(this.backpack.isOpen() && this.backpack.getCount() === 0);
+        this.backpackEmptyNotify.classList.toggle('hidden', hideNotification);
       }
 
       if (event.type === 'viewport_change') {
