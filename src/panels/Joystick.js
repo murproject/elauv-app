@@ -67,6 +67,10 @@ let contextVizAuv = {
   ],
 };
 
+function toNum(value) {
+  return typeof(value) !== 'number' || value === NaN ? 0 : value;
+}
+
 export default class Joystick extends Panel {
   begin() {
     this.name = 'Телеуправление';
@@ -77,7 +81,7 @@ export default class Joystick extends Panel {
           <textarea id="axesFormula" spellcheck="false" class="hidden"
                     rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
           </textarea>
-          <div id="formulaStatus" class="margin-auto"></div>
+          <div id="formulaStatus" class="margin-auto width-fill"></div>
         </div>
 
         <div class="vertical-filler"></div>
@@ -155,10 +159,10 @@ export default class Joystick extends Panel {
 
   updateVizAuvContext() {
     if ('direct_power' in mur.context) {
-      contextVizAuv.motors.hl = mur.context.direct_power[0];
-      contextVizAuv.motors.hr = mur.context.direct_power[1];
-      contextVizAuv.motors.vf = mur.context.direct_power[2];
-      contextVizAuv.motors.vb = mur.context.direct_power[3];
+      contextVizAuv.motors.hl = toNum(mur.context.direct_power[0]);
+      contextVizAuv.motors.hr = toNum(mur.context.direct_power[1]);
+      contextVizAuv.motors.vf = toNum(mur.context.direct_power[2]);
+      contextVizAuv.motors.vb = toNum(mur.context.direct_power[3]);
 
       let speed_yaw = mur.context.axes_speed[0];
       const speed_forward = mur.context.axes_speed[1];
@@ -168,37 +172,37 @@ export default class Joystick extends Panel {
         speed_yaw = 0;
       }
 
-      if (!Boolean(mur.context.direct_mode & (1 << 0))) {
+      if (!Boolean(mur.context.direct_mode & (1 << 0))) { // TODO: use named bit masks
         contextVizAuv.auto_axes.hl = true;
-        contextVizAuv.motors.hl = (+ speed_yaw + speed_forward);
+        contextVizAuv.motors.hl = clamp(+ speed_yaw + speed_forward, -100, 100);
       } else {
         contextVizAuv.auto_axes.hl = false;
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 1))) {
         contextVizAuv.auto_axes.hr = true;
-        contextVizAuv.motors.hr = (- speed_yaw + speed_forward);
+        contextVizAuv.motors.hr = clamp(- speed_yaw + speed_forward, -100, 100);
       } else {
         contextVizAuv.auto_axes.hr = false;
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 2))) {
         contextVizAuv.auto_axes.vf = true;
-        contextVizAuv.motors.vf = (+ speed_vertical);
+        contextVizAuv.motors.vf = clamp(+ speed_vertical, -100, 100);
       } else {
         contextVizAuv.auto_axes.vf = false;
       }
 
       if (!Boolean(mur.context.direct_mode & (1 << 3))) {
         contextVizAuv.auto_axes.vb = true;
-        contextVizAuv.motors.vb = (+ speed_vertical);
+        contextVizAuv.motors.vb = clamp(+ speed_vertical, -100, 100);
       } else {
         contextVizAuv.auto_axes.vb = false;
       }
 
       if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
-        contextVizAuv.motors.hl = mur.telemetry.motorsPower[0];
-        contextVizAuv.motors.hr = mur.telemetry.motorsPower[1];
+        contextVizAuv.motors.hl = toNum(mur.telemetry.motorsPower[0]);
+        contextVizAuv.motors.hr = toNum(mur.telemetry.motorsPower[1]);
       }
 
       if (App.panels.blockly.scriptStatus === 'running') {
@@ -335,24 +339,29 @@ export default class Joystick extends Panel {
     this.q('#formulaStatus').innerHTML =/*html*/`
       <h3 class="normal">Тяга на<br>движителях:</h3>
 
-      <table class="motor-power-table">
-        <tr style="opacity: ${calcRowOpacity(pretty.a)}%;">
-          <td>A:</td>
-          <td>${pretty.a}</td>
-        </tr>
-        <tr style="opacity: ${calcRowOpacity(pretty.b)}%;">
-          <td>B:</td>
-          <td>${pretty.b}</td>
-        </tr>
-        <tr style="opacity: ${calcRowOpacity(pretty.c)}%;">
-          <td>C:</td>
-          <td>${pretty.c}</td>
-        </tr>
-        <tr style="opacity: ${calcRowOpacity(pretty.d)}%;">
-          <td>D:</td>
-          <td>${pretty.d}</td>
-        </tr>
-      </table>
+      <div class="display-flex width-fill">
+        <table class="motor-power-table">
+          <tr style="opacity: ${calcRowOpacity(pretty.c)}%;">
+            <td>C:</td>
+            <td>${pretty.c}</td>
+          </tr>
+          <tr style="opacity: ${calcRowOpacity(pretty.a)}%;">
+            <td>A:</td>
+            <td>${pretty.a}</td>
+          </tr>
+        </table>
+
+        <table class="motor-power-table">
+          <tr style="opacity: ${calcRowOpacity(pretty.d)}%;">
+            <td>D:</td>
+            <td>${pretty.d}</td>
+          </tr>
+          <tr style="opacity: ${calcRowOpacity(pretty.b)}%;">
+            <td>B:</td>
+            <td>${pretty.b}</td>
+          </tr>
+        </table>
+      </div>
     `;
 
 

@@ -42,7 +42,7 @@ export default class Console extends Panel {
       let value = this.userData[name];
       value = value === true ? 'Истина' :
               value === false ? 'Ложь' :
-              value === undefined ? 'Неизвестно' :
+              value === undefined ? 'Не задано' :
               value;
 
       log += `${name}: ${value}\n`;

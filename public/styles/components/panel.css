@@ -190,11 +190,10 @@
 }
 
 #formulaStatus {
-  /* white-space: pre; */
-  /* font-family: monospace; */
   text-align: center;
   font-size: 26px;
-  height: 10em;
+  max-width: 300px;
+  margin: auto;
 }
 
 .motor-power-table td:first-child {

@@ -17,25 +17,25 @@ const welcomeIntro = /*html*/`
   </div>
 
   <p>
-  <!-- TODO ${Icon('package-down')} -->
-  ${Icon('table-furniture')}
-  Поставьте аппарат<br>
-  на ровную поверхность.
+    <!-- TODO ${Icon('package-down')} -->
+    ${Icon('table-furniture')}
+    Поставьте аппарат<br>
+    на ровную поверхность.
   </p>
 
   <p>
-  ${Icon('power')}
-  Включите ElementaryAUV.
+    ${Icon('power')}
+    Включите ElementaryAUV.
   </p>
 
   <p>
-  ${Icon('timer-sand')}
-  Подождите 5 секунд.
+    ${Icon('timer-sand')}
+    Подождите 5 секунд.
   </p>
 
   <p>
-  ${Icon('qrcode-scan')}
-  Отсканируйте код.<br>
+    ${Icon('qrcode-scan')}
+    Отсканируйте код.<br>
   </p>
 
 </div>

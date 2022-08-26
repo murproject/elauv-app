@@ -22,6 +22,8 @@ export default {
     return 'https://murproject.com/elauv';
   },
 
+  // TODO: make logo+link global, and show in aobut panel too?
+
   openSite() {
     cordova.InAppBrowser.open(this.siteLink, '_system');
   },
