@@ -1,6 +1,11 @@
 import barcodeScanner from 'cordova-plugin-qr-barcode-scanner/www/barcodescanner';
 import crc32 from 'crc-32';
 import api from '/src/vehicle/api';
+import App from '/src/App';
+import GlobalDialog from '/src/components/GlobalDialog';
+import Button from '/src/components/Button';
+
+const versionError = 'Too new version';
 
 export default class QrCodes {
   static scanCode() {
@@ -15,6 +20,23 @@ export default class QrCodes {
           formats: 'QR_CODE,AZTEC',
           disableSuccessBeep: true,
         },
+    );
+  }
+
+  static dialog(text) {
+    App.showGlobalDialog(
+        new GlobalDialog({
+          closable: true,
+          title: 'Ошибка',
+          text: text,
+          classes: ['text-center', 'buttons-collapsed'],
+          buttons: [
+            new Button({
+              text: 'Закрыть',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
     );
   }
 
@@ -47,12 +69,19 @@ export default class QrCodes {
         throw new Error('CRC mismatch');
       }
 
-      // TODO: if version is too new: show "outdated app" dialog
+      if (Number('0x' + msg.version[0]) > 0x01 || Number('0x' + msg.version[1]) > 0x01) {
+        throw new Error(versionError);
+      }
 
       console.log('Success code scan: ' + msg.address);
       api.connect(msg.address, true);
     } catch (e) {
       // TODO: dialog with error
+      if (e.message === versionError) {
+        this.dialog(/*html*/`Пожалуйста, обновите приложение!`);
+      } else {
+        this.dialog(/*html*/`Произошла ошибка при чтении кода.`);
+      }
       console.error('Scan code parse error:');
       console.error(e);
     }
