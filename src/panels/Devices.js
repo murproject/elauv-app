@@ -262,6 +262,7 @@ export default class Devices extends Panel {
       this.telemetryTable.attrs.telemetry = t;
       this.telemetryTable.attrs.stats = TelemetryUtils.stats;
       this.telemetryTable.attrs.connection = mur.status;
+      this.telemetryTable.attrs.ping = mur.timePingDelta;
       this.telemetryTable.update();
     }
   }

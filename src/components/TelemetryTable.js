@@ -100,6 +100,9 @@ function formatValues(t) {
       t.connection === 'timeout' ? tag('yellow', 'Нет сигнала…') :
       t.connection === 'closed' ? tag('red', 'Нет сигнала…') : tag('white', t.connection),
 
+    'ping':
+      t.connection === 'open' ? tag('white', t.ping, ' мс') : tag(),
+
     'feedback': {
       'imuTap':
         t.feedback.imuDoubleTap ? tag('orange', 'Двойной') :
@@ -172,6 +175,7 @@ export default class TelemetryPanel extends Element {
       telemetry: null,
       stats: null,
       connection: null,
+      ping: null,
     };
   }
 
@@ -187,6 +191,7 @@ export default class TelemetryPanel extends Element {
                    t.macAddress ? t.macAddress : '...';
 
     t.connection = this.attrs.connection;
+    t.ping = this.attrs.ping;
 
     const tt = formatValues(t);
 
@@ -205,6 +210,7 @@ export default class TelemetryPanel extends Element {
 
           ${row('Связь', tt.connection)}
           ${row('Время работы', tt.timestamp)}
+          ${rowExtra('Задержка', tt.ping)}
 
           ${header(extraTelemetry ? 'Доп. информация' : '')}
 
