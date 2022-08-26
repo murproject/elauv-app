@@ -249,6 +249,7 @@ export default class Devices extends Panel {
     }
 
     this.wasConnected = connected;
+    this.updateTelemetry(mur.telemetry);
   }
 
   updateTelemetry(t) {
@@ -260,6 +261,7 @@ export default class Devices extends Panel {
       this.telemetryTable.attrs.address = mur.deviceAddress;
       this.telemetryTable.attrs.telemetry = t;
       this.telemetryTable.attrs.stats = TelemetryUtils.stats;
+      this.telemetryTable.attrs.connection = mur.status;
       this.telemetryTable.update();
     }
   }

@@ -8,6 +8,7 @@ body {
   --color-light:  hsl(0, 0%, 80%);
   --color-white:  hsl(0, 0%, 100%);
 
+  --color-green-brighter: hsl( 90,  70%, 75%);
   --color-green-bright:   hsl( 90,  70%, 35%);
   --color-yellow-bright:  hsl( 60,  50%, 75%);
   --color-orange-bright:  hsl( 30,  50%, 75%);

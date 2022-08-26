@@ -137,9 +137,10 @@ export default {
           this.onDiscard();
         }
 
-        this.timePing = new Date();
-        this.timePingDelta = this.timePing - this.timePing;
-        this.pingSuccess = true;
+        this.timePingDelta = Date.now() - this.timePing;
+        this.timePing = Date.now();
+        this.authorized = true;
+        this.pingSuccess = this.timePingDelta < 250;
         this.updateStatus();
         break;
 
@@ -183,7 +184,9 @@ export default {
 
     this.clearTelemetry();
 
+    this.authorized = false;
     this.pingSuccess = false;
+    this.connectionTimeout = false;
     // console.warn('WebSocket: connecting…')
     console.info('Connecting to', address);
 
@@ -215,7 +218,9 @@ export default {
   disconnect: function() {
     this.controlPing(-1);
     this.pingCounter = 0;
+    this.authorized = false;
     this.pingSuccess = false;
+    this.connectionTimeout = false;
     this.deviceAddress = null;
     localStorage.lastDeviceAddress = null; // TODO: delete!
     this.conn.disconnect();
@@ -224,14 +229,20 @@ export default {
   updateStatus: function() {
     this.status = this.conn.checkStatus();
 
-    if (this.status === 'open' && !this.pingSuccess) {
-      this.status = 'wait-ping';
+    if (this.connectionTimeout) {
+      console.error('AAaaa');
     }
 
-    // this.conn.onDeviceDiscovered(this.conn.devices);
+    if (!this.authorized) {
+      this.status = 'wait-ping';
+    } else if (this.reconnecting) {
+      this.status = 'reconnecting';
+    } else if (this.connectionTimeout) {
+      this.status = 'timeout';
+      console.error('BBbb');
+    }
+
     this.onStatusUpdated(this.status);
-    // EventBus.$emit('status-updated', { status: this.status })
-    // console.log(this.status)
   },
 
   updateTelemetry: function(data) {
@@ -388,13 +399,26 @@ export default {
   },
 
   controlPing: function(counter = undefined) {
-    if (this.status === 'open' || this.status === 'wait-ping') {
+    if (this.status === 'open' || this.status === 'wait-ping' || this.status === 'timeout') {
       this.conn.sendMessage(Protocol.packControlPing({
         counter: counter == undefined ? this.pingCounter : counter,
       }));
+
+      console.log(this.pingSuccess);
+
+      if (this.pingSuccess) {
+        this.connectionTimeout = false;
+      } else if (this.authorized) {
+        this.connectionTimeout = true;
+        console.error('PING TIMEOUT');
+      }
+
       this.timePing = new Date();
       this.pingCounter++;
+      this.pingSuccess = false;
     }
+
+    this.updateStatus();
   },
 
   controlGetAllSettings: function() {

@@ -90,8 +90,15 @@ function formatValues(t) {
     'type': undefined,
     'lastProtoVer': tag('white', t.hardwareRev),
     'hardwareRev': tag('white', t.lastProtoVer),
+
     'macAddress': t.macAddress,
     'timestamp': tag('white', formatUptime(t.timestamp)),
+    'connection':
+      t.connection === 'open' ? tag('green', 'ОК') :
+      t.connection === 'wait-ping' ? tag('white', 'Ожидание…') :
+      t.connection === 'reconnecting' ? tag('yellow', 'Ожидание…') :
+      t.connection === 'timeout' ? tag('yellow', 'Нет сигнала…') :
+      t.connection === 'closed' ? tag('red', 'Нет сигнала…') : tag('white', t.connection),
 
     'feedback': {
       'imuTap':
@@ -164,6 +171,7 @@ export default class TelemetryPanel extends Element {
       address: null,
       telemetry: null,
       stats: null,
+      connection: null,
     };
   }
 
@@ -178,11 +186,11 @@ export default class TelemetryPanel extends Element {
     t.macAddress = this.attrs.address ? this.attrs.address :
                    t.macAddress ? t.macAddress : '...';
 
+    t.connection = this.attrs.connection;
+
     const tt = formatValues(t);
 
     const extraTelemetry = SettingsStorage.get('extendedTelemetry');
-
-    const uptimeText = formatUptime(t.timestamp);
 
     console.log(t);
     // console.log(s);
@@ -195,8 +203,8 @@ export default class TelemetryPanel extends Element {
             <span class="normal tag-address">${tt.macAddress}</span>
           `)}
 
-          ${row('Связь', tag('red', 'TODO!!!'))}
-          ${row('Время работы', tag('white', uptimeText))}
+          ${row('Связь', tt.connection)}
+          ${row('Время работы', tt.timestamp)}
 
           ${header(extraTelemetry ? 'Доп. информация' : '')}
 
