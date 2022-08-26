@@ -1,4 +1,9 @@
-import barcodeScanner from 'cordova-plugin-qr-barcode-scanner/www/barcodescanner';
+let barcodeScanner = null;
+
+if (typeof cordova !== 'undefined') {
+  barcodeScanner = require('cordova-plugin-qr-barcode-scanner/www/barcodescanner');
+}
+
 import crc32 from 'crc-32';
 import api from '/src/vehicle/api';
 import App from '/src/App';
@@ -9,6 +14,10 @@ const versionError = 'Too new version';
 
 export default class QrCodes {
   static scanCode() {
+    if (barcodeScanner === null) {
+      this.dialog(`Доступно только на мобильных устройствах!`);
+    }
+
     barcodeScanner.scan(
         (result) => this.processCode(result),
         null,
@@ -76,14 +85,13 @@ export default class QrCodes {
       console.log('Success code scan: ' + msg.address);
       api.connect(msg.address, true);
     } catch (e) {
-      // TODO: dialog with error
-      if (e.message === versionError) {
-        this.dialog(/*html*/`Пожалуйста, обновите приложение!`);
-      } else {
-        this.dialog(/*html*/`Произошла ошибка при чтении кода.`);
-      }
       console.error('Scan code parse error:');
       console.error(e);
+      if (e.message === versionError) {
+        this.dialog('Пожалуйста, обновите приложение!');
+      } else {
+        this.dialog('Произошла ошибка при чтении кода.');
+      }
     }
   }
 }
