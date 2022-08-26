@@ -192,7 +192,7 @@ export default class Devices extends Panel {
     devices.forEach((device) => {
       const deviceItem = new DeviceListItem(device, () => {
         if (AppVersion.isDevBuild) {
-          mur.connect(device.address); // TODO: move pingCounter reset to mur.connect?
+          mur.connect(device.address, true); // TODO: move pingCounter reset to mur.connect?
           mur.pingCounter = 0;
         } else {
           App.showGlobalDialog(

@@ -163,8 +163,8 @@ export default {
     }
   },
 
-  connect: function(address) {
-    if (this.reconnecting) {
+  connect: function(address, force = false) {
+    if (this.reconnecting && !force) {
       return;
     }
 
@@ -187,7 +187,6 @@ export default {
     this.pingSuccess = false;
     // console.warn('WebSocket: connecting…')
     console.info('Connecting to', address);
-    this.reconnecting = true;
 
     if (transport.type === 'websocket') {
       // address = 'ws://' + this.ip + ':' + this.port + '/' + this.page; // TODO: костыль

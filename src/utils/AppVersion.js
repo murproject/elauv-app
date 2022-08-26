@@ -27,4 +27,8 @@ export default {
   openSite() {
     cordova.InAppBrowser.open(this.siteLink, '_system');
   },
+
+  openDialogOutdatedApp() {
+    // TODO //
+  },
 };

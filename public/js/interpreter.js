@@ -86,7 +86,7 @@ function sendHighlight(bold = false) {
 
 function setDirectMode(index, mode) {
   context.direct_mode = setBit(context.direct_mode, 1 << index, mode);
-  console.log(`index = ${index}, mode = ${mode}, mask = ${1 << index}, new val: ${context.direct_mode}`);
+  // console.log(`index = ${index}, mode = ${mode}, mask = ${1 << index}, new val: ${context.direct_mode}`);
 }
 
 const mur = {

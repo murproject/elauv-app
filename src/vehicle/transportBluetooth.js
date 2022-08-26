@@ -2,10 +2,13 @@
 // import EventBus from './eventBus'
 import bluetoothClassicSerial from 'cordova-plugin-bluetooth-classic-serial-port/www/bluetoothClassicSerial';
 import barcodeScanner from 'cordova-plugin-qr-barcode-scanner/www/barcodescanner';
+import crc32 from 'crc-32';
 
 import api from './api';
 
 /* TODO: add statuses - scanning, network-unavailable */
+
+document.crc = crc32;
 
 export default {
   name: 'transport',
@@ -112,34 +115,40 @@ export default {
   // TODO: move from transportBluetooth
   processCodeInfo(code) {
     try {
-      const msgSplitted = code.text.split('/');
-      const dataSplitted = msgSplitted[0].split('-');
+      const text = code.text;
+      const prefix = 'https://murproject.com/elauv?';
 
-      const data = {
-        incomingCrc: msgSplitted[1],
-        calculatedCrc: msgSplitted[1], // TODO!! calcCrc32(msgSplitted[0])
+      if (!text.startsWith(prefix)) {
+        throw new Error('Prefix mismatch');
+      }
 
-        headerMagic: dataSplitted[0],
-        vehicleType: dataSplitted[1],
-        vehicleVersion: dataSplitted[2],
-        macAddress: dataSplitted[3],
+      const rawData = text.replace(prefix, '').split('-');
+
+      const msg = {
+        version: rawData[0].split('.'),
+        address: rawData[1],
+        crc: rawData[2].toUpperCase(),
       };
 
-      if (data.incomingCrc !== data.calculatedCrc) {
+      function calcCrc(data) {
+        const crcFull = (crc32.str(data) >>> 0).toString(16).toUpperCase();
+        const crcShort = crcFull.slice(-2);
+        return crcShort;
+      }
+
+      const exceptedCrc = calcCrc(text.slice(0, -3));
+
+      if (msg.crc != exceptedCrc) {
         throw new Error('CRC mismatch');
       }
 
-      // TODO: should procces all fields!
+      // TODO: if version is too new: show "outdated app" dialog
 
-      if (data.vehicleType.toLowerCase() === 'elauv') {
-        // EventBus.$emit('notify', { text: 'code parsed: ' + data.macAddress })
-        // this.disconnect();
-        api.disconnect();
-        api.connect(data.macAddress);
-        // this.macAddress = data.macAddress;
-      }
+      console.log('Success code scan: ' + msg.address);
+      api.connect(msg.address, true);
     } catch (e) {
-      // EventBus.$emit('notify', { text: 'Code parse error: ' + e })
+      console.error('Scan code parse error:');
+      console.error(e);
     }
   },
 
