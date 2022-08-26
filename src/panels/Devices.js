@@ -8,6 +8,7 @@ import App from '/src/App';
 import AppVersion from '/src/utils/AppVersion';
 import TelemetryUtils from '/src/utils/TelemetryUtils';
 import TelemetryTable from '/src/components/TelemetryTable';
+import QrCodes from '../utils/QrCodes';
 
 const welcomeIntro = /*html*/`
 <div id="devices-welcome" class="opacity-75 margin-auto">
@@ -170,7 +171,7 @@ export default class Devices extends Panel {
   }
 
   scanCode() {
-    mur.conn.scanCode();
+    QrCodes.scanCode();
   }
 
   disconnect() {

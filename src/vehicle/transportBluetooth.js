@@ -1,14 +1,10 @@
 // import Vue from 'vue'
 // import EventBus from './eventBus'
 import bluetoothClassicSerial from 'cordova-plugin-bluetooth-classic-serial-port/www/bluetoothClassicSerial';
-import barcodeScanner from 'cordova-plugin-qr-barcode-scanner/www/barcodescanner';
-import crc32 from 'crc-32';
-
 import api from './api';
 
 /* TODO: add statuses - scanning, network-unavailable */
 
-document.crc = crc32;
 
 export default {
   name: 'transport',
@@ -94,62 +90,6 @@ export default {
 
     this.devices = [];
     this.scanUnpaired();
-  },
-
-  // TODO: move from transportBluetooth
-  scanCode: function() {
-    barcodeScanner.scan(
-        (result) => this.processCodeInfo(result),
-        null,
-        {
-          showTorchButton: false,
-          torchOn: false,
-          prompt: 'Наведите камеру на код',
-          resultDisplayDuration: 0,
-          formats: 'QR_CODE,AZTEC',
-          disableSuccessBeep: true,
-        },
-    );
-  },
-
-  // TODO: move from transportBluetooth
-  processCodeInfo(code) {
-    try {
-      const text = code.text;
-      const prefix = 'https://murproject.com/elauv?';
-
-      if (!text.startsWith(prefix)) {
-        throw new Error('Prefix mismatch');
-      }
-
-      const rawData = text.replace(prefix, '').split('-');
-
-      const msg = {
-        version: rawData[0].split('.'),
-        address: rawData[1],
-        crc: rawData[2].toUpperCase(),
-      };
-
-      function calcCrc(data) {
-        const crcFull = (crc32.str(data) >>> 0).toString(16).toUpperCase();
-        const crcShort = crcFull.slice(-2);
-        return crcShort;
-      }
-
-      const exceptedCrc = calcCrc(text.slice(0, -3));
-
-      if (msg.crc != exceptedCrc) {
-        throw new Error('CRC mismatch');
-      }
-
-      // TODO: if version is too new: show "outdated app" dialog
-
-      console.log('Success code scan: ' + msg.address);
-      api.connect(msg.address, true);
-    } catch (e) {
-      console.error('Scan code parse error:');
-      console.error(e);
-    }
   },
 
   setMac: function(address) {

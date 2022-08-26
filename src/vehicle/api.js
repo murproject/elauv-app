@@ -175,14 +175,13 @@ export default {
     //   localStorage.lastDeviceAddress = address;
     // }
 
-    this.clearTelemetry();
-
     if (address) {
       this.deviceAddress = address;
     } else if (this.deviceAddress) {
       address = this.deviceAddress;
     }
 
+    this.clearTelemetry();
 
     this.pingSuccess = false;
     // console.warn('WebSocket: connecting…')
