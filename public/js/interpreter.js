@@ -55,6 +55,10 @@ function clamp(value, minPower = -100, maxPower = 100) {
 }
 
 
+function toNum(value) {
+  return typeof(value) !== 'number' || value === NaN ? 0 : value;
+}
+
 function sendContext() {
   self.postMessage({type: 'context', context: context});
 }
@@ -113,7 +117,8 @@ const mur = {
 
   set_axis: async function(index, speed) {
     // TODO: check index and constrain power
-    speed = clamp(speed);
+    index = toNum(index);
+    speed = clamp(toNum(speed));
     context.axes_speed[index] = Math.round(speed);
 
     if (index == 0) { // AXIS_YAW
@@ -130,7 +135,8 @@ const mur = {
   },
 
   set_yaw: async function(yaw, power, absolute = true) {
-    power = clamp(power, 0, 100);
+    yaw = toNum(yaw);
+    power = clamp(toNum(power), 0, 100);
 
     if (absolute) {
       context.target_yaw = yaw;
@@ -161,7 +167,9 @@ const mur = {
 
   set_power: async function(index, power) {
     // TODO: check index and constrain power
-    power = clamp(power);
+    index = toNum(index);
+    power = clamp(toNum(power));
+
     context.motor_powers[index] = Math.round(power);
 
     if (index == 0 || index == 1) {
@@ -180,6 +188,8 @@ const mur = {
   },
 
   set_led: async function(index, colour) {
+    index = toNum(index);
+
     if (typeof(index) === 'number' && index >= 0 && index <= 3) {
       index = ledIndex[index];
       const rawColour = Number('0x' + colour.substring(1));
@@ -190,6 +200,7 @@ const mur = {
   },
 
   actuator: async function(index, power) {
+    index = toNum(index);
     power = clamp(power);
     context.actuators[index] = Math.round(power);
   },
@@ -207,23 +218,23 @@ const mur = {
     switch (mode) {
       case 0:
       case 'IMU_AXIS_YAW':
-        return telemetry.imuYaw;
+        return toNum(telemetry.imuYaw);
       case 1:
       case 'IMU_AXIS_PITCH':
-        return telemetry.imuPitch;
+        return toNum(telemetry.imuPitch);
       case 2:
       case 'IMU_AXIS_ROLL':
-        return telemetry.imuRoll;
+        return toNum(telemetry.imuRoll);
     }
     return 0.0;
   },
 
   get_imu_tap: function(mode) {
-    return mode == 1 ? telemetry.feedback.imuDoubleTap : telemetry.feedback.imuTap;
+    return Boolean(mode == 1 ? telemetry.feedback.imuDoubleTap : telemetry.feedback.imuTap);
   },
 
   get_color_status: function(mode) {
-    return !!(telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE'));
+    return Boolean(telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE'));
   },
 
   thread_end: async function(scriptId, end_script = false, wait_forever = true) {
@@ -269,6 +280,7 @@ const mur = {
   },
 
   angle_norm: function(angle) {
+    angle = toNum(angle);
     return (Math.abs(((angle) + 180) % 360 ) - 180) * ((angle % 360) >= -180 ? 1.0 : - 1.0);
   },
 
