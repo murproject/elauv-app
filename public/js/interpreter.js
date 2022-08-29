@@ -161,7 +161,7 @@ const mur = {
       if (telemetry.feedback.yawStabilized === true) {
         break;
       }
-      console.log('not stabilized, need to wait! ' + Math.round(Date.now() - _wait_yaw_begin_timestamp));
+      // console.log('not stabilized, need to wait! ' + Math.round(Date.now() - _wait_yaw_begin_timestamp));
     }
   },
 
@@ -172,18 +172,18 @@ const mur = {
 
     context.motor_powers[index] = Math.round(power);
 
-    if (index == 0 || index == 1) {
-      setDirectMode(0, true);
-      setDirectMode(1, true);
-    }
-
-    if (index == 2 || index == 3) {
-      setDirectMode(2, true);
-      setDirectMode(3, true);
-    }
-
-    if (index == 0 || index == 1) {
+    if (index == motorsIndex.hl || index == motorsIndex.hr) {
+      // If set one of the horizontal motors, then set direct mode for both
+      // and disable auto yaw regulator
+      setDirectMode(motorsIndex.hl, true);
+      setDirectMode(motorsIndex.hr, true);
       context.regulators = 0;
+    }
+
+    if (index == motorsIndex.vf || index == motorsIndex.vb) {
+      // If set one of the vertical motors, then set direct mode for both
+      setDirectMode(motorsIndex.vf, true);
+      setDirectMode(motorsIndex.vb, true);
     }
   },
 
@@ -243,6 +243,8 @@ const mur = {
     // console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
 
     if (end_script) {
+      await this.delay(300);
+
       for (const i in this.threadsStates) {
         this.thread_end(i, false);
       }
