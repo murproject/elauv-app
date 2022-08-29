@@ -96,6 +96,8 @@ export default class BlocklyPanel extends Panel {
     Ru['CONTROLS_IF_MSG_THEN'] = '';
     Ru['CONTROLS_WHILEUNTIL_INPUT_DO'] = '';
 
+    Ru['DELETE_X_BLOCKS'] = 'Удалить блоки (%1)';
+
     // Ru["CONTROLS_IF_MSG_IF"] = "?";
     // Ru["CONTROLS_IF_MSG_THEN"] = "✓";
     // Ru["CONTROLS_IF_MSG_ELSE"] = "×";
