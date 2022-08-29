@@ -1,6 +1,6 @@
 import {encode, decode} from '@msgpack/msgpack';
 
-const curProtoVer = 0; // current protocol version
+const curProtoVer = 1; // current protocol version
 
 const packetId = {
   /* General user control */

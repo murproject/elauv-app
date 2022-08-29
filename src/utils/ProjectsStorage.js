@@ -205,7 +205,7 @@ export default {
   exportProjectsArray(name, projects) {
     const fileData = {
       type: 'MUR-ELAUV-PROJECTS',
-      version: 0,
+      version: 1,
       date: Date.now(),
       name: name,
       projects: projects,
