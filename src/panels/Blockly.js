@@ -110,8 +110,8 @@ export default class BlocklyPanel extends Panel {
     Ru['MATH_SUBTRACTION_SYMBOL'] = '−';
 
     Ru['COPY_ALL_TO_BACKPACK'] = 'Копировать все блоки в рюкзак';
-    Ru['COPY_TO_BACKPACK'] = 'Копировать в рюказ';
-    Ru['EMPTY_BACKPACK'] = 'Очистить рюказ';
+    Ru['COPY_TO_BACKPACK'] = 'Копировать в рюкзак';
+    Ru['EMPTY_BACKPACK'] = 'Очистить рюкзак';
     Ru['PASTE_ALL_FROM_BACKPACK'] = 'Вставить всё из рюкзака';
     Ru['REMOVE_FROM_BACKPACK'] = 'Удалить из рюкзака';
 
