@@ -96,6 +96,7 @@ function formatValues(t) {
     'connection':
       t.connection === 'open' ? tag('green', 'ОК') :
       t.connection === 'wait-ping' ? tag('white', 'Ожидание…') :
+      t.connection === 'connecting' ? tag('yellow', 'Соединение…') :
       t.connection === 'reconnecting' ? tag('yellow', 'Ожидание…') :
       t.connection === 'timeout' ? tag('yellow', 'Нет сигнала…') :
       t.connection === 'closed' ? tag('red', 'Нет сигнала…') : tag('white', t.connection),
@@ -249,30 +250,9 @@ export default class TelemetryPanel extends Element {
           ${rowExtra('Температура', tt.battTemp)}
         </table>
 
-        <!-- <pre>${ JSON.stringify(t, null, ' ') }</pre> -->
       </div>
     `;
   }
 }
 
 TelemetryPanel.register();
-
-/*
-battAmps: 1.3900000000000001
-battRsoc: 76
-battTemp: 51.550000000000004
-battVolts: 4.14
-depth: 0
-depthTemp: 0
-feedback: {imuTap: false, imuDoubleTap: false, imuCalibrating: false, colorStatus: true, solenoidRelaxing: false, …}
-hardwareRev: "00"
-imuPitch: -0.8
-imuRoll: -0.5
-imuYaw: 15.4
-lastProtoVer: "00"
-macAddress: "AC:0B:FB:74:1E:1E"
-memFree: 131
-motorsPower: (4) [0, 0, 0, 0]
-timestamp: 3902111
-type: 161
-*/

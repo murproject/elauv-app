@@ -135,12 +135,13 @@ export default {
           console.warn('This client was discarded by vehicle!');
           this.disconnect();
           this.onDiscard();
+          break;
         }
 
         this.timePingDelta = Date.now() - this.timePing;
         this.timePing = Date.now();
         this.authorized = true;
-        this.pingSuccess = this.timePingDelta < 250;
+        this.pingSuccess = this.timePingDelta < 500;
         this.updateStatus();
         break;
 
@@ -230,16 +231,15 @@ export default {
     this.status = this.conn.checkStatus();
 
     if (this.connectionTimeout) {
-      console.error('AAaaa');
+      // console.error('connectionTimeout'); // TODO: remove
     }
 
-    if (!this.authorized) {
+    if (this.status === 'open' && !this.reconnecting && !this.authorized) {
       this.status = 'wait-ping';
     } else if (this.reconnecting) {
       this.status = 'reconnecting';
     } else if (this.connectionTimeout) {
       this.status = 'timeout';
-      console.error('BBbb');
     }
 
     this.onStatusUpdated(this.status);
@@ -400,6 +400,8 @@ export default {
 
   controlPing: function(counter = undefined) {
     if (this.status === 'open' || this.status === 'wait-ping' || this.status === 'timeout') {
+      console.log('Ping when status is ' + this.status);
+
       this.conn.sendMessage(Protocol.packControlPing({
         counter: counter == undefined ? this.pingCounter : counter,
       }));
