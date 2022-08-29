@@ -61,11 +61,11 @@ export default class Settings extends Panel {
         icon: 'rotate-3d',
         setting: 'enableVizAuv',
       },
-      {
-        text: 'Расширенные блоки математики',
-        icon: 'square-root',
-        setting: 'extendedMath',
-      },
+      // {
+      //   text: 'Расширенные блоки математики',
+      //   icon: 'square-root',
+      //   setting: 'extendedMath',
+      // },
       {
         text: 'Расширенная телеметрия',
         icon: 'format-list-bulleted-square',
