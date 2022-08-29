@@ -119,6 +119,8 @@ export default class BlocklyPanel extends Panel {
 
     Blockly.JavaScript.addReservedWords('mur');
 
+    Blockly.ContextMenuRegistry.registry.unregister('blockHelp');
+
     // this.variablesDiv = document.createElement("div");
     // this.variablesDiv.id = "variables-div";
     // this.variablesDiv.classList.add("variables-div");
