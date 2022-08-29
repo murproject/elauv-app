@@ -108,6 +108,10 @@
 
 /* Colours palette */
 
+.blocklyColourTable {
+  width: max-content !important;
+}
+
 .blocklyColourTable>tr>td {
   width: 42px;
   height: 42px;
