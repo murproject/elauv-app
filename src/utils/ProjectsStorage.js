@@ -175,14 +175,26 @@ export default {
     App.closeGlobalDialog();
 
     if (!App.isCordova) {
-      alert('This feature is available only in Android app!');
+      App.showGlobalDialog(
+          new GlobalDialog({
+            closable: true,
+            title: 'Доступно только в Android-приложении',
+            classes: ['text-center', 'buttons-collapsed'],
+            buttons: [
+              new Button({
+                text: 'Закрыть',
+                icon: 'keyboard-return',
+              }, () => App.closeGlobalDialog()),
+            ],
+          }),
+      );
       return false;
     } else {
       return true;
     }
   },
 
-  exportProject(item) { // TODO //
+  exportProject(item) {
     if (!this.checkCordova()) return;
 
     const autosaveLabel = 'type' in item && item.type === 'autosave' ? 'Авто-сохранение ' : '';
@@ -190,7 +202,7 @@ export default {
     this.exportProjectsArray(name, [item]);
   },
 
-  exportAllProjects() { // TODO //
+  exportAllProjects() {
     if (!this.checkCordova()) return;
 
     const projectsArray = [];

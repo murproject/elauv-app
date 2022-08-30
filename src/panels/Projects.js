@@ -58,21 +58,23 @@ export default class Projects extends Panel {
         icon: 'content-save',
         text: 'Сохранить новый',
         classes: 'button-vertical',
-        action: () => App.panels.blockly.save(true), // TODO //
+        action: () => App.panels.blockly.save(true),
       },
       {
         name: 'import',
         icon: 'import',
         text: 'Импорт из&nbsp;файла',
         classes: 'button-vertical',
-        action: () => ProjectsStorage.importProject(), // TODO //
+        ignore: !App.isCordova,
+        action: () => ProjectsStorage.importProject(),
       },
       {
         name: 'export',
         icon: 'export',
         text: 'Экспорт в&nbsp;файл',
         classes: 'button-vertical',
-        action: () => ProjectsStorage.exportAllProjects(), // TODO //
+        ignore: !App.isCordova,
+        action: () => ProjectsStorage.exportAllProjects(),
       },
       {
         name: 'wipe',
@@ -80,7 +82,7 @@ export default class Projects extends Panel {
         iconColor: 'red',
         text: 'Удалить всё',
         classes: 'button-vertical',
-        action: () => this.openWipeAllDialog(), // TODO //
+        action: () => this.openWipeAllDialog(),
       },
     ];
 
@@ -220,6 +222,7 @@ export default class Projects extends Panel {
               text: 'В файл',
               icon: 'export',
               classes: 'button-vertical',
+              ignore: !App.isCordova,
             }, () => ProjectsStorage.exportProject(item)),
             new Button({
               text: 'Удалить',

@@ -98,6 +98,10 @@ export default class Element extends HTMLElement {
   }
 
   inject(parent) {
+    if ('ignore' in this.attrs && this.attrs.ignore == true) {
+      return;
+    }
+
     parent.appendChild(this);
   }
 

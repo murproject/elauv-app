@@ -45,6 +45,7 @@ const welcomeIntro = /*html*/`
 export default class Devices extends Panel {
   begin() {
     this.name = 'Устройства';
+    this.addTab = App.isCordova;
 
     this.html = /*html*/`
       <div class="container">

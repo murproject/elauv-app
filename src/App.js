@@ -50,8 +50,12 @@ export default {
   currentPanelBottom: null,
   globalDialogActive: false,
   mur: mur,
-  isCordova: false,
+  runsOnCordova: false,
   oldStatus: undefined,
+
+  get isCordova() {
+    return this.runsOnCordova;
+  },
 
   panelSelect: function(target, mode = 'main') {
     const currentPanel = mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';
@@ -91,19 +95,16 @@ export default {
       /* Main panels */
       about: new AboutPanel(),
       settings: new SettingsPanel(),
-
       devices: new DevicesPanel(),
-      // telemetry: new TelemetryPanel(),
       joystick: new JoystickPanel(),
       projects: new ProjectsPanel(),
       blockly: new BlocklyPanel(),
 
       /* Bottom panels */
       console: new ConsolePanel(),
-      // vizauv: new VizAuvPanel(),
     };
 
-    this.panelSelect(this.panels.devices);
+    this.panelSelect(this.isCordova ? this.panels.devices : this.panels.projects);
   },
 
   setTitle: function(title) {

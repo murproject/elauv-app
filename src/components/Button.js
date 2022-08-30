@@ -19,6 +19,7 @@ export default class Button extends Element {
     return {
       name: this.constructor.name,
       text: this.constructor.name,
+      ignore: false,
       type: 'push-button',
       action: undefined,
       icon: undefined,

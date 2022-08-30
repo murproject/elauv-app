@@ -1,7 +1,7 @@
 import App from '/src/App.js';
 
 if (typeof cordova !== 'undefined') {
-  App.isCordova = true;
+  App.runsOnCordova = true;
 
   document.addEventListener('deviceready', () => {
     window.cutout.has().then((hasCutout) => {
@@ -28,7 +28,7 @@ if (typeof cordova !== 'undefined') {
     }, 2000);
   }, false);
 } else {
-  App.isCordova = false;
+  App.runsOnCordova = false;
   window.onload = () => main();
 }
 

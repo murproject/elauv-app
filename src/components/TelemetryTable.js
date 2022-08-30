@@ -198,7 +198,7 @@ export default class TelemetryPanel extends Element {
 
     const extraTelemetry = SettingsStorage.get('extendedTelemetry');
 
-    console.log(t);
+    // console.log(t);
     // console.log(s);
 
     return /*html*/`
