@@ -53,7 +53,14 @@ export default {
   },
 
   makeBatteryIcon(forced = undefined) {
-    if (!('battRsoc' in mur.telemetry) || !(mur.conn.state == 'open')) {
+    if (['reconnecting', 'wait-ping', 'timeout'].includes(mur.status)) {
+      return {
+        name: 'battery-unknown',
+        color: 'blue-dark',
+      };
+    }
+
+    if (!('battRsoc' in mur.telemetry) || !(mur.status == 'open')) {
       return {
         name: 'bluetooth',
         color: 'blue-dark',
