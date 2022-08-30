@@ -26,7 +26,7 @@ export default class About extends Panel {
             ` : ``}
         </h1>
 
-        <img src="media/splash-anim.gif" class="about-splash"/>
+        <img id="about-splash-logo" src="media/splash.png" class="about-splash"/>
 
         <p class="text-center">
           ${AppVersion.copyright}
@@ -48,6 +48,8 @@ export default class About extends Panel {
     this.panelButton.setText(`<img src="media/icon-small.png" />${tag}`);
 
     this.makeButtons();
+
+    this.q('#about-splash-logo').onclick = () => this.splashClick();
   }
 
   makeButtons() {
@@ -79,5 +81,19 @@ export default class About extends Panel {
       iconClasses: 'small',
       // classes: 'button-vertical'
     }).inject(this.headButtonsEl);
+  }
+
+  splashClick() {
+    this.splashClicks += 1;
+    if (this.splashClicks === 7) {
+      this.q('#about-splash-logo').src = 'media/splash-anim.gif';
+    } else if (this.splashClicks === 0) {
+      this.q('#about-splash-logo').src = 'media/splash.png';
+    }
+  }
+
+  onActiveChanged() {
+    this.splashClicks = -1;
+    this.splashClick();
   }
 }
