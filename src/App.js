@@ -2,7 +2,6 @@ import mur from './vehicle/api.js';
 
 import AboutPanel from './panels/About.js';
 import DevicesPanel from './panels/Devices.js';
-// import TelemetryPanel from './panels/Telemetry.js';
 import JoystickPanel from './panels/Joystick.js';
 import BlocklyPanel from './panels/Blockly.js';
 import ProjectsPanel from './panels/Projects.js';

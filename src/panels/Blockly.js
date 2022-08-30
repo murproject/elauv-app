@@ -835,8 +835,6 @@ export default class BlocklyPanel extends Panel {
 
       mur.context = paramsContext; // TODO: move context to global scope?
       mur.controlContext(paramsContext);
-
-      // App.panels.telemetry.updateStats("");
     }
 
     if (data.type === 'state') {
