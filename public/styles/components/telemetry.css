@@ -87,12 +87,12 @@
   line-height: 1;
 }
 
-.telemetry-logo span {
-
-}
-
 .telemetry-logo img {
   width: 50px;
   object-fit: contain;
   margin: auto;
+}
+
+#telemetry-feedback-box {
+  min-width: 4.5em;
 }
