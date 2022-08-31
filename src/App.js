@@ -49,10 +49,19 @@ export default {
   globalDialogActive: false,
   mur: mur,
   runsOnCordova: false,
+  runsOnElectron: false,
   oldStatus: undefined,
 
   get isCordova() {
     return this.runsOnCordova;
+  },
+
+  get isElectron() {
+    return this.runsOnElectron;
+  },
+
+  get isMobile() {
+    return this.isCordova && !this.isElectron;
   },
 
   panelSelect: function(target, mode = 'main') {

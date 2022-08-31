@@ -2,6 +2,7 @@ import App from '/src/App.js';
 
 if (typeof cordova !== 'undefined') {
   App.runsOnCordova = true;
+  App.runsOnElectron = cordova.platformId === 'electron';
 
   document.addEventListener('deviceready', () => {
     window.cutout.has().then((hasCutout) => {

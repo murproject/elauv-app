@@ -174,7 +174,7 @@ export default {
   checkCordova() {
     App.closeGlobalDialog();
 
-    if (!App.isCordova) {
+    if (!App.isMobile) {
       App.showGlobalDialog(
           new GlobalDialog({
             closable: true,

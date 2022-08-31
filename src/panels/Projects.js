@@ -65,7 +65,7 @@ export default class Projects extends Panel {
         icon: 'import',
         text: 'Импорт из&nbsp;файла',
         classes: 'button-vertical',
-        ignore: !App.isCordova,
+        ignore: !App.isMobile,
         action: () => ProjectsStorage.importProject(),
       },
       {
@@ -73,7 +73,7 @@ export default class Projects extends Panel {
         icon: 'export',
         text: 'Экспорт в&nbsp;файл',
         classes: 'button-vertical',
-        ignore: !App.isCordova,
+        ignore: !App.isMobile,
         action: () => ProjectsStorage.exportAllProjects(),
       },
       {
