@@ -64,14 +64,14 @@ export default class Devices extends Panel {
 
         <div id="device-info" class="display-flex flex-column height-fill hidden">
           <div class="display-flex flex-column height-fill list-wrapper soft-edges-vertical">
-            <img class="vehicle-img" src="/media/vehicle.png"/>
+            <img class="vehicle-img" src="media/vehicle.png"/>
             <div id="telemetry-wrapper" class=""></div>
           </div>
 
           <div id="disconnect-button-wrapper" class="row buttons-collapsed justify-content-space-around align-items-center">
             <div class="telemetry-logo display-flex flex-column flex-equal text-center">
               <a href="#" onclick="cordova.InAppBrowser.open('${AppVersion.siteLink}', '_system')">
-                <img src="/media/logo.png" />
+                <img src="media/logo.png" />
                 <br>
                 murproject.com/elauv
               </a>

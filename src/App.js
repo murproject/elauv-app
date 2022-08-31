@@ -16,7 +16,6 @@ export default {
   html: /*html*/`
     <header id="head">
       <div class="buttons-group" id="buttons-main"></div>
-
       <div class="buttons-group" id="telemetry-feedback-box"></div>
 
       <div class="buttons-group header-titlebar" id="">
@@ -65,7 +64,7 @@ export default {
 
     if (mode === 'bottom') {
       if (this[currentPanel] === target) {
-        // TODO: don't query on each call, to it better
+        // TODO: don't query on each call, should to it better
         this[currentPanel] = null;
         document.querySelector('#flying-panel-wrapper').classList.add('bottom-collapsed');
         return;
