@@ -6,5 +6,15 @@
       "windows": {
         "package": [ "dir" ]
       }
+  },
+  "android": {
+    "release": {
+        "keystore": "../../mur-keystore-android/keystore-mur.jks",
+        "alias": "key0",
+        "keystoreType": "",
+        "packageType": "apk",
+        "storePassword": "murmur",
+        "password" : "murmur"
+    }
   }
 }
