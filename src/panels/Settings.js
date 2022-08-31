@@ -129,9 +129,9 @@ export default class Settings extends Panel {
         parent: this.vehicleButtons,
       },
       {
-        text: 'Калибровка нав.датчика',
-        action: () => mur.controlImuRecalibrate(),
-        icon: 'rotate-orbit',
+        text: 'Сбросить бат.&nbsp;датчик',
+        action: () => mur.controlBatteryReset(),
+        icon: 'battery-alert',
         parent: this.vehicleButtons,
       },
     ];
@@ -251,14 +251,21 @@ export default class Settings extends Panel {
 - - -  FreeRTOS Stats  - - -
 ${info.text}
 - - - Vehicle Revision - - -
-Software rev:  ${info.softwareRevMajor}.${info.softwareRevMinor}
-Hardware rev:  0x${protocol.prettyHex([info.hardwareRev])}
-Build date:    ${info.buildDate}
-Build time:    ${info.buildTime}
+Hardware rev:   0x${protocol.prettyHex([info.hardwareRev])}
+Software rev:   ${info.softwareRevMajor}.${info.softwareRevMinor.toFixed(0).padStart(2, '0')}
+Build date:     ${info.buildDate}
+Build time:     ${info.buildTime}
 
 - - -  Sensors Status  - - -
-Imu started:   ${info.imuStarted}
-Gauge started: ${info.voltmeterStarted}
+Imu started:    ${info.imuStarted}
+Gauge started:  ${info.voltmeterStarted}
+
+Bat Cap Remain: ${info.battRemainCapacity}
+Bat Cap Full:   ${info.battFullCapacity}
+Bat Cap Design: ${info.battDesignCapacity} mAh
+
+Bat Power:      ${info.battPower} mW
+Bat Health:     ${info.battHealth}%
 
 `;
     this.q('#diag-log-text').innerText = text;

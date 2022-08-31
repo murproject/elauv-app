@@ -39,6 +39,16 @@
     .flex-adaptive {
         flex-direction: column !important;
     }
+
+    .vehicle-img {
+        height: 15%;
+        margin: 2% 0;
+    }
+
+    #settings-inputs-container *,
+    #diag-log-text {
+        font-size: 11px !important;
+    }
 }
 
 @media (max-width: 640px) {

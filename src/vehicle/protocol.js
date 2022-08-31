@@ -264,14 +264,19 @@ export default {
     const data = packet.payload;
     const info = {
       type: packet.type,
-      softwareRevMajor: data[0],
-      softwareRevMinor: data[1],
-      hardwareRev: data[2],
-      buildDate: data[3],
-      buildTime: data[4],
-      imuStarted: Boolean(data[5]),
-      voltmeterStarted: Boolean(data[6]),
-      text: data[7],
+      softwareRevMajor:   data[0],
+      softwareRevMinor:   data[1],
+      hardwareRev:        data[2],
+      buildDate:          data[3],
+      buildTime:          data[4],
+      imuStarted:         Boolean(data[5]),
+      voltmeterStarted:   Boolean(data[6]),
+      battRemainCapacity: data[7],
+      battFullCapacity:   data[8],
+      battDesignCapacity: data[9],
+      battPower:          data[10],
+      battHealth:         data[11],
+      text:               data[12],
     };
     return info;
   },

@@ -1,8 +1,8 @@
 text-input {
-  display: block;
+  display: flex;
   width: auto;
-  /* width: 100%; */
-  /* text-align: right; */
+  align-items: center;
+  justify-content: center;
 }
 
 text-input .input-caption {

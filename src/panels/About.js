@@ -19,11 +19,11 @@ export default class About extends Panel {
             Версия ${AppVersion.version} / ${AppVersion.buildDate}
           </span>
 
-            ${AppVersion.isDevBuild ? /*html*/`
+          ${AppVersion.isDevBuild ? /*html*/`
             <div class="tag-warning">
               <span>DEV BUILD</span>
             </div>
-            ` : ``}
+          ` : ``}
         </h1>
 
         <img id="about-splash-logo" src="media/splash.png" class="about-splash"/>

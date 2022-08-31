@@ -150,11 +150,6 @@ export default {
         break;
 
       case Protocol.packetTypes.ReplyDiagnosticInfo:
-        console.log(`Software rev:  ${message.softwareRevMajor}.${message.softwareRevMinor}`);
-        console.log(`Hardware rev:  ${message.hardwareRev}`);
-        console.log(`Imu start:     ${message.imuStarted}`);
-        console.log(`Gauge start:   ${message.voltmeterStarted}`);
-        console.log('Diagnostic info:\n' + message.text);
         this.onDiagnosticLogReceived(message);
         break;
 

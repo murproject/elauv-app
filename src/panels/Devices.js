@@ -146,7 +146,8 @@ export default class Devices extends Panel {
           text: /*html*/`
           ${Icon('cancel', 'giant text-center margin-top-zero')}<br>
           Аппарат отклонил текущее соединение.<br>
-          Возможно, что подключился кто-то другой.
+          Возможно, подключился кто-то другой,<br>
+          или соединение оборвалось.
         `,
           classes: 'text-center',
           buttons: [
