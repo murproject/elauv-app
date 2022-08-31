@@ -73,9 +73,10 @@ function formatUptime(timestamp) {
     hours:    formatTime(timestamp / 1000 / 60 / 60),
     minutes:  formatTime((timestamp / 1000 / 60) % 60),
     seconds:  formatTime((timestamp / 1000) % 60),
+    ms:       Math.floor((timestamp % 1000) / 100),
   };
 
-  return `${uptime.hours}:${uptime.minutes}:${uptime.seconds}`;
+  return `${uptime.hours}:${uptime.minutes}:${uptime.seconds}<span class="opacity-50">.${uptime.ms}</span>`;
 }
 
 function formatValues(t) {
