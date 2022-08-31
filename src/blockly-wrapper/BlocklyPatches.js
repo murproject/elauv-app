@@ -2,8 +2,14 @@
 
 import Blockly from 'blockly/core';
 import 'blockly/javascript';
+import BlocklyDialog from './BlocklyDialog.js';
 
 document.b = Blockly;
+
+if (typeof cordova !== 'undefined' && cordova.platformId === 'electron') {
+  BlocklyDialog.init();
+}
+
 
 /* https://github.com/google/blockly/pull/6211 */
 Blockly.blockRendering.InputRow.prototype.measure = function() {
@@ -105,3 +111,4 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
 //       block.getFieldValue('VAR'), Blockly.Names.VARIABLE);
 //   return "mur.vars[" + varName + "]" + ' = ' + argument0 + ';\n';
 // };
+
