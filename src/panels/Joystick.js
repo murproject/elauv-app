@@ -429,7 +429,7 @@ export default class Joystick extends Panel {
 
     if (!this.solenoidTriggered) {
       this.solenoidButton.setEnabled(!relaxing);
-    } else if (!this.solenoidTriggered) {
+    } else {
       this.solenoidButton.setEnabled(true);
     }
 
