@@ -74,7 +74,7 @@ export default class Panel {
   }
 
   setIcon(name, color = 'blue-dark', modifier='') {
-    this.panelButton.setIcon(name, color, 'big ' + modifier); // TODO //
+    this.panelButton.setIcon(name, color, 'big ' + modifier);
   }
 
   updateTitle(title) {

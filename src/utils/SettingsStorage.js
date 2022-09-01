@@ -7,11 +7,7 @@ export default {
     vibrateOnTap: true,
     enableVizAuv: true,
     extendedMath: false, // TODO: unimplemented
-    extendedTelemetry: false, // TODO: unimplemented
-
-    /* Special */
-    interpreterContextInterval: 100, // TODO: unimplemented
-    interpreterHighlightInterval: 100, // TODO: unimplemented
+    extendedTelemetry: false,
   },
 
   set(name, value) {
@@ -39,7 +35,5 @@ export default {
     this.save();
   },
 
-  onSettingsChanged() {
-    // TODO //
-  },
+  onSettingsChanged() {},
 };

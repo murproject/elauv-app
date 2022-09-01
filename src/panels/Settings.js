@@ -39,7 +39,6 @@ export default class Settings extends Panel {
     this.setIcon('wrench');
     this.fields = {};
     this.makeButtons();
-    // this.makeSettingsFields(); // TODO: delete?
   }
 
   makeButtons() {
@@ -47,9 +46,7 @@ export default class Settings extends Panel {
     this.vehicleButtons = this.q('#vehicle-action-buttons');
     this.appSettingsButtons = this.q('#app-settings-buttons');
 
-    // TODO: use global dialog to confirm
-
-    /* app settings */
+    /* App settings */
 
     const checkboxes = [
       {
@@ -62,6 +59,7 @@ export default class Settings extends Panel {
         icon: 'rotate-3d',
         setting: 'enableVizAuv',
       },
+      // TODO: extended math setting
       // {
       //   text: 'Расширенные блоки математики',
       //   icon: 'square-root',

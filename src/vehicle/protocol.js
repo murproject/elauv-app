@@ -1,6 +1,6 @@
 import {encode, decode} from '@msgpack/msgpack';
 
-const curProtoVer = 1; // current protocol version
+const curProtoVer = 1; /* current protocol version */
 
 const packetId = {
   /* General user control */
@@ -157,15 +157,13 @@ export default {
   },
 
   splitBufferToPackets: function(buffer) {
-    // TODO: split buffer to packets, respecting 2-bytes size header
+    /* split buffer to packets, respecting 2-bytes size header */
     let chunk = buffer;
     const packets = [];
 
     for (let i = 0; i < 20; i++) { // no more than 20 packets per buffer
       const packetSize = (chunk[1] << 8) + chunk[0];
-      // console.log('packet size: ' + packet_size);
       const currentPacket = chunk.slice(2, 2 + packetSize);
-      // console.log(packet);
 
       if (packetSize > 0 && packetSize === currentPacket.length) {
         packets.push(currentPacket);
@@ -192,7 +190,7 @@ export default {
     const data = decode(raw);
 
     if (!Array.isArray(data) || data.length < 4) {
-      // debug("incorrect packet")
+      return;
     }
 
     const packet = {
@@ -239,10 +237,10 @@ export default {
     const telemetry = {
       type: packet.type,
       lastProtoVer: this.prettyHex([data[0]]),
-      hardwareRev:  this.prettyHex([data[1]]), // TODO: should do formatting outisde
+      hardwareRev:  this.prettyHex([data[1]]),
       macAddress:   this.prettyHex(data[2], true),
       timestamp:    data[3],
-      feedback:     this.feedback.unpack(data[4]), // TODO: should do formatting outisde
+      feedback:     this.feedback.unpack(data[4]),
       depth:        data[5] * 0.01,
       depthTemp:    data[6] * 0.01,
       imuYaw:       data[7] * 0.01,
@@ -325,15 +323,11 @@ export default {
       payload,
     ];
 
-    // TODO: fill first bytes with packet size
-
     const encoded = encode(packet);
     const len = encoded.length;
     const buffer = new Uint8Array(2 + len);
     buffer.set([len & 0xFF, len >> 8], 0);
     buffer.set(encoded, 2);
-    // console.log("sending packet:")
-    // console.log(buffer)
 
     return buffer;
   },
@@ -360,10 +354,6 @@ export default {
       data.actuator_power,
       data.leds,
     ];
-
-    // debug("control payload:")
-    // debug(payload)
-    // console.log(payload);
 
     const packet = this.makePacket(curProtoVer, packetId.ControlContext, payload);
     return packet;

@@ -163,7 +163,8 @@ const CategoryMath = makeCategory(
         type: 'math_single',
       },
       {
-        kind: 'block', type: 'math_constrain',
+        kind: 'block',
+        type: 'math_constrain',
         inputs: {
           LOW: shadowNum(0),
           HIGH: shadowNum(100),
@@ -177,7 +178,10 @@ const CategoryMath = makeCategory(
           TO: shadowNum(10),
         },
       },
-      {kind: 'block', type: 'mur_angle_norm'},
+      {
+        kind: 'block',
+        type: 'mur_angle_norm',
+      },
 
       // TODO: use settings to enable/disable extended math
       // { kind: 'block', type: 'math_trig' },

@@ -1,10 +1,5 @@
-// import Vue from 'vue'
-// import EventBus from './eventBus'
 import bluetoothClassicSerial from 'cordova-plugin-bluetooth-classic-serial-port/www/bluetoothClassicSerial';
 import api from './api';
-
-/* TODO: add statuses - scanning, network-unavailable */
-
 
 export default {
   name: 'transport',
@@ -108,7 +103,6 @@ export default {
     }
 
     this.state = 'connecting';
-    // EventBus.$emit('notify', { text: 'Подключаемся к ' + this.macAddress })
 
     bluetoothClassicSerial.isEnabled(
         () => {
@@ -116,7 +110,6 @@ export default {
               this.macAddress,
               [this.spp],
               (result) => {
-                // EventBus.$emit('notify', { text: 'ВКЛЮЧЕНО ' + result })
                 this.state = 'open';
                 this.onOpen();
                 bluetoothClassicSerial.subscribeRawData(this.macAddress, async (data) => {
@@ -132,7 +125,6 @@ export default {
                 });
               },
               (error) => {
-                // EventBus.$emit('notify', { text: 'ОШИБКА! ' + error })
                 console.log('connect error:');
                 console.error(error);
                 this.state = 'closed';
@@ -151,13 +143,9 @@ export default {
   },
 
   disconnect: async function() {
-    // if (this.state !== 'closed') {
     bluetoothClassicSerial.disconnect(this.macAddress);
     this.state = 'closed';
     this.onClose();
-    // setTimeout(() => this.onClose(), 1000)
-
-    // }
   },
 
   sendMessage: function(message) {
@@ -168,11 +156,9 @@ export default {
         data[i] = message[i];
       }
 
-      // console.log(data)
       bluetoothClassicSerial.write(this.macAddress, data,
           (a) => { },
           (b) => {
-          // EventBus.$emit('notify', { text: 'WRITE ERROR! ' + b })
             console.error('send error:');
             console.error(b);
           },
