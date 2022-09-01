@@ -301,10 +301,10 @@ function strReplaceAll(str, match, replace) {
 
 
 function makeScript(index, code) {
-  const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
-  code = code.replace(funcRegex, 'async $&');
+  // const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
+  // code = code.replace(funcRegex, 'async $&');
 
-  return {script: code, isFunction: false};
+  return {script: code};
 }
 
 
