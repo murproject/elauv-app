@@ -45,11 +45,7 @@ export default {
   loadStorage() {
     document.storage = this;
 
-    console.warn(this.currentProject);
-
     this.projects.saved = JSON.parse(Utils.notNull(localStorage.savedProjects, '{}'));
-    // this.projects.saved = example;
-    console.log(this.projects.saved);
 
     if (!this.projects.saved || typeof(this.projects.saved) !== 'object') {
       this.projects.saved = {};
@@ -80,19 +76,15 @@ export default {
   },
 
   setCurrentProject(item) {
-    // item.id = Utils.notNull(item.id, Utils.generateId());
     this.projects.current = item;
     console.log(item.id);
     this.projects.current.autosaved = true;
-    // this.projects.autosaved.id = item.id
     this.onChanged();
     console.log(item);
   },
 
   loadProject(item) {
-    // TODO: what if script is running? 1) forbid; 2) stop script.
-
-    item = JSON.parse(JSON.stringify(item)); // depp clone
+    item = JSON.parse(JSON.stringify(item));
     this.setCurrentProject(item);
     App.closeGlobalDialog();
     App.panels.blockly.load(item.data);
@@ -112,7 +104,6 @@ export default {
 
   saveProject(forcedNew = false) {
     if ((this.projects.current.id in this.projects.saved) && !forcedNew) {
-      // this.autoSave();
       if (!this.projects.current.name || this.projects.current.name.length == 0) {
         this.projects.current.name = 'Проект №' + this.projects.emptyCounter;
         this.projects.emptyCounter++;

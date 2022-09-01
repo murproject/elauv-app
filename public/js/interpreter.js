@@ -113,10 +113,7 @@ const mur = {
     }
   },
 
-  // TODO: clamp here or in context handler?
-
   set_axis: async function(index, speed) {
-    // TODO: check index and constrain power
     index = toNum(index);
     speed = clamp(toNum(speed));
     context.axes_speed[index] = Math.round(speed);

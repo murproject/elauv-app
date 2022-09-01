@@ -121,7 +121,7 @@ export default {
   init: function() {
     SettingsStorage.load();
 
-    this.preloadIcons();
+    // this.preloadIcons();
 
     this.container.innerHTML = this.html;
 
@@ -132,7 +132,7 @@ export default {
 
     mur.create();
 
-    mur.telemetryUpdated = (t, f) => {
+    mur.onTelemetryUpdated = (t, f) => {
       // TOOD: move to TelemetryUtils?
       const prettyTelemetry = JSON.stringify(f, null, '  ');
       TelemetryUtils.update(prettyTelemetry);
@@ -161,20 +161,10 @@ export default {
         fw.classList.add('background-pulse');
 
         setTimeout(() => {
-          // TODO: should consider as connected (and blink green) only after first successful ping!
           fw.classList.remove('background-soft-green');
           fw.classList.remove('background-pulse');
         }, 2500);
       }
-      // } else if (status == 'closed') {
-      //   fw.classList.add("background-soft-yellow")
-      //   fw.classList.add("background-pulse")
-
-      //   setTimeout(() => {
-      //     fw.classList.remove("background-soft-yellow")
-      //     fw.classList.remove("background-pulse")
-      //   }, 2500);
-      // }
     };
 
     mur.onAllSettingsReceived = (settings) => {
@@ -211,22 +201,22 @@ export default {
     }, timeout);
   },
 
-  preloadIcons() {
-    // TODO
-    const preloadList = [
-      'ui/content-save',
-      'ui/checkbox-marked-outline',
-      'ui/stop',
-      'ui/play',
-    ];
+  // preloadIcons() {
+  //   // TODO
+  //   const preloadList = [
+  //     'ui/content-save',
+  //     'ui/checkbox-marked-outline',
+  //     'ui/stop',
+  //     'ui/play',
+  //   ];
 
-    preloadList.forEach((item) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.type = 'image/svg+xml';
-      link.as = 'image';
-      link.href = 'mdi/' + item + '.svg';
-      document.head.appendChild(link);
-    });
-  },
+  //   preloadList.forEach((item) => {
+  //     const link = document.createElement('link');
+  //     link.rel = 'preload';
+  //     link.type = 'image/svg+xml';
+  //     link.as = 'image';
+  //     link.href = 'mdi/' + item + '.svg';
+  //     document.head.appendChild(link);
+  //   });
+  // },
 };

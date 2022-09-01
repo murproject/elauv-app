@@ -1,4 +1,3 @@
-import AppVersion from '../utils/AppVersion';
 import Protocol from './protocol';
 
 let transport = null;
@@ -11,33 +10,32 @@ if (typeof cordova !== 'undefined') {
 
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 
-
 export default {
   name: 'mur',
   mur: this,
-  ip: '127.0.0.1',
+
+  websocketAddress: 'ws://127.0.0.1:8802/api',
   deviceAddress: null,
-  port: '8802',
-  page: 'api',
-  url: null,
+
   conn: transport,
+  status: 'connecting',
+
   telemetry: {timestamp: 0},
   formattedTelemetry: {},
   precision: 2,
-  status: 'connecting',
-  remote: false,
+
+  context: {},
+
   lastUpdated: '',
   lastUpdatedDate: null,
+
   pingCounter: 0,
   reconnecting: false,
   reconnectTimer: null,
-  context: {},
 
   protocol: Protocol,
 
-  oldImuTapState: false, // TODO: delete!
-
-  telemetryUpdated: (t, f) => {},
+  onTelemetryUpdated: (t, f) => {},
   onStatusUpdated: (status) => {},
   onDiscard: () => {},
   onAllSettingsReceived: () => {},
@@ -51,7 +49,6 @@ export default {
     this.conn.start();
 
     this.conn.onClose = (event) => {
-      // this.telemetry = {timestamp: 0};
       this.clearTelemetry();
       this.pingCounter = 0;
       setTimeout(() => this.connect(), 1000);
@@ -63,23 +60,13 @@ export default {
 
     this.conn.onOpen = (event) => {
       this.updateStatus();
-      // EventBus.$emit('notify', { text: 'Установлено подключение' })
     };
-
-    // setTimeout(() => {
-    //   this.reconnecting = false
-    //   this.updateStatus()
-    // }, 250)
-
-    const mur = this;
-
-    // this.connect();
 
     this.conn.onMessage = (event) => {
       event.data.arrayBuffer().then((buf) => {
         const raw = new Uint8Array(buf);
         const packets = Protocol.splitBufferToPackets(raw);
-        packets.forEach((packet) => mur.handlePacket(packet));
+        packets.forEach((packet) => this.handlePacket(packet));
       });
     };
 
@@ -90,18 +77,11 @@ export default {
       }
 
       if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 5000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
-        console.warn('Connection lost');
-        console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
-        // console.warn(`status: ${this.status}, timestamp delta: ${date - this.lastUpdatedDate}`);
+        // console.warn('Connection lost');
+        // console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
         this.connect();
-      } else if (this.status === 'open') {
-        // EventBus.$emit('status-updated')
       }
     }, 2500);
-
-    if (AppVersion.isDevBuild) {
-      // this.conn.scanAll();
-    }
   },
 
   handlePacket: function(raw) {
@@ -111,23 +91,13 @@ export default {
 
     switch (message.type) {
       case Protocol.packetTypes.ReplyTelemetry:
-        // this.oldImuTapState = !this.oldImuTapState; // TODO: delete!
-        // console.log(this.oldImuTapState);
-
         if (message.timestamp < this.telemetry.timestamp) {
           console.warn('inconsistent timestamps: old is ' + this.telemetry.timestamp + ', and new is ' + message.timestamp);
         }
+
         this.telemetry = message;
         this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3);
-
-        // console.log(this.telemetry);
-
-        // this.telemetry.feedback.imuTap = this.oldImuTapState; // TODO: delete!
-
-        // EventBus.$emit('telemetry-received')
         this.updateTelemetry();
-        // console.log(mur.formattedTelemetry)
-
         break;
 
       case Protocol.packetTypes.ReplyPing:
@@ -165,13 +135,6 @@ export default {
       return;
     }
 
-    // if (!address) {
-    //   address = localStorage.lastDeviceAddress;
-    // } else {
-    //   this.deviceAddress = address;
-    //   localStorage.lastDeviceAddress = address;
-    // }
-
     if (address) {
       this.deviceAddress = address;
     } else if (this.deviceAddress) {
@@ -183,18 +146,12 @@ export default {
     this.authorized = false;
     this.pingSuccess = false;
     this.connectionTimeout = false;
-    // console.warn('WebSocket: connecting…')
-    console.info('Connecting to', address);
 
     if (transport.type === 'websocket') {
-      // address = 'ws://' + this.ip + ':' + this.port + '/' + this.page; // TODO: костыль
+      address = this.websocketAddress;
     }
 
-    // EventBus.$emit('notify', { text: 'Подключение…' })
-    // if (this.conn !== null && this.conn.ws !== null) {
-    //   this.conn.ws.close()
-    // }
-    // this.conn.connect(this.url)
+    console.info('Connecting to', address);
 
     if (address) {
       this.deviceAddress = address;
@@ -207,8 +164,6 @@ export default {
       this.reconnecting = false;
       this.updateStatus();
     }, 250);
-
-    // this.reconnecting = false
   },
 
   disconnect: function() {
@@ -218,16 +173,11 @@ export default {
     this.pingSuccess = false;
     this.connectionTimeout = false;
     this.deviceAddress = null;
-    localStorage.lastDeviceAddress = null; // TODO: delete!
     this.conn.disconnect();
   },
 
   updateStatus: function() {
     this.status = this.conn.checkStatus();
-
-    if (this.connectionTimeout) {
-      // console.error('connectionTimeout'); // TODO: remove
-    }
 
     if (this.status === 'open' && !this.reconnecting && !this.authorized) {
       this.status = 'wait-ping';
@@ -245,16 +195,11 @@ export default {
       this.formattedTelemetry.running = this.telemetry.running;
     }
 
-    if (this.telemetry.remote !== undefined) {
-      this.formattedTelemetry.remote = this.telemetry.remote;
-      this.remote = this.telemetry.remote;
-    }
-
     for (const item in this.telemetry) {
       this.formattedTelemetry[item] = this.getFormattedTelemetry(item);
     }
 
-    this.telemetryUpdated(this.telemetry, this.formattedTelemetry);
+    this.onTelemetryUpdated(this.telemetry, this.formattedTelemetry);
   },
 
   clearTelemetry: function() {
@@ -292,40 +237,6 @@ export default {
       ],
     };
 
-    // this.telemetry = {
-    //   'type': 161,
-    //   'lastProtoVer': '00',
-    //   'hardwareRev': '00',
-    //   'macAddress': '...',
-    //   'timestamp': 0,
-    //   'feedback': {
-    //     'imuTap': false,
-    //     'imuDoubleTap': false,
-    //     'imuCalibrating': false,
-    //     'colorStatus': false,
-    //     'solenoidRelaxing': false,
-    //     'pilotingMode': false,
-    //     'yawStabilized': false,
-    //     'pilotingBlocked': false,
-    //   },
-    //   'depth': 0,
-    //   'depthTemp': 0,
-    //   'imuYaw': 0.0,
-    //   'imuPitch': 0.0,
-    //   'imuRoll': 0,
-    //   'battVolts': 0.0,
-    //   'battAmps': 0.0,
-    //   'battRsoc': 0,
-    //   'battTemp': 0,
-    //   'memFree': 0,
-    //   'motorsPower': [
-    //     0,
-    //     0,
-    //     0,
-    //     0,
-    //   ],
-    // };
-
     this.updateTelemetry(this.telemetry);
   },
 
@@ -343,11 +254,8 @@ export default {
     }
 
     if (typeof value === 'object') {
-      // if (name === 'feedback') {
-      //   return JSON.stringify(value, null, ' ');
-      // }
-
       let result = '';
+
       for (const key in value) {
         if (typeof value[key] !== 'function') {
           const v = value[key] === true ? '1' :
@@ -356,10 +264,8 @@ export default {
 
           result += '\<br>     ' + key + ': ' + v + '; ';
         }
-        // if (value[key] === true) {
-        // result.push(key)
-        // }
       }
+
       return result;
     }
 
@@ -395,19 +301,15 @@ export default {
 
   controlPing: function(counter = undefined) {
     if (this.status === 'open' || this.status === 'wait-ping' || this.status === 'timeout') {
-      console.log('Ping when status is ' + this.status);
-
       this.conn.sendMessage(Protocol.packControlPing({
         counter: counter == undefined ? this.pingCounter : counter,
       }));
-
-      console.log(this.pingSuccess);
 
       if (this.pingSuccess) {
         this.connectionTimeout = false;
       } else if (this.authorized) {
         this.connectionTimeout = true;
-        console.error('PING TIMEOUT');
+        console.warn('PING TIMEOUT');
       }
 
       this.timePing = new Date();

@@ -6,13 +6,11 @@ if (typeof cordova !== 'undefined') {
 
   document.addEventListener('deviceready', () => {
     window.cutout.has().then((hasCutout) => {
+      /* additional space on top of header if screen has cutout */
       if (hasCutout) {
         App.container.classList.add('with-statusbar-spacer');
-        // TODO: make it better?
         document.addEventListener('resume', triggerStatusbar, false);
         triggerStatusbar();
-
-        // TODO: stupid fix (statusbar disappers after activating android menu)
         setInterval(() => window.StatusBar.overlaysWebView(true), 500);
       }
     });
@@ -38,8 +36,6 @@ function triggerStatusbar() {
   setTimeout(() => {
     window.StatusBar.show();
     window.StatusBar.overlaysWebView(true);
-    // window.StatusBar.backgroundColorByHexString("FFF");
-    // window.StatusBar.styleDefault();
   }, 500);
 }
 

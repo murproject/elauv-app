@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 
 import * as Blockly from 'blockly/core';
-import BlocklyLua from 'blockly/lua';
 import 'blockly/javascript';
 
 import {FieldSlider} from '/src/blockly-wrapper/field_slider';
@@ -15,16 +14,6 @@ export default {
   name: 'Blocks',
 
   colours: {
-    // flow:            30,
-    // mov:             80,
-    // sensors:        120,
-    // logic:          160,
-    // loop:           200,
-    // math:           240,
-    // colour:         280,
-    // variable:       320,
-    // procedure:      360,
-
     flow:        '#A44',
     mov:         '#B70',
     sensors:     '#BA3',
@@ -34,22 +23,15 @@ export default {
     colour:         280,
     variable:       320,
     procedure:   '#778',
-
-    // flow:        "#778",
-    // mov:              0,
-    // sensors:     "#B70",
-    // logic:       "#BA3",
-    // loop:           120,
-    // math:           200,
-    // colour:         240,
-    // variable:       280,
-    // procedure:      320,
   },
 
-
-  /* mur.delay(sleepMs) */
+  enums: {
+    // TODO: use named constants instead of magic numbers
+  },
 
   init: function() {
+    /* - - - Fill categories colours - - -*/
+
     colours = this.colours;
 
     for (const key in colours) {
@@ -62,10 +44,10 @@ export default {
       }
     }
 
+    /* - - - Helper funcions - - - */
 
     function getOrder(gen) {
-      return gen === BlocklyLua ? BlocklyLua.ORDER_OVERRIDES :
-        gen === Blockly.JavaScript ? Blockly.JavaScript.ORDER_NONE : null;
+      return Blockly.JavaScript.ORDER_NONE;
     }
 
     function calcVal(gen, block, name) {
@@ -74,12 +56,12 @@ export default {
     }
 
     function calcValFloor(gen, block, name) {
-      const prefix = gen === BlocklyLua ? 'math.floor(' : 'Math.floor(';
+      const prefix = 'Math.floor(';
       return prefix + gen.valueToCode(block, name, getOrder(gen)) + ')' || '\'\'';
     }
 
     function genFloor(gen, code) {
-      const prefix = gen === BlocklyLua ? 'math.floor(' : 'Math.floor(';
+      const prefix = 'Math.floor(';
       return prefix + code + ')';
     }
 
@@ -90,64 +72,34 @@ export default {
         prefix += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX, block);
       }
 
-      if (gen === BlocklyLua && BlocklyLua.STATEMENT_PREFIX) {
-        prefix += BlocklyLua.injectId(BlocklyLua.STATEMENT_PREFIX, block);
-      }
-
       return prefix;
     }
 
     function makeLoop(gen, block, condition, branch) {
-      if (gen === Blockly.JavaScript) {
-        return `
+      return `
 while (${condition}) {
 ${makePrefix(gen, block)}
 ${branch}
 }
 `;
-      }
-
-      if (gen === BlocklyLua) {
-        return `
-while (${condition}) do
-${branch}
-end
-`;
-      }
     }
 
+    // register function prototype
     function register_proto(name, func) {
       console.log('Register block ' + name);
-
-      BlocklyLua[name] = func(BlocklyLua);
       Blockly.JavaScript[name] = func(Blockly.JavaScript);
     }
 
     function makeFunc(gen, code, wait) {
-      if (gen === Blockly.JavaScript) {
-        return ((wait ? 'await ' : '') + `${code};\n`);
-      }
-
-      if (gen === BlocklyLua) {
-        return `${code}\n`;
-      }
+      return ((wait ? 'await ' : '') + `${code};\n`);
     }
 
     function makeInlineFunc(gen, code) {
-      if (gen === Blockly.JavaScript) {
-        return [code, Blockly.JavaScript.ORDER_NONE];
-      }
-
-      if (gen === BlocklyLua) {
-        return [code, BlocklyLua.ORDER_OVERRIDES];
-      }
+      return [code, Blockly.JavaScript.ORDER_NONE];
     }
 
     function makeDelay(gen, delay) {
-      console.log('makedelay is ' + delay);
-      // if (gen === Blockly.JavaScript) {
       delay = genFloor(gen, `${delay} * 1000`);
-      // }
       return makeFunc(gen, `mur.delay(${delay})`, true);
     }
 
@@ -163,40 +115,17 @@ end
       return [{src: iconPath(name), width: 32, height: 32, alt: alt}, value];
     }
 
-    // Blockly.JavaScript.procedures_defreturn = function (block) {
-    //   return '!!!'
-    // }
+    // generic function prototype for numeric blocks
+    const proto_num_value = (gen) => {
+      return (block) => {
+        const value = block.getFieldValue('Value');
+        return makeInlineFunc(gen, `(${value})`);
+      };
+    };
 
-    // // common.defineBlocksWithJsonArray([{
-    // Blockly.Blocks.defineBlocksWithJsonArray([{
-    //   type: 'controls_whileUntil',
-    //   message0: '%1 %2',
-    //   args0: [
-    //     {
-    //       type: 'field_dropdown',
-    //       name: 'MODE',
-    //       options: [
-    //         ['aaa', 'WHILE'],
-    //         ['bbb', 'UNTIL']
-    //       ]
-    //     },
-    //     {
-    //       type: 'input_value',
-    //       name: 'BOOL',
-    //       check: 'Boolean'
-    //     }
-    //   ],
-    //   message1: '%{BKY_CONTROLS_REPEAT_INPUT_DO} %1',
-    //   args1: [{
-    //     type: 'input_statement',
-    //     name: 'DO'
-    //   }],
-    //   previousStatement: null,
-    //   nextStatement: null,
-    //   style: 'loop_blocks',
-    //   helpUrl: '%{BKY_CONTROLS_WHILEUNTIL_HELPURL}',
-    //   extensions: ['controls_whileUntil_tooltip']
-    // }])
+    /* - - - Blocks definition - - - */
+
+    /* mur_delay */
 
     Blockly.Blocks.mur_delay = {
       init: function() {
@@ -206,27 +135,22 @@ end
         this.appendValueInput('sleepSeconds')
             .setCheck('Number');
 
-        // this.appendDummyInput()
-        //   .appendField('секунд')
-
         this.setPreviousStatement(true, 'action');
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.flow);
-        this.setTooltip('Ждать указанное количество секунд');
+        //this.setTooltip('Ждать указанное количество секунд');
       },
     };
 
     register_proto('mur_delay', (gen) => {
       return (block) => {
-        // const sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
-        // console.log('delay is ' + calcVal(gen, block, 'sleepSeconds')
         const sleepMs = calcVal(gen, block, 'sleepSeconds');
         return makeDelay(gen, sleepMs);
       };
     });
 
-    /* get seconds */
+    /* mur_get_timestamp */
 
     Blockly.Blocks.mur_get_timestamp = {
       init: function() {
@@ -245,7 +169,7 @@ end
         this.setNextStatement(false, null);
         this.setInputsInline(true);
         this.setColour(colours.flow);
-        this.setTooltip('Сколько времени прошло с запуска программы');
+        //this.setTooltip('Сколько времени прошло с запуска программы');
       },
     };
 
@@ -253,22 +177,18 @@ end
 
     register_proto('mur_get_timestamp', (gen) => {
       return (block) => {
-        // TODO //
         const mode = block.getFieldValue('MODE');
-        // return [`mur.get_timestamp(${mode === 'MODE_MSEC'})`, Blockly.JavaScript.ORDER_NONE]
         return makeInlineFunc(gen, `mur.get_timestamp(${mode === 'MODE_MSEC'})`);
       };
     });
 
     // TODO (in all block with mode selection): use index/enum instead of text
 
-
-    /* thread */
+    /* mur_thread */
 
     Blockly.Blocks.mur_thread = {
       init: function() {
         this.appendDummyInput()
-        // .appendField(icon('parallel-thread-rotated', 'поток'))
             .appendField(icon('parallel-thread-rotated'), 'процесс')
             .appendField('Процесс')
             .appendField(new Blockly.FieldTextInput(), 'ThreadName');
@@ -278,7 +198,7 @@ end
         this.setNextStatement(false, '');
         this.setInputsInline(true);
         this.setColour(colours.flow);
-        this.setTooltip('Процесс');
+        //this.setTooltip('Процесс');
       },
     };
 
@@ -287,7 +207,6 @@ end
         const branch = Blockly.JavaScript.statementToCode(block, 'STACK');
         const name = block.getFieldValue('ThreadName');
 
-        // mur.thread_start(${gen.injectId("%1", block)});
         return `
 (async () => {
 /* MUR_THREAD:
@@ -301,10 +220,10 @@ await mur.h(_threadId, null);
 await mur.thread_end(_threadId);
 })();
 `;
-        // let sleepMs = Math.round(block.getFieldValue('sleepSeconds') * 1000)
-        // return makeDelay(gen, sleepMs)
       };
     });
+
+    /* mur_print */
 
     Blockly.Extensions.register('auto_print_name', function() {
       this.setOnChange(function(changeEvent) {
@@ -329,27 +248,17 @@ await mur.thread_end(_threadId);
       });
     });
 
-
     Blockly.Blocks.mur_print = {
       init: function() {
-        // this.appendDummyInput()
-        //   // .appendField("Отобразить")
-
-        // this.appendDummyInput()
-        // .appendField(".")
-
         this.appendValueInput('Value')
             .appendField(icon('tooltip-text-outline', 'Текст'))
             .appendField(new Blockly.FieldTextInput(), 'Text');
-        // .appendField(" ")
-        // this.appendDummyInput()
-        //   .appendField("3")
 
         this.setPreviousStatement(true, 'action');
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.flow);
-        this.setTooltip('Отобразить значение');
+        //this.setTooltip('Отобразить значение');
 
         Blockly.Extensions.apply('auto_print_name', this);
       },
@@ -359,10 +268,11 @@ await mur.thread_end(_threadId);
       return (block) => {
         const text = block.getFieldValue('Text');
         const value = calcVal(gen, block, 'Value');
-        // const value = Blockly.JavaScript.valueToCode(block, 'Value', Blockly.JavaScript.ORDER_NONE);
         return makeFunc(gen, `mur.print("${text}", ${value})`);
       };
     });
+
+    /* mur_text */
 
     Blockly.Blocks.mur_text = {
       init: function() {
@@ -373,7 +283,7 @@ await mur.thread_end(_threadId);
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.flow);
-        this.setTooltip('Отобразить значение');
+        //this.setTooltip('Отобразить значение');
       },
     };
 
@@ -384,7 +294,7 @@ await mur.thread_end(_threadId);
       };
     });
 
-    /* mur.set_power(index, power) */
+    /* mur_set_power */
 
     const motors_dropdown = [
       item_image('chars/alpha-c', 'MOTOR_C', 'C'),
@@ -397,7 +307,12 @@ await mur.thread_end(_threadId);
       init: function() {
         this.appendDummyInput()
             .appendField(icon('fan', 'движитель'))
-            .appendField(new FieldGridDropdown(motors_dropdown, undefined, {columns: 2, DEFAULT_VALUE: 'MOTOR_A'}), 'Index');
+            .appendField(new FieldGridDropdown(
+                motors_dropdown,
+                undefined,
+                {columns: 2, DEFAULT_VALUE: 'MOTOR_A'}),
+            'Index',
+            );
 
         this.appendValueInput('Power')
             .setCheck('Number')
@@ -407,11 +322,11 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.mov);
-        this.setTooltip('Задать тягу на движитель');
+        //this.setTooltip('Задать тягу на движитель');
       },
     };
 
-    const MotorsIndex = {
+    const MotorsIndex = { // ODO: move to enum
       'MOTOR_A': 0,
       'MOTOR_B': 1,
       'MOTOR_C': 2,
@@ -423,22 +338,15 @@ await mur.thread_end(_threadId);
         const indexChar = block.getFieldValue('Index');
         const index = MotorsIndex[indexChar];
         const power = calcVal(gen, block, 'Power');
-        // let sleepMs = Math.round(calcVal(gen, block, 'Delay') * 1000)
-        const sleepMs = calcVal(gen, block, 'Delay');
         return makeFunc(gen, `mur.set_power(${index}, ${power})`);
       };
     });
 
-    /* mur.actuator(index, power) */
-
-    // TODO: solenoid now can be only turned on/off without power level
-    // TODO: make forced zero-power on solenoid after timeout?
-
+    /* mur_actuator */
 
     Blockly.Blocks.mur_actuator = {
       init: function() {
         this.appendDummyInput()
-
             .appendField(new FieldGridDropdown([
               item_image('magnet-on', 'SOLENOID_ON', 'включить'),
               item_image('magnet-off', 'SOLENOID_OFF', 'выключить'),
@@ -448,7 +356,7 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.mov);
-        this.setTooltip('Задать мощность на соленоид');
+        //this.setTooltip('Задать мощность на соленоид');
       },
     };
 
@@ -459,47 +367,13 @@ await mur.thread_end(_threadId);
       };
     });
 
-    /* mur.set_axis(index, power) */
+    /* mur_set_axis */
 
     const movements_dropdown = [
       item_image('arrow-march', 'AXIS_MARCH', 'вперед/назад'),
       item_image('arrow-rotate', 'AXIS_YAW', 'налево/направо'),
       item_image('arrow-depth', 'AXIS_DEPTH', 'подниматься/опускаться'),
-
-      // item_image('arrow-forward', 'AXIS_MARCH_FORWARD', 'вперед'),
-      // item_image('arrow-backward', 'AXIS_MARCH_BACKWARD', 'назад'),
-      // item_image('rotate-left', 'AXIS_YAW_LEFT', 'против часовой (налево)'),
-      // item_image('rotate-right', 'AXIS_YAW_RIGHT', 'по часовой (направо)'),
-      // item_image('depth-up', 'AXIS_VERTICAL_UP', 'вверх (подниматься)'),
-      // item_image('depth-down', 'AXIS_VERTICAL_DOWN', 'вниз (заглубляться)'),
-      // item_image('transfer-left', 'AXIS_SIDE_LEFT', 'влево'),
-      // item_image('transfer-right', 'AXIS_SIDE_RIGHT', 'вправо')
     ];
-
-    // Blockly.Blocks.mur_set_axis_wait = {
-    //   init: function () {
-    //     this.appendDummyInput()
-    //       .appendField(new FieldGridDropdown(
-    //         movements_dropdown,
-    //         undefined,
-    //         {columns: 2, DEFAULT_VALUE: 'AXIS_MARCH_FORWARD'}),
-    //         "MODE");
-
-    //     this.appendValueInput('Power')
-    //       .setCheck('Number')
-    //       .appendField(icon('speedometer', 'тяга'))
-
-    //     this.appendValueInput('Delay')
-    //       .setCheck('Number')
-    //       .appendField(icon('timer', 'длительность'))
-
-    //     this.setPreviousStatement(true, 'action')
-    //     this.setNextStatement(true, 'action')
-    //     this.setInputsInline(true)
-    //     this.setColour(colours.mov)
-    //     this.setTooltip('Задать движение на ось')
-    //   }
-    // }
 
     Blockly.Blocks.mur_set_axis = {
       init: function() {
@@ -516,17 +390,27 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.mov);
-        this.setTooltip('Задать движение на ось');
+        //this.setTooltip('Задать движение на ось');
       },
     };
 
-    /* on light sensor */
+    register_proto('mur_set_axis', (gen) => {
+      return (block) => {
+        // TODO
+        const mode = block.getFieldValue('MODE');
+        const index =
+          mode == 'AXIS_YAW' ? 0 :
+          mode == 'AXIS_MARCH' ? 1 :
+          mode == 'AXIS_DEPTH' ? 2 : 0;
+        const power = calcVal(gen, block, 'Power');
+        return makeFunc(gen, `mur.set_axis(${index}, ${power})`);
+      };
+    });
+
+    /* mur_sensor_color_wait */
 
     Blockly.Blocks.mur_sensor_color_wait = {
       init: function() {
-        // this.appendDummyInput()
-        //   .appendField(icon('axis-arrow', 'ось'))
-
         this.appendDummyInput()
             .appendField(new FieldGridDropdown([
               item_image('color-light', 'SENSOR_COLOR_WHITE', 'светлое'),
@@ -538,7 +422,7 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.sensors);
-        this.setTooltip('Задать движение на ось');
+        //this.setTooltip('Задать движение на ось');
       },
     };
 
@@ -546,21 +430,13 @@ await mur.thread_end(_threadId);
       return (block) => {
         const mode = block.getFieldValue('MODE');
 
-        // TODO: stupid! try to do it with async way
-        // TODO: should only call function in interpreter
-
-        // TODO: should implement a proper way to wait for event!
-
         if (gen === Blockly.JavaScript) {
           return makeFunc(gen, `while (!mur.get_color_status('${mode}')) {await mur.delay(50);}`);
-        }
-
-        if (gen === BlocklyLua) {
-          return makeFunc(gen, `while (!mur.get_color_status('${mode}')) do mur.delay(50) end`);
         }
       };
     });
 
+    /* mur_get_color */
 
     Blockly.Blocks.mur_get_color = {
       init: function() {
@@ -574,30 +450,18 @@ await mur.thread_end(_threadId);
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.sensors);
-        this.setTooltip('Проверка цвета');
+        //this.setTooltip('Проверка цвета');
       },
     };
 
-    // register_proto('mur_get_color', (gen) => {
-    //   return (block) => {
-    //     let mode = block.getFieldValue('MODE')
-    //     return [`mur.get_color_status('${mode}')`, Blockly.JavaScript.ORDER_NONE]
-    //     // return makeFunc(gen, 'mur.get_imu_tap()')
-    //   }
-    // })
-
     register_proto('mur_get_color', (gen) => {
       return (block) => {
-        let mode = block.getFieldValue('MODE');
-        if (gen === BlocklyLua) {
-          mode = 1; // TODO !!!
-        }
-        // return [`mur.get_color_status('${mode}')`, Blockly.JavaScript.ORDER_NONE]
+        const mode = block.getFieldValue('MODE');
         return makeInlineFunc(gen, `mur.get_color_status('${mode}')`);
       };
     });
 
-    /* stop all axes */
+    /* mur_stop_motors */
 
     Blockly.Blocks.mur_stop_motors = {
       init: function() {
@@ -608,34 +472,22 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.mov);
-        this.setTooltip('Остановить движители');
+        //this.setTooltip('Остановить движители');
       },
     };
 
     register_proto('mur_stop_motors', (gen) => {
       return (block) => {
-        // TODO: do better?
         return makeFunc(gen, `
           await mur.stop_all()
         `);
       };
     });
 
-    /* set yaw */
+    /* mur_set_yaw */
 
     Blockly.Blocks.mur_set_yaw = {
-      /*
-        1) регулируемся до того как курс будет приемлемым
-           ИЛИ по внутреннему (невидимому) таймуту 10~15 секунд
-
-        2) сделать для тестов два блока, один с заданием мощности (коэф. P), другой без задания мощности
-
-      */
-
       init: function() {
-        // this.appendDummyInput()
-        //   .appendField(icon('axis-arrow', 'ось'))
-
         this.appendDummyInput()
             .appendField(icon('rotate-360', 'курс'))
             .appendField(new FieldGridDropdown([
@@ -654,13 +506,12 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.mov);
-        this.setTooltip('Установить курс');
+        //this.setTooltip('Установить курс');
       },
     };
 
     register_proto('mur_set_yaw', (gen) => {
       return (block) => {
-        // TODO
         const mode = block.getFieldValue('MODE');
         const absolute = mode === 'SET_YAW_ABSOLUTE';
         const angle = calcVal(gen, block, 'Angle');
@@ -669,18 +520,7 @@ await mur.thread_end(_threadId);
       };
     });
 
-    register_proto('mur_set_axis', (gen) => {
-      return (block) => {
-        // TODO
-        const mode = block.getFieldValue('MODE');
-        const index =
-          mode == 'AXIS_YAW' ? 0 :
-          mode == 'AXIS_MARCH' ? 1 :
-          mode == 'AXIS_DEPTH' ? 2 : 0;
-        const power = calcVal(gen, block, 'Power');
-        return makeFunc(gen, `mur.set_axis(${index}, ${power})`);
-      };
-    });
+    /* mur_number_degrees */
 
     Blockly.FieldAngle.HALF = 100;
     Blockly.FieldAngle.RADIUS = 90;
@@ -697,7 +537,7 @@ await mur.thread_end(_threadId);
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.mov);
-        this.setTooltip('Курс в градусах');
+        //this.setTooltip('Курс в градусах');
       },
     };
 
@@ -708,8 +548,7 @@ await mur.thread_end(_threadId);
       };
     });
 
-    /* mur.get_imu_tap */
-    /* mur.get_color_status */
+    /* mur_get_imu_tap */
 
     Blockly.Blocks.mur_get_imu_tap = {
       init: function() {
@@ -723,7 +562,7 @@ await mur.thread_end(_threadId);
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.sensors);
-        this.setTooltip('Происходит ли столкновение');
+        //this.setTooltip('Происходит ли столкновение');
       },
     };
 
@@ -734,7 +573,7 @@ await mur.thread_end(_threadId);
       };
     });
 
-    /* mur.get_imu_yaw */
+    /* mur_get_imu_axis */
 
     Blockly.Blocks.mur_get_imu_axis = {
       init: function() {
@@ -752,7 +591,7 @@ await mur.thread_end(_threadId);
         this.setNextStatement(false, null);
         this.setInputsInline(true);
         this.setColour(colours.sensors);
-        this.setTooltip('Ось');
+        //this.setTooltip('Ось');
       },
     };
 
@@ -772,6 +611,8 @@ await mur.thread_end(_threadId);
       };
     });
 
+    /* mur_wait_imu_tap */
+
     Blockly.Blocks.mur_wait_imu_tap = {
       init: function() {
         this.appendDummyInput()
@@ -790,20 +631,12 @@ await mur.thread_end(_threadId);
 
     register_proto('mur_wait_imu_tap', (gen) => {
       return (block) => {
-        // TODO: stupid! try to do it with async way
-        // TODO: should only call function in interpreter
-
-        // TODO: should implement a proper way to wait for event!
-
-        // TODO: implement double tap
-
         const Mode = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE' ? 1 : 0;
-
         return makeFunc(gen, `while (!mur.get_imu_tap(${Mode})) {await mur.delay(50);}`);
       };
     });
 
-    /* TODO: time loop */
+    /* mur_loop_timeout */
 
     Blockly.Blocks.mur_loop_timeout = {
       init: function() {
@@ -819,7 +652,7 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.loop);
-        this.setTooltip('цикл на время');
+        //this.setTooltip('цикл на время');
       },
     };
 
@@ -840,7 +673,7 @@ await mur.thread_end(_threadId);
       };
     });
 
-    /* infinite loop */
+    /* mur_loop_infinite */
 
     Blockly.Blocks.mur_loop_infinite = {
       init: function() {
@@ -852,7 +685,7 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.loop);
-        this.setTooltip('бесконечный цикл');
+        //this.setTooltip('бесконечный цикл');
       },
     };
 
@@ -863,10 +696,12 @@ await mur.thread_end(_threadId);
       };
     });
 
+    /* register loop blocks to be able to use "break/continue" block */
+
     Blockly.libraryBlocks.loops.loopTypes.add('mur_loop_infinite');
     Blockly.libraryBlocks.loops.loopTypes.add('mur_loop_timeout');
 
-    /* set led color */
+    /* mur_set_led */
 
     Blockly.Blocks.mur_set_led = {
       init: function() {
@@ -882,7 +717,8 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.colour);
-        this.setTooltip('Задать цвет на светодиод');
+        //this.setTooltip('Задать цвет на светодиод');
+
         Blockly.Extensions.apply('auto_led_color', this);
       },
 
@@ -898,9 +734,20 @@ await mur.thread_end(_threadId);
         if (isLight === undefined) {
           isLight = this.isColorFieldLight();
         }
-        this.getIconField().setValue(isLight ? iconPath('lightbulb-on') : iconPath('lightbulb-outline'));
+
+        this.getIconField().setValue(
+          isLight ? iconPath('lightbulb-on') : iconPath('lightbulb-outline'),
+        );
       },
     };
+
+    register_proto('mur_set_led', (gen) => {
+      return (block) => {
+        const index = calcVal(gen, block, 'Index');
+        const colour = calcVal(gen, block, 'Colour');
+        return makeFunc(gen, `await mur.set_led(${index}, ${colour})`);
+      };
+    });
 
     Blockly.Extensions.register('auto_led_color', function() {
       this.setOnChange(function(changeEvent) {
@@ -913,7 +760,9 @@ await mur.thread_end(_threadId);
       });
     });
 
-    Blockly.Blocks['mur_colour_picker'] = {
+    /* mur_colour_picker */
+
+    Blockly.Blocks.mur_colour_picker = {
       init: function() {
         this.appendDummyInput()
             .appendField(new Blockly.FieldColour(
@@ -942,14 +791,7 @@ await mur.thread_end(_threadId);
       };
     });
 
-    register_proto('mur_set_led', (gen) => {
-      return (block) => {
-        const index = calcVal(gen, block, 'Index');
-        const colour = calcVal(gen, block, 'Colour');
-        return makeFunc(gen, `await mur.set_led(${index}, ${colour})`);
-      };
-    });
-
+    /* mur_set_leds_all */
 
     Blockly.Blocks.mur_set_leds_all = {
       init: function() {
@@ -964,7 +806,7 @@ await mur.thread_end(_threadId);
         this.setNextStatement(true, 'action');
         this.setInputsInline(true);
         this.setColour(colours.colour);
-        this.setTooltip('Задать цвет на светодиод');
+        //this.setTooltip('Задать цвет на светодиод');
         Blockly.Extensions.apply('auto_led_color', this);
       },
 
@@ -980,13 +822,15 @@ await mur.thread_end(_threadId);
         if (isLight === undefined) {
           isLight = this.isColorFieldLight();
         }
-        this.getIconField().setValue(isLight ? iconPath('lightbulb-group') : iconPath('lightbulb-group-outline'));
+
+        this.getIconField().setValue(
+          isLight ? iconPath('lightbulb-group') : iconPath('lightbulb-group-outline'),
+        );
       },
     };
 
     register_proto('mur_set_leds_all', (gen) => {
       return (block) => {
-        const index = calcVal(gen, block, 'Index');
         const colour = calcVal(gen, block, 'Colour');
         return makeFunc(gen, `
 for (let i = 0; i < 4; i++) {
@@ -1023,14 +867,6 @@ for (let i = 0; i < 4; i++) {
 
     /* math_slider_number */
 
-    const proto_num_value = (gen) => {
-      return (block) => {
-        const value = block.getFieldValue('Value');
-        return makeInlineFunc(gen, `(${value})`);
-      };
-    };
-
-
     Blockly.Blocks.mur_number_slider = {
       init: function() {
         this.appendDummyInput()
@@ -1040,11 +876,13 @@ for (let i = 0; i < 4; i++) {
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.mov);
-        this.setTooltip('Число');
+        //this.setTooltip('Число');
       },
     };
 
     register_proto('mur_number_slider', proto_num_value);
+
+    /* mur_number_slider_yaw */
 
     Blockly.Blocks.mur_number_slider_yaw = {
       init: function() {
@@ -1055,11 +893,13 @@ for (let i = 0; i < 4; i++) {
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.mov);
-        this.setTooltip('Курс в градусах');
+        //this.setTooltip('Курс в градусах');
       },
     };
 
     register_proto('mur_number_slider_yaw', proto_num_value);
+
+    /* mur_number_slider_positive */
 
     Blockly.Blocks.mur_number_slider_positive = {
       init: function() {
@@ -1070,11 +910,13 @@ for (let i = 0; i < 4; i++) {
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.mov);
-        this.setTooltip('Число');
+        //this.setTooltip('Число');
       },
     };
 
     register_proto('mur_number_slider_positive', proto_num_value);
+
+    /* mur_number */
 
     Blockly.Blocks.mur_number = {
       init: function() {
@@ -1085,55 +927,13 @@ for (let i = 0; i < 4; i++) {
         this.setPreviousStatement(false, null);
         this.setNextStatement(false, null);
         this.setColour(colours.math);
-        this.setTooltip('Число');
+        //this.setTooltip('Число');
       },
     };
 
     register_proto('mur_number', proto_num_value);
 
-
-    /*
-
-        Blockly.Blocks.mur_get_color = {
-      init: function () {
-        this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([
-            item_image('sun-wireless', 'SENSOR_COLOR_WHITE', 'светлое'),
-            item_image('sun-wireless-outline', 'SENSOR_COLOR_BLACK', 'тёмное')
-          ], null), 'MODE')
-
-        this.setOutput(true, 'Boolean')
-        this.setPreviousStatement(false, null)
-        this.setNextStatement(false, null)
-        this.setColour(colours.sensors)
-        this.setTooltip('Проверка цвета')
-      }
-    }
-
-    // register_proto('mur_get_color', (gen) => {
-    //   return (block) => {
-    //     let mode = block.getFieldValue('MODE')
-    //     return [`mur.get_color_status('${mode}')`, Blockly.JavaScript.ORDER_NONE]
-    //     // return makeFunc(gen, 'mur.get_imu_tap()')
-    //   }
-    // })
-
-    register_proto('mur_get_color', (gen) => {
-      return (block) => {
-        let mode = block.getFieldValue('MODE')
-        if (gen === BlocklyLua) {
-          mode = 1 // TODO !!!
-        }
-        // return [`mur.get_color_status('${mode}')`, Blockly.JavaScript.ORDER_NONE]
-        return makeInlineFunc(gen, `mur.get_color_status('${mode}')`)
-      }
-    })
-
-    */
-
-    /* end thread */
-
-    // TODO: rename!! to be consistent
+    /* mur_end_thread */
 
     Blockly.Blocks.mur_end_thread = {
       init: function() {
@@ -1149,7 +949,7 @@ for (let i = 0; i < 4; i++) {
         this.setNextStatement(false);
         this.setInputsInline(true);
         this.setColour(colours.flow);
-        this.setTooltip('Завершить выполнение');
+        //this.setTooltip('Завершить выполнение');
       },
     };
 
@@ -1160,10 +960,10 @@ for (let i = 0; i < 4; i++) {
       };
     });
 
+    /* mur_angle_norm */
+
     Blockly.Blocks.mur_angle_norm = {
       init: function() {
-        // this.appendDummyInput()
-
         this.appendValueInput('Value')
             .setCheck('Number')
             .appendField('нормализовать угол');
@@ -1173,14 +973,13 @@ for (let i = 0; i < 4; i++) {
         this.setNextStatement(false, null);
         this.setColour(colours.math);
         this.setInputsInline(false);
-        this.setTooltip('Нормализовать угол');
+        //this.setTooltip('Нормализовать угол');
       },
     };
 
     register_proto('mur_angle_norm', (gen) => {
       return (block) => {
         const value = calcVal(gen, block, 'Value');
-        // return makeInlineFunc(gen, `(Math.abs(((${value}) + 180) % 360 ) - 180)`)
         return makeInlineFunc(gen, `mur.angle_norm(${value})`);
       };
     });
@@ -1192,6 +991,7 @@ for (let i = 0; i < 4; i++) {
       ['2', '2'],
     ];
 
+    /* mur_led_selector */
 
     Blockly.Blocks.mur_led_selector = {
       init: function() {
@@ -1214,186 +1014,5 @@ for (let i = 0; i < 4; i++) {
         return makeInlineFunc(gen, `Number(${index})`);
       };
     });
-
-
-    /* Procedures: should await for execution! */
-
-    Blockly.JavaScript['procedures_defreturn'] = function(block) {
-      // Define a procedure with a return value.
-      const funcName = Blockly.JavaScript.nameDB_.getName(
-          block.getFieldValue('NAME'), Blockly.Names.NameType.PROCEDURE);
-      let xfix1 = '';
-      if (Blockly.JavaScript.STATEMENT_PREFIX) {
-        xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX, block);
-      }
-      if (Blockly.JavaScript.STATEMENT_SUFFIX) {
-        xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block);
-      }
-      if (xfix1) {
-        xfix1 = Blockly.JavaScript.prefixLines(xfix1, Blockly.JavaScript.INDENT);
-      }
-      let loopTrap = '';
-      if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-        loopTrap = Blockly.JavaScript.prefixLines(
-            Blockly.JavaScript.injectId(Blockly.JavaScript.INFINITE_LOOP_TRAP, block),
-            Blockly.JavaScript.INDENT);
-      }
-      const branch = Blockly.JavaScript.statementToCode(block, 'STACK');
-      let returnValue =
-          Blockly.JavaScript.valueToCode(block, 'RETURN', Blockly.JavaScript.ORDER_NONE) || '';
-      let xfix2 = '';
-      if (branch && returnValue) {
-        // After executing the function body, revisit this block for the return.
-        xfix2 = xfix1;
-      }
-      if (returnValue) {
-        returnValue = Blockly.JavaScript.INDENT + 'return ' + returnValue + ';\n';
-      }
-      const args = [];
-      const variables = block.getVars();
-      for (let i = 0; i < variables.length; i++) {
-        args[i] = Blockly.JavaScript.nameDB_.getName(variables[i], Blockly.Names.NameType.VARIABLE);
-      }
-      let code = 'async function ' + funcName + '(' + args.join(', ') + ') {\n' + xfix1 +
-          loopTrap + branch + xfix2 + returnValue + '}';
-      code = Blockly.JavaScript.scrub_(block, code);
-      // Add % so as not to collide with helper functions in definitions list.
-      Blockly.JavaScript.definitions_['%' + funcName] = code;
-      return null;
-    };
-
-    // Defining a procedure without a return value uses the same generator as
-    // a procedure with a return value.
-    Blockly.JavaScript['procedures_defnoreturn'] = Blockly.JavaScript['procedures_defreturn'];
-
-    Blockly.JavaScript['procedures_callreturn'] = function(block) {
-      // Call a procedure with a return value.
-      const funcName = Blockly.JavaScript.nameDB_.getName(
-          block.getFieldValue('NAME'), Blockly.Names.NameType.PROCEDURE);
-      const args = [];
-      const variables = block.getVars();
-      for (let i = 0; i < variables.length; i++) {
-        args[i] = Blockly.JavaScript.valueToCode(block, 'ARG' + i, Blockly.JavaScript.ORDER_NONE) ||
-            'null';
-      }
-      const code = 'await ' + funcName + '(' + args.join(', ') + ')';
-      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-    };
-
-    Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
-      // Call a procedure with no return value.
-      // Generated code is for a function call as a statement is the same as a
-      // function call as a value, with the addition of line ending.
-      const tuple = Blockly.JavaScript['procedures_callreturn'](block);
-      return tuple[0] + ';\n';
-    };
-
-
-    /* Modify math blocks */
-
-
-    Blockly.Blocks['math_number_property'] = {
-      init: function() {
-        this.jsonInit({
-          'type': 'math_number_property',
-          'message0': '%1 %2',
-          'args0': [
-            {
-              'type': 'input_value',
-              'name': 'NUMBER_TO_CHECK',
-              'check': 'Number',
-            },
-            {
-              'type': 'field_dropdown',
-              'name': 'PROPERTY',
-              'options': [
-                ['%{BKY_MATH_IS_EVEN}', 'EVEN'],
-                ['%{BKY_MATH_IS_ODD}', 'ODD'],
-                // ['%{BKY_MATH_IS_PRIME}', 'PRIME'],
-                // ['%{BKY_MATH_IS_WHOLE}', 'WHOLE'],
-                ['%{BKY_MATH_IS_POSITIVE}', 'POSITIVE'],
-                ['%{BKY_MATH_IS_NEGATIVE}', 'NEGATIVE'],
-                ['%{BKY_MATH_IS_DIVISIBLE_BY}', 'DIVISIBLE_BY'],
-              ],
-            },
-          ],
-          'inputsInline': true,
-          'output': 'Boolean',
-          'style': 'math_blocks',
-          'tooltip': '%{BKY_MATH_IS_TOOLTIP}',
-          'mutator': 'math_is_divisibleby_mutator',
-        });
-      },
-    };
-
-    Blockly.Blocks['math_arithmetic'] = {
-      init: function() {
-        this.jsonInit({
-          'type': 'math_arithmetic',
-          'message0': '%1 %2 %3',
-          'args0': [
-            {
-              'type': 'input_value',
-              'name': 'A',
-              'check': 'Number',
-            },
-            {
-              'type': 'field_dropdown',
-              'name': 'OP',
-              'options': [
-                ['%{BKY_MATH_ADDITION_SYMBOL}', 'ADD'],
-                ['%{BKY_MATH_SUBTRACTION_SYMBOL}', 'MINUS'],
-                ['%{BKY_MATH_MULTIPLICATION_SYMBOL}', 'MULTIPLY'],
-                ['%{BKY_MATH_DIVISION_SYMBOL}', 'DIVIDE'],
-                // ['%{BKY_MATH_POWER_SYMBOL}', 'POWER'],
-              ],
-            },
-            {
-              'type': 'input_value',
-              'name': 'B',
-              'check': 'Number',
-            },
-          ],
-          'inputsInline': true,
-          'output': 'Number',
-          'style': 'math_blocks',
-          'helpUrl': '%{BKY_MATH_ARITHMETIC_HELPURL}',
-          'extensions': ['math_op_tooltip'],
-        });
-      },
-    };
-
-    Blockly.Blocks['math_single'] = {
-      init: function() {
-        this.jsonInit({
-          'type': 'math_single',
-          'message0': '%1 %2',
-          'args0': [
-            {
-              'type': 'field_dropdown',
-              'name': 'OP',
-              'options': [
-                // ['%{BKY_MATH_SINGLE_OP_ROOT}', 'ROOT'],
-                ['%{BKY_MATH_SINGLE_OP_ABSOLUTE}', 'ABS'],
-                ['-', 'NEG'],
-                // ['ln', 'LN'],
-                // ['log10', 'LOG10'],
-                // ['e^', 'EXP'],
-                // ['10^', 'POW10'],
-              ],
-            },
-            {
-              'type': 'input_value',
-              'name': 'NUM',
-              'check': 'Number',
-            },
-          ],
-          'output': 'Number',
-          'style': 'math_blocks',
-          'helpUrl': '%{BKY_MATH_SINGLE_HELPURL}',
-          'extensions': ['math_op_tooltip'],
-        });
-      },
-    };
   },
 };

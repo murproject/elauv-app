@@ -21,19 +21,15 @@ export default class Projects extends Panel {
         <div id="projects-head-buttons" class="row"></div>
       </div>
     `;
-
-    // document.p = ProjectItem;
   }
 
   init() {
     this.setIcon('folder-open');
     this.projectsListEl = this.q('#projects-list');
-    // this.headerTitleEl = this.q('#projects-header-title');
 
     this.makeButtons();
     this.projectsList = [];
     ProjectsStorage.loadStorage();
-    // this.loadProjectsList(true);
     this.displayProjects();
 
     ProjectsStorage.onChanged = () => {
@@ -91,26 +87,6 @@ export default class Projects extends Panel {
     });
   }
 
-  // loadProjectsList(populate = false) {
-  //   this.projectsList = example; // TODO
-  //   // if (populate) {
-  //   //   for (let i = 0; i < 22; i++) {
-  //   //     let name = '';
-  //   //     const iter = Math.round(Math.random() * 6) + 1
-  //   //     for (let j = 0; j < iter; j++) {
-  //   //       name += Math.random().toString(36).slice(2, Math.random() * 8 + 3) + ' ';
-  //   //     }
-  //   //     const item = {
-  //   //       name: name,
-  //   //       date: new Date(+new Date - Math.round(Math.random() * 100000000000)),
-  //   //       data: {},
-  //   //     };
-  //   //     this.projectsList.push(item);
-  //   //   }
-  //   // }
-  //   this.projectsList = this.projectsList.sort((a, b) => b.date - a.date);
-  // }
-
   addItem(item, action = undefined) {
     this.projectsListEl.appendChild(new ProjectListItem(item, action));
   }
@@ -121,10 +97,11 @@ export default class Projects extends Panel {
 
     this.projectsListEl.innerText = '';
 
-    this.addItem({
-      name: 'Примеры',
-      type: 'folderExamples',
-    }, () => this.displayExamples());
+    // TODO: should populate examples with real ones!
+    // this.addItem({
+    //   name: 'Примеры',
+    //   type: 'folderExamples',
+    // }, () => this.displayExamples());
 
     this.addItem({
       type: 'projectNew',
@@ -145,8 +122,6 @@ export default class Projects extends Panel {
     }
 
     ProjectsStorage.projects.savedSorted.forEach((item, index) => {
-      // const isEditing = index == 1; // TODO - TODO - TODO //
-
       item = ProjectsStorage.projects.saved[item.id];
       item.type = item.id === ProjectsStorage.projects.current.id ? 'projectActive' : 'project';
       this.addItem(item, () => {
@@ -173,13 +148,6 @@ export default class Projects extends Panel {
     });
   }
 
-  // projectListSelect(index) {
-  //   setTimeout(() => {
-  //     console.log(this.projectsList[index]);
-  //     this.openProjectDialog(index);
-  //   }, 75);
-  // }
-
   openExampleDialog(item) {
     App.showGlobalDialog(
         new GlobalDialog({
@@ -191,7 +159,7 @@ export default class Projects extends Panel {
             new Button({
               text: 'Открыть',
               icon: 'puzzle',
-            }, () => this.openProject(item)), // TODO //
+            }, () => this.openProject(item)),
             new Button({
               text: 'Назад',
               icon: 'keyboard-return',
@@ -202,15 +170,13 @@ export default class Projects extends Panel {
   }
 
   openProjectDialog(item) {
-    // const item = ProjectsStorage.saved[index];
-
     App.showGlobalDialog(
         new GlobalDialog({
           closable: true,
           title: item.name.length > 0 ? item.name : '(без названия)',
           text: /*html*/`
-          Дата изменения: ${Utils.dateStringAbsolute(item.date)}
-        `,
+            Дата изменения: ${Utils.dateStringAbsolute(item.date)}
+          `,
           classes: 'text-center',
           buttons: [
             new Button({
@@ -251,7 +217,7 @@ export default class Projects extends Panel {
               text: 'Удалить всё',
               icon: 'trash-can',
               iconColor: 'red',
-            }, () => this.deleteAllProjects()), // TODO //
+            }, () => this.deleteAllProjects()),
             new Button({
               text: 'Назад',
               icon: 'keyboard-return',
@@ -297,7 +263,7 @@ export default class Projects extends Panel {
               icon: 'puzzle',
             }, () => {
               App.closeGlobalDialog(); action();
-            }), // TODO //
+            }),
             new Button({
               text: 'Назад',
               icon: 'keyboard-return',
@@ -324,7 +290,7 @@ export default class Projects extends Panel {
               text: 'Удалить',
               icon: 'trash-can',
               iconColor: 'red',
-            }, () => this.deleteProject(item) ), // TODO //
+            }, () => this.deleteProject(item) ),
             new Button({
               text: 'Назад',
               icon: 'keyboard-return',
