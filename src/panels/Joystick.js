@@ -19,6 +19,8 @@ function calcRowOpacity(value) {
   return (value > 0 ? value + 50 : 30);
 }
 
+// TODO: remove formula!!
+
 const axesFormulaDefault = `max_power = 100
 threshold = 10
 
@@ -279,7 +281,7 @@ export default class Joystick extends Panel {
   }
 
 
-  computePowers() {
+  computePowers() { // TODO: use fixed (predefined) formula
     let max_power = 0;
 
     let yaw = this.axes.yaw;
@@ -334,8 +336,6 @@ export default class Joystick extends Panel {
       d: String(contextVizAuv.motors.vb),
     };
 
-    // this.formulaStatusText.innerText = axisFormulaOk ? "formula ok" : "formula error";
-    // this.formulaStatusText.innerText = ""
     this.q('#formulaStatus').innerHTML =/*html*/`
       <h3 class="normal">Тяга на<br>движителях:</h3>
 
@@ -364,7 +364,6 @@ export default class Joystick extends Panel {
       </div>
     `;
 
-
     return {
       axes: {x: x, y: y, z: z},
       motors: [a, b, c, d],
@@ -381,10 +380,10 @@ export default class Joystick extends Panel {
       }
 
       const regs = protocol.regulators;
-      regs.yaw = false; // TODO
+      regs.yaw = false;
       regs.pitch = false;
       regs.roll = false;
-      regs.depth = false; // TODO
+      regs.depth = false;
       regs.isJoystick = true;
 
       const solenoidPower = this.solenoidTriggered ? 100 : 0;
@@ -398,12 +397,12 @@ export default class Joystick extends Panel {
           powers.motors[2],
           powers.motors[3],
         ],
-        direct_mode: true ? 0b00001111 : 0x00, // TODO
+        direct_mode: true ? 0b00001111 : 0b00000000,
         axes_speed: [
           powers.axes.x,
           powers.axes.y,
           powers.axes.z,
-          0, // TODO: rearrange
+          0,
         ],
         axes_regulators: regs.pack(), // TODO
         target_yaw: 0,

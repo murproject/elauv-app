@@ -86,7 +86,6 @@ function sendHighlight(bold = false) {
 
 function setDirectMode(index, mode) {
   context.direct_mode = setBit(context.direct_mode, 1 << index, mode);
-  // console.log(`index = ${index}, mode = ${mode}, mask = ${1 << index}, new val: ${context.direct_mode}`);
 }
 
 const mur = {
@@ -98,8 +97,6 @@ const mur = {
 
   h: async function(threadId, blockId) {
     highlightedBlocks[threadId] = [blockId, 5];
-    // console.log(`mur.h( "${threadId}", "${blockId}" )`);
-
     await mur.delay(3);
   },
 
@@ -203,8 +200,6 @@ const mur = {
   },
 
   delay: function(sleepMs) {
-    // TODO: should not create dozens of timers by calling setTimeout() lots times per second,
-    // TODO: create one timer with setInterval to control ticks? (but will block other async threads)
     if (sleepMs <= 0) {
       return;
     }
@@ -235,25 +230,19 @@ const mur = {
   },
 
   thread_end: async function(scriptId, end_script = false, wait_forever = true) {
-    // return /* TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO */
-
-    // console.log(`thread_end: ${scriptId} ${end_script} ${wait_forever}`);
-
     if (end_script) {
+      await this.stop_all();
       await this.delay(300);
 
       for (const i in this.threadsStates) {
         this.thread_end(i, false);
       }
-      // TODO: stop all motors and sendContext here? Or in BlocklyPanel before terminate?
     }
 
     this.threadsStates[scriptId] = false;
 
     sendHighlight(true);
     self.postMessage({type: 'thread_end', id: scriptId});
-
-    // console.log(this.threadsStates)
 
     if (!Object.values(this.threadsStates).includes(true) && !this.mainThreadState) {
       setState('done');
@@ -297,10 +286,7 @@ function strReplaceAll(str, match, replace) {
 }
 
 
-function makeScript(index, code) {
-  // const funcRegex = /(?<=^|\n)function \w+\(.*\)/g;
-  // code = code.replace(funcRegex, 'async $&');
-
+function makeScript(index, code) { // TODO: remove
   return {script: code};
 }
 
@@ -331,6 +317,7 @@ self.onmessage = function(e) {
       mur.threadsStates[e.data.threads[i]] = true;
     }
 
+    // TODO: move to makeScript?
     script = `
 (async () => {
 const _threadId = -1;
@@ -348,16 +335,12 @@ mur.h(-1, null);
       mur.mainThreadState = false;
       console.log('main thread end');
     } catch (e) {
+      // TODO: send message to main worker and show dialog on error
       console.log(e);
     }
-
-    // setState('done') // TODO: prints 'done' even if script is not over (async functions)
-    // TODO: should set 'done' flag on end of every thread?
   }
 
   if (e.data.type === 'telemetry') {
     telemetry = e.data.telemetry;
   }
 };
-
-// TODO: wait forever (stop thread): await new Promise(() => {});

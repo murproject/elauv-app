@@ -11,8 +11,6 @@ import SettingsStorage from './utils/SettingsStorage.js';
 import TelemetryUtils from './utils/TelemetryUtils.js';
 
 export default {
-  // TODO: integrate loading wrapper into PANEL, not main!
-
   html: /*html*/`
     <header id="head">
       <div class="buttons-group" id="buttons-main"></div>
@@ -43,14 +41,16 @@ export default {
   `,
 
   container: document.querySelector('#app'),
+
   panels: {},
   currentPanelMain: null,
   currentPanelBottom: null,
+
   globalDialogActive: false,
-  mur: mur,
+  oldConnStatus: undefined,
+
   runsOnCordova: false,
   runsOnElectron: false,
-  oldStatus: undefined,
 
   get isCordova() {
     return this.runsOnCordova;
@@ -73,7 +73,7 @@ export default {
 
     if (mode === 'bottom') {
       if (this[currentPanel] === target) {
-        // TODO: don't query on each call, should to it better
+        // TODO: don't query on each call, should to it better. use classList.toggle
         this[currentPanel] = null;
         document.querySelector('#flying-panel-wrapper').classList.add('bottom-collapsed');
         return;
@@ -141,7 +141,7 @@ export default {
     };
 
     this.timerKeepAlive = setInterval(() => {
-      mur.controlPing(); // TODO: use separate keepalive packet?
+      mur.controlPing();
     }, 1000);
 
     mur.onStatusUpdated = (status) => {

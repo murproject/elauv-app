@@ -21,16 +21,13 @@ export default class Console extends Panel {
   }
 
   init() {
-    // this.setIcon('../tooltip-text-outline');
-    // this.setIcon('../tooltip-text-outline', 'cyan', `big pulse`);
-
     this.userData = {};
     this.variablesDiv = this.q('#variables-div');
     this.welcomeDiv = this.q('#console-welcome');
     this.clear();
   }
 
-  show(msg) {
+  show(msg) { // TODO: rename?
     this.welcomeDiv.classList.add('hidden');
     let log = '';
 
@@ -59,9 +56,6 @@ export default class Console extends Panel {
     if (isActive) {
       this.notify(false);
     }
-    // if ('blockly' in App.panels) {
-    //   App.panels.blockly.collapse(isActive);
-    // }
   }
 
   clear() {

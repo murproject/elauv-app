@@ -5,11 +5,10 @@ export default {
   name: 'transport',
   type: 'bluetooth',
   spp: '00001101-0000-1000-8000-00805F9B34FB',
-  state: 'closed',
-
-  devices: [],
 
   macAddress: null,
+  state: 'closed',
+  devices: [],
 
   checkStatus: function() {
     return this.state;
@@ -23,7 +22,6 @@ export default {
 
   isDeviceCompatible: function(device) {
     return ('name' in device && device.name.startsWith('ElementaryAUV-'));
-    // return true // TODO //
   },
 
   deviceDiscovered: function(device) {
@@ -31,7 +29,7 @@ export default {
     const compatible = this.isDeviceCompatible(device);
 
     const currentDevice = {
-      type: compatible ? 'elauv' : 'unknown', // TODO:   type deduction
+      type: compatible ? 'elauv' : 'unknown',
       address: device.address,
       name: device.name ? device.name : '',
       isCompatible: compatible,
@@ -58,7 +56,7 @@ export default {
 
   scanUnpaired: function() {
     this.disconnect();
-    this.state = 'scanning'; // TODO: 'scanning' status??
+    this.state = 'scanning';
     this.onScan();
 
     this.devices = [];
@@ -95,7 +93,6 @@ export default {
     if (address && (this.macAddress !== address)) {
       this.disconnect();
       this.macAddress = address;
-      // return
     }
 
     if (!this.macAddress || this.state === 'connecting') {
@@ -167,10 +164,8 @@ export default {
   },
 
   onDeviceDiscovered: null,
-
   onScan: null,
   onOpen: null,
   onClose: null,
-  onError: null,
   onMessage: null,
 };

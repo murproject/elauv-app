@@ -56,7 +56,6 @@ export default class BlocklyPanel extends Panel {
     }
   }
 
-
   init() {
     /* Panel init */
 
@@ -80,6 +79,7 @@ export default class BlocklyPanel extends Panel {
 
     Blockly.setLocale(Ru);
     Blockly.JavaScript.addReservedWords('mur');
+    Blockly.JavaScript.addReservedWords('_threadId');
     Blockly.ContextMenuRegistry.registry.unregister('blockHelp');
 
     this.blocklyDiv = document.createElement('div');
@@ -241,11 +241,9 @@ export default class BlocklyPanel extends Panel {
     }
   }
 
-  generate_code(workspace) {
+  generate_code(workspace) { // TODO: naming consistence
     Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_threadId, %1);\n';
-    const code = Blockly.JavaScript.workspaceToCode(workspace);
-
-    return code;
+    return Blockly.JavaScript.workspaceToCode(workspace);
   }
 
   run() {
@@ -265,21 +263,14 @@ export default class BlocklyPanel extends Panel {
 
   stop() {
     document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
-    // this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'blue-dark', 'big');
     this.scriptStatus = 'stopped';
 
     App.panels.console.clear();
-    // this.userData = {};
-    // this.variablesDiv.innerText = '';
 
     if (this.scriptWorker) {
       this.scriptWorker.terminate();
     }
-
-    // TODO: make function to return empty context! (in mur)
-
-    // this.resetContext();
 
     setTimeout(() => this.resetContext(50), 0);
 
@@ -304,7 +295,6 @@ export default class BlocklyPanel extends Panel {
     const timeFromLastEdit = (Date.now() - this.lastEditTime);
 
     if ((!ProjectsStorage.projects.current.autosaved && timeFromLastEdit > 3000) || forced) {
-      // console.log(`Autosaving: ${ProjectsStorage.projects.current.autosaved}, ${timeFromLastEdit}`);
       const savedBlocks = Blockly.serialization.workspaces.save(this.workspace);
       ProjectsStorage.projects.current.data = JSON.stringify(savedBlocks);
       ProjectsStorage.autoSave();
@@ -317,12 +307,6 @@ export default class BlocklyPanel extends Panel {
     const savedBlocks = Blockly.serialization.workspaces.save(this.workspace);
     ProjectsStorage.projects.current.data = JSON.stringify(savedBlocks);
     ProjectsStorage.saveProject(forcedNew);
-
-    // const startTime = Date.now();
-    // const savedBlocks = Blockly.serialization.workspaces.save(this.workspace)
-    // console.log(savedBlocks)
-    // localStorage.savedBlocks = JSON.stringify(savedBlocks)
-    // console.log("Serialization duration: " + (Date.now() - startTime));
   }
 
   load(blocksToLoad = undefined) {
@@ -345,7 +329,6 @@ export default class BlocklyPanel extends Panel {
       Blockly.serialization.workspaces.load(blocksToLoad, this.workspace);
     }
 
-    // this.workspace.trashcan.emptyContents();
     this.workspace.clearUndo();
     this.onWorkspaceChange();
     this.autoZoom();
@@ -353,12 +336,6 @@ export default class BlocklyPanel extends Panel {
     setTimeout(() => this.workspace.trashcan.emptyContents(), 500);
 
     this.setLoading(false, 0);
-  }
-
-  example() {
-    // TODO: delete this method
-    // console.log(this);
-    Blockly.serialization.workspaces.load(example_code, this.workspace);
   }
 
   resetContext(ledsPower = 0) {
@@ -410,50 +387,14 @@ export default class BlocklyPanel extends Panel {
 
     this.scriptStatus = 'running';
 
-    ////////
-
     mur.controlImuResetYaw();
-
-    const contextLedsOn = {
-      direct_power: [0, 0, 0, 0],
-      direct_mode: 0b00001111,
-      axes_speed: [0, 0, 0, 0],
-      axes_regulators: 0,
-      target_yaw: 0,
-      actuator_power: [0, 0],
-      leds: [255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
-    };
-
-    const contextLedsOff = {
-      direct_power: [0, 0, 0, 0],
-      direct_mode: 0b00001111,
-      axes_speed: [0, 0, 0, 0],
-      axes_regulators: 0,
-      target_yaw: 0,
-      actuator_power: [0, 0],
-      leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    };
-
     setTimeout(() => this.resetContext(0), 0);
     setTimeout(() => this.resetContext(50), 100);
     setTimeout(() => this.resetContext(0), 350);
 
-    ////////
-
-    // console.warn("workspaceToCode(workspace)")
     this.code = this.generate_code(this.workspace);
-    // console.log(this.code)
-    // TODO: this.code is unused!
-
-    // let userVariables = []
-    // console.warn("USER VARIABLES:");
-    // this.workspace.getAllVariableNames().forEach(item => {
-    //   console.warn(`${item} : ${Blockly.Names.prototype.safeName_(item)}`);
-    //   userVariables.push(Blockly.Names.prototype.safeName_(item));
-    // })
 
     this.reinject(true);
-    // checkUndoRedo(true);
 
     if (this.scriptWorker != null) {
       this.scriptWorker.terminate();
@@ -477,39 +418,26 @@ export default class BlocklyPanel extends Panel {
     // Load each block into the workspace individually and generate code.
     const allCode = [];
     this.allRootBlocks = [];
-    // let variablesDeclaration = '/* MUR: User variables begin */\n\n'
-    // userVariables.forEach(item => {
-    //   variablesDeclaration += `var ${Blockly.Names.prototype.safeName_(item)};\n`;
-    // })
-    // variablesDeclaration += '\n/* End of user variables */\n\n';
-    // allCode.push(variablesDeclaration);
 
     const headless = new Blockly.Workspace();
 
     topBlocks.forEach((block) => {
-      // blocks.push(block)
       this.allRootBlocks.push(block);
       Blockly.serialization.workspaces.load(json, headless);
       allCode.push(this.generate_code(headless));
-      // blocks.length = 0
-      // console.warn("gen from block");
-      // console.log(block);
-      // console.log(`${block.type} - ${block.id}`);
     });
-
-    // console.log(this.allRootBlocks);
 
     this.executionCursors = {};
 
     function makeCursorHtml(id) {
-      return `
-      <g id="execution-cursor-${id}" style="display: block;" opacity="0%">
-        <image xlink:href="mdi/arrow-cursor-execution.svg" width="42" height="42"/>
-      </g>`;
+      return /*html*/`
+        <g id="execution-cursor-${id}" style="display: block;" opacity="0%">
+          <image xlink:href="mdi/arrow-cursor-execution.svg" width="42" height="42"/>
+        </g>
+      `;
     }
 
     for (const blockNum in this.allRootBlocks) {
-    // this.allRootBlocks.forEach(block => {
       const key = this.allRootBlocks[blockNum].id;
       if (!(key in this.executionCursors)) {
         document.querySelector('.blocklyBlockCanvas').innerHTML += makeCursorHtml(blockNum);
@@ -521,14 +449,9 @@ export default class BlocklyPanel extends Panel {
     for (const blockNum in this.allRootBlocks) { // need to query elements again after altering .blocklyBlockCanvas!
       const block = this.allRootBlocks[blockNum];
       this.executionCursors[block.id] = document.querySelector(`#execution-cursor-${blockNum}`);
-      // TODO: each "parse HTML" takes ~50ms, entire action can take over ~500ms
-      // TODO: fill executionCursors AFTER??
     }
 
     this.executionCursors['-1'] = document.querySelector(`#execution-cursor-glob`);
-
-    // console.warn("EXECUTION CURSORS:");
-    // console.log(this.executionCursors);
 
     const threadsDict = {};
     const threadsList = [];
@@ -541,12 +464,7 @@ export default class BlocklyPanel extends Panel {
       threadsList[index] = block.id;
     }
 
-    // console.warn("THREAD DICT")
-    // console.log(threadsDict)
-    // console.warn("THREAD LIST")
-    // console.log(threadsList)
-
-    this.scriptWorker.postMessage({ // TODO: copypasta
+    this.scriptWorker.postMessage({
       type: 'telemetry',
       telemetry: JSON.parse(JSON.stringify(mur.telemetry)),
     });
@@ -556,14 +474,10 @@ export default class BlocklyPanel extends Panel {
     setTimeout(() => {
       this.scriptWorker.postMessage({
         type: 'run',
-        // scripts: allCode,
-        scripts: [this.code], // TODO //
+        scripts: [this.code], // TODO: don't use array?
         threads: threadsList,
-        // userVariables: userVariables,
       });
     }, 500);
-
-    // this.loadingDiv.classList.remove('active');
   }
 
   updateTelemetry(telemetry) {
@@ -594,13 +508,6 @@ export default class BlocklyPanel extends Panel {
     }
   }
 
-  // TODO: don't use reinjecting because of bad performance.
-  /* TODO: block editing with alternative methods:
-      - disable event handlers?
-      - transparent overlay with 100% w/h on top of blockly panel
-      - hide toolbox with css
-  */
-
   reinject(readonly = false) {
     this.lastEditTime = Date.now();
 
@@ -616,16 +523,13 @@ export default class BlocklyPanel extends Panel {
       this.stateOfUndo.savedRedoStack = this.workspace.getRedoStack();
     }
 
-    // this.$refs.blocklyInstance.inject(readonly)
     blocklyConfig.readOnly = readonly;
     blocklyConfig.zoom.controls = !readonly;
     blocklyConfig.zoom.wheel = !readonly;
     blocklyConfig.zoom.pinch = !readonly;
     blocklyConfig.grid.colour = readonly ? '#fff' : '#ccc';
-
     blocklyConfig.move.drag = !readonly;
     blocklyConfig.move.wheel = !readonly;
-    // blocklyConfig.scrollbars = !readonly;
 
     this.workspace = Blockly.inject(this.blocklyDiv, blocklyConfig);
     Blockly.svgResize(this.workspace);
@@ -637,6 +541,7 @@ export default class BlocklyPanel extends Panel {
     this.autoZoom();
 
     if (readonly) {
+      // TODO: use classList.toggle; maybe don't use query selector
       document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.add('hidden'));
     } else {
       document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.remove('hidden'));
@@ -661,7 +566,6 @@ export default class BlocklyPanel extends Panel {
     this.workspace.addChangeListener((event) => {
       this.onWorkspaceChange(event);
     });
-    // this.checkUndoRedo(false);
 
     if (!readonly) {
       this.backpack = new Backpack.Backpack(this.workspace);
@@ -669,7 +573,7 @@ export default class BlocklyPanel extends Panel {
       this.backpack.shouldPreventMove = () => false;
 
       this.backpack.onDropOriginal = this.backpack.onDrop;
-      this.backpack.onDrop = (block) => { // TODO: move to separate function
+      this.backpack.onDrop = (block) => {
         this.backpack.onDropOriginal(block);
 
         setTimeout(() => {
@@ -690,7 +594,10 @@ export default class BlocklyPanel extends Panel {
       this.backpackEmptyNotify = document.createElement('div');
       this.backpackEmptyNotify.classList.add('backpack-empty-notify');
       this.backpackEmptyNotify.classList.add('hidden');
-      this.backpackEmptyNotify.innerHTML = 'Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>использовать их в других проектах!';
+      this.backpackEmptyNotify.innerHTML = /*html*/`
+        Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>
+        использовать их в других проектах!
+      `;
 
       this.backpack.initFlyoutOriginal = this.backpack.initFlyout_;
       this.backpack.initFlyout_ = () => {
@@ -732,11 +639,8 @@ export default class BlocklyPanel extends Panel {
 
             this.executionCursors[key].setAttribute('transform', `translate(${x},${y})`);
             this.executionCursors[key].setAttribute('opacity', `${blockTime}%`);
-
-            // console.log(`Setting cursor "${key}" with block "${blockId}", html-id: ${this.executionCursors[key].id}`);
           } else {
             this.executionCursors[key].setAttribute('opacity', `0%`);
-            // console.log(`Setting cursor "${key}" as EMPTY`);
           }
         }
       }
@@ -748,24 +652,18 @@ export default class BlocklyPanel extends Panel {
 
       const paramsContext = {
         direct_power: ctx.motor_powers,
-        direct_mode: ctx.direct_mode, // TODO
+        direct_mode: ctx.direct_mode,
         axes_speed: ctx.axes_speed,
         axes_regulators: ctx.regulators,
-        target_yaw: ctx.target_yaw, // TODO
+        target_yaw: ctx.target_yaw,
         actuator_power: ctx.actuators,
         leds: ctx.leds,
       };
 
-      // console.log(JSON.stringify(paramsContext, null, ' '));
-
-      // TODO: fill context correctly in inpertreter and don't fill it here
-
-      mur.context = paramsContext; // TODO: move context to global scope?
       mur.controlContext(paramsContext);
     }
 
     if (data.type === 'state') {
-      // this.scriptStatus = data.state;
       // TODO: inform user on script stop?
       if (data.state === 'done') {
         console.log('script done');
@@ -775,25 +673,15 @@ export default class BlocklyPanel extends Panel {
         }
 
         setTimeout(() => this.stop(), 2000);
-        // this.workspace.highlightBlock(null) // TODO: ?
       }
     }
 
     if (data.type === 'thread_end') {
-      // if (this.scriptWorker) {
-      //   this.scriptWorker.terminate()
-      // }
-      // console.warn("thread end");
-      // console.warn(data.id)
       this.executionCursors[data.id].children[0].setAttribute('xlink:href', 'mdi/arrow-cursor-execution-off.svg');
     }
 
     if (data.type === 'print') {
       App.panels.console.show(data.msg);
-      // console.error("PRINT");
-      // console.error(data.msg);
     }
-
-    // e = null
   }
 }
