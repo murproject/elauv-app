@@ -1,24 +1,16 @@
-import App from '/src/App.js';
-
-import Panel from './Panel';
-import Button from '/src/components/Button';
 
 import * as Blockly from 'blockly/core';
 import * as Ru from 'blockly/msg/ru';
 
-import 'blockly/blocks';
-import 'blockly/javascript';
-import BlocklyLua from 'blockly/lua';
-
-// import Backpack from '@blockly/workspace-backpack';
 import * as Backpack from '../blockly-wrapper/workspace-backpack/src';
-
-import MurToolbox from '../blockly-wrapper/Toolbox';
-import '../blockly-wrapper/BlocklyStyle';
+import '/src/blockly-wrapper/BlocklyStyle';
 
 import mur from '../vehicle/api';
+import MurToolbox from '../blockly-wrapper/Toolbox';
 import ProjectsStorage from '/src/utils/ProjectsStorage';
-
+import App from '/src/App.js';
+import Panel from './Panel';
+import Button from '/src/components/Button';
 
 const blocklyConfig = {
   grid: {
@@ -45,7 +37,7 @@ const blocklyConfig = {
   trashcan: true,
   renderer: 'custom_renderer',
   horizontalLayout: true,
-  collapse: false, // вкл/выкл пункт контекстного меню свернуть/развернуть блоки
+  collapse: false,
   toolbox: MurToolbox,
 };
 
@@ -66,6 +58,8 @@ export default class BlocklyPanel extends Panel {
 
 
   init() {
+    /* Panel init */
+
     this.setIcon('puzzle', 'blue-dark');
     this.noTitle = true;
     this.container.classList.add('background-white');
@@ -79,61 +73,14 @@ export default class BlocklyPanel extends Panel {
     this.onActiveChanged();
     this.makeActionButtons();
 
-    /* --- Blockly --- */
+    /* Blockly */
 
     this.workspace = null;
     this.scriptWorker = null;
 
-
-    // TODO: move locale overrides?
-    Ru['CLEAN_UP'] = 'Упорядочить блоки';
-    Ru['PROCEDURE_VARIABLE'] = 'аргументом';
-    Ru['MATH_RANDOM_INT_TITLE'] = 'случайное число от %1 до %2';
-
-    Ru['CONTROLS_REPEAT_INPUT_DO'] = '';
-    Ru['CONTROLS_FOREACH_INPUT_DO'] = '';
-    Ru['CONTROLS_FOR_INPUT_DO'] = '';
-    Ru['CONTROLS_IF_MSG_THEN'] = '';
-    Ru['CONTROLS_WHILEUNTIL_INPUT_DO'] = '';
-
-    Ru['DELETE_X_BLOCKS'] = 'Удалить блоки (%1)';
-
-    // Ru["CONTROLS_IF_MSG_IF"] = "?";
-    // Ru["CONTROLS_IF_MSG_THEN"] = "✓";
-    // Ru["CONTROLS_IF_MSG_ELSE"] = "×";
-    // Ru["CONTROLS_IF_MSG_ELSEIF"] = "?";
-
-    // Ru["PROCEDURES_BEFORE_PARAMS"] = "с";
-    // Ru["PROCEDURES_CALL_BEFORE_PARAMS"] = "с";
-
-    // Ru["COLOUR_RGB_RED"] = "R";
-    // Ru["COLOUR_RGB_GREEN"] = "G";
-    // Ru["COLOUR_RGB_BLUE"] = "B";
-    Ru['MATH_SUBTRACTION_SYMBOL'] = '−';
-
-    Ru['COPY_ALL_TO_BACKPACK'] = 'Копировать все блоки в рюкзак';
-    Ru['COPY_TO_BACKPACK'] = 'Копировать в рюкзак';
-    Ru['EMPTY_BACKPACK'] = 'Очистить рюкзак';
-    Ru['PASTE_ALL_FROM_BACKPACK'] = 'Вставить всё из рюкзака';
-    Ru['REMOVE_FROM_BACKPACK'] = 'Удалить из рюкзака';
-
     Blockly.setLocale(Ru);
-
     Blockly.JavaScript.addReservedWords('mur');
-
     Blockly.ContextMenuRegistry.registry.unregister('blockHelp');
-
-    // this.variablesDiv = document.createElement("div");
-    // this.variablesDiv.id = "variables-div";
-    // this.variablesDiv.classList.add("variables-div");
-    // this.container.appendChild(this.variablesDiv);
-
-    // this.userData = {}; // TODO //
-
-    // this.loadingDiv = document.createElement("div");
-    // this.loadingDiv.id = "loading-wrapper";
-    // this.loadingDiv.classList.add("loading-wrapper");
-    // this.container.appendChild(this.loadingDiv);
 
     this.blocklyDiv = document.createElement('div');
     this.blocklyDiv.id = 'blocklyDiv';
@@ -147,20 +94,13 @@ export default class BlocklyPanel extends Panel {
     };
 
     this.reinject(false);
-
     this.onWorkspaceChange();
-
     this.setInterval(this.autoSave, 500);
 
-    /* --- Cursor --- */
+    /* Cursor */
 
-    this.executionCursors = {}; // one cursor per script thread
-
+    this.executionCursors = {}; // one cursor per thread in user script
     this.scriptStatus = 'stopped';
-  }
-
-  collapse(collapsed) {
-    this.blocklyDiv.classList.toggle('blockly-collapsed', collapsed);
   }
 
   makeActionButtons() {
@@ -172,8 +112,6 @@ export default class BlocklyPanel extends Panel {
       {func: this.redo, name: 'redo', icon: 'redo'},
       {spacer: true},
       {func: this.run, name: 'run', icon: 'play'},
-      // { func: this.example,   name: 'example',  icon: 'star',},
-      // { func: this.load,      name: 'load',     icon: 'file-upload',},
       {func: this.save, name: 'save', icon: 'content-save'},
     ];
 
@@ -213,7 +151,6 @@ export default class BlocklyPanel extends Panel {
     if (event) {
       if (event.type === 'backpack_change') {
         ProjectsStorage.setBackpack(this.backpack.getContents());
-        // this.workspace.undo();
         return;
       }
 
@@ -230,8 +167,6 @@ export default class BlocklyPanel extends Panel {
         ProjectsStorage.projects.current.autosaved = true;
         this.lastEditTime = Date.now();
       }
-
-      // console.log("Change event: " + event.type);
     }
 
     const delta = (Date.now() - this.lastEditTime);
@@ -261,9 +196,6 @@ export default class BlocklyPanel extends Panel {
 
     const newStateUndo = this.workspace.getUndoStack().length > 0;
     const newStateRedo = this.workspace.getRedoStack().length > 0;
-
-    // TODO: check for modifications in correct way!
-    // TODO: check old status (currently causes emitting lots of updates)
     const currentlyTouched = (newStateUndo || newStateRedo);
 
     if (this.scriptStatus !== 'running') {
@@ -286,10 +218,6 @@ export default class BlocklyPanel extends Panel {
   }
 
   undo() {
-    // TODO: remove debug feature
-    // const undoStack = this.workspace.getUndoStack();
-    // console.log("Undo stack:");
-    // undoStack.forEach(item => console.log(item));
     this.workspace.undo(false);
   }
 
@@ -301,12 +229,12 @@ export default class BlocklyPanel extends Panel {
     if (this.scriptStatus !== 'running') {
       const autosavedLongAgo = (Date.now() - ProjectsStorage.projects.autosaved.date) > 2000;
       const autosaved = ProjectsStorage.projects.current.autosaved;
+
       const newPuzzleIcon = this.wasTouched && !autosaved ? 'puzzle-edit' :
                             autosaved && !autosavedLongAgo ? 'puzzle-check' : 'puzzle';
 
       if (this.currentPuzzleIcon !== newPuzzleIcon || forced) {
         this.setIcon(newPuzzleIcon, 'blue-dark');
-        // console.log("set puzzle icon: " + newPuzzleIcon);
       }
 
       this.currentPuzzleIcon = newPuzzleIcon;
@@ -336,7 +264,6 @@ export default class BlocklyPanel extends Panel {
   }
 
   stop() {
-    this.collapse(false);
     document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
     // this.setIcon('puzzle');
     this.actionButtons.run.setIcon('play', 'blue-dark', 'big');

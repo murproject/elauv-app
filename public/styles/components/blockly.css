@@ -17,7 +17,7 @@
   height: 34px;
 }
 
-/* Mutator plus icon */ /* TODO? */
+/* Mutator plus icon */
 #blocklyDiv g g:nth-of-type(1) image[*|href^="data:image/svg+xml;"] {
   width: 19px;
   height: 19px;
@@ -256,16 +256,6 @@
   margin: auto;
   border-radius: --radius-round;
   border-left: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-
-/* TODO: fix .blockly-collapsed */
-.blockly-collapsed {
-  transform-origin: 50% 0%;
-  transform: scale(0.735);
-  top: 2.5em;
-  height: 100%;
-  position: fixed;
 }
 
 .blocklyMainBackground {

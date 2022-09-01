@@ -3,14 +3,40 @@
 import Blockly from 'blockly/core';
 import 'blockly/javascript';
 import BlocklyDialog from './BlocklyDialog.js';
+import * as Ru from 'blockly/msg/ru';
 
 document.b = Blockly;
+
+/* Fix prompt dialogs on Electron platform */
 
 if (typeof cordova !== 'undefined' && cordova.platformId === 'electron') {
   BlocklyDialog.init();
 }
 
-/* https://github.com/google/blockly/pull/6211 */
+/* Translations */
+
+Ru['CLEAN_UP'] = 'Упорядочить блоки';
+Ru['PROCEDURE_VARIABLE'] = 'аргументом';
+Ru['MATH_RANDOM_INT_TITLE'] = 'случайное число от %1 до %2';
+
+Ru['CONTROLS_REPEAT_INPUT_DO'] = '';
+Ru['CONTROLS_FOREACH_INPUT_DO'] = '';
+Ru['CONTROLS_FOR_INPUT_DO'] = '';
+Ru['CONTROLS_IF_MSG_THEN'] = '';
+Ru['CONTROLS_WHILEUNTIL_INPUT_DO'] = '';
+
+Ru['MATH_SUBTRACTION_SYMBOL'] = '−';
+Ru['DELETE_X_BLOCKS'] = 'Удалить блоки (%1)';
+
+Ru['COPY_ALL_TO_BACKPACK'] = 'Копировать все блоки в рюкзак';
+Ru['COPY_TO_BACKPACK'] = 'Копировать в рюкзак';
+Ru['EMPTY_BACKPACK'] = 'Очистить рюкзак';
+Ru['PASTE_ALL_FROM_BACKPACK'] = 'Вставить всё из рюкзака';
+Ru['REMOVE_FROM_BACKPACK'] = 'Удалить из рюкзака';
+
+/* Fixes crash: https://github.com/google/blockly/pull/6211 */
+/* Should update Blockly to new version when patch will be included to stable release */
+
 Blockly.blockRendering.InputRow.prototype.measure = function() {
   const InputConnection = Blockly.blockRendering.InputConnection;
   const ExternalValueInput = Blockly.blockRendering.ExternalValueInput;
@@ -44,7 +70,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
 
-/* Procedures: should _await_ for execution! */
+/* Procedures: should await for execution! */
 
 Blockly.JavaScript['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.

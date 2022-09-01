@@ -212,7 +212,7 @@ function makeVehicle(parent, pos = zero_xyz, rot = zero_xyz) {
     translate: {z: 0, y:  200},
   });
 
-  vehicle.bodycolba = new Zdog.Cylinder({
+  vehicle.bodyColba = new Zdog.Cylinder({
     addTo: vehicle.grBody,
     diameter: 35,
     length: 18,
@@ -504,12 +504,7 @@ function makeHexColor(r, g, b) {
   g = Math.min(Math.abs(Math.round(g)) + 0, 255);
   b = Math.min(Math.abs(Math.round(b)) + 0, 255);
 
-  const result = '#' +
-            decToHex(r) +
-            decToHex(g) +
-            decToHex(b);
-
-  return result;
+  return '#' + decToHex(r) + decToHex(g) + decToHex(b);
 }
 
 
@@ -531,21 +526,35 @@ function animate() {
       return (Math.abs(((angle) + 180) % 360 ) - 180) * ((angle % 360) >= -180 ? 1.0 : - 1.0);
     }
 
-    contextSmoothed.rot.yawDelta = normalizeAngle(ease(contextSmoothed.rot.yawDelta, -normalizeAngle(contextSmoothed.rot.yawOld - (context.rot.yaw))));
+    contextSmoothed.rot.yawDelta = normalizeAngle(ease(
+        contextSmoothed.rot.yawDelta,
+        -normalizeAngle(contextSmoothed.rot.yawOld - (context.rot.yaw)),
+    ));
+
     origin.rotate.y += contextSmoothed.rot.yawDelta * rot;
     contextSmoothed.rot.yawOld = (context.rot.yaw);
 
-    contextSmoothed.rot.rollDelta = normalizeAngle(ease(contextSmoothed.rot.rollDelta, -normalizeAngle(contextSmoothed.rot.rollOld - (context.rot.roll))));
+    contextSmoothed.rot.rollDelta = normalizeAngle(ease(
+        contextSmoothed.rot.rollDelta,
+        -normalizeAngle(contextSmoothed.rot.rollOld - (context.rot.roll)),
+    ));
+
     vehicle.origin.rotate.z -= contextSmoothed.rot.rollDelta * rot;
     contextSmoothed.rot.rollOld = (context.rot.roll);
 
-    contextSmoothed.rot.pitchDelta = normalizeAngle(ease(contextSmoothed.rot.pitchDelta, -normalizeAngle(contextSmoothed.rot.pitchOld - (context.rot.pitch))));
+    contextSmoothed.rot.pitchDelta = normalizeAngle(ease(
+        contextSmoothed.rot.pitchDelta,
+        -normalizeAngle(contextSmoothed.rot.pitchOld - (context.rot.pitch)),
+    ));
+
     vehicle.origin.rotate.x += contextSmoothed.rot.pitchDelta * rot;
     contextSmoothed.rot.pitchOld = (context.rot.pitch);
 
     contextSmoothed.leds.forEach((led, ledIndex) => {
       contextSmoothed.leds[ledIndex].forEach((color, colorIndex) => {
-        contextSmoothed.leds[ledIndex][colorIndex] = Math.round(ease(contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 0.5));
+        contextSmoothed.leds[ledIndex][colorIndex] = Math.round(ease(
+            contextSmoothed.leds[ledIndex][colorIndex], context.leds[ledIndex][colorIndex], 0.5,
+        ));
       });
     });
 
@@ -559,8 +568,18 @@ function animate() {
         const rgb = contextSmoothed.leds[index];
         const glowOpacity = toHex(Math.round(Math.max(Math.abs(rgb[0]), Math.abs(rgb[1]), Math.abs(rgb[2])) * 0.1));
         const mainOpacity = toHex(Math.round(Math.max(Math.abs(rgb[0]) + 50, Math.abs(rgb[1]) + 50, Math.abs(rgb[2]) + 50) * 0.5));
-        led[0].color = makeHexColor(Math.abs(rgb[0]), Math.abs(rgb[1]), Math.abs(rgb[2])) + glowOpacity;
-        led[1].color = makeHexColor(Math.abs(rgb[0]) + 100, Math.abs(rgb[1]) + 130, Math.abs(rgb[2]) + 150) + mainOpacity;
+
+        led[0].color = makeHexColor(
+            Math.abs(rgb[0]),
+            Math.abs(rgb[1]),
+            Math.abs(rgb[2]),
+        ) + glowOpacity;
+
+        led[1].color = makeHexColor(
+            Math.abs(rgb[0]) + 100,
+            Math.abs(rgb[1]) + 130,
+            Math.abs(rgb[2]) + 150,
+        ) + mainOpacity;
       });
     }
 
