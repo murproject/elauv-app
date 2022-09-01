@@ -1218,6 +1218,54 @@ for (let i = 0; i < 4; i++) {
 
     /* Procedures: should await for execution! */
 
+    Blockly.JavaScript['procedures_defreturn'] = function(block) {
+      // Define a procedure with a return value.
+      const funcName = Blockly.JavaScript.nameDB_.getName(
+          block.getFieldValue('NAME'), Blockly.Names.NameType.PROCEDURE);
+      let xfix1 = '';
+      if (Blockly.JavaScript.STATEMENT_PREFIX) {
+        xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX, block);
+      }
+      if (Blockly.JavaScript.STATEMENT_SUFFIX) {
+        xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block);
+      }
+      if (xfix1) {
+        xfix1 = Blockly.JavaScript.prefixLines(xfix1, Blockly.JavaScript.INDENT);
+      }
+      let loopTrap = '';
+      if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+        loopTrap = Blockly.JavaScript.prefixLines(
+            Blockly.JavaScript.injectId(Blockly.JavaScript.INFINITE_LOOP_TRAP, block),
+            Blockly.JavaScript.INDENT);
+      }
+      const branch = Blockly.JavaScript.statementToCode(block, 'STACK');
+      let returnValue =
+          Blockly.JavaScript.valueToCode(block, 'RETURN', Blockly.JavaScript.ORDER_NONE) || '';
+      let xfix2 = '';
+      if (branch && returnValue) {
+        // After executing the function body, revisit this block for the return.
+        xfix2 = xfix1;
+      }
+      if (returnValue) {
+        returnValue = Blockly.JavaScript.INDENT + 'return ' + returnValue + ';\n';
+      }
+      const args = [];
+      const variables = block.getVars();
+      for (let i = 0; i < variables.length; i++) {
+        args[i] = Blockly.JavaScript.nameDB_.getName(variables[i], Blockly.Names.NameType.VARIABLE);
+      }
+      let code = 'async function ' + funcName + '(' + args.join(', ') + ') {\n' + xfix1 +
+          loopTrap + branch + xfix2 + returnValue + '}';
+      code = Blockly.JavaScript.scrub_(block, code);
+      // Add % so as not to collide with helper functions in definitions list.
+      Blockly.JavaScript.definitions_['%' + funcName] = code;
+      return null;
+    };
+
+    // Defining a procedure without a return value uses the same generator as
+    // a procedure with a return value.
+    Blockly.JavaScript['procedures_defnoreturn'] = Blockly.JavaScript['procedures_defreturn'];
+
     Blockly.JavaScript['procedures_callreturn'] = function(block) {
       // Call a procedure with a return value.
       const funcName = Blockly.JavaScript.nameDB_.getName(
@@ -1239,6 +1287,9 @@ for (let i = 0; i < 4; i++) {
       const tuple = Blockly.JavaScript['procedures_callreturn'](block);
       return tuple[0] + ';\n';
     };
+
+
+    /* Modify math blocks */
 
 
     Blockly.Blocks['math_number_property'] = {
