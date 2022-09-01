@@ -8,6 +8,7 @@ import TextInput from '/src/components/TextInput';
 import mur from '/src/vehicle/api.js';
 import protocol from '/src/vehicle/protocol';
 import AppVersion from '/src/utils/AppVersion';
+import ProjectsStorage from '/src/utils/ProjectsStorage';
 
 export default class Settings extends Panel {
   begin() {
@@ -134,16 +135,31 @@ export default class Settings extends Panel {
         icon: 'battery-alert',
         parent: this.vehicleButtons,
       },
+      {
+        text: 'Сбросить статистику',
+        action: () => {
+          localStorage.rsocStats = '[]';
+          location.reload();
+        },
+        parent: this.appSettingsButtons,
+      },
+      {
+        text: 'Сохранить статистику',
+        action: () => ProjectsStorage.saveFile('ElAUV Stats - ' + Date.now(), localStorage.rsocStats),
+        parent: this.appSettingsButtons,
+      },
     ];
 
-    buttons.forEach((button) => {
-      new Button({
-        text: button.text,
-        action: () => this.confirm(button.action, button.text),
-        icon: button.icon,
-        classes: 'button-vertical',
-      }).inject(button.parent);
-    });
+    if (AppVersion.isDevBuild) {
+      buttons.forEach((button) => {
+        new Button({
+          text: button.text,
+          action: () => this.confirm(button.action, button.text),
+          icon: button.icon,
+          classes: 'button-vertical',
+        }).inject(button.parent);
+      });
+    }
   }
 
   confirm(action, text) {
