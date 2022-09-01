@@ -80,7 +80,8 @@
   background: var(--color-red-bright);
 }
 
-.telemetry-logo a {
+.telemetry-logo a,
+.site-link {
   font-size: 12px;
   text-decoration: none;
   color: var(--color-mur);
@@ -91,6 +92,10 @@
   width: 50px;
   object-fit: contain;
   margin: auto;
+}
+
+.site-link {
+  font-size: 16px;
 }
 
 #telemetry-feedback-box {

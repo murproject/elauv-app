@@ -55,23 +55,13 @@ export default class About extends Panel {
   makeButtons() {
     this.headButtonsEl = this.q('#about-buttons');
 
-    // new Button({
-    //   name: 'licenses',
-    //   text: 'Сторонние компоненты',
-    //   action: () => {},
-    //   icon: 'star-outline',
-    //   iconClasses: 'small',
-    //   // classes: 'button-vertical'
-    // }).inject(this.headButtonsEl);
-
-    // new Button({
-    //   name: 'authors',
-    //   text: 'Авторы',
-    //   action: () => {},
-    //   icon: 'account',
-    //   iconClasses: 'small',
-    //   // classes: 'button-vertical'
-    // }).inject(this.headButtonsEl);
+    new Button({
+      name: 'link',
+      text: 'Открыть сайт',
+      action: () => AppVersion.openSite(),
+      icon: 'web',
+      iconClasses: 'small',
+    }).inject(this.headButtonsEl);
 
     new Button({
       name: 'settings',
@@ -79,7 +69,6 @@ export default class About extends Panel {
       action: () => App.panelSelect(App.panels.settings),
       icon: 'wrench',
       iconClasses: 'small',
-      // classes: 'button-vertical'
     }).inject(this.headButtonsEl);
   }
 

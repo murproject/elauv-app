@@ -12,7 +12,7 @@ export default {
   },
 
   get isDevBuild() {
-    return true;
+    return false;
   },
 
   get copyright() {
@@ -30,7 +30,7 @@ export default {
     if (App.isCordova) {
       cordova.InAppBrowser.open(this.siteLink, '_system');
     } else {
-      location.open(this.siteLink, '_blank');
+      window.open(this.siteLink);
     }
   },
 
