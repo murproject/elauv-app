@@ -9,6 +9,7 @@ import api from '/src/vehicle/api';
 import App from '/src/App';
 import GlobalDialog from '/src/components/GlobalDialog';
 import Button from '/src/components/Button';
+import AppVersion from '/src/utils/AppVersion';
 
 const versionError = 'Too new version';
 
@@ -88,7 +89,7 @@ export default class QrCodes {
       console.error('Scan code parse error:');
       console.error(e);
       if (e.message === versionError) {
-        this.dialog('Пожалуйста, обновите приложение!');
+        AppVersion.openDialogOutdatedApp();
       } else {
         this.dialog('Произошла ошибка при чтении кода.');
       }

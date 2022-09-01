@@ -1,3 +1,7 @@
+import App from '/src/App';
+import GlobalDialog from '/src/components/GlobalDialog';
+import Button from '/src/components/Button';
+
 export default {
   get version() {
     return '[AIV]{version}[/AIV]';
@@ -22,13 +26,32 @@ export default {
     return 'https://murproject.com/elauv';
   },
 
-  // TODO: make logo+link global, and show in aobut panel too?
-
   openSite() {
-    cordova.InAppBrowser.open(this.siteLink, '_system');
+    if (App.isCordova) {
+      cordova.InAppBrowser.open(this.siteLink, '_system');
+    } else {
+      location.open(this.siteLink, '_blank');
+    }
   },
 
   openDialogOutdatedApp() {
-    // TODO //
+    App.showGlobalDialog(
+        new GlobalDialog({
+          closable: true,
+          title: 'Ошибка',
+          text: 'Пожалуйста, обновите приложение!',
+          classes: ['text-center', 'buttons-collapsed'],
+          buttons: [
+            new Button({
+              text: 'Открыть сайт',
+              icon: 'web',
+            }, () => this.openSite()),
+            new Button({
+              text: 'Закрыть',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
+    );
   },
 };
