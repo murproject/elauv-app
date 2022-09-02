@@ -7,6 +7,7 @@ import Utils from '/src/utils/Utils';
 
 import GlobalDialog from '/src/components/GlobalDialog.js';
 import ProjectsStorage from '/src/utils/ProjectsStorage.js';
+import AppVersion from '../utils/AppVersion';
 
 export default class Projects extends Panel {
   begin() {
@@ -97,11 +98,12 @@ export default class Projects extends Panel {
 
     this.projectsListEl.innerText = '';
 
-    // TODO: should populate examples with real ones!
-    // this.addItem({
-    //   name: 'Примеры',
-    //   type: 'folderExamples',
-    // }, () => this.displayExamples());
+    if (AppVersion.isDevBuild) {
+      this.addItem({
+        name: 'Примеры',
+        type: 'folderExamples',
+      }, () => this.displayExamples());
+    }
 
     this.addItem({
       type: 'projectNew',
