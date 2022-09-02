@@ -44,24 +44,6 @@
             <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
             <uses-permission android:name="android.permission.BLUETOOTH" />
         </config-file>
-
-        <!-- <preference name="android-manifest/@android:requestLegacyExternalStorage" value="true" /> -->
-
-        <!-- <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest"> -->
-            <!-- <application android:requestLegacyExternalStorage="true" /> -->
-        <!-- </edit-config> -->
-
-        <!-- <config-file parent="application/activity" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.elauv-proj" />
-                <data android:host="*" />
-            </intent-filter>
-        </config-file> -->
     </platform>
 
 </widget>

@@ -27,7 +27,7 @@ export default class Console extends Panel {
     this.clear();
   }
 
-  show(msg) { // TODO: rename?
+  printMsg(msg) { // TODO: rename?
     this.welcomeDiv.classList.add('hidden');
     let log = '';
 

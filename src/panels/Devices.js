@@ -175,6 +175,7 @@ export default class Devices extends Panel {
     this.devicesListEl.innerText = '';
 
     const devicesFound = devices.length > 0;
+    // TODO: don't query each time
     this.q('#connDevicesListWrapper').classList.toggle('height-fill', devicesFound);
     this.q('#connDevicesListWrapper').classList.toggle('height-fit-content', !devicesFound);
 
@@ -222,7 +223,6 @@ export default class Devices extends Panel {
 
   onStatusUpdated(status) {
     const connected = mur.deviceAddress != null;
-    // const connected = true;
 
     if (this.wasConnected !== connected) {
       App.setLoading(true);
@@ -239,8 +239,6 @@ export default class Devices extends Panel {
   }
 
   updateTelemetry(t) {
-    // console.log(t);
-    // this.q('#telemetry-wrapper').innerText = JSON.stringify(t);
     this.updateIcon();
 
     if (this.active) {

@@ -353,34 +353,6 @@ export default class BlocklyPanel extends Panel {
     mur.controlContext(contextParams);
   }
 
-  run_lua() {
-    BlocklyLua.STATEMENT_PREFIX = 'h(%1)\n';
-    this.code = BlocklyLua.workspaceToCode(this.workspace);
-
-    this.codeBlockIds = [];
-    const regexpBlockId = new RegExp(/^ *h\('(.*)'\)$/, 'gm');
-    // var result
-
-    this.code = this.code.replace(regexpBlockId, ($0, $1) => {
-      this.codeBlockIds.push($1);
-      return `h('${this.codeBlockIds.length - 1}')`;
-    });
-
-    // console.log(this.code)
-
-    // result = regexpBlockId.exec(this.code)
-    // console.log(result)/
-    // while ((result = regexpBlockId.exec(this.code)) !== null) {
-    //   console.log(result)
-    //   this.codeBlockIds.push(result['1'])
-    // }
-
-    // console.log(this.codeBlockIds)
-    mur.controlScriptRun({script: this.code});
-
-    // TODO: disable editing while executing
-  }
-
   run_js() {
     this.setIcon('cog', 'blue-dark anim-spin');
     this.actionButtons.run.setIcon('stop', 'blue-dark', 'big');
@@ -400,12 +372,11 @@ export default class BlocklyPanel extends Panel {
       this.scriptWorker.terminate();
     }
 
-    this.scriptWorker = new Worker('/js/interpreter.js', {type: 'module'});
+    this.scriptWorker = new Worker('js/interpreter.js', {type: 'module'});
     this.scriptWorker.onmessage = (e) => this.workerMsgHandler(e);
 
     const json = Blockly.serialization.workspaces.save(this.workspace);
 
-    // Store top blocks separately, and remove them from the JSON.
     if (!json.blocks) {
       // TODO: emit stop?
       return;
@@ -415,7 +386,7 @@ export default class BlocklyPanel extends Panel {
     const topBlocks = blocks.slice(); // Create shallow copy.
     blocks.length = 0;
 
-    // Load each block into the workspace individually and generate code.
+    // Load each block structure into the workspace individually and generate code.
     const allCode = [];
     this.allRootBlocks = [];
 
@@ -484,7 +455,7 @@ export default class BlocklyPanel extends Panel {
     if (this.scriptStatus === 'running') {
       this.scriptWorker.postMessage({
         type: 'telemetry',
-        telemetry: JSON.parse(JSON.stringify(telemetry)), // TODO: should do it in better way
+        telemetry: JSON.parse(JSON.stringify(telemetry)),
       });
     }
   }
@@ -664,7 +635,6 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'state') {
-      // TODO: inform user on script stop?
       if (data.state === 'done') {
         console.log('script done');
 
@@ -681,7 +651,7 @@ export default class BlocklyPanel extends Panel {
     }
 
     if (data.type === 'print') {
-      App.panels.console.show(data.msg);
+      App.panels.console.printMsg(data.msg);
     }
   }
 }

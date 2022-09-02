@@ -155,7 +155,6 @@ const mur = {
       if (telemetry.feedback.yawStabilized === true) {
         break;
       }
-      // console.log('not stabilized, need to wait! ' + Math.round(Date.now() - _wait_yaw_begin_timestamp));
     }
   },
 
