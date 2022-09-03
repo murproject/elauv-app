@@ -301,10 +301,7 @@ export default {
 
   controlPing: function(counter = undefined) {
     if (this.status === 'open' || this.status === 'wait-ping' || this.status === 'timeout') {
-      this.conn.sendMessage(Protocol.packControlPing({
-        counter: counter == undefined ? this.pingCounter : counter,
-      }));
-
+      // check previous ping
       if (this.pingSuccess) {
         this.connectionTimeout = false;
       } else if (this.authorized) {
@@ -312,8 +309,17 @@ export default {
         console.warn('PING TIMEOUT');
       }
 
+      if (this.status === 'open') {
+        this.pingCounter++;
+      } else if (this.status === 'wait-ping') {
+        this.pingCounter = 0;
+      }
+
+      this.conn.sendMessage(Protocol.packControlPing({
+        counter: counter == undefined ? this.pingCounter : counter,
+      }));
+
       this.timePing = new Date();
-      this.pingCounter++;
       this.pingSuccess = false;
     }
 
