@@ -111,7 +111,7 @@ export default {
       console: new ConsolePanel(),
     };
 
-    this.panelSelect(this.isCordova ? this.panels.devices : this.panels.projects);
+    this.panelSelect(this.isMobile ? this.panels.devices : this.panels.projects);
   },
 
   setTitle: function(title) {
