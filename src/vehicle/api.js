@@ -279,8 +279,8 @@ export default {
   },
 
   controlContext: function(data) {
-    this.sendMessage(Protocol.packControlContext(data));
     this.context = data;
+    this.sendMessage(Protocol.packControlContext(data));
   },
 
   controlActuator: function(data) {

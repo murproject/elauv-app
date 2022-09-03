@@ -247,11 +247,11 @@ export default class BlocklyPanel extends Panel {
   }
 
   run() {
-    console.log('status = ' + this.scriptStatus);
+    console.log('status was ' + this.scriptStatus);
     if (this.scriptStatus == 'running') {
       this.setLoading(true, 0);
       setTimeout(() => this.stop(), 100);
-    } else {
+    } else if (this.scriptStatus == 'stopped') {
       this.setLoading(true, 0);
       this.autoSave(true);
       setTimeout(() => this.run_js(), 100);
@@ -262,9 +262,14 @@ export default class BlocklyPanel extends Panel {
   }
 
   stop() {
+    if (this.scriptStatus !== 'running') {
+      return;
+    }
+
+    this.scriptStatus = 'stopping';
+
     document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
     this.actionButtons.run.setIcon('play', 'blue-dark', 'big');
-    this.scriptStatus = 'stopped';
 
     App.panels.console.clear();
 
@@ -287,8 +292,12 @@ export default class BlocklyPanel extends Panel {
 
     this.workspace.highlightBlock(null);
     this.reinject(false);
-    this.updatePuzzleIcon(true);
-    this.setLoading(false, 100);
+    this.setLoading(false, 150);
+
+    setTimeout(() => {
+      this.updatePuzzleIcon(true);
+      this.scriptStatus = 'stopped';
+    }, 150);
   }
 
   autoSave(forced = false) {
@@ -358,15 +367,19 @@ export default class BlocklyPanel extends Panel {
   }
 
   run_js() {
+    if (this.scriptStatus !== 'stopped') {
+      return;
+    }
+
+    this.scriptStatus = 'preparing';
+
     this.setIcon('cog', 'blue-dark anim-spin');
     this.actionButtons.run.setIcon('stop', 'blue-dark', 'big');
 
-    this.scriptStatus = 'running';
-
     mur.controlImuResetYaw();
-    setTimeout(() => this.resetContext(0), 0);
-    setTimeout(() => this.resetContext(50), 100);
-    setTimeout(() => this.resetContext(0), 350);
+    setTimeout(() => this.resetContext(0), 100);
+    setTimeout(() => this.resetContext(50), 200);
+    setTimeout(() => this.resetContext(0), 450);
 
     this.code = this.generate_code(this.workspace);
 
@@ -452,6 +465,7 @@ export default class BlocklyPanel extends Panel {
         scripts: [this.code], // TODO: don't use array?
         threads: threadsList,
       });
+      this.scriptStatus = 'running';
     }, 500);
   }
 
