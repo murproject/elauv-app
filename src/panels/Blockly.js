@@ -381,9 +381,9 @@ export default class BlocklyPanel extends Panel {
     this.actionButtons.run.setIcon('stop', 'blue-dark', 'big');
 
     mur.controlImuResetYaw();
-    setTimeout(() => this.resetContext(0), 100);
-    setTimeout(() => this.resetContext(50), 200);
-    setTimeout(() => this.resetContext(0), 450);
+    setTimeout(() => this.resetContext(0), 0);
+    setTimeout(() => this.resetContext(50), 150);
+    setTimeout(() => this.resetContext(0), 700);
 
     this.code = this.generate_code(this.workspace);
 
@@ -399,7 +399,6 @@ export default class BlocklyPanel extends Panel {
     const json = Blockly.serialization.workspaces.save(this.workspace);
 
     if (!json.blocks) {
-      // TODO: emit stop?
       return;
     }
 
@@ -470,7 +469,7 @@ export default class BlocklyPanel extends Panel {
         threads: threadsList,
       });
       this.scriptStatus = 'running';
-    }, 500);
+    }, 1000);
   }
 
   updateTelemetry(telemetry) {
