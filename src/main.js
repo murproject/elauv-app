@@ -5,25 +5,28 @@ if (typeof cordova !== 'undefined') {
   App.runsOnElectron = cordova.platformId === 'electron';
 
   document.addEventListener('deviceready', () => {
-    window.cutout.has().then((hasCutout) => {
-      /* additional space on top of header if screen has cutout */
-      if (hasCutout) {
-        App.container.classList.add('with-statusbar-spacer');
-        document.addEventListener('resume', triggerStatusbar, false);
-        triggerStatusbar();
-        setInterval(() => window.StatusBar.overlaysWebView(true), 500);
-      }
-    });
+    if (cordova.platformId === 'android') {
+      AndroidFullScreen.immersiveMode();
 
-    document.addEventListener('backbutton', function(e) {
-      e.preventDefault();
-    });
+      window.cutout.has().then((hasCutout) => {
+      /* additional space on top of header if screen has cutout */
+        if (hasCutout) {
+          App.container.classList.add('with-statusbar-spacer');
+          document.addEventListener('resume', triggerStatusbar, false);
+          triggerStatusbar();
+          setInterval(() => window.StatusBar.overlaysWebView(true), 500);
+        }
+      });
+
+      document.addEventListener('backbutton', function(e) {
+        e.preventDefault();
+      });
+    }
 
     main();
 
     setTimeout(() => {
       window.IsekaiFakeSplash.hide();
-      console.warn('ready!!');
     }, 2000);
   }, false);
 } else {
