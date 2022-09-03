@@ -330,7 +330,7 @@ export default class BlocklyPanel extends Panel {
     this.wasTouched = false;
     this.lastEditTime = Date.now();
 
-    if (this.scriptStatus === 'running') {
+    if (this.scriptStatus !== 'stopped') {
       this.stop();
     }
 
@@ -399,6 +399,8 @@ export default class BlocklyPanel extends Panel {
     const json = Blockly.serialization.workspaces.save(this.workspace);
 
     if (!json.blocks) {
+      this.scriptStatus = 'running';
+      this.stop();
       return;
     }
 
@@ -463,12 +465,12 @@ export default class BlocklyPanel extends Panel {
     this.setLoading(false, 100);
 
     setTimeout(() => {
+      this.scriptStatus = 'running';
       this.scriptWorker.postMessage({
         type: 'run',
         script: this.code, // TODO: don't use array?
         threads: threadsList,
       });
-      this.scriptStatus = 'running';
     }, 1000);
   }
 
