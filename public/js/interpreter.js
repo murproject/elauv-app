@@ -2,7 +2,6 @@
 
 let state = null;
 let script = null;
-let scripts = [];
 let telemetry = {};
 const highlightedBlocks = {};
 const msgToSend = {};
@@ -143,9 +142,10 @@ const mur = {
     // disable direct mode on horizontal motors
     setDirectMode(motorsIndex.hl, false);
     setDirectMode(motorsIndex.hr, false);
-
     context.regulators = 1;
-    telemetry.feedback.yawStabilized = false; // force, to prevent accidentally claiming as already stabilized
+
+    // force set as not stabilized, to prevent accidentally claiming as already stabilized later
+    telemetry.feedback.yawStabilized = false;
 
     await this.delay(200);
 
@@ -159,7 +159,6 @@ const mur = {
   },
 
   set_power: async function(index, power) {
-    // TODO: check index and constrain power
     index = toNum(index);
     power = clamp(toNum(power));
 
@@ -228,20 +227,20 @@ const mur = {
     return Boolean(telemetry.feedback.colorStatus ^ (mode === 'SENSOR_COLOR_WHITE'));
   },
 
-  thread_end: async function(scriptId, end_script = false, wait_forever = true) {
+  thread_end: async function(threadId, end_script = false, wait_forever = true) {
     if (end_script) {
       await this.stop_all();
-      await this.delay(300);
+      await this.delay(125);
 
       for (const i in this.threadsStates) {
         this.thread_end(i, false);
       }
     }
 
-    this.threadsStates[scriptId] = false;
+    this.threadsStates[threadId] = false;
 
     sendHighlight(true);
-    self.postMessage({type: 'thread_end', id: scriptId});
+    self.postMessage({type: 'thread_end', id: threadId});
 
     if (!Object.values(this.threadsStates).includes(true) && !this.mainThreadState) {
       setState('done');
@@ -285,8 +284,15 @@ function strReplaceAll(str, match, replace) {
 }
 
 
-function makeScript(index, code) { // TODO: remove
-  return {script: code};
+function makeScript(script) {
+  return `
+(async () => {
+const _threadId = -1;
+${script}
+await mur.thread_end(-1);
+await mur.h(-1, null);
+})();
+  `;
 }
 
 
@@ -296,9 +302,6 @@ self.onmessage = function(e) {
   }
 
   if (e.data.type === 'run') {
-    scripts = e.data.scripts;
-
-
     contextUpdater = setInterval(sendContext, 100);
     setTimeout(() => highlightUpdater = setInterval(sendHighlight, 50), 25);
 
@@ -309,21 +312,11 @@ self.onmessage = function(e) {
     console.warn('run interpreter');
     setState('running');
 
-    script = '';
-    script = makeScript(0, scripts[0]).script;
+    script = makeScript(e.data.script);
 
     for (const i in e.data.threads) {
       mur.threadsStates[e.data.threads[i]] = true;
     }
-
-    // TODO: move to makeScript?
-    script = `
-(async () => {
-const _threadId = -1;
-${script}
-mur.h(-1, null);
-})();
-`;
 
     console.warn('Run script:');
     console.log(script);

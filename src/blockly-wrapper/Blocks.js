@@ -216,8 +216,8 @@ ${branch}
 const _threadId = ${gen.injectId('%1', block)};
 
 ${branch}
-await mur.h(_threadId, null);
 await mur.thread_end(_threadId);
+await mur.h(_threadId, null);
 })();
 `;
       };

@@ -277,9 +277,13 @@ export default class BlocklyPanel extends Panel {
       this.scriptWorker.terminate();
     }
 
-    setTimeout(() => this.resetContext(50), 0);
+    this.resetContext(0);
 
     let ledPower = 50;
+
+    if (this.fadeoffTimer) {
+      clearInterval(this.fadeoffTimer);
+    }
 
     this.fadeoffTimer = setInterval(() => {
       this.resetContext(ledPower);
@@ -297,7 +301,7 @@ export default class BlocklyPanel extends Panel {
     setTimeout(() => {
       this.updatePuzzleIcon(true);
       this.scriptStatus = 'stopped';
-    }, 150);
+    }, 250);
   }
 
   autoSave(forced = false) {
@@ -462,7 +466,7 @@ export default class BlocklyPanel extends Panel {
     setTimeout(() => {
       this.scriptWorker.postMessage({
         type: 'run',
-        scripts: [this.code], // TODO: don't use array?
+        script: this.code, // TODO: don't use array?
         threads: threadsList,
       });
       this.scriptStatus = 'running';
@@ -659,6 +663,21 @@ export default class BlocklyPanel extends Panel {
         if (this.scriptWorker) {
           this.scriptWorker.terminate();
         }
+
+        let counter = 0;
+
+        if (this.fadeoffTimer) {
+          clearInterval(this.fadeoffTimer);
+        }
+
+        this.fadeoffTimer = setInterval(() => {
+          counter += 100;
+          this.resetContext(0);
+
+          if (counter >= 1800) {
+            clearInterval(this.fadeoffTimer);
+          }
+        }, 100);
 
         setTimeout(() => this.stop(), 2000);
       }
