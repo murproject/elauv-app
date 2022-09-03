@@ -6,15 +6,15 @@ if (typeof cordova !== 'undefined') {
 
   document.addEventListener('deviceready', () => {
     if (cordova.platformId === 'android') {
-      AndroidFullScreen.immersiveMode();
-
       window.cutout.has().then((hasCutout) => {
-      /* additional space on top of header if screen has cutout */
         if (hasCutout) {
+          /* additional space on top of header if screen has cutout */
           App.container.classList.add('with-statusbar-spacer');
           document.addEventListener('resume', triggerStatusbar, false);
           triggerStatusbar();
           setInterval(() => window.StatusBar.overlaysWebView(true), 500);
+        } else {
+          AndroidFullScreen.immersiveMode();
         }
       });
 
