@@ -122,18 +122,19 @@ export default {
     SettingsStorage.load();
 
     // this.preloadIcons();
-
     this.container.innerHTML = this.html;
 
     this.loadingWrapper = document.querySelector('#loading-wrapper');
     this.titleBar = document.querySelector('#main-titlebar-caption');
 
     this.createPanels();
-
     mur.create();
+    this.setupEvents();
+    TelemetryUtils.start();
+  },
 
+  setupEvents() {
     mur.onTelemetryUpdated = (t, f) => {
-      // TOOD: move to TelemetryUtils?
       const prettyTelemetry = JSON.stringify(f, null, '  ');
       TelemetryUtils.update(prettyTelemetry);
       this.panels.blockly.updateTelemetry(t);
@@ -174,8 +175,6 @@ export default {
     mur.onDiagnosticLogReceived = (info) => {
       this.panels.settings.onDiagnosticLogReceived(info);
     };
-
-    TelemetryUtils.start();
   },
 
   showGlobalDialog(dialog) {
