@@ -1,6 +1,4 @@
 import Element from './Element.js';
-import Icon from '/src/components/Icon';
-import Utils from '/src/utils/Utils';
 
 export default class GlobalDialog extends Element {
   static get defaultClasses() {
@@ -19,18 +17,6 @@ export default class GlobalDialog extends Element {
       closable: false,
       textInput: false,
     };
-  }
-
-  beforeRender() {
-    // TODO: ?
-    // if (this.attrs.closable) {
-    //   this.closeButton = document.createElement('div');
-    //   this.appendChild(this.closeButton);
-    //   this.closeButton.innerHTML = /*html*/`
-    //     <div class="global-dialog-close">${Icon('close')}</div>
-    //   `;
-    //   this.closeButton.querySelector(".global-dialog-close").onclick = App.closeGlobalDialog;
-    // }
   }
 
   render() {
@@ -57,7 +43,7 @@ export default class GlobalDialog extends Element {
     this.attrs.buttons.forEach((button) => button.inject(this.buttonsRow));
     this.appendChild(this.buttonsRow);
 
-    if (this.attrs.textInput) { // TODO: text input as component!
+    if (this.attrs.textInput) {
       this.textInputEl = this.querySelector('#text-input');
       this.textInputEl.onchange = (event) => this.attrs.textInput(this.textInputEl.value);
     }

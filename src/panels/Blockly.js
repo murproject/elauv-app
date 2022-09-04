@@ -530,12 +530,11 @@ export default class BlocklyPanel extends Panel {
 
     this.autoZoom();
 
-    if (readonly) {
-      // TODO: use classList.toggle; maybe don't use query selector
-      document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.add('hidden'));
-    } else {
-      document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.remove('hidden'));
+    function setBlocklyScrollbars(show) {
+      document.querySelectorAll('.blocklyMainWorkspaceScrollbar').forEach((el) => el.classList.toggle('hidden', !show));
     }
+
+    setBlocklyScrollbars(!readonly);
 
     if (!readonly) {
       for (const key in this.stateOfUndo.savedUndoStack) {

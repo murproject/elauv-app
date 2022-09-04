@@ -92,11 +92,20 @@ export default class Devices extends Panel {
     this.setIcon(this.battIconName);
 
     this.devicesListEl = this.q('#connDevicesList');
+    this.devicesListWrapper = this.q('#connDevicesListWrapper');
+
+    this.deviceSectionConnect = this.q('#device-connect');
+    this.deviceSectionInfo = this.q('#device-info');
     this.welcomeEl = this.q('#devices-welcome');
     this.buttonsWrapper = this.q('#buttonsRow');
+
     this.telemetryTable = new TelemetryTable();
     this.telemetryTable.inject(this.q('#telemetry-wrapper'));
 
+    this.makeButtons();
+  }
+
+  makeButtons() {
     this.buttonScanCode = new Button({
       name: 'scan-code',
       text: 'Сканировать код',
@@ -175,39 +184,15 @@ export default class Devices extends Panel {
     this.devicesListEl.innerText = '';
 
     const devicesFound = devices.length > 0;
-    // TODO: don't query each time
-    this.q('#connDevicesListWrapper').classList.toggle('height-fill', devicesFound);
-    this.q('#connDevicesListWrapper').classList.toggle('height-fit-content', !devicesFound);
+    this.devicesListWrapper.classList.toggle('height-fill', devicesFound);
+    this.devicesListWrapper.classList.toggle('height-fit-content', !devicesFound);
 
     devices.forEach((device) => {
       const deviceItem = new DeviceListItem(device, () => {
         if (AppVersion.isDevBuild) {
           mur.connect(device.address, true);
         } else {
-          App.showGlobalDialog(
-              new GlobalDialog({
-                closable: true,
-                title: 'Нужно сканировать код',
-                text: /*html*/`
-                  Для подключения к аппарату<br>
-                  необходимо отсканировать QR-код.
-                `,
-                classes: ['text-center'],
-                buttons: [
-                  new Button({
-                    text: 'Сканировать',
-                    icon: 'qrcode-scan',
-                  }, () => {
-                    App.closeGlobalDialog();
-                    this.scanCode();
-                  }),
-                  new Button({
-                    text: 'Назад',
-                    icon: 'keyboard-return',
-                  }, () => App.closeGlobalDialog()),
-                ],
-              }),
-          );
+          this.showDialogQrRequired();
         }
       });
 
@@ -228,8 +213,8 @@ export default class Devices extends Panel {
       App.setLoading(true);
       setTimeout(() => {
         App.setLoading(false);
-        this.q('#device-connect').classList.toggle('hidden', connected);
-        this.q('#device-info').classList.toggle('hidden', !connected);
+        this.deviceSectionConnect.classList.toggle('hidden', connected);
+        this.deviceSectionInfo.classList.toggle('hidden', !connected);
         this.updateIcon();
       }, 1500);
     }
@@ -258,5 +243,32 @@ export default class Devices extends Panel {
       console.log(`updated icon from ${this.oldIcon} to ${icon.name}`);
       this.oldIcon = icon.name;
     }
+  }
+
+  showDialogQrRequired() {
+    App.showGlobalDialog(
+        new GlobalDialog({
+          closable: true,
+          title: 'Нужно сканировать код',
+          text: /*html*/`
+            Для подключения к аппарату<br>
+            необходимо отсканировать QR-код.
+          `,
+          classes: ['text-center'],
+          buttons: [
+            new Button({
+              text: 'Сканировать',
+              icon: 'qrcode-scan',
+            }, () => {
+              App.closeGlobalDialog();
+              this.scanCode();
+            }),
+            new Button({
+              text: 'Назад',
+              icon: 'keyboard-return',
+            }, () => App.closeGlobalDialog()),
+          ],
+        }),
+    );
   }
 }

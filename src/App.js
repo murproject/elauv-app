@@ -46,7 +46,7 @@ export default {
   currentPanelBottom: null,
 
   globalDialogActive: false,
-  oldConnStatus: undefined,
+  oldConnectionStatus: undefined,
 
   runsOnCordova: false,
   runsOnElectron: false,
