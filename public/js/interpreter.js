@@ -328,7 +328,12 @@ self.onmessage = function(e) {
       console.log('main thread end');
     } catch (e) {
       // TODO: send message to main worker and show dialog on error
-      console.log(e);
+
+      console.error('Interpreter: user script error:');
+      console.error(e);
+
+      mur.mainThreadState = false;
+      setState('done');
     }
   }
 
