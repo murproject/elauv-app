@@ -51,6 +51,8 @@ export default {
   runsOnCordova: false,
   runsOnElectron: false,
 
+  /* Platform utils */
+
   get isCordova() {
     return this.runsOnCordova;
   },
@@ -63,66 +65,10 @@ export default {
     return this.isCordova && !this.isElectron;
   },
 
-  panelSelect: function(target, mode = 'main') {
-    const currentPanel = mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';
-
-    if (this[currentPanel]) {
-      this[currentPanel].setActive(false);
-    }
-
-    if (mode === 'bottom') {
-      if (this[currentPanel] === target) {
-        this[currentPanel] = null;
-        this.bottomPanelSetCollapsed(true);
-        return;
-      } else {
-        this.bottomPanelSetCollapsed(false);
-      }
-    } else {
-      this.bottomPanelSetHidden(target !== this.panels.blockly);
-    }
-
-    this[currentPanel] = target;
-    this[currentPanel].setActive(true);
-  },
-
-  bottomPanelSetCollapsed(collapsed = true) {
-    this.bottomPanelWrapper.classList.toggle('bottom-collapsed', collapsed);
-  },
-
-  bottomPanelSetHidden(hidden = true) {
-    this.bottomPanelWrapper.classList.toggle('hidden', hidden);
-  },
-
-  createPanels: function() {
-    if (this.panels.length > 0) {
-      return;
-    }
-
-    this.panels = {
-      /* Main panels */
-      about: new AboutPanel(),
-      settings: new SettingsPanel(),
-      devices: new DevicesPanel(),
-      joystick: new JoystickPanel(),
-      projects: new ProjectsPanel(),
-      blockly: new BlocklyPanel(),
-
-      /* Bottom panels */
-      console: new ConsolePanel(),
-    };
-
-    this.panelSelect(this.isMobile ? this.panels.devices : this.panels.projects);
-  },
-
-  setTitle: function(title) {
-    this.titleBar.innerText = title;
-  },
+  /* Generic setup */
 
   init: function() {
     SettingsStorage.load();
-
-    // this.preloadIcons();
     this.container.innerHTML = this.html;
     this.setupWrappers();
     this.createPanels();
@@ -144,6 +90,29 @@ export default {
     for (const [key, id] of Object.entries(wrappers)) {
       this[key] = document.querySelector(id);
     }
+  },
+
+  /* Panels */
+
+  createPanels: function() {
+    if (this.panels.length > 0) {
+      return;
+    }
+
+    this.panels = {
+      /* Main panels */
+      about: new AboutPanel(),
+      settings: new SettingsPanel(),
+      devices: new DevicesPanel(),
+      joystick: new JoystickPanel(),
+      projects: new ProjectsPanel(),
+      blockly: new BlocklyPanel(),
+
+      /* Bottom panels */
+      console: new ConsolePanel(),
+    };
+
+    this.panelSelect(this.isMobile ? this.panels.devices : this.panels.projects);
   },
 
   setupEvents() {
@@ -180,6 +149,43 @@ export default {
     };
   },
 
+  panelSelect: function(target, mode = 'main') {
+    const currentPanel = mode === 'main' ? 'currentPanelMain' : 'currentPanelBottom';
+
+    if (this[currentPanel]) {
+      this[currentPanel].setActive(false);
+    }
+
+    if (mode === 'bottom') {
+      if (this[currentPanel] === target) {
+        this[currentPanel] = null;
+        this.bottomPanelSetCollapsed(true);
+        return;
+      } else {
+        this.bottomPanelSetCollapsed(false);
+      }
+    } else {
+      this.bottomPanelSetHidden(target !== this.panels.blockly);
+    }
+
+    this[currentPanel] = target;
+    this[currentPanel].setActive(true);
+  },
+
+  setTitle: function(title) {
+    this.titleBar.innerText = title;
+  },
+
+  bottomPanelSetCollapsed(collapsed = true) {
+    this.bottomPanelWrapper.classList.toggle('bottom-collapsed', collapsed);
+  },
+
+  bottomPanelSetHidden(hidden = true) {
+    this.bottomPanelWrapper.classList.toggle('hidden', hidden);
+  },
+
+  /* Background feedback (green pulse when connected) */
+
   triggerBackgroundFeedback(activate = true) {
     this.feedbackWrapper.classList.toggle('background-soft-green', activate);
     this.feedbackWrapper.classList.toggle('background-pulse', activate);
@@ -188,6 +194,8 @@ export default {
       setTimeout(() => this.triggerBackgroundFeedback(false), 2500);
     }
   },
+
+  /* Global dialog (blocks generic UI) */
 
   showGlobalDialog(dialog) {
     if (!this.globalDialogActive) {
@@ -205,28 +213,11 @@ export default {
     this.globalDialogWrapperContent.innerText = '';
   },
 
+  /* Loading mode (blocks UI and shows visual feedback) */
+
   setLoading(isLoading, timeout) {
     setTimeout(() => {
       this.loadingWrapper.classList.toggle('active', isLoading);
     }, timeout);
   },
-
-  // preloadIcons() {
-  //   // TODO
-  //   const preloadList = [
-  //     'ui/content-save',
-  //     'ui/checkbox-marked-outline',
-  //     'ui/stop',
-  //     'ui/play',
-  //   ];
-
-  //   preloadList.forEach((item) => {
-  //     const link = document.createElement('link');
-  //     link.rel = 'preload';
-  //     link.type = 'image/svg+xml';
-  //     link.as = 'image';
-  //     link.href = 'mdi/' + item + '.svg';
-  //     document.head.appendChild(link);
-  //   });
-  // },
 };
