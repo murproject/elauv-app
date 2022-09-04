@@ -12,7 +12,7 @@ export default {
   },
 
   get isDevBuild() {
-    return true;
+    return false;
   },
 
   get copyright() {

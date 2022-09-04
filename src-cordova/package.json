@@ -1,7 +1,7 @@
 {
   "name": "org.robocenter.elementaryauv",
   "displayName": "ElementaryAUV App",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Companion app for ElementaryAUV underwater vehicle.",
   "main": "index.js",
   "scripts": {
