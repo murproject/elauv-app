@@ -182,46 +182,42 @@ export default class TelemetryPanel extends Element {
   }
 
   render() {
-    const t = this.attrs.telemetry;
-    const s = this.attrs.stats;
+    const telemetry = this.attrs.telemetry;
+    const extraTelemetryMode = SettingsStorage.get('extendedTelemetry');
 
-    if (t === null) {
+    if (telemetry === null) {
       return '';
     }
 
-    t.macAddress = this.attrs.address ? this.attrs.address :
-                   t.macAddress ? t.macAddress : '...';
+    telemetry.macAddress = this.attrs.address ? this.attrs.address :
+                   telemetry.macAddress ? telemetry.macAddress : '...';
 
-    t.connection = this.attrs.connection;
-    t.ping = this.attrs.ping;
+    telemetry.connection = this.attrs.connection;
+    telemetry.ping = this.attrs.ping;
 
-    const tt = formatValues(t);
+    const info = formatValues(telemetry);
 
-    const extraTelemetry = SettingsStorage.get('extendedTelemetry');
-
-    // console.log(t);
-    // console.log(s);
 
     return /*html*/`
       <div class="display-flex flex-column">
         <table class="telemetry-table margin-auto margin-top-zero">
           ${header( /*html*/`
             <span>ElementaryAUV</span><br>
-            <span class="normal tag-address">${tt.macAddress}</span>
+            <span class="normal tag-address">${info.macAddress}</span>
           `)}
 
-          ${row('Связь', tt.connection)}
-          ${row('Время работы', tt.timestamp)}
-          ${rowExtra('Задержка', tt.ping)}
+          ${row('Связь', info.connection)}
+          ${row('Время работы', info.timestamp)}
+          ${rowExtra('Задержка', info.ping)}
 
-          ${header(extraTelemetry ? 'Доп. информация' : '')}
+          ${header(extraTelemetryMode ? 'Доп. информация' : '')}
 
-          ${rowExtra('Плата', tt.hardwareRev)}
-          ${rowExtra('Протокол', tt.lastProtoVer)}
+          ${rowExtra('Плата', info.hardwareRev)}
+          ${rowExtra('Протокол', info.lastProtoVer)}
 
-          ${rowExtra('', tt.feedback.pilotingMode)}
-          ${rowExtra('', tt.feedback.imuCalibrating)}
-          ${rowExtra('', tt.feedback.yawStabilized)}
+          ${rowExtra('', info.feedback.pilotingMode)}
+          ${rowExtra('', info.feedback.imuCalibrating)}
+          ${rowExtra('', info.feedback.yawStabilized)}
         </table>
       </div>
 
@@ -229,26 +225,26 @@ export default class TelemetryPanel extends Element {
         <table class="telemetry-table margin-auto margin-top-zero">
           ${header('Датчики')}
 
-          ${row('Курс', tt.imuYaw)}
-          ${row('Крен', tt.imuRoll)}
-          ${row('Дифферент', tt.imuPitch)}
+          ${row('Курс', info.imuYaw)}
+          ${row('Крен', info.imuRoll)}
+          ${row('Дифферент', info.imuPitch)}
 
-          ${row('Стук', tt.feedback.imuTap)}
+          ${row('Стук', info.feedback.imuTap)}
 
-          ${row('Лазер', tt.feedback.colorStatus)}
+          ${row('Лазер', info.feedback.colorStatus)}
 
           ${header('Питание')}
 
-          ${row('Заряд', tt.battRsoc)}
-          ${row('Состояние', tt.battStatus)}
+          ${row('Заряд', info.battRsoc)}
+          ${row('Состояние', info.battStatus)}
 
-          ${row('Моторы', tt.motorsStatus)}
+          ${row('Моторы', info.motorsStatus)}
 
-          ${row('Магнит', tt.magnetStatus)}
+          ${row('Магнит', info.magnetStatus)}
 
-          ${rowExtra('Напряжение', tt.battVolts)}
-          ${rowExtra('Ток', tt.battAmps)}
-          ${rowExtra('Температура', tt.battTemp)}
+          ${rowExtra('Напряжение', info.battVolts)}
+          ${rowExtra('Ток', info.battAmps)}
+          ${rowExtra('Температура', info.battTemp)}
         </table>
 
       </div>

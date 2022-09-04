@@ -240,7 +240,6 @@ export default class Devices extends Panel {
     const icon = TelemetryUtils.makeBatteryIcon();
     if (icon && this.oldIcon != icon.name) {
       this.setIcon(icon.name, icon.color);
-      console.log(`updated icon from ${this.oldIcon} to ${icon.name}`);
       this.oldIcon = icon.name;
     }
   }

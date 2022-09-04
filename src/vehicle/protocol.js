@@ -203,16 +203,12 @@ export default {
       } else {
         break;
       }
-
-      if (packetSize !== currentPacket.length) {
-        console.log(`packet_size: ${packetSize}; currentPacket.length: ${currentPacket.length}`);
-      }
     }
 
     if (packets.length !== 1) {
-      console.log('unusal packets count: ' + packets.length);
-      console.log(buffer);
-      console.log(packets);
+      console.warn('Unusal packets count: ' + packets.length);
+      console.warn(buffer);
+      console.warn(packets);
     }
 
     return packets;
@@ -388,7 +384,6 @@ export default {
     const payload = [];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlDiagnosticInfo, payload);
-    console.log(packet);
     return packet;
   },
 
@@ -442,7 +437,6 @@ export default {
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlMotorsSettings, payload);
-    console.log(payload);
     return packet;
   },
 

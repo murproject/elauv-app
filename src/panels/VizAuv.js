@@ -101,8 +101,6 @@ function makeVizauv(parent) {
   th_vf = makeThruster(vehicle.origin, {x:   0, y: 0, z:  35}, {x:  Zdog.TAU/4});
   th_vb = makeThruster(vehicle.origin, {x:   0, y: 0, z: -35}, {x:  Zdog.TAU/4});
 
-  console.log(vehicle);
-
   const vizauv = {
     vehicle: vehicle,
     th_hl: th_hl,

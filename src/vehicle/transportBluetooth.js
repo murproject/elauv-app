@@ -25,7 +25,6 @@ export default {
   },
 
   deviceDiscovered: function(device) {
-    console.log(device);
     const compatible = this.isDeviceCompatible(device);
 
     const currentDevice = {
@@ -50,7 +49,6 @@ export default {
 
     this.devices.push(currentDevice);
     this.devices = this.devices.sort((a, b) => a.tag.localeCompare(b.tag, 'en', {numeric: true}));
-    console.log(this.devices);
     this.onDeviceDiscovered(this.devices);
   },
 
@@ -63,7 +61,6 @@ export default {
 
     bluetoothClassicSerial.discoverUnpaired(
         (results) => {
-          console.log(results);
           this.state = 'closed';
         },
         (error) => {
@@ -122,7 +119,7 @@ export default {
                 });
               },
               (error) => {
-                console.log('connect error:');
+                console.error('Connect error:');
                 console.error(error);
                 this.state = 'closed';
                 bluetoothClassicSerial.unsubscribeRawData(this.macAddress);
@@ -156,7 +153,7 @@ export default {
       bluetoothClassicSerial.write(this.macAddress, data,
           (a) => { },
           (b) => {
-            console.error('send error:');
+            console.error('Send error:');
             console.error(b);
           },
       );

@@ -247,7 +247,6 @@ export default class BlocklyPanel extends Panel {
   }
 
   run() {
-    console.log('status was ' + this.scriptStatus);
     if (this.scriptStatus == 'running') {
       this.setLoading(true, 0);
       setTimeout(() => this.stop(), 100);
@@ -631,7 +630,7 @@ export default class BlocklyPanel extends Panel {
           const blockTime = block[1];
 
           if (!(key in this.executionCursors)) {
-            console.error(`ERROR: execution cursor with key ${key} doesn't exists!`);
+            console.error(`execution cursor with key ${key} doesn't exists!`);
             continue;
           }
 

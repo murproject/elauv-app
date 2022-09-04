@@ -271,8 +271,8 @@ export default {
         break;
 
       default:
-        console.warn('unknown packet type');
-        console.log(JSON.stringify(message, null, ' '));
+        console.warn('Unknown packet type');
+        console.warn(JSON.stringify(message, null, ' '));
         break;
     }
   },
@@ -313,7 +313,6 @@ export default {
         this.connectionTimeout = false;
       } else if (this.authorized) {
         this.connectionTimeout = true;
-        console.warn('PING TIMEOUT');
       }
 
       if (this.status === 'open') {

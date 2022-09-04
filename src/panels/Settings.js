@@ -209,7 +209,6 @@ export default class Settings extends Panel {
 
   onSettingsReceived(settings) {
     this.makeSettingsFields(settings);
-    console.log(settings);
   }
 
   getSetting(key) {
@@ -222,8 +221,6 @@ export default class Settings extends Panel {
     fields.forEach((key) => {
       payload[key] = this.getSetting(key);
     });
-
-    console.log(payload);
 
     mur[type](payload);
   }

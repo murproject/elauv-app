@@ -82,8 +82,6 @@ export default class QrCodes {
       if (Number('0x' + msg.version[0]) > 0x01 || Number('0x' + msg.version[1]) > 0x01) {
         throw new Error(versionError);
       }
-
-      console.log('Success code scan: ' + msg.address);
       api.connect(msg.address, true);
     } catch (e) {
       console.error('Scan code parse error:');

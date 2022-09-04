@@ -101,7 +101,6 @@ ${branch}
 
     // register function prototype
     function register_proto(name, func) {
-      console.log('Register block ' + name);
       Blockly.JavaScript[name] = func(Blockly.JavaScript);
     }
 

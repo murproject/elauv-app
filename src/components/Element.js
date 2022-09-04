@@ -36,7 +36,6 @@ export default class Element extends HTMLElement {
   }
 
   applyClasses(classes = undefined) {
-    // console.log("classes = " + this.constructor.defaultClasses);
     this.constructor.defaultClasses.forEach((item) => {
       this.classList.add(item);
     });
@@ -83,7 +82,6 @@ export default class Element extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`set ${name} = ${newValue}`);
     this.attrs[name] = newValue;
     this.update();
   }

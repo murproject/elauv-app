@@ -77,10 +77,8 @@ export default {
 
   setCurrentProject(item) {
     this.projects.current = item;
-    console.log(item.id);
     this.projects.current.autosaved = true;
     this.onChanged();
-    console.log(item);
   },
 
   loadProject(item) {
@@ -149,7 +147,6 @@ export default {
   },
 
   createProject(name, doSaveProject = false) {
-    console.warn('CREATING ' + name);
     const id = Utils.generateId();
     this.projects.current.id = id;
     this.projects.current.name = name;
@@ -227,8 +224,9 @@ export default {
     const fileName = name + '.mur.json';
 
     window.cordova.plugins.saveDialog.saveFile(blob, fileName).then(() => {
-      console.info('The file has been successfully saved');
+      console.log('The file has been successfully saved: ' + name);
     }).catch((reason) => {
+      console.warn('saveFile failed:');
       console.warn(reason);
     });
   },
