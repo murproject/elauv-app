@@ -10,6 +10,25 @@ import './BlocklyPatches';
 
 let colours = {};
 
+const MotorsIndex = {
+  'MOTOR_A': 0,
+  'MOTOR_B': 1,
+  'MOTOR_C': 2,
+  'MOTOR_D': 3,
+};
+
+const SpeedAxesModes = {
+  'AXIS_YAW' : 0,
+  'AXIS_MARCH' : 1,
+  'AXIS_DEPTH' : 2,
+};
+
+const ImuAxesModes = {
+  'IMU_AXIS_YAW': 0,
+  'IMU_AXIS_PITCH': 1,
+  'IMU_AXIS_ROLL': 2,
+};
+
 export default {
   name: 'Blocks',
 
@@ -23,10 +42,6 @@ export default {
     colour:         280,
     variable:       320,
     procedure:   '#778',
-  },
-
-  enums: {
-    // TODO: use named constants instead of magic numbers
   },
 
   init: function() {
@@ -173,16 +188,12 @@ ${branch}
       },
     };
 
-    // TODO (in all block with mode selection): use index/enum instead of text
-
     register_proto('mur_get_timestamp', (gen) => {
       return (block) => {
-        const mode = block.getFieldValue('MODE');
-        return makeInlineFunc(gen, `mur.get_timestamp(${mode === 'MODE_MSEC'})`);
+        const isMilliseconds = block.getFieldValue('MODE') === 'MODE_MSEC';
+        return makeInlineFunc(gen, `mur.get_timestamp(${isMilliseconds})`);
       };
     });
-
-    // TODO (in all block with mode selection): use index/enum instead of text
 
     /* mur_thread */
 
@@ -326,13 +337,6 @@ await mur.h(_threadId, null);
       },
     };
 
-    const MotorsIndex = { // TODO: move to enum
-      'MOTOR_A': 0,
-      'MOTOR_B': 1,
-      'MOTOR_C': 2,
-      'MOTOR_D': 3,
-    };
-
     register_proto('mur_set_power', (gen) => {
       return (block) => {
         const indexChar = block.getFieldValue('Index');
@@ -379,7 +383,7 @@ await mur.h(_threadId, null);
       init: function() {
         this.appendDummyInput()
             .appendField(new FieldGridDropdown(
-                movements_dropdown, undefined, {columns: 3, DEFAULT_VALUE: 'AXIS_MARCH_FORWARD'}), 'MODE',
+                movements_dropdown, undefined, {columns: 3, DEFAULT_VALUE: 'AXIS_MARCH'}), 'MODE',
             );
 
         this.appendValueInput('Power')
@@ -396,12 +400,8 @@ await mur.h(_threadId, null);
 
     register_proto('mur_set_axis', (gen) => {
       return (block) => {
-        // TODO
         const mode = block.getFieldValue('MODE');
-        const index =
-          mode == 'AXIS_YAW' ? 0 :
-          mode == 'AXIS_MARCH' ? 1 :
-          mode == 'AXIS_DEPTH' ? 2 : 0;
+        const index = SpeedAxesModes(mode);
         const power = calcVal(gen, block, 'Power');
         return makeFunc(gen, `mur.set_axis(${index}, ${power})`);
       };
@@ -568,8 +568,8 @@ await mur.h(_threadId, null);
 
     register_proto('mur_get_imu_tap', (gen) => {
       return (block) => {
-        const Mode = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE' ? 1 : 0;
-        return makeInlineFunc(gen, `mur.get_imu_tap(${Mode})`);
+        const mode = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE' ? 1 : 0;
+        return makeInlineFunc(gen, `mur.get_imu_tap(${mode})`);
       };
     });
 
@@ -595,19 +595,11 @@ await mur.h(_threadId, null);
       },
     };
 
-    // TODO (in all block with mode selection): use index/enum instead of text
-
     register_proto('mur_get_imu_axis', (gen) => {
       return (block) => {
-        let Mode = block.getFieldValue('MODE');
-        const ModesEnum = {
-          IMU_AXIS_YAW: 0,
-          IMU_AXIS_PITCH: 1,
-          IMU_AXIS_ROLL: 2,
-        };
-        Mode = ModesEnum[Mode];
-        return [`mur.get_imu_axis(${Mode})`, Blockly.JavaScript.ORDER_NONE];
-        // return makeFunc(gen, 'mur.get_imu_tap()')
+        const mode = block.getFieldValue('MODE');
+        const axis = ImuAxesModes[mode];
+        return [`mur.get_imu_axis(${axis})`, Blockly.JavaScript.ORDER_NONE];
       };
     });
 
@@ -631,8 +623,8 @@ await mur.h(_threadId, null);
 
     register_proto('mur_wait_imu_tap', (gen) => {
       return (block) => {
-        const Mode = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE' ? 1 : 0;
-        return makeFunc(gen, `while (!mur.get_imu_tap(${Mode})) {await mur.delay(50);}`);
+        const isDouble = block.getFieldValue('MODE') == 'IMU_TAP_DOUBLE';
+        return makeFunc(gen, `while (!mur.get_imu_tap(${isDouble})) {await mur.delay(50);}`);
       };
     });
 

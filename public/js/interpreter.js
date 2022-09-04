@@ -219,8 +219,8 @@ const mur = {
     return 0.0;
   },
 
-  get_imu_tap: function(mode) {
-    return Boolean(mode == 1 ? telemetry.feedback.imuDoubleTap : telemetry.feedback.imuTap);
+  get_imu_tap: function(isDouble) {
+    return Boolean(isDouble ? telemetry.feedback.imuDoubleTap : telemetry.feedback.imuTap);
   },
 
   get_color_status: function(mode) {
