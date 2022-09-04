@@ -226,7 +226,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   updatePuzzleIcon(forced = false) {
-    if (this.scriptStatus !== 'running') {
+    if (this.scriptStatus === 'stopped') {
       const autosavedLongAgo = (Date.now() - ProjectsStorage.projects.autosaved.date) > 2000;
       const autosaved = ProjectsStorage.projects.current.autosaved;
 
