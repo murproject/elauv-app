@@ -54,7 +54,14 @@ function packFixed(value, precision = 0.01) {
   return Math.round(value * (1.0 / precision));
 }
 
-/* Bitmasks */
+/* Enums, bitmasks */
+
+const motorIndexMask = {
+  hl: 1 << 0,
+  hr: 1 << 1,
+  vf: 1 << 2,
+  vb: 1 << 3,
+};
 
 const regulatorsMask = {
   yaw:        1 << 0,
@@ -82,6 +89,10 @@ export default {
   parsers: {},
 
   /* Enums, structs, utils */
+
+  motorIndexMask: motorIndexMask,
+  regulatorsMask: regulatorsMask,
+  feedbackMask: feedbackMask,
 
   imuActions: {
     UpdateSettings: 0,

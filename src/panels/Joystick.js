@@ -1,17 +1,28 @@
-/* eslint-disable prefer-const */
 import nipplejs from 'nipplejs';
 
-import Panel from './Panel';
-import mur from '../vehicle/api.js';
-import protocol from '../vehicle/protocol';
+import mur from '/src/vehicle/api.js';
+import protocol from '/src/vehicle/protocol';
 
-import VizAuv from '/src/panels/VizAuv.js';
+import App from '/src/App';
+import Panel from './Panel';
 import SettingsStorage from '/src/utils/SettingsStorage';
 import Button from '/src/components/Button.js';
-import App from '../App';
+import VizAuv from '/src/panels/VizAuv.js';
+
+/* Math utils */
 
 function clamp(value, min, max) {
   return Math.min(Math.max(min, Math.round(value)), max);
+}
+
+function clampPower(value) {
+  const maxPower = 100;
+  return clamp(value, -maxPower, maxPower);
+}
+
+function limitAxis(val) {
+  const threshold = 10;
+  return Math.abs(val) >= threshold ? val : 0.0;
 }
 
 function calcRowOpacity(value) {
@@ -19,26 +30,13 @@ function calcRowOpacity(value) {
   return (value > 0 ? value + 50 : 30);
 }
 
-// TODO: remove formula!!
+function toNum(value) {
+  return typeof(value) !== 'number' || value === NaN ? 0 : value;
+}
 
-const axesFormulaDefault = `max_power = 100
-threshold = 10
+/* Context for 3D model of vehicle */
 
-x = limit(x)
-y = limit(y)
-z = limit(z)
-
-a = + x + y
-b = - x + y
-c = + z
-d = + z
-
-// x = yaw
-// y = forward
-// z = depth
-`;
-
-let contextVizAuv = {
+const contextVizAuv = {
   motors: {
     hl: 0,
     hr: 0,
@@ -67,10 +65,6 @@ let contextVizAuv = {
   ],
 };
 
-function toNum(value) {
-  return typeof(value) !== 'number' || value === NaN ? 0 : value;
-}
-
 export default class Joystick extends Panel {
   begin() {
     this.name = 'Телеуправление';
@@ -81,7 +75,7 @@ export default class Joystick extends Panel {
           <textarea id="axesFormula" spellcheck="false" class="hidden"
                     rows="15" cols="20" name="text" style="margin-right: 1em; width: 48%;">
           </textarea>
-          <div id="formulaStatus" class="margin-auto width-fill"></div>
+          <div id="thrusters-speed-feedback" class="margin-auto width-fill"></div>
         </div>
 
         <div class="vertical-filler"></div>
@@ -100,7 +94,6 @@ export default class Joystick extends Panel {
     `;
   }
 
-
   init() {
     this.setIcon('gamepad');
 
@@ -111,10 +104,7 @@ export default class Joystick extends Panel {
       vertical: 0,
     };
 
-    this.formulaStatusText = this.q('#formulaStatus');
-    this.formulaInput = this.q('#axesFormula');
-    this.formulaInput.value = axesFormulaDefault;
-
+    this.speedFeedbackEl = this.q('#thrusters-speed-feedback');
     this.updateTimer = this.setInterval(this.update, 100);
 
     this.solenoidButton = new Button({
@@ -155,78 +145,6 @@ export default class Joystick extends Panel {
     this.q('#nipples-container').classList.toggle('opacity-0', blockControls);
     this.q('#solenoid-button-row').classList.toggle('disabled', blockControls);
     this.q('#solenoid-button-row').classList.toggle('opacity-0', blockControls);
-  }
-
-  updateVizAuvContext() {
-    if ('direct_power' in mur.context) {
-      contextVizAuv.motors.hl = toNum(mur.context.direct_power[0]);
-      contextVizAuv.motors.hr = toNum(mur.context.direct_power[1]);
-      contextVizAuv.motors.vf = toNum(mur.context.direct_power[2]);
-      contextVizAuv.motors.vb = toNum(mur.context.direct_power[3]);
-
-      let speed_yaw = mur.context.axes_speed[0];
-      const speed_forward = mur.context.axes_speed[1];
-      const speed_vertical = mur.context.axes_speed[2];
-
-      if (Boolean(mur.context.axes_regulators & (1 << 0))) {
-        speed_yaw = 0;
-      }
-
-      if (!Boolean(mur.context.direct_mode & (1 << 0))) { // TODO: use named bit masks
-        contextVizAuv.auto_axes.hl = true;
-        contextVizAuv.motors.hl = clamp(+ speed_yaw + speed_forward, -100, 100);
-      } else {
-        contextVizAuv.auto_axes.hl = false;
-      }
-
-      if (!Boolean(mur.context.direct_mode & (1 << 1))) {
-        contextVizAuv.auto_axes.hr = true;
-        contextVizAuv.motors.hr = clamp(- speed_yaw + speed_forward, -100, 100);
-      } else {
-        contextVizAuv.auto_axes.hr = false;
-      }
-
-      if (!Boolean(mur.context.direct_mode & (1 << 2))) {
-        contextVizAuv.auto_axes.vf = true;
-        contextVizAuv.motors.vf = clamp(+ speed_vertical, -100, 100);
-      } else {
-        contextVizAuv.auto_axes.vf = false;
-      }
-
-      if (!Boolean(mur.context.direct_mode & (1 << 3))) {
-        contextVizAuv.auto_axes.vb = true;
-        contextVizAuv.motors.vb = clamp(+ speed_vertical, -100, 100);
-      } else {
-        contextVizAuv.auto_axes.vb = false;
-      }
-
-      if (Boolean(mur.context.axes_regulators & (1 << 0)) && 'motorsPower' in mur.telemetry) {
-        contextVizAuv.motors.hl = toNum(mur.telemetry.motorsPower[0]);
-        contextVizAuv.motors.hr = toNum(mur.telemetry.motorsPower[1]);
-      }
-
-      if (App.panels.blockly.scriptStatus === 'running') {
-        contextVizAuv.leds[0] = [mur.context.leds[0 * 3 + 0], mur.context.leds[0 * 3 + 1], mur.context.leds[0 * 3 + 0 + 2]];
-        contextVizAuv.leds[1] = [mur.context.leds[1 * 3 + 0], mur.context.leds[1 * 3 + 1], mur.context.leds[1 * 3 + 0 + 2]];
-        contextVizAuv.leds[2] = [mur.context.leds[2 * 3 + 0], mur.context.leds[2 * 3 + 1], mur.context.leds[2 * 3 + 0 + 2]];
-        contextVizAuv.leds[3] = [mur.context.leds[3 * 3 + 0], mur.context.leds[3 * 3 + 1], mur.context.leds[3 * 3 + 0 + 2]];
-      } else {
-        contextVizAuv.leds[0] = [0, contextVizAuv.motors.vf > 0 ? 0 : contextVizAuv.motors.vf * 2.55, contextVizAuv.motors.vf < 0 ? 0 : contextVizAuv.motors.vf * 2.55];
-        contextVizAuv.leds[1] = [0, contextVizAuv.motors.hr > 0 ? 0 : contextVizAuv.motors.hr * 2.55, contextVizAuv.motors.hr < 0 ? 0 : contextVizAuv.motors.hr * 2.55];
-        contextVizAuv.leds[2] = [0, contextVizAuv.motors.hl > 0 ? 0 : contextVizAuv.motors.hl * 2.55, contextVizAuv.motors.hl < 0 ? 0 : contextVizAuv.motors.hl * 2.55];
-        contextVizAuv.leds[3] = [0, contextVizAuv.motors.vb > 0 ? 0 : contextVizAuv.motors.vb * 2.55, contextVizAuv.motors.vb < 0 ? 0 : contextVizAuv.motors.vb * 2.55];
-      }
-    }
-
-    if ('imuYaw' in mur.telemetry) {
-      contextVizAuv.rot.yaw = mur.telemetry.imuYaw;
-      contextVizAuv.rot.pitch = mur.telemetry.imuPitch;
-      contextVizAuv.rot.roll = mur.telemetry.imuRoll;
-    }
-
-    if (this.vizauv) {
-      this.vizauv.updContext(contextVizAuv);
-    }
   }
 
 
@@ -279,53 +197,15 @@ export default class Joystick extends Panel {
   }
 
 
-  computePowers() { // TODO: use fixed (predefined) formula
-    let max_power = 0;
+  computePowers() {
+    const yaw = limitAxis(this.axes.yaw);
+    const forward = limitAxis(this.axes.forward);
+    const depth = limitAxis(this.axes.vertical);
 
-    let yaw = this.axes.yaw;
-    let forward = this.axes.forward;
-    let depth = this.axes.vertical;
-
-    /* short aliases for axes */
-    let x = yaw;
-    let y = forward;
-    let z = depth;
-
-    let a = 0;
-    let b = 0;
-    let c = 0;
-    let d = 0;
-
-    let threshold = 0;
-
-    function limit(val) {
-      return Math.abs(val) >= threshold ? val : 0.0;
-    }
-
-    let axisFormulaOk = false;
-
-    try {
-      eval(this.formulaInput.value);
-      axisFormulaOk = true;
-    } catch (e) {
-      a = 0;
-      b = 0;
-      c = 0;
-      d = 0;
-      axisFormulaOk = false;
-    }
-
-    a = a / 100 * max_power;
-    b = b / 100 * max_power;
-    c = c / 100 * max_power;
-    d = d / 100 * max_power;
-
-    max_power = Math.min(max_power, 100);
-
-    a = clamp(a, -max_power, max_power);
-    b = clamp(b, -max_power, max_power);
-    c = clamp(c, -max_power, max_power);
-    d = clamp(d, -max_power, max_power);
+    const a = clampPower(+ yaw + forward);
+    const b = clampPower(- yaw + forward);
+    const c = clampPower(+ depth);
+    const d = clampPower(+ depth);
 
     const pretty = {
       a: String(contextVizAuv.motors.hl),
@@ -334,7 +214,7 @@ export default class Joystick extends Panel {
       d: String(contextVizAuv.motors.vb),
     };
 
-    this.q('#formulaStatus').innerHTML =/*html*/`
+    this.speedFeedbackEl.innerHTML = /*html*/`
       <h3 class="normal">Тяга на<br>движителях:</h3>
 
       <div class="display-flex width-fill">
@@ -363,7 +243,6 @@ export default class Joystick extends Panel {
     `;
 
     return {
-      axes: {x: x, y: y, z: z},
       motors: [a, b, c, d],
     };
   }
@@ -386,8 +265,6 @@ export default class Joystick extends Panel {
 
       const solenoidPower = this.solenoidTriggered ? 100 : 0;
 
-      // TODO: use axes_speed instead of "manual" calculating
-
       const data = {
         direct_power: [
           powers.motors[0],
@@ -395,14 +272,14 @@ export default class Joystick extends Panel {
           powers.motors[2],
           powers.motors[3],
         ],
-        direct_mode: true ? 0b00001111 : 0b00000000,
+        direct_mode: 0b00001111,
         axes_speed: [
-          powers.axes.x,
-          powers.axes.y,
-          powers.axes.z,
+          0,
+          0,
+          0,
           0,
         ],
-        axes_regulators: regs.pack(), // TODO
+        axes_regulators: regs.pack(),
         target_yaw: 0,
         actuator_power: [solenoidPower, 0],
         leds: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -412,10 +289,12 @@ export default class Joystick extends Panel {
     }
   }
 
+
   triggerSolenoid() {
     this.solenoidTriggered = !this.solenoidTriggered;
     this.updateSolenoidButton();
   }
+
 
   updateSolenoidButton() {
     if (!this.active) {
@@ -438,5 +317,102 @@ export default class Joystick extends Panel {
       this.solenoidTriggered || relaxing ? 'magnet-off' : 'magnet-on',
       this.solenoidTriggered ? 'orange' : 'cyan',
     );
+  }
+
+
+  checkDirectMode(motorBitmask) {
+    return Boolean(mur.context.direct_mode & motorBitmask);
+  }
+
+
+  getLedColor(index) {
+    return [
+      mur.context.leds[index * 3 + 0],
+      mur.context.leds[index * 3 + 1],
+      mur.context.leds[index * 3 + 0 + 2],
+    ];
+  }
+
+
+  makeLedMotorFeedback(power) {
+    return [
+      0,
+      power > 0 ? 0 : power * 2.55,
+      power < 0 ? 0 : power * 2.55,
+    ];
+  }
+
+
+  updateVizAuvContext() {
+    if ('direct_power' in mur.context) {
+      contextVizAuv.motors.hl = toNum(mur.context.direct_power[0]);
+      contextVizAuv.motors.hr = toNum(mur.context.direct_power[1]);
+      contextVizAuv.motors.vf = toNum(mur.context.direct_power[2]);
+      contextVizAuv.motors.vb = toNum(mur.context.direct_power[3]);
+
+      contextVizAuv.auto_axes.hl = false;
+      contextVizAuv.auto_axes.hr = false;
+      contextVizAuv.auto_axes.vf = false;
+      contextVizAuv.auto_axes.vb = false;
+
+      let speedYaw = mur.context.axes_speed[0];
+      const speedForward = mur.context.axes_speed[1];
+      const speedVertical = mur.context.axes_speed[2];
+      const isYawRegulatorActive = Boolean(mur.context.axes_regulators & protocol.regulatorsMask.yaw);
+
+      if (isYawRegulatorActive) {
+        /* Yaw axis speed is used for P coefficient of PID regulator when regualtor is active */
+        speedYaw = 0;
+      }
+
+      /* Calculate powers for motors in auto speed axis mode (not direct mode) */
+
+      if (!this.checkDirectMode(protocol.motorIndexMask.hl)) {
+        contextVizAuv.auto_axes.hl = true;
+        contextVizAuv.motors.hl = clampPower(+ speedYaw + speedForward);
+      }
+
+      if (!this.checkDirectMode(protocol.motorIndexMask.hr)) {
+        contextVizAuv.auto_axes.hr = true;
+        contextVizAuv.motors.hr = clampPower(- speedYaw + speedForward);
+      }
+
+      if (!this.checkDirectMode(protocol.motorIndexMask.vf)) {
+        contextVizAuv.auto_axes.vf = true;
+        contextVizAuv.motors.vf = clampPower(+ speedVertical);
+      }
+
+      if (!this.checkDirectMode(protocol.motorIndexMask.vb)) {
+        contextVizAuv.auto_axes.vb = true;
+        contextVizAuv.motors.vb = clampPower(+ speedVertical);
+      }
+
+      if (isYawRegulatorActive && 'motorsPower' in mur.telemetry) {
+        /* Use motors power feedback from vehicle if yaw regulator is active and telemetry is available */
+        contextVizAuv.motors.hl = toNum(mur.telemetry.motorsPower[0]);
+        contextVizAuv.motors.hr = toNum(mur.telemetry.motorsPower[1]);
+      }
+
+      if (App.panels.blockly.scriptStatus === 'running') {
+        for (let led = 0; led < 4; led++) {
+          contextVizAuv.leds[led] = this.getLedColor(led);
+        }
+      } else {
+        contextVizAuv.leds[0] = this.makeLedMotorFeedback(contextVizAuv.motors.vf);
+        contextVizAuv.leds[1] = this.makeLedMotorFeedback(contextVizAuv.motors.hr);
+        contextVizAuv.leds[2] = this.makeLedMotorFeedback(contextVizAuv.motors.hl);
+        contextVizAuv.leds[3] = this.makeLedMotorFeedback(contextVizAuv.motors.vb);
+      }
+    }
+
+    if ('imuYaw' in mur.telemetry) {
+      contextVizAuv.rot.yaw = mur.telemetry.imuYaw;
+      contextVizAuv.rot.pitch = mur.telemetry.imuPitch;
+      contextVizAuv.rot.roll = mur.telemetry.imuRoll;
+    }
+
+    if (this.vizauv) {
+      this.vizauv.updContext(contextVizAuv);
+    }
   }
 }
