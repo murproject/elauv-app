@@ -254,7 +254,7 @@ export default class BlocklyPanel extends Panel {
     } else if (this.scriptStatus == 'stopped') {
       this.setLoading(true, 0);
       this.autoSave(true);
-      setTimeout(() => this.run_js(), 100);
+      setTimeout(() => this.runScript(), 100);
     }
 
     App.bottomPanelSetHidden(false);
@@ -367,11 +367,20 @@ export default class BlocklyPanel extends Panel {
     mur.controlContext(contextParams);
   }
 
-  run_js() {
+  runScript() {
     if (this.scriptStatus !== 'stopped') {
       return;
     }
 
+    try {
+      this.executeScript();
+    } catch (err) {
+      this.scriptStatus = 'running';
+      this.stop();
+    }
+  }
+
+  executeScript() {
     this.scriptStatus = 'preparing';
 
     this.setIcon('cog', 'blue-dark anim-spin');
