@@ -35,7 +35,7 @@ Ru['PASTE_ALL_FROM_BACKPACK'] = 'Вставить всё из рюкзака';
 Ru['REMOVE_FROM_BACKPACK'] = 'Удалить из рюкзака';
 
 /* Fixes crash: https://github.com/google/blockly/pull/6211 */
-/* Should update Blockly to new version when patch will be included to stable release */
+/* Should update Blockly to new version when patch will be merged to stable release */
 
 Blockly.blockRendering.InputRow.prototype.measure = function() {
   const InputConnection = Blockly.blockRendering.InputConnection;

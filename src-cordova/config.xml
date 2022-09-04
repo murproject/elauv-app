@@ -2,7 +2,7 @@
 <widget id="org.robocenter.elementaryauv" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ElementaryAUV</name>
     <description>Companion app for ElementaryAUV underwater vehicle</description>
-    <author email="support@murproject.com" href="https://murproject.com">
+    <author email="support@murproject.com" href="https://murproject.com/elauv">
         ООО "Центр робототехники", г. Владивосток.
     </author>
 

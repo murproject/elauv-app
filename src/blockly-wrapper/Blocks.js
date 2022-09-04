@@ -326,7 +326,7 @@ await mur.h(_threadId, null);
       },
     };
 
-    const MotorsIndex = { // ODO: move to enum
+    const MotorsIndex = { // TODO: move to enum
       'MOTOR_A': 0,
       'MOTOR_B': 1,
       'MOTOR_C': 2,
@@ -753,10 +753,7 @@ await mur.h(_threadId, null);
       this.setOnChange(function(changeEvent) {
         try {
           this.setIconLight();
-        } catch (err) {
-          console.warn(err);
-          console.warn(this);
-        }
+        } catch (err) { }
       });
     });
 

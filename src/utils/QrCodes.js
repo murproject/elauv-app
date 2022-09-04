@@ -1,15 +1,15 @@
-let barcodeScanner = null;
-
-if (typeof cordova !== 'undefined') {
-  barcodeScanner = require('cordova-plugin-qr-barcode-scanner/www/barcodescanner');
-}
-
 import crc32 from 'crc-32';
 import api from '/src/vehicle/api';
 import App from '/src/App';
 import GlobalDialog from '/src/components/GlobalDialog';
 import Button from '/src/components/Button';
 import AppVersion from '/src/utils/AppVersion';
+
+let barcodeScanner = null;
+
+if (typeof cordova !== 'undefined') {
+  barcodeScanner = require('cordova-plugin-qr-barcode-scanner/www/barcodescanner');
+}
 
 const versionError = 'Too new version';
 

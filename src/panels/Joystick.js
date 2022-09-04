@@ -38,8 +38,6 @@ d = + z
 // z = depth
 `;
 
-const nippleConfig = {};
-
 let contextVizAuv = {
   motors: {
     hl: 0,
@@ -93,8 +91,8 @@ export default class Joystick extends Panel {
         <div class="vertical-filler"></div>
 
         <div id="nipples-container" class="row justify-content-center joystick-outer-margin">
-          <div class="nipple-wrapper" id="nipple0"></div>
-          <div class="nipple-wrapper" id="nipple1"></div>
+          <div class="nipple-wrapper" id="nipple-left"></div>
+          <div class="nipple-wrapper" id="nipple-right"></div>
         </div>
 
         <div id='solenoid-button-row' class="row buttons-collapsed"></div>
@@ -238,8 +236,8 @@ export default class Joystick extends Panel {
 
 
   initNipples() {
-    this.nipple0 = nipplejs.create({
-      zone: this.q('#nipple0'),
+    this.nippleleft = nipplejs.create({
+      zone: this.q('#nipple-left'),
       mode: 'static',
       position: {left: '50%', top: '50%'},
       color: '#006688',
@@ -248,8 +246,8 @@ export default class Joystick extends Panel {
 
     });
 
-    this.nipple1 = nipplejs.create({
-      zone: this.q('#nipple1'),
+    this.nippleright = nipplejs.create({
+      zone: this.q('#nipple-right'),
       mode: 'static',
       position: {left: '50%', top: '50%'},
       color: '#006688',
@@ -259,22 +257,22 @@ export default class Joystick extends Panel {
 
     });
 
-    this.nipple0.on('move', (evt, data) => {
+    this.nippleleft.on('move', (evt, data) => {
       this.axes.yaw = this.normalizeAxis(data.vector.x);
       this.axes.forward = this.normalizeAxis(data.vector.y);
     });
 
-    this.nipple1.on('move', (evt, data) => {
+    this.nippleright.on('move', (evt, data) => {
       this.axes.side = this.normalizeAxis(data.vector.x);
       this.axes.vertical = this.normalizeAxis(data.vector.y);
     });
 
-    this.nipple0.on('end', (evt) => {
+    this.nippleleft.on('end', (evt) => {
       this.axes.yaw = 0;
       this.axes.forward = 0;
     });
 
-    this.nipple1.on('end', (evt) => {
+    this.nippleright.on('end', (evt) => {
       this.axes.side = 0;
       this.axes.vertical = 0;
     });

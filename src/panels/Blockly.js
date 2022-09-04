@@ -2,14 +2,14 @@
 import * as Blockly from 'blockly/core';
 import * as Ru from 'blockly/msg/ru';
 
-import * as Backpack from '../blockly-wrapper/workspace-backpack/src';
+import * as Backpack from '/src/blockly-wrapper/workspace-backpack/src';
 import '/src/blockly-wrapper/BlocklyStyle';
+import MurToolbox from '/src/blockly-wrapper/Toolbox';
 
-import mur from '../vehicle/api';
-import MurToolbox from '../blockly-wrapper/Toolbox';
-import ProjectsStorage from '/src/utils/ProjectsStorage';
+import mur from '/src/vehicle/api';
 import App from '/src/App.js';
-import Panel from './Panel';
+import ProjectsStorage from '/src/utils/ProjectsStorage';
+import Panel from '/src/panels/Panel';
 import Button from '/src/components/Button';
 
 const blocklyConfig = {
@@ -46,7 +46,7 @@ export default class BlocklyPanel extends Panel {
     if (this.toolButtons) {
       if (this.active) {
         this.toolButtons.classList.remove('hidden');
-        document.querySelector('#flying-panel-wrapper').classList.toggle('hidden', this.scriptStatus !== 'running');
+        document.querySelector('#flying-panel-wrapper').classList.toggle('hidden', this.scriptStatus !== 'running'); // TODO //
       } else {
         this.toolButtons.classList.add('hidden');
         if (this.workspace) {
@@ -241,7 +241,7 @@ export default class BlocklyPanel extends Panel {
     }
   }
 
-  generate_code(workspace) { // TODO: naming consistence
+  generateCode(workspace) {
     Blockly.JavaScript.STATEMENT_PREFIX = 'await mur.h(_threadId, %1);\n';
     return Blockly.JavaScript.workspaceToCode(workspace);
   }
@@ -383,9 +383,9 @@ export default class BlocklyPanel extends Panel {
     mur.controlImuResetYaw();
     setTimeout(() => this.resetContext(0), 0);
     setTimeout(() => this.resetContext(50), 150);
-    setTimeout(() => this.resetContext(0), 700);
+    setTimeout(() => this.resetContext(0), 450);
 
-    this.code = this.generate_code(this.workspace);
+    this.code = this.generateCode(this.workspace);
 
     this.reinject(true);
 
@@ -408,16 +408,15 @@ export default class BlocklyPanel extends Panel {
     const topBlocks = blocks.slice(); // Create shallow copy.
     blocks.length = 0;
 
-    // Load each block structure into the workspace individually and generate code.
+    // Load each block structure into the headless workspace individually and generate code.
     const allCode = [];
     this.allRootBlocks = [];
-
     const headless = new Blockly.Workspace();
 
     topBlocks.forEach((block) => {
       this.allRootBlocks.push(block);
       Blockly.serialization.workspaces.load(json, headless);
-      allCode.push(this.generate_code(headless));
+      allCode.push(this.generateCode(headless));
     });
 
     this.executionCursors = {};
@@ -468,10 +467,10 @@ export default class BlocklyPanel extends Panel {
       this.scriptStatus = 'running';
       this.scriptWorker.postMessage({
         type: 'run',
-        script: this.code, // TODO: don't use array?
+        script: this.code,
         threads: threadsList,
       });
-    }, 1000);
+    }, 750);
   }
 
   updateTelemetry(telemetry) {
@@ -562,46 +561,50 @@ export default class BlocklyPanel extends Panel {
     });
 
     if (!readonly) {
-      this.backpack = new Backpack.Backpack(this.workspace);
-
-      this.backpack.shouldPreventMove = () => false;
-
-      this.backpack.onDropOriginal = this.backpack.onDrop;
-      this.backpack.onDrop = (block) => {
-        this.backpack.onDropOriginal(block);
-
-        setTimeout(() => {
-          const undoStack = this.workspace.getUndoStack();
-          if (undoStack.length > 0 && undoStack[undoStack.length - 1].type != 'create') {
-            this.workspace.undo();
-          } else {
-            const blockSize = block.getHeightWidth();
-            block.moveBy(-blockSize.width, 0);
-          }
-        }, 150);
-
-        const backpackEl = document.getElementsByClassName('blocklyBackpack')[0];
-        setTimeout(() => backpackEl.classList.add('bounce-once'), 200);
-        setTimeout(() => backpackEl.classList.remove('bounce-once'), 1000);
-      };
-
-      this.backpackEmptyNotify = document.createElement('div');
-      this.backpackEmptyNotify.classList.add('backpack-empty-notify');
-      this.backpackEmptyNotify.classList.add('hidden');
-      this.backpackEmptyNotify.innerHTML = /*html*/`
-        Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>
-        использовать их в других проектах!
-      `;
-
-      this.backpack.initFlyoutOriginal = this.backpack.initFlyout_;
-      this.backpack.initFlyout_ = () => {
-        this.backpack.initFlyoutOriginal();
-        this.backpack.flyout_.svgGroup_.parentElement.appendChild(this.backpackEmptyNotify);
-      };
-
-      this.backpack.init();
-      this.backpack.setContents(ProjectsStorage.projects.backpack);
+      this.initBackpack();
     }
+  }
+
+  initBackpack() {
+    this.backpack = new Backpack.Backpack(this.workspace);
+
+    this.backpack.shouldPreventMove = () => false;
+
+    this.backpack.onDropOriginal = this.backpack.onDrop;
+    this.backpack.onDrop = (block) => {
+      this.backpack.onDropOriginal(block);
+
+      setTimeout(() => {
+        const undoStack = this.workspace.getUndoStack();
+        if (undoStack.length > 0 && undoStack[undoStack.length - 1].type != 'create') {
+          this.workspace.undo();
+        } else {
+          const blockSize = block.getHeightWidth();
+          block.moveBy(-blockSize.width, 0);
+        }
+      }, 150);
+
+      const backpackEl = document.getElementsByClassName('blocklyBackpack')[0];
+      setTimeout(() => backpackEl.classList.add('bounce-once'), 200);
+      setTimeout(() => backpackEl.classList.remove('bounce-once'), 1000);
+    };
+
+    this.backpackEmptyNotify = document.createElement('div');
+    this.backpackEmptyNotify.classList.add('backpack-empty-notify');
+    this.backpackEmptyNotify.classList.add('hidden');
+    this.backpackEmptyNotify.innerHTML = /*html*/`
+      Добавляйте блоки в <b>рюкзак</b>, чтобы потом<br>
+      использовать их в других проектах!
+    `;
+
+    this.backpack.initFlyoutOriginal = this.backpack.initFlyout_;
+    this.backpack.initFlyout_ = () => {
+      this.backpack.initFlyoutOriginal();
+      this.backpack.flyout_.svgGroup_.parentElement.appendChild(this.backpackEmptyNotify);
+    };
+
+    this.backpack.init();
+    this.backpack.setContents(ProjectsStorage.projects.backpack);
   }
 
   workerMsgHandler(e) {
