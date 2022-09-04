@@ -143,7 +143,7 @@ Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
 };
 
 /* Modify math blocks */
-// TODO: use settings to enable/disable extended math
+// TODO: use extended math setting
 
 Blockly.Blocks['math_number_property'] = {
   init: function() {

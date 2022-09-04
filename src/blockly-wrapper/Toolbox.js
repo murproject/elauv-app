@@ -183,7 +183,7 @@ const CategoryMath = makeCategory(
         type: 'mur_angle_norm',
       },
 
-      // TODO: use settings to enable/disable extended math
+      // TODO: use extended math setting
       // { kind: 'block', type: 'math_trig' },
       // { kind: 'block', type: 'math_constant' },
       // { kind: 'block', type: 'math_round' },

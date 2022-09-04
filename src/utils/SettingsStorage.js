@@ -6,7 +6,7 @@ export default {
     /* General */
     vibrateOnTap: true,
     enableVizAuv: true,
-    extendedMath: false, // TODO: setting is unimplemented
+    extendedMath: false, // TODO: use extended math setting (setting is unimplemented)
     extendedTelemetry: false,
   },
 

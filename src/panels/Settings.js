@@ -59,7 +59,7 @@ export default class Settings extends Panel {
         icon: 'rotate-3d',
         setting: 'enableVizAuv',
       },
-      // TODO: extended math setting
+      // TODO: use extended math setting
       // {
       //   text: 'Расширенные блоки математики',
       //   icon: 'square-root',
