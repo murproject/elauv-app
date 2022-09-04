@@ -375,6 +375,8 @@ export default class BlocklyPanel extends Panel {
     try {
       this.executeScript();
     } catch (err) {
+      console.error('Failed to run user script!');
+      console.error(err);
       this.scriptStatus = 'running';
       this.stop();
     }
