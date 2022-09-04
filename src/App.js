@@ -21,7 +21,6 @@ export default {
           <span id="main-titlebar-caption"></span>
         </div>
       </div>
-
     </header>
 
     <section id="main-panel-wrapper">
@@ -125,6 +124,7 @@ export default {
     this.container.innerHTML = this.html;
 
     this.loadingWrapper = document.querySelector('#loading-wrapper');
+    this.feedbackWrapper = document.querySelector('#feedback-wrapper');
     this.titleBar = document.querySelector('#main-titlebar-caption');
 
     this.createPanels();
@@ -149,22 +149,12 @@ export default {
       TelemetryUtils.update();
       this.panels.devices.onStatusUpdated(status);
 
-      if (this.oldStatus == status) {
-        return;
-      }
+      if (this.oldConnectionStatus != status) {
+        this.oldConnectionStatus = status;
 
-      this.oldStatus = status;
-
-      const fw = document.querySelector('#feedback-wrapper');
-
-      if (status == 'open') {
-        fw.classList.add('background-soft-green');
-        fw.classList.add('background-pulse');
-
-        setTimeout(() => {
-          fw.classList.remove('background-soft-green');
-          fw.classList.remove('background-pulse');
-        }, 2500);
+        if (status == 'open') {
+          this.triggerBackgroundFeedback();
+        }
       }
     };
 
@@ -175,6 +165,15 @@ export default {
     mur.onDiagnosticLogReceived = (info) => {
       this.panels.settings.onDiagnosticLogReceived(info);
     };
+  },
+
+  triggerBackgroundFeedback(activate = true) {
+    this.feedbackWrapper.classList.toggle('background-soft-green', activate);
+    this.feedbackWrapper.classList.toggle('background-pulse', activate);
+
+    if (activate) {
+      setTimeout(() => this.triggerBackgroundFeedback(false), 2500);
+    }
   },
 
   showGlobalDialog(dialog) {
