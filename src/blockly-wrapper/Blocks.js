@@ -401,7 +401,7 @@ await mur.h(_threadId, null);
     register_proto('mur_set_axis', (gen) => {
       return (block) => {
         const mode = block.getFieldValue('MODE');
-        const index = SpeedAxesModes(mode);
+        const index = SpeedAxesModes[mode];
         const power = calcVal(gen, block, 'Power');
         return makeFunc(gen, `mur.set_axis(${index}, ${power})`);
       };
