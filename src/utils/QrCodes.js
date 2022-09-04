@@ -23,7 +23,7 @@ export default class QrCodes {
         (result) => this.processCode(result),
         null,
         {
-          showTorchButton: false,
+          showTorchButton: true,
           torchOn: false,
           prompt: 'Наведите камеру на код',
           resultDisplayDuration: 0,
