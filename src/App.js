@@ -28,15 +28,15 @@ export default {
       <div id="loading-wrapper" class="loading-wrapper"></div>
     </section>
 
-    <section id="global-wrapper" class="">
-      <div class="global-wrapper-background"></div>
-      <div id="global-wrapper-content"></div>
+    <section id="global-dialog-wrapper" class="">
+      <div class="global-dialog-wrapper-background"></div>
+      <div id="global-dialog-wrapper-content"></div>
     </section>
 
-    <div id="flying-panel-wrapper" class="bottom-collapsed">
-      <div id="bottom-panel-wrapper"></div>
+    <section id="bottom-panel-wrapper" class="bottom-collapsed">
+      <div id="bottom-panel-content"></div>
       <div class="buttons-group" id="buttons-bottom"></div>
-    </div>
+    </section>
   `,
 
   container: document.querySelector('#app'),
@@ -72,25 +72,27 @@ export default {
 
     if (mode === 'bottom') {
       if (this[currentPanel] === target) {
-        // TODO: don't query on each call, should to it better. use classList.toggle
         this[currentPanel] = null;
-        document.querySelector('#flying-panel-wrapper').classList.add('bottom-collapsed');
+        this.bottomPanelSetCollapsed(true);
         return;
       } else {
-        document.querySelector('#flying-panel-wrapper').classList.remove('bottom-collapsed');
+        this.bottomPanelSetCollapsed(false);
       }
     } else {
-      if (target === this.panels.blockly) {
-        document.querySelector('#flying-panel-wrapper').classList.remove('hidden');
-      } else {
-        document.querySelector('#flying-panel-wrapper').classList.add('hidden');
-      }
+      this.bottomPanelSetHidden(target !== this.panels.blockly);
     }
 
     this[currentPanel] = target;
     this[currentPanel].setActive(true);
   },
 
+  bottomPanelSetCollapsed(collapsed = true) {
+    this.bottomPanelWrapper.classList.toggle('bottom-collapsed', collapsed);
+  },
+
+  bottomPanelSetHidden(hidden = true) {
+    this.bottomPanelWrapper.classList.toggle('hidden', hidden);
+  },
 
   createPanels: function() {
     if (this.panels.length > 0) {
@@ -122,15 +124,26 @@ export default {
 
     // this.preloadIcons();
     this.container.innerHTML = this.html;
-
-    this.loadingWrapper = document.querySelector('#loading-wrapper');
-    this.feedbackWrapper = document.querySelector('#feedback-wrapper');
-    this.titleBar = document.querySelector('#main-titlebar-caption');
-
+    this.setupWrappers();
     this.createPanels();
     mur.create();
     this.setupEvents();
     TelemetryUtils.start();
+  },
+
+  setupWrappers() {
+    const wrappers = {
+      'loadingWrapper': '#loading-wrapper',
+      'feedbackWrapper': '#feedback-wrapper',
+      'titleBar': '#main-titlebar-caption',
+      'globalDialogWrapper': '#global-dialog-wrapper',
+      'globalDialogWrapperContent': '#global-dialog-wrapper-content',
+      'bottomPanelWrapper': '#bottom-panel-wrapper',
+    };
+
+    for (const [key, id] of Object.entries(wrappers)) {
+      this[key] = document.querySelector(id);
+    }
   },
 
   setupEvents() {
@@ -177,11 +190,10 @@ export default {
   },
 
   showGlobalDialog(dialog) {
-    // TODO: dont'query each time
     if (!this.globalDialogActive) {
       this.globalDialogActive = true;
-      document.querySelector('#global-wrapper').classList.add('active');
-      setTimeout(() => document.querySelector('#global-wrapper-content').appendChild(dialog), 80);
+      this.globalDialogWrapper.classList.add('active');
+      setTimeout(() => this.globalDialogWrapperContent.appendChild(dialog), 80);
     } else {
       console.warn('GlobalDialog is already active!');
     }
@@ -189,8 +201,8 @@ export default {
 
   closeGlobalDialog() {
     this.globalDialogActive = false;
-    document.querySelector('#global-wrapper').classList.remove('active');
-    document.querySelector('#global-wrapper-content').innerText = '';
+    this.globalDialogWrapper.classList.remove('active');
+    this.globalDialogWrapperContent.innerText = '';
   },
 
   setLoading(isLoading, timeout) {

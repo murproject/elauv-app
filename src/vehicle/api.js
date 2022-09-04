@@ -77,8 +77,6 @@ export default {
       }
 
       if ((this.conn.state !== 'open' || ((date - this.lastUpdatedDate) > 5000)) && this.conn.state !== 'connecting' && !this.reconnecting) {
-        // console.warn('Connection lost');
-        // console.warn(`status: ${this.conn.state}, timestamp delta: ${date - this.lastUpdatedDate}, reconn: ${this.reconnecting}`);
         this.connect();
       }
     }, 2500);
@@ -92,7 +90,10 @@ export default {
     switch (message.type) {
       case Protocol.packetTypes.ReplyTelemetry:
         if (message.timestamp < this.telemetry.timestamp) {
-          console.warn('inconsistent timestamps: old is ' + this.telemetry.timestamp + ', and new is ' + message.timestamp);
+          console.warn(
+              'inconsistent timestamps: old is ' + this.telemetry.timestamp +
+              ', and new is ' + message.timestamp,
+          );
         }
 
         this.telemetry = message;

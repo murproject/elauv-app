@@ -79,8 +79,6 @@ export default class Element extends HTMLElement {
   }
 
   static get observedAttributes() {
-    // console.log("observed:")
-    // console.log(this.defaultAttrs)
     return Object.keys(this.defaultAttrs);
   }
 

@@ -1,5 +1,5 @@
 
-#global-wrapper {
+#global-dialog-wrapper {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -11,7 +11,7 @@
   pointer-events: none;
 }
 
-#global-wrapper:before {
+#global-dialog-wrapper:before {
   content: '';
   position: fixed;
   width: 100%;
@@ -27,12 +27,12 @@
       linear-gradient(to right, hsl(200, 100%, 10%), hsl(200, 35%, 45%));
 }
 
-#global-wrapper.active {
+#global-dialog-wrapper.active {
   opacity: 1.0;
   pointer-events: all;
 }
 
-#global-wrapper-content {
+#global-dialog-wrapper-content {
   height: 100%;
   width: 100%;
   display: flex;

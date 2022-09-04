@@ -18,9 +18,13 @@ export default class Panel {
   begin() {}
 
   inject() {
-    const wrapperPrefix = this.isBottomPanel ? 'bottom' : 'main';
-    this.wrapperPanel = document.querySelector(`#${wrapperPrefix}-panel-wrapper`);
-    this.wrapperButtons = document.querySelector(`#buttons-${wrapperPrefix}`);
+    const panelType = this.isBottomPanel ? 'bottom' : 'main';
+
+    this.wrapperPanel = document.querySelector(
+      panelType === 'main' ? '#main-panel-wrapper' : '#bottom-panel-content',
+    );
+
+    this.wrapperButtons = document.querySelector(`#buttons-${panelType}`);
 
     this.container = document.createElement('div');
     this.container.classList.add('panel');

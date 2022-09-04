@@ -46,7 +46,7 @@ export default class BlocklyPanel extends Panel {
     if (this.toolButtons) {
       if (this.active) {
         this.toolButtons.classList.remove('hidden');
-        document.querySelector('#flying-panel-wrapper').classList.toggle('hidden', this.scriptStatus !== 'running'); // TODO //
+        App.bottomPanelSetHidden(this.scriptStatus !== 'running');
       } else {
         this.toolButtons.classList.add('hidden');
         if (this.workspace) {
@@ -257,8 +257,7 @@ export default class BlocklyPanel extends Panel {
       setTimeout(() => this.run_js(), 100);
     }
 
-    // TODO: better interaction with console
-    document.querySelector('#flying-panel-wrapper').classList.remove('hidden'); // TODO //
+    App.bottomPanelSetHidden(false);
   }
 
   stop() {
@@ -267,10 +266,8 @@ export default class BlocklyPanel extends Panel {
     }
 
     this.scriptStatus = 'stopping';
-
-    document.querySelector('#flying-panel-wrapper').classList.add('hidden'); // TODO //
     this.actionButtons.run.setIcon('play', 'blue-dark', 'big');
-
+    App.bottomPanelSetHidden(true);
     App.panels.console.clear();
 
     if (this.scriptWorker) {
