@@ -30,6 +30,8 @@ const packetId = {
   ReplyAllSettings        : 0xC1,
 };
 
+/* Utils (bitwize, math) */
+
 function checkBit(value, mask) {
   return ((value & mask) === mask);
 }
@@ -48,9 +50,11 @@ function clamp(value, maxPower = 100) {
   return Math.min(Math.max(value, -maxPower), maxPower);
 }
 
-function packFloat(value, precision = 0.01) {
+function packFixed(value, precision = 0.01) {
   return Math.round(value * (1.0 / precision));
 }
+
+/* Bitmasks */
 
 const regulatorsMask = {
   yaw:        1 << 0,
@@ -61,8 +65,6 @@ const regulatorsMask = {
 };
 
 const feedbackMask = {
-  // imuTap: 1 << 0,
-  // colorStatus: 1 << 1
   imuTap:           1 << 0,
   imuDoubleTap:     1 << 1,
   imuCalibrating:   1 << 2,
@@ -78,6 +80,8 @@ export default {
   protocol: this,
   packetTypes: packetId,
   parsers: {},
+
+  /* Enums, structs, utils */
 
   imuActions: {
     UpdateSettings: 0,
@@ -156,6 +160,23 @@ export default {
     },
   },
 
+  prettyHex: function(raw, dots = false) {
+    if (!(raw instanceof Uint8Array)) {
+      raw = new Uint8Array(raw);
+    }
+
+    let hexString = Buffer.from(raw).toString('hex').toUpperCase();
+
+    if (dots) {
+      hexString = hexString.replace(/(.{2})/g, '$1:');
+      hexString = hexString.substring(0, hexString.length - 1);
+    }
+
+    return hexString;
+  },
+
+  /* Packet parsing */
+
   splitBufferToPackets: function(buffer) {
     /* split buffer to packets, respecting 2-bytes size header */
     let chunk = buffer;
@@ -209,21 +230,6 @@ export default {
     return result;
   },
 
-  prettyHex: function(raw, dots = false) {
-    if (!(raw instanceof Uint8Array)) {
-      raw = new Uint8Array(raw);
-    }
-
-    let hexString = Buffer.from(raw).toString('hex').toUpperCase();
-
-    if (dots) {
-      hexString = hexString.replace(/(.{2})/g, '$1:');
-      hexString = hexString.substring(0, hexString.length - 1);
-    }
-
-    return hexString;
-  },
-
   fillParsers: function() {
     this.parsers[packetId.ReplyTelemetry] = (p) => this.parseTelemetry(p);
     this.parsers[packetId.ReplyDiagnosticInfo] = (p) => this.parseDiagnosticInfo(p);
@@ -254,7 +260,6 @@ export default {
       motorsPower:  data[15],
     };
 
-    // debug(telemetry)
     return telemetry;
   },
 
@@ -350,7 +355,7 @@ export default {
       data.direct_mode,
       data.axes_speed,
       data.axes_regulators,
-      data.target_yaw !== null ? packFloat(data.target_yaw) : packFloat(0),
+      data.target_yaw !== null ? packFixed(data.target_yaw) : packFixed(0),
       data.actuator_power,
       data.leds,
     ];
@@ -417,11 +422,11 @@ export default {
     const payload = [
       data.motorsPorts,
       data.motorsMultipliers,
-      packFloat(data.motorsOffsetPositive),
-      packFloat(data.motorsOffsetNegative),
-      packFloat(data.yawPidI),
-      packFloat(data.yawPidD),
-      packFloat(data.yawPidStabMaxErr),
+      packFixed(data.motorsOffsetPositive),
+      packFixed(data.motorsOffsetNegative),
+      packFixed(data.yawPidI),
+      packFixed(data.yawPidD),
+      packFixed(data.yawPidStabMaxErr),
       data.yawPidStabWaitMs,
     ];
 
@@ -434,7 +439,7 @@ export default {
     const payload = [
       data.action,
       data.imuTapTimeout,
-      packFloat(data.imuTapThreshold),
+      packFixed(data.imuTapThreshold),
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload);

@@ -43,9 +43,7 @@ export default {
 
   create: function() {
     this.clearTelemetry();
-
     this.protocol.fillParsers();
-
     this.conn.start();
 
     this.conn.onClose = (event) => {
@@ -82,54 +80,7 @@ export default {
     }, 2500);
   },
 
-  handlePacket: function(raw) {
-    const message = Protocol.parsePacket(raw);
-    const date = new Date();
-    this.lastUpdatedDate = date;
-
-    switch (message.type) {
-      case Protocol.packetTypes.ReplyTelemetry:
-        if (message.timestamp < this.telemetry.timestamp) {
-          console.warn(
-              'inconsistent timestamps: old is ' + this.telemetry.timestamp +
-              ', and new is ' + message.timestamp,
-          );
-        }
-
-        this.telemetry = message;
-        this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3);
-        this.updateTelemetry();
-        break;
-
-      case Protocol.packetTypes.ReplyPing:
-        if (message.counter == -1) {
-          console.warn('This client was discarded by vehicle!');
-          this.disconnect();
-          this.onDiscard();
-          break;
-        }
-
-        this.timePingDelta = Date.now() - this.timePing;
-        this.timePing = Date.now();
-        this.authorized = true;
-        this.pingSuccess = this.timePingDelta < 500;
-        this.updateStatus();
-        break;
-
-      case Protocol.packetTypes.ReplyAllSettings:
-        this.onAllSettingsReceived(message);
-        break;
-
-      case Protocol.packetTypes.ReplyDiagnosticInfo:
-        this.onDiagnosticLogReceived(message);
-        break;
-
-      default:
-        console.warn('unknown packet type');
-        console.log(JSON.stringify(message, null, ' '));
-        break;
-    }
-  },
+  /* Connection handling */
 
   connect: function(address, force = false) {
     if (this.reconnecting && !force) {
@@ -190,6 +141,8 @@ export default {
 
     this.onStatusUpdated(this.status);
   },
+
+  /* Telemetry */
 
   updateTelemetry: function(data) {
     if (this.telemetry.running !== undefined) {
@@ -272,6 +225,59 @@ export default {
 
     return value;
   },
+
+  /* Incoming packets handling */
+
+  handlePacket: function(raw) {
+    const message = Protocol.parsePacket(raw);
+    const date = new Date();
+    this.lastUpdatedDate = date;
+
+    switch (message.type) {
+      case Protocol.packetTypes.ReplyTelemetry:
+        if (message.timestamp < this.telemetry.timestamp) {
+          console.warn(
+              'inconsistent timestamps: old is ' + this.telemetry.timestamp +
+              ', and new is ' + message.timestamp,
+          );
+        }
+
+        this.telemetry = message;
+        this.lastUpdated = date.toLocaleTimeString('ru-RU') + '.' + zeroPad(date.getMilliseconds(), 3);
+        this.updateTelemetry();
+        break;
+
+      case Protocol.packetTypes.ReplyPing:
+        if (message.counter == -1) {
+          console.warn('This client was discarded by vehicle!');
+          this.disconnect();
+          this.onDiscard();
+          break;
+        }
+
+        this.timePingDelta = Date.now() - this.timePing;
+        this.timePing = Date.now();
+        this.authorized = true;
+        this.pingSuccess = this.timePingDelta < 500;
+        this.updateStatus();
+        break;
+
+      case Protocol.packetTypes.ReplyAllSettings:
+        this.onAllSettingsReceived(message);
+        break;
+
+      case Protocol.packetTypes.ReplyDiagnosticInfo:
+        this.onDiagnosticLogReceived(message);
+        break;
+
+      default:
+        console.warn('unknown packet type');
+        console.log(JSON.stringify(message, null, ' '));
+        break;
+    }
+  },
+
+  /* API commands */
 
   sendMessage: function(data) {
     if (this.status === 'open') {

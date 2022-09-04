@@ -15,7 +15,6 @@ export default {
   solenoidWasRelaxing: 0,
 
   rsocStats: JSON.parse(Utils.notNull(localStorage.rsocStats, '[]')),
-
   rsocStatsCollector: undefined,
 
   rsocLevels: {
@@ -157,14 +156,12 @@ export default {
         this.feedbackIcons.tap2x.setActive(true);
         this.feedbackIcons.tap.setActive(false);
         if (!this.feedbacksStatesOld.tapDouble && vibrateEnabled) {
-          console.log('vibrate');
           navigator.vibrate(150);
         }
       } else if (mur.telemetry.feedback.imuTap) {
         this.feedbackIcons.tap2x.setActive(false);
         this.feedbackIcons.tap.setActive(true);
         if (!this.feedbacksStatesOld.tap && vibrateEnabled) {
-          console.log('vibrate');
           navigator.vibrate(150);
         }
       } else {
@@ -175,6 +172,7 @@ export default {
       this.feedbacksStatesOld.tap = mur.telemetry.feedback.imuTap;
       this.feedbacksStatesOld.tapDouble = mur.telemetry.feedback.imuDoubleTap;
     } else {
+      /* if no connection, then deactivate all feedback icons */
       this.feedbackIcons.motors.setActive(false);
       this.feedbackIcons.solenoid.setActive(false);
       this.feedbackIcons.tap2x.setActive(false);
