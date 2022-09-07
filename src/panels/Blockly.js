@@ -471,7 +471,9 @@ export default class BlocklyPanel extends Panel {
     this.setLoading(false, 100);
 
     setTimeout(() => {
+      mur.controlImuResetYaw();
       this.scriptStatus = 'running';
+      this.updateTelemetry(mur.telemetry);
       this.scriptWorker.postMessage({
         type: 'run',
         script: this.code,
