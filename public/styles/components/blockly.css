@@ -153,8 +153,8 @@
 
 #blocklyDiv .blocklyToolboxDiv {
   padding-left: 0.35em;
-  background: rgba(221, 221, 221, 0.9);
-  box-shadow: 0 -3px 20px rgba(0, 0, 0, 0.5);
+  background: rgba(240, 240, 240, 0.9);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
   z-index: 55;
 }
 
@@ -175,7 +175,6 @@
   content: '';
   display: block;
   position: absolute;
-  /* top: 5px; */
   height: calc(100% - 10px);
   margin-left: -12px;
   width: 5px;
@@ -189,12 +188,8 @@
 }
 
 .blocklyFlyout {
-  box-shadow: 0 0px 15px rgb(0 0 0 / 25%);
-  animation: 0.07s linear 0s 1 delayed-appear;
-  background: rgba(221, 221, 221, 0.8);
-
-  border-bottom-left-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
+  background: rgba(240, 240, 240, 0.8);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .blocklyFlyoutBackground {
@@ -285,7 +280,7 @@
 }
 
 .backpack-empty-notify {
-  content: 'aaa';
+  content: '';
   width: calc(100% - 4em);
   bottom: 0em;
   text-align: center;
