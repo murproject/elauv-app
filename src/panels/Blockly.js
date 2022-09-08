@@ -171,7 +171,7 @@ export default class BlocklyPanel extends Panel {
 
     const delta = (Date.now() - this.lastEditTime);
 
-    if (this.scriptStatus !== 'running' && (delta > 500)) {
+    if (this.scriptStatus === 'stopped' && (delta > 500)) {
       ProjectsStorage.projects.current.autosaved = false;
       this.lastEditTime = Date.now();
     }
@@ -181,7 +181,7 @@ export default class BlocklyPanel extends Panel {
   }
 
   checkUndoRedo(force = undefined) {
-    if (force === true) {
+    if (force === true || this.scriptStatus !== 'stopped') {
       this.stateOfUndo.undo = false;
       this.stateOfUndo.redo = false;
       this.actionButtons.undo.setEnabled(false);
@@ -295,8 +295,9 @@ export default class BlocklyPanel extends Panel {
     this.setLoading(false, 150);
 
     setTimeout(() => {
-      this.updatePuzzleIcon(true);
       this.scriptStatus = 'stopped';
+      this.updatePuzzleIcon(true);
+      this.checkUndoRedo(false);
     }, 250);
   }
 
