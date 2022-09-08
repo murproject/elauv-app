@@ -137,6 +137,23 @@ ${branch}
       };
     };
 
+    function strReplaceAll(str, match, replace) {
+      return str.replace(new RegExp(match, 'gm'), () => replace);
+    }
+
+    function textValidator(value) {
+      value = strReplaceAll(value, `\\\\`, `/`);
+      value = strReplaceAll(value, `\"`, `\'`);
+      value = strReplaceAll(value, `\n`, ` `);
+      value = value.trim();
+
+      while (value.includes('  ')) {
+        value = strReplaceAll(value, '  ', ' ');
+      }
+
+      return value;
+    }
+
     /* - - - Blocks definition - - - */
 
     /* mur_delay */
@@ -201,7 +218,7 @@ ${branch}
         this.appendDummyInput()
             .appendField(icon('parallel-thread-rotated'), 'процесс')
             .appendField('Процесс')
-            .appendField(new Blockly.FieldTextInput(), 'ThreadName');
+            .appendField(new Blockly.FieldTextInput('', textValidator), 'ThreadName');
 
         this.appendStatementInput('STACK').appendField();
         this.setPreviousStatement(false, '');
@@ -262,7 +279,7 @@ await mur.h(_threadId, null);
       init: function() {
         this.appendValueInput('Value')
             .appendField(icon('tooltip-text-outline', 'Текст'))
-            .appendField(new Blockly.FieldTextInput(), 'Text');
+            .appendField(new Blockly.FieldTextInput('', textValidator), 'Text');
 
         this.setPreviousStatement(true, 'action');
         this.setNextStatement(true, 'action');
@@ -276,7 +293,7 @@ await mur.h(_threadId, null);
 
     register_proto('mur_print', (gen) => {
       return (block) => {
-        const text = block.getFieldValue('Text');
+        const text = block.getField('Text').getText();
         const value = calcVal(gen, block, 'Value');
         return makeFunc(gen, `mur.print("${text}", ${value})`);
       };
@@ -287,7 +304,7 @@ await mur.h(_threadId, null);
     Blockly.Blocks.mur_text = {
       init: function() {
         this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput(), 'Text');
+            .appendField(new Blockly.FieldTextInput('', textValidator), 'Text');
 
         this.setOutput(true, 'String');
         this.setPreviousStatement(false, null);
@@ -299,7 +316,7 @@ await mur.h(_threadId, null);
 
     register_proto('mur_text', (gen) => {
       return (block) => {
-        const text = block.getFieldValue('Text');
+        const text = block.getField('Text').getText();
         return [`"${text}"`, Blockly.JavaScript.ORDER_ATOMIC];
       };
     });
