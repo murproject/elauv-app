@@ -58,7 +58,6 @@
     "cordova-plugin-statusbar": "^3.0.0",
     "crc-32": "^1.2.2",
     "dayjs": "^1.11.3",
-    "hyperapp": "^2.0.22",
     "nipplejs": "^0.9.1",
     "zdog": "^1.1.3"
   }
