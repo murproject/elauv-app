@@ -1,72 +1,56 @@
-# ElementaryAUV – Android app
+# MUR VPE (Visual Programming Environment)
 
-- Cordova for Android support.
-- No (more) frontend frameworks (because of serious performance issues on low cost / old devices).
+Android-приложение для работы с
+[подводным аппаратом ElementaryAUV](https://robocenter.net/goods/kit/elementaryauv/)
+от [«Центра робототехники»](https://robocenter.net/).
 
-## Prepare
+__[Загрузить приложение для Android (APK)](https://murproject.com/elauv/)__
 
-- Set up Node.JS, NPM.
-- VueCLI is optional (may be more convenient way to run tasks).
-- Set up Cordova. May require Android Studio / Android SDK.
+![Скриншот приложения](docs/screenshot.png?raw=true)
 
-## Building – easy way
+<img width="25%" align="right" src="docs/3d-model.gif?raw=true" alt="Видео-демонстрация 3D-модели">
 
-    npm run cordova-build-android
+## Возможности
 
-## Building – long way (more flexible)
+- Подключение к аппаратам по Bluetooth.
+- Просмотр телеметрии аппарата.
+- Визуальное программирование с помощью блоков.
+- Сохранение, импорт и экспорт проектов.
+- Режим телеуправления.
+- Интерактивная 3D-модель аппарата.
 
-Two stages to build app:
+## Лицензия
 
-1. Build web app bundle (`cordova-build-only-www-android` task) via NPM or Vue CLI.
-2. Build Android APK via Cordova
+Исходный код проекта распространяется на условиях лицензии
+[GNU AGPLv3](https://www.gnu.org/licenses/agpl-3.0.html).
 
-### Build `src-cordova/www` for Android
+> MUR VPE
+>
+> Copyright © 2022, ООО "Центр робототехники"
+>
+> Эта программа является свободным программным обеспечением: Вы можете
+> распространять ее и (или) изменять, соблюдая условия Генеральной публичной
+> лицензии GNU Affero, опубликованной Фондом свободного программного обеспечения;
+> либо редакции 3 Лицензии, либо (на Ваше усмотрение) любой редакции, выпущенной
+> позже.
+> Эта программа распространяется в расчете на то, что она окажется полезной, но
+> БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, включая подразумеваемую гарантию КАЧЕСТВА либо
+> ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ.
+> Ознакомьтесь с Генеральной публичной лицензией GNU Affero для получения более
+> подробной информации.
+> Вы должны были получить копию Генеральной публичной лицензии GNU Affero вместе с
+> этой программой. Если Вы ее не получили, то перейдите по адресу:
+> <http://www.gnu.org/licenses/>.
 
-Run `cordova-build-only-www-android` task via NPM:
+Сторонние компоненты включённые в проект (а также внесённые в них модификации)
+распространяются на условиях тех лицензий, которые указаны в исходном коде данных компонентов.
 
-    npm run cordova-build-only-www-android
+### Сторонние компоненты
 
-Or run live builds with changes watching:
+- [Google Blockly](https://github.com/google/blockly), [Blockly Samples](https://github.com/google/blockly-samples)
+- [Apache Cordova](https://cordova.apache.org/)
+- [msgpack](https://github.com/msgpack/msgpack-javascript)
+- [Zdog](https://zzz.dog)
+- [Nipplejs](https://yoannmoi.net/nipplejs/)
 
-    npx cross-env CORDOVA_PLATFORM=android vue-cli-service \
-    --watch --mode development cordova-build-only-www-android
-
-### Build / Run Android APK
-
-After building web app, you can use Cordova to build APK.
-Don't forget to set path to Android SDK (ANDROID_SDK_ROOT).
-
-Start cordova build from `src-cordova` directory:
-
-    cd src-cordova
-    cordova build android --release -- --packageType=apk
-
-You can build and deploy debug app build to your device (requires enabled debugging on your device):
-
-    cordova run android
-
-## Signing build
-
-Final app build should be signed.
-And all builds should be signed with the **same key**.
-
-Without correct sign, graceful app update will be impossible.
-User will be forced to delete old version and install new one.
-
-App is signed automatically via `build.json` config:
-the only thing you should to do, is to place keystore file in right place
-(or manually set correct path in `build.json`):
-
-```
-- mur-keystore-android
-    - keystore-mur.jks
-- elauv-app
-    - src
-    - src-cordova
-    ...
-```
-
-So, `keystore-mur.jks` file should be available with `../../mur-keystore-android/keystore-mur.jks` relative path from the `src-cordva` directory.
-
-If you need to sign app build manually, then refer to
-[Cordova docs](https://cordova.apache.org/docs/en/11.x/guide/platforms/android/?#signing-an-app), or you can generate signed build using Android Studio.
+Более подробный список сторонних компонентов присутствует в `package.json`.
