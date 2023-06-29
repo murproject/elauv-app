@@ -589,7 +589,7 @@ function animate() {
   framesCount++;
 
   /* frames skipping */
-  if (framesCount >= 2) {
+  if (framesCount >= 1) {
     framesCount = 0;
   }
 
