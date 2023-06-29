@@ -126,7 +126,9 @@ export default class Devices extends Panel {
       icon: 'broadcast',
     });
 
-    this.buttonScanDevices.inject(this.q('#scan-button-wrapper'));
+    if (AppVersion.isDevBuild) {
+      this.buttonScanDevices.inject(this.q('#scan-button-wrapper'));
+    }
 
     this.buttonDisconnect = new Button({
       name: 'disconnect',
