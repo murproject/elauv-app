@@ -13,7 +13,7 @@ import ProjectsStorage from '/src/utils/ProjectsStorage';
 export default class Settings extends Panel {
   begin() {
     this.name = 'Настройки';
-    this.addTab = false;
+    this.addTab = AppVersion.isDevBuild;
 
     this.html = /*html*/`
       <div class="container">
