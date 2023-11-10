@@ -42,6 +42,7 @@ export default {
   onDiscard: () => {},
   onAllSettingsReceived: () => {},
   onDiagnosticLogReceived: () => {},
+  onReplyCvCamProxyReceived: () => {},
 
   create: function() {
     this.clearTelemetry();
@@ -63,6 +64,27 @@ export default {
     };
 
     this.conn.onMessage = (event) => {
+      if (typeof(event.data) == 'string') {
+        // console.error('GOT STRING MESSAGE!!!'); // TODO //
+        if (event.data[0] != '<') {
+          return;
+        }
+
+        const text = event.data.substring(1);
+
+        // TODO: replace 'btoa' and 'atob' to Buffer.from(str, 'base64') and buf.toString('base64')
+        const proxyMessage = Array.from(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)));
+
+        const packet = {
+          payloadSize: proxyMessage.length,
+          payload: proxyMessage,
+        };
+        console.log('Sending proxy packet: ');
+        console.log(packet);
+        this.sendMessage(Protocol.packControlCvCamProxy(packet));
+        return;
+      }
+
       event.data.arrayBuffer().then((buf) => {
         const raw = new Uint8Array(buf);
         const newBuffer = new Uint8Array(bigBuffer.length + raw.length);
@@ -284,8 +306,12 @@ export default {
         this.onDiagnosticLogReceived(message);
         break;
 
+      case Protocol.packetTypes.ReplyCvCamProxy:
+        this.onReplyCvCamProxyReceived(message);
+        break;
+
       default:
-        console.warn('Unknown packet type');
+        console.warn(`Unknown packet type (${message.type})`);
         console.warn(JSON.stringify(message, null, ' '));
         break;
     }
@@ -348,6 +374,10 @@ export default {
 
   controlGetAllSettings: function() {
     this.sendMessage(Protocol.packControlGetAllSettings());
+  },
+
+  controlActivateCvCamProxy: function() {
+    this.sendMessage(Protocol.packControlCvCamProxy({payloadSize: 0, payload: []}));
   },
 
   controlMotorsSettings: function(data) {

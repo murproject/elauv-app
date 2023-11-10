@@ -20,6 +20,15 @@ export default class Settings extends Panel {
         <div class="list-wrapper">
           <div id="vehicle-settings">
             <h1 class="text-center">Настройки аппарата</h1>
+
+            <center> <!-- Laser Camera (CvCam) -->
+              <img
+                id="cv-cam-img"
+                style="margin-top: 1em; width: calc(160px * 2); text-align: center; border: 1px solid gray;"
+              />
+              <div id="camera-settings"></div>
+            </center>
+
             <div id="settings-inputs-container" class="monospace-all"></div>
             <pre id="diag-log-text" class="monospace fit-center"></pre>
             <div id="settings-action-buttons" class="row"></div>
@@ -97,6 +106,12 @@ export default class Settings extends Panel {
     }
 
     const buttons = [
+      {
+        text: 'CvCam Proxy Activate',
+        action: () => mur.controlActivateCvCamProxy(),
+        icon: 'cog',
+        parent: this.q('#camera-settings'),
+      },
       {
         text: 'Получить настройки',
         action: () => mur.controlGetAllSettings(),
@@ -280,5 +295,35 @@ Bat Health:     ${info.battHealth}%
 
 `;
     this.q('#diag-log-text').innerText = text;
+  }
+
+  async onReplyCvCamProxyReceived(data) {
+    const d = new Uint8Array(data.payload);
+
+    console.log(`We got proxied packet with len: ${d.length}`);
+
+    // TODO: replace 'btoa' and 'atob' to Buffer.from(str, 'base64') and buf.toString('base64')
+
+    const proxyBase64 = '>' + btoa(String.fromCharCode.apply(null, d));
+    // console.log('sending via proxy: ' + proxyBase64); // TODO //
+
+    if (!App.runsOnCordova) {
+      mur.sendMessage(proxyBase64);
+    }
+
+    if (d.length != 8204) { // TODO: better detection of packet type //
+      return;
+    }
+
+    console.log('WE GOT CV CAM PROXY'); // TODO //
+
+    const imgSize = 1024 * 8;
+    const headerSize = 8;
+
+    const img = d.subarray(headerSize, headerSize + imgSize);
+    console.log(img);
+    const b64encoded = 'data:image/png;base64,' + btoa(String.fromCharCode.apply(null, img));
+
+    this.q('#cv-cam-img').src = b64encoded;
   }
 }

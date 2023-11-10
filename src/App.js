@@ -102,9 +102,9 @@ export default {
     this.panels = {
       /* Main panels */
       about: new AboutPanel(),
-      settings: new SettingsPanel(),
       devices: new DevicesPanel(),
       joystick: new JoystickPanel(),
+      settings: new SettingsPanel(),
       projects: new ProjectsPanel(),
       blockly: new BlocklyPanel(),
 
@@ -112,7 +112,7 @@ export default {
       console: new ConsolePanel(),
     };
 
-    this.panelSelect(this.isMobile ? this.panels.devices : this.panels.projects);
+    this.panelSelect(this.isMobile ? this.panels.devices : this.panels.settings);
   },
 
   setupEvents() {
@@ -146,6 +146,10 @@ export default {
 
     mur.onDiagnosticLogReceived = (info) => {
       this.panels.settings.onDiagnosticLogReceived(info);
+    };
+
+    mur.onReplyCvCamProxyReceived = (data) => {
+      this.panels.settings.onReplyCvCamProxyReceived(data);
     };
   },
 
