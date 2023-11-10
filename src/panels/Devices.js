@@ -44,7 +44,7 @@ const welcomeIntro = /*html*/`
 export default class Devices extends Panel {
   begin() {
     this.name = 'Устройства';
-    this.addTab = App.isMobile;
+    this.addTab = !App.runsOnElectron;
 
     this.html = /*html*/`
       <div class="container">
