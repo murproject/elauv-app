@@ -2,6 +2,8 @@ import Protocol from './protocol';
 
 let transport = null;
 
+let bigBuffer = new Uint8Array(0);
+
 if (typeof cordova !== 'undefined') {
   transport = require('./transportBluetooth').default;
 } else {
@@ -63,7 +65,19 @@ export default {
     this.conn.onMessage = (event) => {
       event.data.arrayBuffer().then((buf) => {
         const raw = new Uint8Array(buf);
-        const packets = Protocol.splitBufferToPackets(raw);
+        const newBuffer = new Uint8Array(bigBuffer.length + raw.length);
+        newBuffer.set(bigBuffer);
+        newBuffer.set(raw, bigBuffer.length);
+        bigBuffer = newBuffer;
+
+        if (raw.length > 980) {
+          return;
+        }
+
+        bigBuffer = new Uint8Array(0);
+        // console.log(newBuffer); // TODO //
+
+        const packets = Protocol.splitBufferToPackets(newBuffer);
         packets.forEach((packet) => this.handlePacket(packet));
       });
     };
