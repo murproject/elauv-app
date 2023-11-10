@@ -19,6 +19,9 @@ const packetId = {
   ControlMotorsSettings   : 0x23,
   ControlImuSettings      : 0x24,
 
+  /* CvCam control */
+  ControlCvCamProxy       : 0x31,
+
   /* General feedback */
   ReplyTelemetry          : 0xA1,
 
@@ -28,6 +31,9 @@ const packetId = {
 
   /* Settings reply */
   ReplyAllSettings        : 0xC1,
+
+  /* CvCam reply */
+  ReplyCvCamProxy         : 0xD1,
 };
 
 /* Utils (bitwize, math) */
@@ -206,7 +212,7 @@ export default {
     }
 
     if (packets.length !== 1) {
-      console.warn('Unusal packets count: ' + packets.length);
+      console.warn('Unusual packets count: ' + packets.length);
       console.warn(buffer);
       console.warn(packets);
     }
@@ -242,6 +248,7 @@ export default {
     this.parsers[packetId.ReplyDiagnosticInfo] = (p) => this.parseDiagnosticInfo(p);
     this.parsers[packetId.ReplyPing] = (p) => this.parsePing(p);
     this.parsers[packetId.ReplyAllSettings] = (p) => this.parseAllSettings(p);
+    this.parsers[packetId.ReplyCvCamProxy] = (p) => this.parseReplyCvCamProxy(p);
   },
 
   parseTelemetry: function(packet) {
@@ -325,6 +332,18 @@ export default {
     };
 
     return settings;
+  },
+
+  parseReplyCvCamProxy: function(packet) {
+    const data = packet.payload;
+
+    const cvCamMessage = {
+      type: packet.type,
+      payloadSize: data[0],
+      payload: data[1],
+    };
+
+    return cvCamMessage;
   },
 
   makePacket: function(protoVer, type, payload) {
@@ -448,6 +467,16 @@ export default {
     ];
 
     const packet = this.makePacket(curProtoVer, packetId.ControlImuSettings, payload);
+    return packet;
+  },
+
+  packControlCvCamProxy: function(data) {
+    const payload = [
+      data.payloadSize,
+      data.payload,
+    ];
+
+    const packet = this.makePacket(curProtoVer, packetId.ControlCvCamProxy, payload);
     return packet;
   },
 
